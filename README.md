@@ -13,6 +13,7 @@ A collection of python scripts that aimed at rendering beautiful figures or anim
 - [Newton Fractal](#newton-fractal)
 - [The E8 Pattern](#the-e8-pattern)
 - [The Modular Group](#the-modular-group)
+- [Beauty of Roots](#beauty-of-roots)
 
 
 ---
@@ -56,7 +57,7 @@ Mandelbrot 集 [[View Code](./src/misc/mandelbrot.py)]
 </p>
 
 <br>
-[[View Gif Animation](./img/icosa.gif)]
+[[View Webm Animation](./img/kaleidoscoe.webm)]
 [[Back to Top](#contents)]
 
 ---
@@ -100,7 +101,23 @@ Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikip
 <br>
 [[Back to Top](#contents)]
 
+
+---
+### Beauty of Roots
+Littlewood 多项式的根 [[View Code](./src/misc/rootsart.py)] [[Origin](http://www.math.ucr.edu/home/baez/roots/)]
+
+<br>
+
+<p align="center">
+<img src="./img/rootsart.png"/>
+</p>
+
+<br>
+[[Back to Top](#contents)]
+
 ## Dependencies
+
+Python libs:
 
 + `numpy`
 + `matplotlib`
@@ -110,3 +127,10 @@ Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikip
 + `tqdm`
 + `numba`
 + `pyglet`
++ `vapory`
+
+Softwares:
+
++ ImageMagick
++ FFmpeg
++ POV - Ray
