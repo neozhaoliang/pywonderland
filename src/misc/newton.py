@@ -32,7 +32,6 @@ def render(imgsize):
     img = np.frompyfunc(iterate, 1, 1)(z).astype(np.float)
     img /= np.max(img)
 
-
     # self-defined rgb channels, a mimick of matplotlib's hot colormap
     red = np.sin(img * np.pi)
     green = img * img
@@ -44,7 +43,6 @@ def render(imgsize):
 if __name__ == '__main__':
     import time
     start = time.time()
-    imgsize = 400
-    render(imgsize)
+    render(imgsize=400)
     end = time.time()
     print('runtime: {:03f} seconds'.format(end - start))

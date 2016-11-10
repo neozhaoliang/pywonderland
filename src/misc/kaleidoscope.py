@@ -27,10 +27,7 @@ def Mobius(z):
     return (z - 20)/(3*z + 1j)
 
 
-def render(imgsize):
-    x = np.linspace(-6, 6, imgsize)
-    y = np.linspace(6, -6, imgsize)
-    z = x[None, :] + y[:, None]*1j
+def render(z):
     z = RiemannSphere(Klein(Mobius(Klein(z))))
 
     # define colors in hsv space
@@ -44,10 +41,16 @@ def render(imgsize):
     Image.fromarray(np.uint8(img*255)).save('kaleidoscope.png')
 
 
+def main(imgsize):
+    x = np.linspace(-6, 6, imgsize)
+    y = np.linspace(6, -6, imgsize)
+    z = x[None, :] + y[:, None]*1j
+    render(z)
+
+
 if __name__ == '__main__':
     import time
     start = time.time()
-    imgsize = 800
-    render(imgsize)
+    main(imgsize=800)
     end = time.time()
     print('runtime: {:3f} seconds'.format(end - start))

@@ -25,8 +25,8 @@ def main(xmin, xmax, ymin, ymax, width, height):
     x = np.linspace(xmin, xmax, width)
     y = np.linspace(ymax, ymin, height)
     z = x[None, :] + y[:, None]*1j
-    B = np.frompyfunc(iterate, 1, 1)(z).astype(np.float)
-    img = np.dstack((B**4, B**3, B))
+    blue = np.frompyfunc(iterate, 1, 1)(z).astype(np.float)
+    img = np.dstack((blue**4, blue**3, blue))
     Image.fromarray(np.uint8(img*255)).save('mandelbrot.png')
 
 
