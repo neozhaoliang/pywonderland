@@ -2,21 +2,34 @@
 
 A collection of python scripts that aimed at rendering beautiful figures or animating interesting algorithms in mathematics.
 
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Code Health](https://landscape.io/github/neozhaoliang/pywonderland/master/landscape.svg?style=flat)](https://landscape.io/github/neozhaoliang/pywonderland/master) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 
 ## Contents
 
-
+- [Mandelbrot Set](#mandelbrot-set)
 - [Domino Shuffling Algorithm Animation](#domino-shuffling-algorithm-animation)
 - [Icosahedral Kaleidoscope](#icosahedral-kaleidoscope)
+- [Newton Fractal](#newton-fractal)
 
 
 ---
-### Domino Shuffling Algorithm Animation (多米诺洗牌算法)
+### Mandelbrot Set
+Mandelbrot 集 [[View Code](./src/misc/mandelbrot.py)]
 
-[[View Code](./src/domino/)] [[Wiki](https://en.wikipedia.org/wiki/Aztec_diamond)]
+<br>
+
+<p align="center">
+<img src="./img/mandelbrot.png"/>
+</p>
+
+<br>
+[[Back to Top](#contents)]
+
+
+---
+### Domino Shuffling Algorithm Animation
+多米诺洗牌算法 [[View Code](./src/domino/)] [[Wiki](https://en.wikipedia.org/wiki/Aztec_diamond)]
 
 <br>
 
@@ -30,8 +43,9 @@ A collection of python scripts that aimed at rendering beautiful figures or anim
 
 
 ---
-### Icosahedral Kaleidoscope (正二十面体万花筒)
-[[View Code](./src/misc/kaleidoscope.py)]
+### Icosahedral Kaleidoscope
+
+正二十面体万花筒 [[View Code](./src/misc/kaleidoscope.py)]
 
 <br>
 
@@ -42,6 +56,19 @@ A collection of python scripts that aimed at rendering beautiful figures or anim
 <br>
 [[Back to Top](#contents)]
 
+
+---
+### Newton Fractal
+Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikipedia.org/wiki/Newton_fractal)]
+
+<br>
+
+<p align="center">
+<img src="./img/newton.png"/>
+</p>
+
+<br>
+[[Back to Top](#contents)]
 
 ## Dependencies
 
