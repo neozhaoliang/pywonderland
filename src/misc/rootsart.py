@@ -4,14 +4,10 @@ An implementation of the polynomial roots fractal depicted in
 http://www.math.ucr.edu/home/baez/roots/
 
 This script takes a rather long time to compute all the roots for d >= 20.
-Some experiential runtime for the cases d = 20, 21, 22 on my computer
-(a quite out-dated one) are:
+The experiential runtime for d = 20, 21, 22 on my computer (a quite
+out-dated one) are 19 mins, 35 mins, and 85 mins respectively.
 
-d = 20: 19 mins
-d = 21: 25 mins
-d = 22: 85 mins
-
-I could write it faster, but that would result in a longer code.
+I could write it faster but that would result in a longer code.
 
 '''
 
@@ -24,7 +20,7 @@ from tqdm import tqdm
 
 def f(z):
     '''
-    Given a complex number z, return a positive real number.
+    Return a positive real number for a given complex number.
     This function is used for smoothing the heatmap image below.
     '''
     r = z.real*z.real + z.imag*z.imag

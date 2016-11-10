@@ -57,7 +57,7 @@ Mandelbrot 集 [[View Code](./src/misc/mandelbrot.py)]
 </p>
 
 <br>
-[[View Webm Animation](./img/kaleidoscoe.webm)]
+[[View Webm Animation](./img/kaleidoscope.webm)]
 [[Back to Top](#contents)]
 
 ---
