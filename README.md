@@ -14,6 +14,8 @@ A collection of python scripts that aimed at rendering beautiful figures or anim
 - [The E8 Pattern](#the-e8-pattern)
 - [The Modular Group](#the-modular-group)
 - [Beauty of Roots](#beauty-of-roots)
+- [Breather Surface](#breather-surface)
+- [World War Z in America](#world-war-z-in-america)
 
 
 ---
@@ -32,7 +34,7 @@ Mandelbrot 集 [[View Code](./src/misc/mandelbrot.py)]
 
 ---
 ### Domino Shuffling Algorithm Animation
-多米诺洗牌算法 [[View Code](./src/domino/)] [[Wiki](https://en.wikipedia.org/wiki/Aztec_diamond)]
+多米诺洗牌算法 [[View Code](./src/domino/)] [[View Gif Animation](./img/dominoshuffling.gif)] [[Wiki](https://en.wikipedia.org/wiki/Aztec_diamond)]
 
 <br>
 
@@ -41,14 +43,13 @@ Mandelbrot 集 [[View Code](./src/misc/mandelbrot.py)]
 </p>
 
 <br>
-[[View Gif Animation](./img/dominoshuffling.gif)]
 [[Back to Top](#contents)]
 
 
 ---
 ### Icosahedral Kaleidoscope
 
-正二十面体万花筒 [[View Code](./src/misc/kaleidoscope.py)]
+正二十面体万花筒 [[View Code](./src/misc/kaleidoscope.py)] [[View Webm Animation](./img/kaleidoscope.webm)]
 
 <br>
 
@@ -57,7 +58,6 @@ Mandelbrot 集 [[View Code](./src/misc/mandelbrot.py)]
 </p>
 
 <br>
-[[View Webm Animation](./img/kaleidoscope.webm)]
 [[Back to Top](#contents)]
 
 ---
@@ -90,7 +90,7 @@ Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikip
 
 ---
 ### The Modular Group
-模群的基本域 [[View Code](./src/modulargroup.py)] [[Wiki](https://en.wikipedia.org/wiki/Modular_group)]
+模群的基本域 [[View Code](./src/misc/modulargroup.py)] [[Wiki](https://en.wikipedia.org/wiki/Modular_group)]
 
 <br>
 
@@ -114,6 +114,36 @@ Littlewood 多项式的根 [[View Code](./src/misc/rootsart.py)] [[Origin](http:
 
 <br>
 [[Back to Top](#contents)]
+
+
+---
+### Breather Surface
+Breather 曲面 [[View Code](./src/povray/breather.py)] [[Wiki](https://en.wikipedia.org/wiki/Breather_surface)]
+
+<br>
+
+<p align="center">
+<img src="./img/breather.png"/>
+</p>
+
+<br>
+[[Back to Top](#contents)]
+
+
+
+---
+### World War Z in America
+模拟僵尸在美国传播 [[View Webm Animation](./img/zombie.webm)] [[View Code](./src/zombie/zombie.py)]
+
+<br>
+
+<p align="center">
+<img src="./img/zombie.png"/>
+</p>
+
+<br>
+[[Back to Top](#contents)]
+
 
 ## Dependencies
 
