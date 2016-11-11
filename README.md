@@ -14,9 +14,6 @@ A collection of python scripts that aimed at rendering beautiful figures or anim
 - [The E8 Pattern](#the-e8-pattern)
 - [The Modular Group](#the-modular-group)
 - [Beauty of Roots](#beauty-of-roots)
-- [Breather Surface](#breather-surface)
-- [World War Z in America](#world-war-z-in-america)
-
 
 ---
 ### Mandelbrot Set
@@ -115,34 +112,6 @@ Littlewood 多项式的根 [[View Code](./src/misc/rootsart.py)] [[Origin](http:
 <br>
 [[Back to Top](#contents)]
 
-
----
-### Breather Surface
-Breather 曲面 [[View Code](./src/povray/breather.py)] [[Wiki](https://en.wikipedia.org/wiki/Breather_surface)]
-
-<br>
-
-<p align="center">
-<img src="./img/breather.png"/>
-</p>
-
-<br>
-[[Back to Top](#contents)]
-
-
-
----
-### World War Z in America
-模拟僵尸在美国传播 [[View Webm Animation](./img/zombie.webm)] [[View Code](./src/zombie/zombie.py)]
-
-<br>
-
-<p align="center">
-<img src="./img/zombie.png"/>
-</p>
-
-<br>
-[[Back to Top](#contents)]
 
 
 ## Dependencies
