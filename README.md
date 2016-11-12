@@ -2,7 +2,7 @@
 
 A collection of python scripts that aimed at rendering beautiful figures or animating interesting algorithms in mathematics.
 
-[![Code Health](https://landscape.io/github/neozhaoliang/pywonderland/master/landscape.svg?style=flat)](https://landscape.io/github/neozhaoliang/pywonderland/master) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Code Health](https://landscape.io/github/neozhaoliang/pywonderland/master/landscape.svg?style=flat)](https://landscape.io/github/neozhaoliang/pywonderland/master) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![PyPI](https://img.shields.io/pypi/pyversions/Django.svg)]()
 
 
 ## Contents
@@ -14,6 +14,7 @@ A collection of python scripts that aimed at rendering beautiful figures or anim
 - [The E8 Pattern](#the-e8-pattern)
 - [The Modular Group](#the-modular-group)
 - [Beauty of Roots](#beauty-of-roots)
+- [Generalized Penrose Tilings](#generalized-penrose-tilings)
 
 ---
 ### Mandelbrot Set
@@ -112,6 +113,19 @@ Littlewood 多项式的根 [[View Code](./src/misc/rootsart.py)] [[Origin](http:
 <br>
 [[Back to Top](#contents)]
 
+
+---
+### Generalized Penrose Tilings
+彭罗斯铺砌 [[View Code](./src/misc/penrose.py)] [[Wiki](https://en.wikipedia.org/wiki/Penrose_tiling)]
+
+<br>
+
+<p align="center">
+<img src="./img/penrose.gif"/>
+</p>
+
+<br>
+[[Back to Top](#contents)]
 
 
 ## Dependencies

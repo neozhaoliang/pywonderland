@@ -1,5 +1,5 @@
 '''
-A Fast Mandelbrot set wallpaper renderer
+A fast Mandelbrot set wallpaper renderer
 '''
 import numpy as np
 from PIL import Image
