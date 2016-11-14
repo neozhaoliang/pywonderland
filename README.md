@@ -15,6 +15,7 @@ A collection of python scripts that aimed at rendering beautiful figures or anim
 - [The Modular Group](#the-modular-group)
 - [Beauty of Roots](#beauty-of-roots)
 - [Generalized Penrose Tilings](#generalized-penrose-tilings)
+- [Wilson Algorithm Animation](#wilsn-algorithm-animation)
 
 ---
 ### Mandelbrot Set
@@ -126,6 +127,21 @@ Littlewood 多项式的根 [[View Code](./src/misc/rootsart.py)] [[Origin](http:
 
 <br>
 [[Back to Top](#contents)]
+
+
+---
+### Wilson Algorithm Animation
+
+Wilson 算法 [[View Code](./src/wilson/wilson_easy.py)]
+<br>
+
+<p align="center">
+<img src="./img/wilson.png"/>
+</p>
+
+<br>
+[[Back to Top](#contents)]
+
 
 
 ## Dependencies

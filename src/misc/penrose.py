@@ -5,11 +5,9 @@ Reference:
 
 "Algebraic theory of Penrose's non-periodic tilings of the plane", N.G. de Bruijn.
 '''
-
 from itertools import combinations, product
 import numpy as np
 import cairo
-
 
 
 GRIDS = [np.exp(2j * np.pi * i / 5) for i in range(5)]
@@ -27,15 +25,16 @@ def rhombus(r, s, kr, ks):
     Compute the four vertices and color of the rhombus corresponding to
     the intersection point of two grid lines.
 
-    Here 0 <= r < s <= 4 indicate the two grids and ks, kr are integers.
+    Here 0 <= r < s <= 4 indicate the two grids and
+    ks, kr are line numbers in each grid.
 
     The intersection point is the solution to a 2x2 linear equation:
 
-    Re[z/GRIDS[r]] + SHIFT[r] = kr
-    Re[z/GRIDS[s]] + SHIFT[s] = ks
+    Re(z/GRIDS[r]) + SHIFT[r] = kr
+    Re(z/GRIDS[s]) + SHIFT[s] = ks
     '''
 
-    # if s-r = 1 or 4 then this is a thin rhombus, or it's fat if s-r = 2 or 3.
+    # if s-r = 1 or 4 then this is a thin rhombus, otherwise it's fat.
     if (s - r)**2 % 5 == 1:
         color = THIN_RHOMBUS_COLOR
     else:
@@ -51,10 +50,10 @@ def rhombus(r, s, kr, ks):
     index = [np.ceil((point/grid).real + shift)
              for grid, shift in zip(GRIDS, SHIFT)]
 
-    # Note the float accuracy problem here:
+    # Be careful of the accuracy problem here:
     # Mathematically the r-th and s-th item of index should be kr and ks,
     # but programmingly it might not.
-    # So we have to manully set them to bbe the correct values.
+    # So we have to manually set them to be the correct values.
     vertices = []
     for index[r], index[s] in [(kr, ks), (kr+1, ks), (kr+1, ks+1), (kr, ks+1)]:
         vertices.append(np.dot(index, GRIDS))
