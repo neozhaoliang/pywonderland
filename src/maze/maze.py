@@ -32,7 +32,7 @@ class Maze:
                 self.cells.append((x, y))
 
 
-    def encode_image (self, left, top, *color_indexes):
+    def encode_image(self, left, top, *color_indexes):
         imagedata = [self.data[x][y] for y in range(self.canvas_height) for x in range(self.canvas_width)]
 
         stream = lzw_encoder(imagedata, *color_indexes)
