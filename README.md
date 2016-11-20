@@ -17,7 +17,7 @@ A collection of python scripts that aimed at drawing beautiful figures or animat
 - [The Modular Group](#the-modular-group)
 - [Beauty of Roots](#beauty-of-roots)
 - [Generalized Penrose Tilings](#generalized-penrose-tilings)
-- [Wilson Algorithm Animation](#wilsn-algorithm-animation)
+- [Wilson Algorithm Animation](#wilson-algorithm-animation)
 
 ---
 ### Mandelbrot Set
