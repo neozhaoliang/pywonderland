@@ -10,12 +10,10 @@ out-dated one) are 19 mins, 35 mins, and 85 mins respectively.
 I could write it faster but that would result in a longer code.
 
 '''
-
 from itertools import product
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-
 
 
 def f(z):
