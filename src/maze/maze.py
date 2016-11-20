@@ -15,16 +15,16 @@ TRANS_COLOR_INDEX = 3
 SCALE = 5
 
 
-class Maze:
+class Maze(object):
 
     def __init__ (self, width, height):
-	self.width = width
-	self.height = height
+        self.width = width
+        self.height = height
         self.canvas_width = width * SCALE
         self.canvas_height = height * SCALE
-	self.data = [[0] * self.canvas_height for _ in range(self.canvas_width)]
-	self.num_changes = 0
-	self.diff_box = None
+        self.data = [[0] * self.canvas_height for _ in range(self.canvas_width)]
+        self.num_changes = 0
+        self.diff_box = None
 
         self.cells = []
         for y in range(0, height, 2):
@@ -36,39 +36,39 @@ class Maze:
         imagedata = [self.data[x][y] for y in range(self.canvas_height) for x in range(self.canvas_width)]
 
         stream = lzw_encoder(imagedata, *color_indexes)
-	descriptor = image_descriptor(left * SCALE, top * SCALE,
-				      self.canvas_width, self.canvas_height)
-	return descriptor + stream
+        descriptor = image_descriptor(left * SCALE, top * SCALE,
+                                      self.canvas_width, self.canvas_height)
+        return descriptor + stream
 
 
     def fill(self, x, y, color_index):
         for ox in range(SCALE):
-	    for oy in range(SCALE):
-		self.data[x*SCALE + ox][y*SCALE + oy] = color_index
+            for oy in range(SCALE):
+                self.data[x*SCALE + ox][y*SCALE + oy] = color_index
 
-	self.num_changes += 1
+        self.num_changes += 1
 
-	if self.diff_box:
-	    left, top, right, bottom = self.diff_box
+        if self.diff_box:
+            left, top, right, bottom = self.diff_box
             self.diff_box = (min(x, left), min(y, top),
                              max(x, right), max(y, bottom))
-	else:
-	    self.diff_box = (x, y, x, y)
+        else:
+            self.diff_box = (x, y, x, y)
 
 
     def get_diffmask(self):
-	left, top, right, bottom = self.diff_box
-	width = (right - left) + 1
-	height = (bottom - top) + 1
-	mask = Maze(width, height)
+        left, top, right, bottom = self.diff_box
+        width = (right - left) + 1
+        height = (bottom - top) + 1
+        mask = Maze(width, height)
 
         for y in range(top, bottom+1):
             for x in range(left, right+1):
-	        mask.fill(x - left, y - top, self.data[x*SCALE][y*SCALE])
+                mask.fill(x - left, y - top, self.data[x*SCALE][y*SCALE])
 
-	self.num_changes = 0
-	self.diff_box = None
-	return mask.encode_image(left, top, BACKGROUND_COLOR_INDEX,
+        self.num_changes = 0
+        self.diff_box = None
+        return mask.encode_image(left, top, BACKGROUND_COLOR_INDEX,
                                  TREE_COLOR_INDEX, PATH_COLOR_INDEX)
 
 
@@ -99,11 +99,11 @@ class Maze:
 
 def delay_frame(delay):
     return (graphics_control_block(delay) +
-	    image_descriptor(0, 0, 1, 1) +
-	    chr(PALETTE_BITS) +
-	    chr(1) +
-	    chr(TRANS_COLOR_INDEX) +
-	    chr(0))
+            image_descriptor(0, 0, 1, 1) +
+            chr(PALETTE_BITS) +
+            chr(1) +
+            chr(TRANS_COLOR_INDEX) +
+            chr(0))
 
 
 def loop_control_block():
@@ -155,7 +155,7 @@ for x, y in maze.cells:
         ox, oy = nx, ny
 
         if maze.num_changes >= speed:
-	    stream += graphics_control_block(2) + maze.get_diffmask()
+            stream += graphics_control_block(2) + maze.get_diffmask()
 
     for v in path:
         tree.add(v)
@@ -167,7 +167,7 @@ if maze.num_changes > 0:
     stream += graphics_control_block(2) + maze.get_diffmask()
 
 stream = (delay_frame(50) +
-	  stream +
+          stream +
           delay_frame(300))
 
 stream = Maze(width, height).encode_image(0, 0, BACKGROUND_COLOR_INDEX) + stream
@@ -175,8 +175,8 @@ screen_descriptor = logical_screen_descriptor(maze.canvas_width, maze.canvas_hei
 palette = global_color_table(BACKGROUND_COLOR, TREE_COLOR,
                                PATH_COLOR, TRANS_COLOR)
 open('anim.gif', 'w').write('GIF89a' +
-			    screen_descriptor +
-			    palette +
+                            screen_descriptor +
+                            palette +
                             loop_control_block() +
                             stream +
-			    '\x3B')
+                            '\x3B')
