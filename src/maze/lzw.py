@@ -1,4 +1,4 @@
-__all__ = ['lzw_encoder']
+__all__ = ['lzw_encoder', 'PALETTE_BITS']
 
 
 PALETTE_BITS = 2
