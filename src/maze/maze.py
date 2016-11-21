@@ -170,10 +170,7 @@ for x, y in maze.cells:
 if maze.num_changes > 0:
     stream += graphics_control_block(2) + maze.get_diffmask()
 
-stream = (delay_frame(50) +
-          stream +
-          delay_frame(300))
-
+stream = delay_frame(50) + stream + delay_frame(300)
 stream = Maze(width, height).encode_image(0, 0, BACKGROUND_COLOR_INDEX) + stream
 screen_descriptor = logical_screen_descriptor(maze.canvas_width, maze.canvas_height)
 palette = global_color_table(BACKGROUND_COLOR, TREE_COLOR,
