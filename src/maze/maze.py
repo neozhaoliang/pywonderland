@@ -138,30 +138,33 @@ root = (0, 0)
 tree = set([root])
 
 for x, y in maze.cells:
-    ox, oy = x, y
-    path = [(ox, oy)]
-    while (ox, oy) not in tree:
-        nx, ny = random.choice(maze.get_neighbors(ox, oy))
-        if (nx, ny) in path:
-            index = path.index((nx, ny))
-            maze.fillpath(path[index:], BACKGROUND_COLOR_INDEX)
-            maze.fill(path[index][0], path[index][1], PATH_COLOR_INDEX)
-            path = path[:index+1]
+    if (x, y) not in tree:
+        path = [(x, y)]
+        maze.fill(x, y, PATH_COLOR_INDEX)
 
-        else:
-            path.append((nx, ny))
-            maze.fill(nx, ny, PATH_COLOR_INDEX)
-            maze.fill((nx+ox)//2, (ny+oy)//2, PATH_COLOR_INDEX)
+        ox, oy = x, y
+        while (ox, oy) not in tree:
+            nx, ny = random.choice(maze.get_neighbors(ox, oy))
+            if (nx, ny) in path:
+                index = path.index((nx, ny))
+                maze.fillpath(path[index:], BACKGROUND_COLOR_INDEX)
+                maze.fill(path[index][0], path[index][1], PATH_COLOR_INDEX)
+                path = path[:index+1]
 
-        ox, oy = nx, ny
+            else:
+                path.append((nx, ny))
+                maze.fill(nx, ny, PATH_COLOR_INDEX)
+                maze.fill((nx+ox)//2, (ny+oy)//2, PATH_COLOR_INDEX)
 
-        if maze.num_changes >= speed:
-            stream += graphics_control_block(2) + maze.get_diffmask()
+            ox, oy = nx, ny
 
-    for v in path:
-        tree.add(v)
+            if maze.num_changes >= speed:
+                stream += graphics_control_block(2) + maze.get_diffmask()
 
-    maze.fillpath(path, TREE_COLOR_INDEX)
+        for v in path:
+            tree.add(v)
+
+        maze.fillpath(path, TREE_COLOR_INDEX)
 
 
 if maze.num_changes > 0:
