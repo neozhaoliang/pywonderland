@@ -1,6 +1,10 @@
+'''
+Animating Wilson's uniform spanning tree algorithm on a 2d grid.
+'''
+
 from struct import pack
 import random
-from lzw import lzw_encoder, PALETTE_BITS
+from lzw import *
 
 
 BACKGROUND_COLOR = [0, 0, 0]
@@ -13,12 +17,20 @@ TREE_COLOR_INDEX = 1
 PATH_COLOR_INDEX = 2
 TRANS_COLOR_INDEX = 3
 
+# size of cell in pixels
 SCALE = 5
+# speed of the animation
+SPEED = 10
+
 
 
 class Maze(object):
 
     def __init__ (self, width, height):
+        '''
+        width, height:  size of the image in cells.
+        should both be odd numbers, though works for any positive integers.
+        '''
         self.width = width
         self.height = height
         self.canvas_width = width * SCALE
@@ -42,7 +54,11 @@ class Maze(object):
         return descriptor + stream
 
 
-    def fill(self, x, y, color_index):
+    def fill(self, cell, color_index):
+        '''
+        Note we update the differ box each time we fill a cell
+        '''
+        x, y = cell
         for ox in range(SCALE):
             for oy in range(SCALE):
                 self.data[x*SCALE + ox][y*SCALE + oy] = color_index
@@ -57,7 +73,7 @@ class Maze(object):
             self.diff_box = (x, y, x, y)
 
 
-    def get_diffmask(self):
+    def output_frame(self):
         left, top, right, bottom = self.diff_box
         width = (right - left) + 1
         height = (bottom - top) + 1
@@ -65,7 +81,7 @@ class Maze(object):
 
         for y in range(top, bottom+1):
             for x in range(left, right+1):
-                mask.fill(x - left, y - top, self.data[x*SCALE][y*SCALE])
+                mask.fill((x - left, y - top), self.data[x*SCALE][y*SCALE])
 
         self.num_changes = 0
         self.diff_box = None
@@ -73,7 +89,8 @@ class Maze(object):
                                  TREE_COLOR_INDEX, PATH_COLOR_INDEX)
 
 
-    def get_neighbors(self, x, y):
+    def get_neighbors(self, cell):
+        x, y = cell
         neighbors = []
         if x >= 2:
             neighbors.append((x-2, y))
@@ -86,98 +103,83 @@ class Maze(object):
         return neighbors
 
 
-    def fillpath(self, path, color_index):
-        if len(path) == 1:
-            x, y = path[0]
-            self.fill(x, y, color_index)
-        else:
-            for x, y in path:
-                self.fill(x, y, color_index)
-            for a, b in zip(path[1:], path[:-1]):
-                self.fill((a[0]+b[0])//2, (a[1]+b[1])//2, color_index)
+    def fill_wall(self, cellA, cellB, color_index):
+        wall = ((cellA[0] + cellB[0])//2,
+                (cellA[1] + cellB[1])//2)
+        self.fill(wall, color_index)
+
+
+    def fill_path(self, path, color_index):
+        for cell in path:
+            self.fill(cell, color_index)
+        for cellA, cellB in zip(path[1:], path[:-1]):
+            self.fill_wall(cellA, cellB, color_index)
 
 
 
 def delay_frame(delay):
-    return (graphics_control_block(delay) +
-            image_descriptor(0, 0, 1, 1) +
-            chr(PALETTE_BITS) +
-            chr(1) +
-            chr(TRANS_COLOR_INDEX) +
-            chr(0))
+    return (graphics_control_block(delay)
+            + image_descriptor(0, 0, 1, 1)
+            + chr(PALETTE_BITS)
+            + chr(1)
+            + chr(TRANS_COLOR_INDEX)
+            + chr(0))
 
 
-def loop_control_block():
-    return pack('<3B8s3s2BHB', 0x21, 0xFF, 11, 'NETSCAPE', '2.0', 3, 1, 0, 0)
+def wilson(width, height, root=(0, 0)):
+    maze = Maze(width, height)
+    stream = str()
+    tree = set([root])
+
+    for cell in maze.cells:
+        if cell not in tree:
+            path = [cell]
+            maze.fill(cell, PATH_COLOR_INDEX)
+
+            current_cell = cell
+            while current_cell not in tree:
+                next_cell = random.choice(maze.get_neighbors(current_cell))
+                if next_cell in path:
+                    index = path.index(next_cell)
+                    # erase path
+                    maze.fill_path(path[index:], BACKGROUND_COLOR_INDEX)
+                    maze.fill(path[index], PATH_COLOR_INDEX)
+                    path = path[:index+1]
+
+                else:
+                    path.append(next_cell)
+                    maze.fill(next_cell, PATH_COLOR_INDEX)
+                    maze.fill_wall(current_cell, next_cell, PATH_COLOR_INDEX)
+
+                current_cell = next_cell
+
+                if maze.num_changes >= SPEED:
+                    stream += graphics_control_block(2) + maze.output_frame()
+            for v in path:
+                tree.add(v)
+
+            maze.fill_path(path, TREE_COLOR_INDEX)
 
 
-def global_color_table(*color_list):
-    palette = []
-    for color in color_list:
-        palette.extend(color)
-    return pack('{:d}B'.format(len(palette)), *palette);
+    if maze.num_changes > 0:
+        stream += graphics_control_block(2) + maze.output_frame()
 
-
-def graphics_control_block(delay):
-    return pack("<4BH2B", 0x21, 0xF9, 4, 0b00000101, delay, 3, 0)
-
-
-def image_descriptor(left, top, width, height):
-    return pack('<B4HB', 0x2C, left, top, width, height, 0)
-
-
-def logical_screen_descriptor(width, height):
-    return pack('<2H3B', width, height, 0b10010001, 0, 0)
-
-
-width, height = (101, 81)
-speed = 10
-stream = str()
-maze = Maze(width, height)
-root = (0, 0)
-tree = set([root])
-
-for x, y in maze.cells:
-    if (x, y) not in tree:
-        path = [(x, y)]
-        maze.fill(x, y, PATH_COLOR_INDEX)
-
-        ox, oy = x, y
-        while (ox, oy) not in tree:
-            nx, ny = random.choice(maze.get_neighbors(ox, oy))
-            if (nx, ny) in path:
-                index = path.index((nx, ny))
-                maze.fillpath(path[index:], BACKGROUND_COLOR_INDEX)
-                maze.fill(path[index][0], path[index][1], PATH_COLOR_INDEX)
-                path = path[:index+1]
-
-            else:
-                path.append((nx, ny))
-                maze.fill(nx, ny, PATH_COLOR_INDEX)
-                maze.fill((nx+ox)//2, (ny+oy)//2, PATH_COLOR_INDEX)
-
-            ox, oy = nx, ny
-
-            if maze.num_changes >= speed:
-                stream += graphics_control_block(2) + maze.get_diffmask()
-
-        for v in path:
-            tree.add(v)
-
-        maze.fillpath(path, TREE_COLOR_INDEX)
-
-
-if maze.num_changes > 0:
-    stream += graphics_control_block(2) + maze.get_diffmask()
-
-stream = delay_frame(50) + stream + delay_frame(300)
-stream = Maze(width, height).encode_image(0, 0, BACKGROUND_COLOR_INDEX) + stream
-screen_descriptor = logical_screen_descriptor(maze.canvas_width, maze.canvas_height)
-palette = global_color_table(BACKGROUND_COLOR, TREE_COLOR,
+    # pad 1x1 pixel frame
+    stream = delay_frame(50) + stream + delay_frame(300)
+    # add background frame
+    stream = Maze(width, height).encode_image(0, 0, BACKGROUND_COLOR_INDEX) + stream
+    screen_descriptor = logical_screen_descriptor(maze.canvas_width, maze.canvas_height)
+    palette = global_color_table(BACKGROUND_COLOR, TREE_COLOR,
                                PATH_COLOR, TRANS_COLOR)
-open('wilson.gif', 'w').write('GIF89a' +
-                            screen_descriptor +
-                            palette +
-                            loop_control_block() +
-                            stream +
-                            '\x3B')
+
+    with open('wilson.gif', 'w') as f:
+        f.write('GIF89a'
+                + screen_descriptor
+                + palette
+                + loop_control_block()
+                + stream
+                + '\x3B')
+
+
+if __name__ == '__main__':
+    wilson(101, 81)
