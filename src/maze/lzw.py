@@ -45,7 +45,7 @@ class LZWEncoder(object):
         pattern = str()
         for c in map(str, imagedata):
             pattern += c
-            if not code_table.has_key(pattern):
+            if not pattern in code_table:
                 code_table[pattern] = next_code
                 self.encode_bits(code_table[pattern[:-1]], code_length)
                 pattern = c

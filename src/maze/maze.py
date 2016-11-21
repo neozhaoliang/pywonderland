@@ -2,9 +2,10 @@ from struct import pack
 import random
 from lzw import lzw_encoder, PALETTE_BITS
 
+
 BACKGROUND_COLOR = [0, 0, 0]
-TREE_COLOR = [255, 0, 255]
-PATH_COLOR = [0, 0, 255]
+TREE_COLOR = [200, 200, 200]
+PATH_COLOR = [255, 0, 255]
 TRANS_COLOR = [0, 255, 0]
 
 BACKGROUND_COLOR_INDEX = 0
@@ -93,7 +94,7 @@ class Maze(object):
             for x, y in path:
                 self.fill(x, y, color_index)
             for a, b in zip(path[1:], path[:-1]):
-                self.fill((a[0]+b[0])/2, (a[1]+b[1])/2, color_index)
+                self.fill((a[0]+b[0])//2, (a[1]+b[1])//2, color_index)
 
 
 
@@ -150,7 +151,7 @@ for x, y in maze.cells:
         else:
             path.append((nx, ny))
             maze.fill(nx, ny, PATH_COLOR_INDEX)
-            maze.fill((nx+ox)/2, (ny+oy)/2, PATH_COLOR_INDEX)
+            maze.fill((nx+ox)//2, (ny+oy)//2, PATH_COLOR_INDEX)
 
         ox, oy = nx, ny
 
@@ -174,7 +175,7 @@ stream = Maze(width, height).encode_image(0, 0, BACKGROUND_COLOR_INDEX) + stream
 screen_descriptor = logical_screen_descriptor(maze.canvas_width, maze.canvas_height)
 palette = global_color_table(BACKGROUND_COLOR, TREE_COLOR,
                                PATH_COLOR, TRANS_COLOR)
-open('anim.gif', 'w').write('GIF89a' +
+open('wilson.gif', 'w').write('GIF89a' +
                             screen_descriptor +
                             palette +
                             loop_control_block() +

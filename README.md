@@ -133,7 +133,8 @@ Littlewood 多项式的根 [[View Code](./src/misc/rootsart.py)] [[Origin](http:
 
 ---
 ### Wilson Algorithm Animation
-Wilson 算法 [[View Code](./src/maze/)] [[View Randomized-DFS Animation](./img/dfs.gif)]
+Wilson 算法 [[View Code](./src/maze/)] [[View Randomized-DFS Animation](./img/dfs.gif)] 
+(some bugs to be fixed, run this in python2.7)
 
 <br>
 
