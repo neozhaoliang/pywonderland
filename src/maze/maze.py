@@ -155,18 +155,19 @@ def wilson(width, height, root=(0, 0)):
 
                 if maze.num_changes >= SPEED:
                     stream += graphics_control_block(2) + maze.output_frame()
-            for v in path:
-                tree.add(v)
 
+            tree = tree.union(path)
             maze.fill_path(path, TREE_COLOR_INDEX)
 
 
     if maze.num_changes > 0:
         stream += graphics_control_block(2) + maze.output_frame()
 
-    # pad 1x1 pixel frame
+    # pad 1x1 pixel transparent frame for delay
     stream = delay_frame(50) + stream + delay_frame(300)
-    # add background frame
+
+    # add background frame. Since for regions not covered by a frame,
+    # the transparent color is used.
     stream = Maze(width, height).encode_image(0, 0, BACKGROUND_COLOR_INDEX) + stream
     screen_descriptor = logical_screen_descriptor(maze.canvas_width, maze.canvas_height)
     palette = global_color_table(BACKGROUND_COLOR, TREE_COLOR,
