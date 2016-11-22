@@ -1,7 +1,6 @@
 '''
 Animating Wilson's uniform spanning tree algorithm on a 2d grid.
 '''
-
 import random
 from lzw import *
 
@@ -20,7 +19,9 @@ TRANS_COLOR_INDEX = 3
 SCALE = 5
 # speed of the animation
 SPEED = 10
-
+# margin between the maze and the border of window
+# size in celss
+MARGIN = 2
 
 
 class Maze(object):
@@ -39,8 +40,10 @@ class Maze(object):
         self.diff_box = None
 
         self.cells = []
-        for y in range(0, height, 2):
-            for x in range(0, width, 2):
+        # to pad margin at the border just 'shrink' the maze a little.
+        # well mathematically it's not very comfortable but it's a cheap way to do the trick.
+        for y in range(MARGIN, height-MARGIN, 2):
+            for x in range(MARGIN, width-MARGIN, 2):
                 self.cells.append((x, y))
 
 
@@ -53,7 +56,7 @@ class Maze(object):
         return descriptor + stream
 
 
-    def fill(self, cell, color_index):
+    def fill_cell(self, cell, color_index):
         '''
         Note we update the differ box each time we fill a cell
         '''
@@ -80,7 +83,7 @@ class Maze(object):
 
         for y in range(top, bottom+1):
             for x in range(left, right+1):
-                mask.fill((x - left, y - top), self.data[x*SCALE][y*SCALE])
+                mask.fill_cell((x - left, y - top), self.data[x*SCALE][y*SCALE])
 
         self.num_changes = 0
         self.diff_box = None
@@ -91,13 +94,13 @@ class Maze(object):
     def get_neighbors(self, cell):
         x, y = cell
         neighbors = []
-        if x >= 2:
+        if x >= 2 + MARGIN:
             neighbors.append((x-2, y))
-        if y >= 2:
+        if y >= 2 + MARGIN:
             neighbors.append((x, y-2))
-        if x <= self.width-3:
+        if x <= self.width - 3 - MARGIN:
             neighbors.append((x+2, y))
-        if y <= self.height-3:
+        if y <= self.height - 3 - MARGIN:
             neighbors.append((x, y+2))
         return neighbors
 
@@ -105,12 +108,12 @@ class Maze(object):
     def fill_wall(self, cellA, cellB, color_index):
         wall = ((cellA[0] + cellB[0])//2,
                 (cellA[1] + cellB[1])//2)
-        self.fill(wall, color_index)
+        self.fill_cell(wall, color_index)
 
 
     def fill_path(self, path, color_index):
         for cell in path:
-            self.fill(cell, color_index)
+            self.fill_cell(cell, color_index)
         for cellA, cellB in zip(path[1:], path[:-1]):
             self.fill_wall(cellA, cellB, color_index)
 
@@ -125,7 +128,7 @@ def delay_frame(delay):
             + chr(0))
 
 
-def wilson(width, height, root=(0, 0)):
+def wilson(width, height, root=(MARGIN, MARGIN)):
     maze = Maze(width, height)
     stream = str()
     tree = set([root])
@@ -133,7 +136,7 @@ def wilson(width, height, root=(0, 0)):
     for cell in maze.cells:
         if cell not in tree:
             path = [cell]
-            maze.fill(cell, PATH_COLOR_INDEX)
+            maze.fill_cell(cell, PATH_COLOR_INDEX)
 
             current_cell = cell
             while current_cell not in tree:
@@ -142,12 +145,12 @@ def wilson(width, height, root=(0, 0)):
                     index = path.index(next_cell)
                     # erase path
                     maze.fill_path(path[index:], BACKGROUND_COLOR_INDEX)
-                    maze.fill(path[index], PATH_COLOR_INDEX)
+                    maze.fill_cell(path[index], PATH_COLOR_INDEX)
                     path = path[:index+1]
 
                 else:
                     path.append(next_cell)
-                    maze.fill(next_cell, PATH_COLOR_INDEX)
+                    maze.fill_cell(next_cell, PATH_COLOR_INDEX)
                     maze.fill_wall(current_cell, next_cell, PATH_COLOR_INDEX)
 
                 current_cell = next_cell
