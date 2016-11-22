@@ -18,7 +18,6 @@ A collection of python scripts that aimed at drawing beautiful figures or animat
 - [Beauty of Roots](#beauty-of-roots)
 - [Generalized Penrose Tilings](#generalized-penrose-tilings)
 - [Wilson Algorithm Animation](#wilson-algorithm-animation)
-- [World War Z in America](#world-war-z-in-america)
 
 ---
 ### Mandelbrot Set
@@ -147,21 +146,6 @@ currently only runs with Python2.7
 <br>
 [[Back to Top](#contents)]
 
-
----
-### World War Z in America
-模拟僵尸爆发 [[View Code](./src/zombie/)] [[View Webm Animation](./img/zombie.webm)] 
-
-This is an animation, see the video in the above link.
-
-<br>
-
-<p align="center">
-<img src="./img/zombie.png"/>
-</p>
-
-<br>
-[[Back to Top](#contents)]
 
 
 ## Dependencies
