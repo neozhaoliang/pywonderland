@@ -9,7 +9,10 @@ The model is basically a slightly changed reaction-diffusion process,
 the tricky part is how to lay the zombie's density map on top of the
 population density map.
 
-The code is not well-structured, since I just want a single animation.
+The code is not well-structured since I just want a single animation.
+
+For windows users you should manually set 'PROGRAM' to be the path
+to your ffmpeg binaries.
 '''
 import subprocess
 import glob
@@ -20,6 +23,8 @@ from scipy.ndimage.filters import convolve
 from PIL import Image
 from tqdm import tqdm
 
+
+PROGRAM = 'ffmpeg'
 
 INFECTION_SPEED = 0.2
 TURNING_SPEED = 0.5
@@ -67,15 +72,15 @@ for i in tqdm(range(days*24)):
     HIZ = update(HIZ)
     if (i % 24 == 0):
         ax.clear()
-        ax.axis("off")
+        ax.axis('off')
         I, Z = HIZ[1:]
         img = np.dstack((Z**0.1, I**0.2, M, Z**0.2))
-        ax.imshow(usa_color, cmap="Greys_r", interpolation="nearest")
-        ax.imshow(img, interpolation="nearest")
-        fig.savefig("zombie{:03d}.png".format(i/24))
+        ax.imshow(usa_color, cmap='Greys_r', interpolation='nearest')
+        ax.imshow(img, interpolation='nearest')
+        fig.savefig('zombie{:03d}.png'.format(i/24))
 
 
-command = ['ffmpeg',
+command = [PROGRAM,
            '-loglevel', 'quiet',
            '-framerate', '16',
            '-i', 'zombie%03d.png',
