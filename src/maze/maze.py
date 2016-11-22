@@ -2,7 +2,6 @@
 Animating Wilson's uniform spanning tree algorithm on a 2d grid.
 '''
 
-from struct import pack
 import random
 from lzw import *
 

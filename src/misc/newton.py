@@ -1,5 +1,5 @@
 import numpy as np
-from PIL import Image
+import matplotlib.pyplot as plt
 from numba import jit
 
 
@@ -30,14 +30,11 @@ def render(imgsize):
     y = np.linspace(1, -1, imgsize)
     z = x[None, :] + y[:, None] * 1j
     img = np.frompyfunc(iterate, 1, 1)(z).astype(np.float)
-    img /= np.max(img)
-
-    # self-defined rgb channels, a mimick of matplotlib's hot colormap
-    red = np.sin(img * np.pi)
-    green = img * img
-    blue = np.zeros_like(img)
-    image = np.dstack((red, green, blue))
-    Image.fromarray(np.uint8(image*255)).save('newton.png')
+    fig = plt.figure(figsize=(imgsize/100.0, imgsize/100.0), dpi=100)
+    ax = fig.add_axes([0, 0, 1, 1], aspect=1)
+    ax.axis('off')
+    ax.imshow(img, cmap='hot')
+    fig.savefig('newton.png')
 
 
 if __name__ == '__main__':
