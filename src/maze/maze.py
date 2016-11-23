@@ -1,27 +1,51 @@
 '''
-Animating Wilson's uniform spanning tree algorithm on a 2d grid.
+This script makes a GIF animation of the Wilson algorithm by directly
+encoding the frames into byte streams with LZW algorithm. It can be served
+for the following purposes:
+
+1. Visualize how Wilson algorithm works on a 2d grid.
+
+2. A playground for implementing various maze solving algorithms.
+
+3. A quick example shows how to implement a LZW encoder for GIF files.
+
+4. Help you understand the structure of a GIF file, especially how to
+combine the transparent and disposal features to make nice animations.
+
+5. You can also extend this method to animate Conway's game of life,
+Langton' ant, ... many other possibilities.
+
+Features of this script:
+
+1. Just pure python with built-in functions and the random/struct modules,
+no dependencies needed.
+
+2. Neat and small output file, just wait a few seconds to see the result!
+
+Any suggestions are welcomed: zhao liang <mathzhaoliang@gmail.com>
 '''
 import random
 from lzw import *
 
 
-BACKGROUND_COLOR = [0, 0, 0]
-TREE_COLOR = [200, 200, 200]
-PATH_COLOR = [255, 0, 255]
-TRANS_COLOR = [0, 255, 0]
+wall_color = [0, 0, 0]
+tree_color = [100, 100, 100]
+path_color = [255, 0, 255]
+paint_color = [150, 200, 100]
 
-BACKGROUND_COLOR_INDEX = 0
-TREE_COLOR_INDEX = 1
-PATH_COLOR_INDEX = 2
-TRANS_COLOR_INDEX = 3
+iswall = wall_color_index = 0
+intree = tree_color_index = 1
+inpath = path_color_index = 2
+painted = paint_color_index = 3
 
 # size of cell in pixels
-SCALE = 5
+scale = 5
 # speed of the animation
-SPEED = 10
+speed = 10
 # margin between the maze and the border of window
 # size in celss
-MARGIN = 2
+margin = 2
+
 
 
 class Maze(object):
@@ -33,17 +57,18 @@ class Maze(object):
         '''
         self.width = width
         self.height = height
-        self.canvas_width = width * SCALE
-        self.canvas_height = height * SCALE
+        self.canvas_width = width * scale
+        self.canvas_height = height * scale
         self.data = [[0] * self.canvas_height for _ in range(self.canvas_width)]
         self.num_changes = 0
         self.diff_box = None
 
         self.cells = []
         # to pad margin at the border just 'shrink' the maze a little.
-        # well mathematically it's not very comfortable but it's a cheap way to do the trick.
-        for y in range(MARGIN, height-MARGIN, 2):
-            for x in range(MARGIN, width-MARGIN, 2):
+        # well, it's not very comfortable mathematically but it's a cheap way to do the trick.
+        # the order of the cells is irrelevant. It only changes the appearance of the animation.
+        for y in range(margin, height - margin, 2):
+            for x in range(margin, width - margin, 2):
                 self.cells.append((x, y))
 
 
@@ -51,19 +76,19 @@ class Maze(object):
         imagedata = [self.data[x][y] for y in range(self.canvas_height) for x in range(self.canvas_width)]
 
         stream = lzw_encoder(imagedata, *color_indexes)
-        descriptor = image_descriptor(left * SCALE, top * SCALE,
+        descriptor = image_descriptor(left * scale, top * scale,
                                       self.canvas_width, self.canvas_height)
         return descriptor + stream
 
 
-    def fill_cell(self, cell, color_index):
+    def mark_cell(self, cell, index):
         '''
-        Note we update the differ box each time we fill a cell
+        update the differ box each time we change a cell
         '''
         x, y = cell
-        for ox in range(SCALE):
-            for oy in range(SCALE):
-                self.data[x*SCALE + ox][y*SCALE + oy] = color_index
+        for ox in range(scale):
+            for oy in range(scale):
+                self.data[x*scale + ox][y*scale + oy] = index
 
         self.num_changes += 1
 
@@ -75,7 +100,7 @@ class Maze(object):
             self.diff_box = (x, y, x, y)
 
 
-    def output_frame(self):
+    def output_frame(self, *color_indexes):
         left, top, right, bottom = self.diff_box
         width = (right - left) + 1
         height = (bottom - top) + 1
@@ -83,105 +108,212 @@ class Maze(object):
 
         for y in range(top, bottom+1):
             for x in range(left, right+1):
-                mask.fill_cell((x - left, y - top), self.data[x*SCALE][y*SCALE])
+                mask.mark_cell((x - left, y- top), self.data[x*scale][y*scale])
 
+        # clear the differ box and the counter
         self.num_changes = 0
         self.diff_box = None
-        return mask.encode_image(left, top, BACKGROUND_COLOR_INDEX,
-                                 TREE_COLOR_INDEX, PATH_COLOR_INDEX)
+        return mask.encode_image(left, top, *color_indexes)
 
 
     def get_neighbors(self, cell):
         x, y = cell
         neighbors = []
-        if x >= 2 + MARGIN:
+        if x >= 2 + margin:
             neighbors.append((x-2, y))
-        if y >= 2 + MARGIN:
+        if y >= 2 + margin:
             neighbors.append((x, y-2))
-        if x <= self.width - 3 - MARGIN:
+        if x <= self.width - 3 - margin:
             neighbors.append((x+2, y))
-        if y <= self.height - 3 - MARGIN:
+        if y <= self.height - 3 - margin:
             neighbors.append((x, y+2))
+
+        # return a shuffled list for randomized dfs/bfs if you like
+        random.shuffle(neighbors)
         return neighbors
 
 
-    def fill_wall(self, cellA, cellB, color_index):
+    def mark_wall(self, cellA, cellB, index):
         wall = ((cellA[0] + cellB[0])//2,
                 (cellA[1] + cellB[1])//2)
-        self.fill_cell(wall, color_index)
+        self.mark_cell(wall, index)
 
 
-    def fill_path(self, path, color_index):
+    def mark_path(self, path, index):
         for cell in path:
-            self.fill_cell(cell, color_index)
+            self.mark_cell(cell, index)
         for cellA, cellB in zip(path[1:], path[:-1]):
-            self.fill_wall(cellA, cellB, color_index)
+            self.mark_wall(cellA, cellB, index)
+
+
+    def check_wall(self, cellA, cellB):
+        '''
+        check if two cells are connected
+        '''
+        x = (cellA[0] + cellB[0])//2
+        y = (cellA[1] + cellB[1])//2
+        return self.data[x*scale][y*scale] == iswall
+
+
+    def write_to_gif(self, stream, filename):
+        screen_descriptor = logical_screen_descriptor(self.canvas_width, self.canvas_height)
+        palette = global_color_table(wall_color, tree_color, path_color, paint_color)
+
+        with open(filename, 'w') as f:
+            f.write('GIF89a'
+                    + screen_descriptor
+                    + palette
+                    + loop_control_block()
+                    + stream
+                    + '\x3B')
 
 
 
-def delay_frame(delay):
-    return (graphics_control_block(delay)
+def delay_frame(delay, trans_index):
+    return (graphics_control_block(delay, trans_index)
             + image_descriptor(0, 0, 1, 1)
             + chr(PALETTE_BITS)
             + chr(1)
-            + chr(TRANS_COLOR_INDEX)
+            + chr(trans_index)
             + chr(0))
 
 
-def wilson(width, height, root=(MARGIN, MARGIN)):
+def wilson(width, height, root=(margin, margin)):
     maze = Maze(width, height)
+
+    # we will put encoded image data into this stream
     stream = str()
+
+    # Wilson algorithm maintains a tree, initially it's {root}
     tree = set([root])
+    maze.mark_cell(root, intree)
+
 
     for cell in maze.cells:
         if cell not in tree:
             path = [cell]
-            maze.fill_cell(cell, PATH_COLOR_INDEX)
+            maze.mark_cell(cell, inpath)
 
             current_cell = cell
+            # start a loop erased random walk at current_cell
             while current_cell not in tree:
                 next_cell = random.choice(maze.get_neighbors(current_cell))
                 if next_cell in path:
+                    # so we have found a loop in the path, erase it!
                     index = path.index(next_cell)
-                    # erase path
-                    maze.fill_path(path[index:], BACKGROUND_COLOR_INDEX)
-                    maze.fill_cell(path[index], PATH_COLOR_INDEX)
+                    maze.mark_path(path[index:], iswall)
+                    maze.mark_cell(path[index], inpath)
                     path = path[:index+1]
 
                 else:
+                    # add this cell to path and continue the walk from it
                     path.append(next_cell)
-                    maze.fill_cell(next_cell, PATH_COLOR_INDEX)
-                    maze.fill_wall(current_cell, next_cell, PATH_COLOR_INDEX)
+                    maze.mark_cell(next_cell, inpath)
+                    maze.mark_wall(current_cell, next_cell, inpath)
 
                 current_cell = next_cell
 
-                if maze.num_changes >= SPEED:
-                    stream += graphics_control_block(2) + maze.output_frame()
+                if maze.num_changes >= speed:
+                    stream += (graphics_control_block(delay=2, trans_index=paint_color_index)
+                               + maze.output_frame(wall_color_index, tree_color_index, path_color_index))
 
+
+            # once the random walk hits the tree, then add the path to the tree
+            # and continue the loop at any new cell that not in the tree
             tree = tree.union(path)
-            maze.fill_path(path, TREE_COLOR_INDEX)
+            maze.mark_path(path, intree)
 
 
     if maze.num_changes > 0:
-        stream += graphics_control_block(2) + maze.output_frame()
+        stream += (graphics_control_block(delay=2, trans_index=paint_color_index)
+                   + maze.output_frame(wall_color_index, tree_color_index, path_color_index))
 
     # pad 1x1 pixel transparent frame for delay
-    stream = delay_frame(50) + stream + delay_frame(300)
+    # note we used the paint color as the transparent color
+    # this does not affect our wilson animaion since we have not
+    # used the painted index so far.
+    stream = (delay_frame(delay=100, trans_index=paint_color_index)
+              + stream
+              + delay_frame(delay=300, trans_index=paint_color_index))
 
-    # add background frame. Since for regions not covered by a frame,
-    # the transparent color is used.
-    stream = Maze(width, height).encode_image(0, 0, BACKGROUND_COLOR_INDEX) + stream
-    screen_descriptor = logical_screen_descriptor(maze.canvas_width, maze.canvas_height)
-    palette = global_color_table(BACKGROUND_COLOR, TREE_COLOR,
-                               PATH_COLOR, TRANS_COLOR)
+    # add a background frame. since for a region that hasn't been covered by any frame yet
+    # a transparent background will show though.
+    stream = Maze(width, height).encode_image(0, 0, wall_color_index) + stream
 
-    with open('wilson.gif', 'w') as f:
-        f.write('GIF89a'
-                + screen_descriptor
-                + palette
-                + loop_control_block()
-                + stream
-                + '\x3B')
+
+    # we have finished Wilson algorithm's animation
+    # and you can call the write_to_gif method to see the result now!
+    # But wait, why not step further and add another animaion? Let's solve this maze!
+
+    # you may use bread-first-search, depth-first-search, randomized-search, A-star, ...
+    # you name it. I will show you how to do this with randomized depth-first-search,
+    # other algorithms can be done in a similar manner and they are left to you!
+
+
+    # so we need the following data structures:
+    # 1. a stack to hold cells that to be processed.
+    # 2. a dict to record where to where.
+    # 3. a set consists of visited cells.
+
+    # we will start at the top-left corner and look for a way to the bottom-right corner.
+    start = (margin, margin)
+    end = (width - 1 - margin, height - 1 - margin)
+    stack = [(root, root)]
+    visited = set([start])
+    where = dict()    # the dict tells us where we are from and go to where
+    maze.mark_cell(start, painted)
+
+    while stack:
+        current, last = stack.pop()
+        where[current] = last
+        maze.mark_wall(current, last, painted)
+
+        if current == end:
+            break
+        else:
+            maze.mark_cell(current, painted)
+            for next_cell in maze.get_neighbors(current):
+                if (next_cell not in visited) and (not maze.check_wall(current, next_cell)):
+                    stack.append((next_cell, current))
+                    visited.add(next_cell)
+
+        if maze.num_changes >= speed:
+            stream += (graphics_control_block(delay=5, trans_index=wall_color_index)
+                       + maze.output_frame(wall_color_index,
+                                           wall_color_index,
+                                           wall_color_index,
+                                           paint_color_index))
+
+    # It's important for you to understand how this works:
+    # this time we set wall color to be the transparent color
+    # and we colored wall, tree both with this transparent color,
+    # so the underlying maze image we have constructed in the Wilson
+    # algorithm step will show through.
+    if maze.num_changes > 0:
+        stream += (graphics_control_block(delay=5, trans_index=wall_color_index)
+                   + maze.output_frame(wall_color_index,
+                                       wall_color_index,
+                                       wall_color_index,
+                                       paint_color_index))
+
+    # now add the frame that shows the path !
+    # but we have to retrieve the path first:
+    path = [end]
+    tmp = end
+    while tmp != start:
+        tmp = where[tmp]
+        path.append(tmp)
+
+    maze.mark_path(path, path_color_index)
+    stream += (graphics_control_block(delay=5, trans_index=wall_color_index)
+               + maze.output_frame(wall_color_index,
+                                   wall_color_index,
+                                   path_color_index,
+                                   paint_color_index))
+
+    # pad a frame to show the path clearly
+    stream += delay_frame(1000, trans_index=wall_color_index)
+    maze.write_to_gif(stream, 'wilson.gif')
 
 
 if __name__ == '__main__':

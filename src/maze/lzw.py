@@ -47,12 +47,12 @@ def loop_control_block():
     return pack('<3B8s3s2BHB', 0x21, 0xFF, 11, 'NETSCAPE', '2.0', 3, 1, 0, 0)
 
 
-def graphics_control_block(delay):
+def graphics_control_block(delay, trans_index):
     '''
     This block should occur just before the image descriptor block,
     it only controls the single frame that follows it.
     '''
-    return pack("<4BH2B", 0x21, 0xF9, 4, 0b00000101, delay, 3, 0)
+    return pack("<4BH2B", 0x21, 0xF9, 4, 0b00000101, delay, trans_index, 0)
 
 
 def image_descriptor(left, top, width, height):
@@ -128,10 +128,11 @@ class LZWEncoder(object):
         next_code = END_CODE + 1
 
         # The following line is much deeper than it's first-look,
-        # Make sure you understand it!
+        # Make sure you understand it! It's a little different from the standard LZW encoding:
+        # In out animation we want to color our cells, with the same palette, but in different ways.
         code_table = {str(i): c for i, c in enumerate(color_indexes)}
 
-        # Always start with the clear code
+        # always start with the clear code
         self.encode_bits(CLEAR_CODE, code_length)
 
         pattern = str()
