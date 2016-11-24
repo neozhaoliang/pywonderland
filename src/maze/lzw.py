@@ -6,6 +6,7 @@ __all__ = ['logical_screen_descriptor',
            'loop_control_block',
            'graphics_control_block',
            'image_descriptor',
+           'delay_frame',
            'lzw_encoder',
            'PALETTE_BITS']
 
@@ -62,6 +63,14 @@ def image_descriptor(left, top, width, height):
     '''
     return pack('<B4HB', 0x2C, left, top, width, height, 0)
 
+
+def delay_frame(delay, trans_index):
+    return (graphics_control_block(delay, trans_index)
+            + image_descriptor(0, 0, 1, 1)
+            + chr(PALETTE_BITS)
+            + chr(1)
+            + chr(trans_index)
+            + chr(0))
 
 
 

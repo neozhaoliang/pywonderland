@@ -1,7 +1,6 @@
 '''
-This script makes a GIF animation of the Wilson algorithm by directly
-encoding the frames into byte streams with LZW algorithm. It can be served
-for the following purposes:
+This script makes GIF animations of the Wilson algorithm by directly
+encoding frames into byte streams with LZW algorithm. It might be useful for the following purposes:
 
 1. Visualize how Wilson algorithm works on a 2d grid.
 
@@ -15,10 +14,9 @@ combine the transparent and disposal features to make nice animations.
 5. You can also extend this method to animate Conway's game of life,
 Langton' ant, ... many other possibilities.
 
-Features of this script:
+Features:
 
-1. Just pure python with built-in functions and the random/struct modules,
-no dependencies needed.
+1. Pure python with built-in functions/modules, no dependencies needed.
 
 2. Neat and small output file, just wait a few seconds to see the result!
 
@@ -43,7 +41,7 @@ scale = 5
 # speed of the animation
 speed = 10
 # margin between the maze and the border of window
-# size in celss
+# size in cells
 margin = 2
 
 
@@ -65,8 +63,9 @@ class Maze(object):
 
         self.cells = []
         # to pad margin at the border just 'shrink' the maze a little.
-        # well, it's not very comfortable mathematically but it's a cheap way to do the trick.
-        # the order of the cells is irrelevant. It only changes the appearance of the animation.
+        # well, this isn't very comfortable mathematically but it does the trick in a cheap way.
+        # the order that how the cells are added is irrelevant,
+        # it only changes the appearance of the animation.
         for y in range(margin, height - margin, 2):
             for x in range(margin, width - margin, 2):
                 self.cells.append((x, y))
@@ -82,16 +81,15 @@ class Maze(object):
 
 
     def mark_cell(self, cell, index):
-        '''
-        update the differ box each time we change a cell
-        '''
         x, y = cell
         for ox in range(scale):
             for oy in range(scale):
                 self.data[x*scale + ox][y*scale + oy] = index
 
+
         self.num_changes += 1
 
+        # update the differ box each time we change a cell
         if self.diff_box:
             left, top, right, bottom = self.diff_box
             self.diff_box = (min(x, left), min(y, top),
@@ -169,15 +167,6 @@ class Maze(object):
 
 
 
-def delay_frame(delay, trans_index):
-    return (graphics_control_block(delay, trans_index)
-            + image_descriptor(0, 0, 1, 1)
-            + chr(PALETTE_BITS)
-            + chr(1)
-            + chr(trans_index)
-            + chr(0))
-
-
 def wilson(width, height, root=(margin, margin)):
     maze = Maze(width, height)
 
@@ -218,8 +207,8 @@ def wilson(width, height, root=(margin, margin)):
                                + maze.output_frame(wall_color_index, tree_color_index, path_color_index))
 
 
-            # once the random walk hits the tree, then add the path to the tree
-            # and continue the loop at any new cell that not in the tree
+            # once the random walk hits the tree, add the path to the tree
+            # and continue the loop at any new cell that is not in the tree
             tree = tree.union(path)
             maze.mark_path(path, intree)
 
@@ -228,8 +217,8 @@ def wilson(width, height, root=(margin, margin)):
         stream += (graphics_control_block(delay=2, trans_index=paint_color_index)
                    + maze.output_frame(wall_color_index, tree_color_index, path_color_index))
 
-    # pad 1x1 pixel transparent frame for delay
-    # note we used the paint color as the transparent color
+    # pad 1x1 pixel transparent frame for delay.
+    # note we used the paint color as the transparent color.
     # this does not affect our wilson animaion since we have not
     # used the painted index so far.
     stream = (delay_frame(delay=100, trans_index=paint_color_index)
@@ -250,7 +239,7 @@ def wilson(width, height, root=(margin, margin)):
     # other algorithms can be done in a similar manner and they are left to you!
 
 
-    # so we need the following data structures:
+    # to do a dfs search we need some data structures:
     # 1. a stack to hold cells that to be processed.
     # 2. a dict to record where to where.
     # 3. a set consists of visited cells.
@@ -304,7 +293,7 @@ def wilson(width, height, root=(margin, margin)):
         tmp = where[tmp]
         path.append(tmp)
 
-    maze.mark_path(path, path_color_index)
+    maze.mark_path(path, inpath)
     stream += (graphics_control_block(delay=5, trans_index=wall_color_index)
                + maze.output_frame(wall_color_index,
                                    wall_color_index,

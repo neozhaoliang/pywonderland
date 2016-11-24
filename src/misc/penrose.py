@@ -77,6 +77,8 @@ def render(imgsize, num_lines):
     ctx.translate(num_lines, num_lines)
     ctx.set_line_join(2)
     ctx.set_line_width(0.1)
+    ctx.set_source_rgb(0, 0, 0)
+    ctx.paint()
 
     for rhombus, color in tile(num_lines):
         A, B, C, D = rhombus
