@@ -63,7 +63,7 @@ class Maze(object):
 
         self.cells = []
         # to pad margin at the border just 'shrink' the maze a little.
-        # well, this isn't very comfortable mathematically but it does the trick in a cheap way.
+        # well this isn't very comfortable mathematically but it does the trick in a cheap way.
         # the order that how the cells are added is irrelevant,
         # it only changes the appearance of the animation.
         for y in range(margin, height - margin, 2):
@@ -86,9 +86,7 @@ class Maze(object):
             for oy in range(scale):
                 self.data[x*scale + ox][y*scale + oy] = index
 
-
         self.num_changes += 1
-
         # update the differ box each time we change a cell
         if self.diff_box:
             left, top, right, bottom = self.diff_box
@@ -177,7 +175,6 @@ def wilson(width, height, root=(margin, margin)):
     tree = set([root])
     maze.mark_cell(root, intree)
 
-
     for cell in maze.cells:
         if cell not in tree:
             path = [cell]
@@ -193,7 +190,6 @@ def wilson(width, height, root=(margin, margin)):
                     maze.mark_path(path[index:], iswall)
                     maze.mark_cell(path[index], inpath)
                     path = path[:index+1]
-
                 else:
                     # add this cell to path and continue the walk from it
                     path.append(next_cell)
@@ -206,50 +202,46 @@ def wilson(width, height, root=(margin, margin)):
                     stream += (graphics_control_block(delay=2, trans_index=paint_color_index)
                                + maze.output_frame(wall_color_index, tree_color_index, path_color_index))
 
-
             # once the random walk hits the tree, add the path to the tree
             # and continue the loop at any new cell that is not in the tree
             tree = tree.union(path)
             maze.mark_path(path, intree)
-
 
     if maze.num_changes > 0:
         stream += (graphics_control_block(delay=2, trans_index=paint_color_index)
                    + maze.output_frame(wall_color_index, tree_color_index, path_color_index))
 
     # pad 1x1 pixel transparent frame for delay.
-    # note we used the paint color as the transparent color.
+    # use the paint color as the transparent color.
     # this does not affect our wilson animaion since we have not
     # used the painted index so far.
     stream = (delay_frame(delay=100, trans_index=paint_color_index)
               + stream
               + delay_frame(delay=300, trans_index=paint_color_index))
 
-    # add a background frame. since for a region that hasn't been covered by any frame yet
-    # a transparent background will show though.
+    # add a background frame. for regions that haven't been covered by any frame yet
+    # a transparent background will show through.
     stream = Maze(width, height).encode_image(0, 0, wall_color_index) + stream
-
 
     # we have finished Wilson algorithm's animation
     # and you can call the write_to_gif method to see the result now!
     # But wait, why not step further and add another animaion? Let's solve this maze!
 
     # you may use bread-first-search, depth-first-search, randomized-search, A-star, ...
-    # you name it. I will show you how to do this with randomized depth-first-search,
-    # other algorithms can be done in a similar manner and they are left to you!
+    # whatever you like. I will show you how to do this with randomized depth-first-search,
+    # other algorithms can be done in a similar manner and are left to you!
 
-
-    # to do a dfs search we need some data structures:
+    # data structures needed:
     # 1. a stack to hold cells that to be processed.
-    # 2. a dict to record where to where.
+    # 2. a dict to remember where to where.
     # 3. a set consists of visited cells.
 
-    # we will start at the top-left corner and look for a way to the bottom-right corner.
+    # we will start at the top-left corner and look for the path to the bottom-right corner.
     start = (margin, margin)
     end = (width - 1 - margin, height - 1 - margin)
     stack = [(root, root)]
     visited = set([start])
-    where = dict()    # the dict tells us where we are from and go to where
+    where = dict()
     maze.mark_cell(start, painted)
 
     while stack:
@@ -273,7 +265,7 @@ def wilson(width, height, root=(margin, margin)):
                                            wall_color_index,
                                            paint_color_index))
 
-    # It's important for you to understand how this works:
+    # It's important to understand how this works:
     # this time we set wall color to be the transparent color
     # and we colored wall, tree both with this transparent color,
     # so the underlying maze image we have constructed in the Wilson

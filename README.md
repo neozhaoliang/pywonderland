@@ -142,6 +142,7 @@ Wilson 算法 [[View Code](./src/maze/)] [[Wiki](https://en.wikipedia.org/wiki/L
 </p>
 
 <br>
+[[A Large Version](./img/wilson_large.gif)]
 [[Back to Top](#contents)]
 
 
