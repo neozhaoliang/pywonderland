@@ -1,17 +1,6 @@
 from struct import pack
 
 
-__all__ = ['logical_screen_descriptor',
-           'global_color_table',
-           'loop_control_block',
-           'graphics_control_block',
-           'image_descriptor',
-           'delay_frame',
-           'lzw_encoder',
-           'PALETTE_BITS']
-
-
-
 # Constants for LZW encoding
 # Do not modify these!
 # --------
@@ -20,6 +9,19 @@ CLEAR_CODE = 4
 END_CODE = 5
 MAX_CODES = 4096
 # --------
+
+
+def int_to_byte(n):
+    '''
+    convert an integer in [0, 255] to a byte.
+    In python3 this can be replaced by bytes([n]), or n.to_bytes(),
+    but python2 is a headache.
+    '''
+    return pack('B', n)
+
+
+gif_header = pack('6s', b'GIF89a')
+gif_trailor = pack('B', 0x3B)
 
 
 def logical_screen_descriptor(width, height):
@@ -33,10 +35,10 @@ def global_color_table(*color_list):
     '''
     This block always follows the logical screen descriptor immediately.
     '''
-    palette = []
+    palette = bytearray()
     for color in color_list:
         palette.extend(color)
-    return pack('{:d}B'.format(len(palette)), *palette);
+    return palette
 
 
 def loop_control_block():
@@ -45,7 +47,7 @@ def loop_control_block():
     it only affects the frames after it
     until a next loop control block.
     '''
-    return pack('<3B8s3s2BHB', 0x21, 0xFF, 11, 'NETSCAPE', '2.0', 3, 1, 0, 0)
+    return pack('<3B8s3s2BHB', 0x21, 0xFF, 11, b'NETSCAPE', b'2.0', 3, 1, 0, 0)
 
 
 def graphics_control_block(delay, trans_index):
@@ -67,11 +69,7 @@ def image_descriptor(left, top, width, height):
 def delay_frame(delay, trans_index):
     return (graphics_control_block(delay, trans_index)
             + image_descriptor(0, 0, 1, 1)
-            + chr(PALETTE_BITS)
-            + chr(1)
-            + chr(trans_index)
-            + chr(0))
-
+            + bytearray([PALETTE_BITS, 1, trans_index, 0]))
 
 
 class LZWEncoder(object):
@@ -111,26 +109,26 @@ class LZWEncoder(object):
         Note that after calling this method we should reset the attributes to their
         initial states.
         '''
-        bytestream = str()
+        bytestream = bytearray()
         while len(self.bitstream) > 255:
-            bytestream += chr(255) + self.bitstream[:255]
+            bytestream += int_to_byte(255) + self.bitstream[:255]
             self.bitstream = self.bitstream[255:]
         if self.bitstream:
-            bytestream += chr(len(self.bitstream)) + self.bitstream
+            bytestream += int_to_byte(len(self.bitstream)) + self.bitstream
 
         self.reset()
         return bytestream
 
 
-    def __call__(self, imagedata, *color_indexes):
+    def __call__(self, imagedata, *color_index):
         '''
         Now comes the most difficult part of code in this script!
         the imagedata should be a 1D array of integers in [0, 1, 2, 3],
-        the length of color_indexes must be as least as the different numbers in imagedata.
+        the length of color_index must be as least as the different numbers in imagedata.
 
-        The first color in color_indexes is used to paint the pixels with value 0,
-        the second color in color_indexes is used to paint the pixels with value 1, ... and so on.
-        So if you only specify two colors in the color_indexes but the imagedata contains at least 3
+        The first color in color_index is used to paint the pixels with value 0,
+        the second color in color_index is used to paint the pixels with value 1, ... and so on.
+        So if you only specify two colors in the color_index but the imagedata contains at least 3
         different numbers in [0, 1, 2, 3], you would get an error.
         '''
         code_length = PALETTE_BITS + 1
@@ -139,7 +137,7 @@ class LZWEncoder(object):
         # The following line is much deeper than it's first-look,
         # Make sure you understand it! It's a little different from the standard LZW encoding:
         # In out animation we want to color our cells, with the same palette, but in different ways.
-        code_table = {str(i): c for i, c in enumerate(color_indexes)}
+        code_table = {str(i): c for i, c in enumerate(color_index)}
 
         # always start with the clear code
         self.encode_bits(CLEAR_CODE, code_length)
@@ -165,12 +163,12 @@ class LZWEncoder(object):
                     next_code = END_CODE + 1
                     self.encode_bits(CLEAR_CODE, code_length)
                     code_length = PALETTE_BITS + 1
-                    code_table = {str(i): c for i, c in enumerate(color_indexes)}
+                    code_table = {str(i): c for i, c in enumerate(color_index)}
 
         self.encode_bits(code_table[pattern], code_length)
         self.encode_bits(END_CODE, code_length)
 
-        return chr(PALETTE_BITS) + self.dump_bytes() + chr(0)
+        return int_to_byte(PALETTE_BITS) + self.dump_bytes() + int_to_byte(0)
 
     def reset(self):
         self.num_bits = 0

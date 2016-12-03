@@ -70,11 +70,14 @@ class Maze(object):
             for x in range(margin, width - margin, 2):
                 self.cells.append((x, y))
 
+        # we will put encoded image data into this bytearray
+        self.stream = bytearray()
 
-    def encode_image(self, left, top, *color_indexes):
+
+    def encode_image(self, left, top, *color_index):
         imagedata = [self.data[x][y] for y in range(self.canvas_height) for x in range(self.canvas_width)]
 
-        stream = lzw_encoder(imagedata, *color_indexes)
+        stream = lzw_encoder(imagedata, *color_index)
         descriptor = image_descriptor(left * scale, top * scale,
                                       self.canvas_width, self.canvas_height)
         return descriptor + stream
@@ -96,7 +99,7 @@ class Maze(object):
             self.diff_box = (x, y, x, y)
 
 
-    def output_frame(self, *color_indexes):
+    def output_frame(self, *color_index):
         left, top, right, bottom = self.diff_box
         width = (right - left) + 1
         height = (bottom - top) + 1
@@ -109,7 +112,7 @@ class Maze(object):
         # clear the differ box and the counter
         self.num_changes = 0
         self.diff_box = None
-        return mask.encode_image(left, top, *color_indexes)
+        return mask.encode_image(left, top, *color_index)
 
 
     def get_neighbors(self, cell):
@@ -125,7 +128,7 @@ class Maze(object):
             neighbors.append((x, y+2))
 
         # return a shuffled list for randomized dfs/bfs if you like
-        random.shuffle(neighbors)
+        # random.shuffle(neighbors)
         return neighbors
 
 
@@ -151,25 +154,23 @@ class Maze(object):
         return self.data[x*scale][y*scale] == iswall
 
 
-    def write_to_gif(self, stream, filename):
+    def write_to_gif(self, filename):
         screen_descriptor = logical_screen_descriptor(self.canvas_width, self.canvas_height)
         palette = global_color_table(wall_color, tree_color, path_color, paint_color)
 
-        with open(filename, 'w') as f:
-            f.write('GIF89a'
+        with open(filename, 'wb') as f:
+            data = (gif_header
                     + screen_descriptor
                     + palette
                     + loop_control_block()
-                    + stream
-                    + '\x3B')
+                    + self.stream
+                    + gif_trailor)
+            f.write(data)
 
 
 
 def wilson(width, height, root=(margin, margin)):
     maze = Maze(width, height)
-
-    # we will put encoded image data into this stream
-    stream = str()
 
     # Wilson algorithm maintains a tree, initially it's {root}
     tree = set([root])
@@ -199,7 +200,7 @@ def wilson(width, height, root=(margin, margin)):
                 current_cell = next_cell
 
                 if maze.num_changes >= speed:
-                    stream += (graphics_control_block(delay=2, trans_index=paint_color_index)
+                    maze.stream += (graphics_control_block(delay=2, trans_index=paint_color_index)
                                + maze.output_frame(wall_color_index, tree_color_index, path_color_index))
 
             # once the random walk hits the tree, add the path to the tree
@@ -208,20 +209,20 @@ def wilson(width, height, root=(margin, margin)):
             maze.mark_path(path, intree)
 
     if maze.num_changes > 0:
-        stream += (graphics_control_block(delay=2, trans_index=paint_color_index)
+        maze.stream += (graphics_control_block(delay=2, trans_index=paint_color_index)
                    + maze.output_frame(wall_color_index, tree_color_index, path_color_index))
 
     # pad 1x1 pixel transparent frame for delay.
     # use the paint color as the transparent color.
     # this does not affect our wilson animaion since we have not
     # used the painted index so far.
-    stream = (delay_frame(delay=100, trans_index=paint_color_index)
-              + stream
+    maze.stream = (delay_frame(delay=100, trans_index=paint_color_index)
+              + maze.stream
               + delay_frame(delay=300, trans_index=paint_color_index))
 
     # add a background frame. for regions that haven't been covered by any frame yet
     # a transparent background will show through.
-    stream = Maze(width, height).encode_image(0, 0, wall_color_index) + stream
+    maze.stream = Maze(width, height).encode_image(0, 0, wall_color_index) + maze.stream
 
     # we have finished Wilson algorithm's animation
     # and you can call the write_to_gif method to see the result now!
@@ -259,7 +260,7 @@ def wilson(width, height, root=(margin, margin)):
                     visited.add(next_cell)
 
         if maze.num_changes >= speed:
-            stream += (graphics_control_block(delay=5, trans_index=wall_color_index)
+            maze.stream += (graphics_control_block(delay=5, trans_index=wall_color_index)
                        + maze.output_frame(wall_color_index,
                                            wall_color_index,
                                            wall_color_index,
@@ -271,7 +272,7 @@ def wilson(width, height, root=(margin, margin)):
     # so the underlying maze image we have constructed in the Wilson
     # algorithm step will show through.
     if maze.num_changes > 0:
-        stream += (graphics_control_block(delay=5, trans_index=wall_color_index)
+        maze.stream += (graphics_control_block(delay=5, trans_index=wall_color_index)
                    + maze.output_frame(wall_color_index,
                                        wall_color_index,
                                        wall_color_index,
@@ -286,15 +287,15 @@ def wilson(width, height, root=(margin, margin)):
         path.append(tmp)
 
     maze.mark_path(path, inpath)
-    stream += (graphics_control_block(delay=5, trans_index=wall_color_index)
+    maze.stream += (graphics_control_block(delay=5, trans_index=wall_color_index)
                + maze.output_frame(wall_color_index,
                                    wall_color_index,
                                    path_color_index,
                                    paint_color_index))
 
     # pad a frame to show the path clearly
-    stream += delay_frame(1000, trans_index=wall_color_index)
-    maze.write_to_gif(stream, 'wilson.gif')
+    maze.stream += delay_frame(1000, trans_index=wall_color_index)
+    maze.write_to_gif('wilson.gif')
 
 
 if __name__ == '__main__':
