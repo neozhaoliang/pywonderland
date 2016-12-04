@@ -11,15 +11,6 @@ MAX_CODES = 4096
 # --------
 
 
-def int_to_byte(n):
-    '''
-    convert an integer in [0, 255] to a byte.
-    In python3 this can be replaced by bytes([n]), or n.to_bytes(),
-    but python2 is a headache.
-    '''
-    return pack('B', n)
-
-
 gif_header = pack('6s', b'GIF89a')
 gif_trailor = pack('B', 0x3B)
 
@@ -111,10 +102,10 @@ class LZWEncoder(object):
         '''
         bytestream = bytearray()
         while len(self.bitstream) > 255:
-            bytestream += int_to_byte(255) + self.bitstream[:255]
+            bytestream += bytearray([255]) + self.bitstream[:255]
             self.bitstream = self.bitstream[255:]
         if self.bitstream:
-            bytestream += int_to_byte(len(self.bitstream)) + self.bitstream
+            bytestream += bytearray([len(self.bitstream)]) + self.bitstream
 
         self.reset()
         return bytestream
@@ -168,7 +159,7 @@ class LZWEncoder(object):
         self.encode_bits(code_table[pattern], code_length)
         self.encode_bits(END_CODE, code_length)
 
-        return int_to_byte(PALETTE_BITS) + self.dump_bytes() + int_to_byte(0)
+        return bytearray([PALETTE_BITS]) + self.dump_bytes() + bytearray([0])
 
     def reset(self):
         self.num_bits = 0
