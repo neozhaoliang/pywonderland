@@ -159,7 +159,6 @@ Python libs:
 + `tqdm`
 + `numba`
 + `pyglet`
-+ `vapory`
 
 Softwares:
 
