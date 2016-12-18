@@ -135,14 +135,14 @@ Littlewood 多项式的根 [[View Code](./src/misc/rootsart.py)] [[Origin](http:
 ### Wilson Algorithm Animation
 Wilson 算法 [[View Code](./src/maze/)] [[Wiki](https://en.wikipedia.org/wiki/Loop-erased_random_walk)] [[Mike Bostock's Javascript Animation](https://bl.ocks.org/mbostock/11357811)]
 
-I have updated the code and now it works both with python2.7 and python3!
+For more information see [this page](./src/maze/README.md).
 <br>
 <p align="center">
 <img src="./img/wilson.gif"/>
 </p>
 
 <br>
-[[A Large Version](./img/wilson_large.gif)]
+
 [[Back to Top](#contents)]
 
 
