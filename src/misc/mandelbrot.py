@@ -42,4 +42,4 @@ def main(xmin, xmax, ymin, ymax, width, height):
 
 
 if __name__ == '__main__':
-    main(-2.1, 0.8, -1.16, 1.16, 800, 640)
+    main(-2.1, 0.8, -1.16, 1.16, 1200, 960)
