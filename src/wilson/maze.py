@@ -1,3 +1,17 @@
+'''
+In this file we define two classes: 
+
+1. the 'Maze' class 
+
+   this is the abstract class for implementing maze operations,
+   it knows nothing about how to write the gif file nor which algorithm to animate.
+
+2. the 'Animation' class
+
+   this is the class for encapsulating all methods that we need to write the gif file.
+   It builds on top of the 'Maze' class and the 'GIFWriter' class.
+'''
+
 from encoder import GIFWriter
 
 
@@ -12,6 +26,7 @@ class Maze(object):
         '''
         self.width = width
         self.height = height
+        self.margin = margin
         self.grid = [[0]*height for _ in range(width)]
         self.num_changes = 0
         self.frame_box = None
@@ -118,8 +133,8 @@ class Animation(object):
 
     def write_to_gif(self, filename):
         self.writer.save(filename)
-
-
+        
+        
     def get_init_table(self, **kwargs):
         wc = kwargs.get('wall_color', None)
         tc = kwargs.get('tree_color', None)

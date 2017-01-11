@@ -4,7 +4,7 @@ from struct import pack
 __all__ = ['GIFWriter']
 
 
-# constants for the LZW encoding, do not modify these!
+# constants for LZW encoding, do not modify these!
 PALETTE_BITS = 2
 CLEAR_CODE = 4
 END_CODE = 5
@@ -40,10 +40,9 @@ class DataBlock(object):
             
     def dump_bytes(self):
         '''
-        Pack the LZW encoded image data into blocks.
-        Each block is of length <= 255 and is preceded by a byte
+        pack the LZW encoded image data into blocks.
+        each block is of length <= 255 and is preceded by a byte
         in 0-255 that indicates the length of this block.
-        Note that after calling this method we should reset the encoder.
         '''
         bytestream = bytearray()
         while len(self.bitstream) > 255:
@@ -67,7 +66,7 @@ class GIFWriter(object):
        (i) a graphics control block that specify the delay time and transparent color of the coming frame.
        (ii) the image descriptor for the coming frame.
        (iii) the LZW enconded data of the frame.
-    5. finally the trailor '0x3B'
+    5. finally the trailor '0x3B'.
     '''
     
     def __init__(self, width, height, palette, loop):
@@ -112,16 +111,16 @@ class GIFWriter(object):
 
         I think this is the most difficult part and it deserves more explanation.
         In our animation there are 4 possible states of a cell: wall(0), tree(1), path(2), and filled(3).
-        in some frames we want to color wall with black, and in some frames we want to color them transparent,
+        in some frames we want to color those walls with black, and in some frames we want to color them transparent,
         so we need a dict to maps the states to the colors (in fact to the indices of the colors in the global color table).
 
-        For example, if we want to color wall and tree with 0, i.e. the 0-th color in the global color table,
+        For example, if we want to color the walls and the tree with 0, i.e. the 0-th color in the global color table,
         color the path with 1 (the 1-th color in the global color table), and color the filled cells with 2,
         we can specify the init_table as follows:
 
         {'0': 0, '1': 0, '2': 1, '3': 2}
 
-        Now comes the tricky part: when the decoder reads the encoded data, by the standard LZW decoding peocedure,
+        Now comes the tricky part: when the decoder reads the encoded data, by the standard LZW decoding procedure,
         it will firstly reconstruct the init table always to be
 
         {'0': 0, '1': 1, '2': 2, '3': 3}

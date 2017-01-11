@@ -1,15 +1,51 @@
+'''
+Make gif animations of Wilson's uniform spanning tree algorithm and other maze-solving algorithms.
+
+
+Wilson's algorithm comes from probability, it samples a random spanning tree with equal probability
+among all spanning trees of a given simple, finite, connected graph. It's runs as follows:
+
+1. choose any vertex v as the root, maintain a tree T, initially T = {v}.
+2. for any vertex z that not in T, start a loop erased random walk from z, until the walk 'hits' T.
+   then add the resulting path of the walk to T.
+3. repeat step 2 until all vertices of the graph are in T.
+
+for the proof of the correctness of this algorithm see Wilson's original paper:
+
+Generating random spanning trees more quickly than the cover time.
+
+
+The maze-solving part is a bit arbitrary and you may implement any algorithm you like, I've chosen
+the depth first search algorithm for simplicity.
+
+
+Example Usage: simply run 
+
+    python main.py
+
+and enjoy the result!
+'''
+
 import argparse
 import random
 from maze import Maze, Animation
 
 
-def Wilson(width, height, margin, scale, speed, loop):
+def wilson(width, height, margin, scale, speed, loop):
     maze = Maze(width, height, margin)
     anim = Animation(maze, scale, speed, loop)
+
+    # here we need to paint the blank background because the region that has not been
+    # covered by any frame will be set to transparent by decoders.
+    # comment this line and see the result if you don't understand this.
     anim.paint_background(wall_color=0)
+
+    # pad a one second delay
     anim.pad_delay_frame(100)
 
+    # the root is default to be the top-left corner
     root = (margin, margin)
+    # initially the tree = {root}
     tree = set([root])
     maze.mark_cell(root, 1)
 
@@ -26,7 +62,6 @@ def Wilson(width, height, margin, scale, speed, loop):
                     maze.add_to_path(next_cell)
                     
                 current_cell = next_cell
-                
                 if maze.num_changes >= anim.speed:
                     anim.render_frame(wall_color=0, tree_color=1, path_color=2)
 
@@ -37,24 +72,32 @@ def Wilson(width, height, margin, scale, speed, loop):
     if maze.num_changes > 0:
         anim.render_frame(wall_color=0, tree_color=1, path_color=2)
 
+    # pad a two-seconds delay to see the maze clearly.
     anim.pad_delay_frame(200)
-    anim.write_to_gif('wilson.gif')
 
     
-    # we havw just finished the Wilson algo animation and now let's solve this maze!
-    start = root
-    end = (width - 1 - margin, height - 1 - margin)
-    stack = [(start, start)]
+    # now we have finished Wilson algorithm's animation and you may view the
+    # result now, just uncomment the following line!
+
+    # anim.write_to_gif('wilson.gif')
+
+    # but wait, why not add another animation? Let's solve this maze!
+
+    # we will look for a path from the top left corner to the bottom right corner
+    start = (margin, margin)
+    end = (width - margin - 1, height - margin - 1)
     visited = set([start])
+    stack = [(start, start)]
     parent = dict()
     maze.mark_cell(start, 3)
     anim.set_transparent(0)
-    
+    anim.set_delay(5)
+
     while stack:
         current, last = stack.pop()
         parent[current] = last
         maze.mark_wall(current, last, 3)
-
+        
         if current == end:
             break
         else:
@@ -63,11 +106,12 @@ def Wilson(width, height, margin, scale, speed, loop):
                 if (next_cell not in visited) and (not maze.check_wall(current, next_cell)):
                     stack.append((next_cell, current))
                     visited.add(next_cell)
-        if maze.num_changes >= anim.speed:
-            anim.render_frame(wall_color=0, tree_color=0, path_color=0, fill_color=3)
 
+        if maze.num_changes >= anim.speed:
+            anim.render_frame(wall_color=0, tree_color=0, fill_color=3)
+        
     if maze.num_changes > 0:
-        anim.render_frame(wall_color=0, tree_color=0, path_color=0, fill_color=3)
+        anim.render_frame(wall_color=0, tree_color=0, fill_color=3)
 
     path = [end]
     tmp = end
@@ -77,14 +121,12 @@ def Wilson(width, height, margin, scale, speed, loop):
 
     maze.mark_path(path, 2)
     anim.render_frame(wall_color=0, tree_color=0, path_color=2, fill_color=3)
-
     anim.pad_delay_frame(500)
-    anim.write_to_gif('wilson_solve.gif')
+    return anim
 
 
 
 def main():
-
     parser = argparse.ArgumentParser()
     parser.add_argument('-width', metavar='w', type=int, default=101,
                         help='width of the maze')
@@ -100,8 +142,11 @@ def main():
                         help='number of loops of the animation, default to 0 (loop infinitely)')
 
     args = parser.parse_args()
-    Wilson(args.width, args.height, args.margin, args.scale, args.speed, args.loop)
+    
+    anim = wilson(args.width, args.height, args.margin, args.scale, args.speed, args.loop)
+    anim.write_to_gif('wilson_and_dfs.gif')
 
 
+    
 if __name__ == '__main__':
     main()  
