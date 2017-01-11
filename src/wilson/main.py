@@ -12,12 +12,10 @@ among all spanning trees of a given simple, finite, connected graph. It's runs a
 
 for the proof of the correctness of this algorithm see Wilson's original paper:
 
-Generating random spanning trees more quickly than the cover time.
-
+"Generating random spanning trees more quickly than the cover time".
 
 The maze-solving part is a bit arbitrary and you may implement any algorithm you like, I've chosen
 the depth first search algorithm for simplicity.
-
 
 Example Usage: simply run 
 
@@ -37,7 +35,7 @@ def wilson(width, height, margin, scale, speed, loop):
 
     # here we need to paint the blank background because the region that has not been
     # covered by any frame will be set to transparent by decoders.
-    # comment this line and see the result if you don't understand this.
+    # comment this line and watch the result if you don't understand this.
     anim.paint_background(wall_color=0)
 
     # pad a one second delay
@@ -51,12 +49,15 @@ def wilson(width, height, margin, scale, speed, loop):
 
     for cell in maze.cells:
         if cell not in tree:
+
+            # start a random walk from this cell
             maze.begin_path(cell)
-            
             current_cell = cell
+            
+            # while this walk has not meet the tree, move one step further.
             while current_cell not in tree:
                 next_cell = random.choice(maze.get_neighbors(current_cell))                
-                if next_cell in maze.path:
+                if next_cell in maze.path:    # thus we have found a loop, erase it!
                     maze.erase_loop(next_cell)
                 else:
                     maze.add_to_path(next_cell)
@@ -65,6 +66,7 @@ def wilson(width, height, margin, scale, speed, loop):
                 if maze.num_changes >= anim.speed:
                     anim.render_frame(wall_color=0, tree_color=1, path_color=2)
 
+            # add the result path to the tree
             tree = tree.union(maze.path)
             maze.mark_path(maze.path, 1)
 
@@ -88,7 +90,7 @@ def wilson(width, height, margin, scale, speed, loop):
     end = (width - margin - 1, height - margin - 1)
     visited = set([start])
     stack = [(start, start)]
-    parent = dict()
+    parent = dict()    # use a dict to retrieve the path
     maze.mark_cell(start, 3)
     anim.set_transparent(0)
     anim.set_delay(5)
@@ -113,17 +115,18 @@ def wilson(width, height, margin, scale, speed, loop):
     if maze.num_changes > 0:
         anim.render_frame(wall_color=0, tree_color=0, fill_color=3)
 
+    # retrieve the path between start and end
     path = [end]
     tmp = end
     while tmp != start:
         tmp = parent[tmp]
         path.append(tmp)
 
+    # mark this path
     maze.mark_path(path, 2)
     anim.render_frame(wall_color=0, tree_color=0, path_color=2, fill_color=3)
     anim.pad_delay_frame(500)
     return anim
-
 
 
 def main():
