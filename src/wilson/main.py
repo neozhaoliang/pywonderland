@@ -170,6 +170,9 @@ class WilsonAnimation(Maze):
         # pad a three-seconds delay to help to see the resulting maze clearly.
         self.pad_delay_frame(300)
 
+        # fix a suitable speed for path finding animation.
+        self.set_speed(10)
+
         # in the dfs algorithm step the walls are unchanged throughout,
         # hence it's safe to use color 0 as the transparent color.
         self.make_dfs_animation(delay=5, trans_index=0, wall_color=0,
@@ -296,6 +299,10 @@ class WilsonAnimation(Maze):
         self.delay = delay
 
 
+    def set_speed(self, speed):
+        self.speed = speed
+
+
     def set_colors(self, **kwargs):
         colormap = {'wall_color': '0', 'tree_color': '1',
                     'path_color': '2', 'fill_color': '3'}
@@ -374,7 +381,7 @@ def main():
                         help='height of the maze')
     parser.add_argument('-margin', metavar='m', type=int, default=2,
                         help='border of the maze')
-    parser.add_argument('-speed', type=int, default=10,
+    parser.add_argument('-speed', type=int, default=30,
                         help='speed of the animation')
     parser.add_argument('-scale', type=int, default=5,
                         help='size of a cell in pixels')
