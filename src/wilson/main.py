@@ -16,7 +16,7 @@ for the proof of the correctness of this algorithm see Wilson's original paper:
 The maze-solving part is a bit arbitrary and you may implement any algorithm you like, I've chosen
 the depth first search algorithm for simplicity.
 
-Example Usage: simply run 
+Example Usage: simply run
 
     python main.py
 
@@ -33,28 +33,27 @@ class Maze(object):
     this class defines the very basic structure and methods we will need.
     '''
 
-    def __init__ (self, width, height, margin):
+    def __init__(self, width, height, margin):
         '''
-        width, height: 
+        width, height:
             size of the maze in cells, should both be odd numbers.
-        
-        margin: 
+        margin:
             size of the border of the maze.
-        
-        the maze is represented by a matrix with 'height' rows and 'width' columns, 
+
+        the maze is represented by a matrix with 'height' rows and 'width' columns,
         each cell in the maze has 4 possible states:
-      
+
         0: this cell is a wall
         1: this cell is in the tree
         2: this cell is in the path
         3: this cell is filled (this will not be used until the path finding animation)
-      
+
         initially all cells are walls.
         adjacent cells in the maze are spaced out by one cell.
 
-        frame_box: 
+        frame_box:
             maintains the region that to be updated
-        
+
         num_changes:
             once this number of cells are changed, output the frame
         '''
@@ -77,18 +76,18 @@ class Maze(object):
             if x >= 2 + margin:
                 neighbors.append((x-2, y))
             if y >= 2 + margin:
-                neighbors.append((x , y-2))
+                neighbors.append((x, y-2))
             if x <= width - 3 - margin:
                 neighbors.append((x+2, y))
             if y <= height - 3 - margin:
                 neighbors.append((x, y+2))
             return neighbors
-          
+
         self.graph = {v: neighborhood(v) for v in self.cells}
 
         # we will look for a path between this start and end.
         self.start = (margin, margin)
-        self.end  = (width - margin - 1, height - margin -1) 
+        self.end = (width - margin - 1, height - margin -1)
 
 
     def get_neighbors(self, cell):
@@ -98,7 +97,7 @@ class Maze(object):
     def mark_cell(self, cell, index):
         x, y = cell
         self.grid[x][y] = index
-        
+
         # update frame_box and num_changes each time we change a cell.
         self.num_changes += 1
         if self.frame_box:
@@ -114,13 +113,13 @@ class Maze(object):
                 (cellA[1] + cellB[1])//2)
         self.mark_cell(wall, index)
 
-        
+
     def check_wall(self, cellA, cellB):
         x = (cellA[0] + cellB[0]) // 2
         y = (cellA[1] + cellB[1]) // 2
         return self.grid[x][y] == 0
 
-    
+
     def mark_path(self, path, index):
         for cell in path:
             self.mark_cell(cell, index)
@@ -149,7 +148,7 @@ class WilsonAnimation(Maze):
 
 
     def __call__(self, filename):
-        
+
         # here we need to paint the blank background because the region that has not been
         # covered by any frame will be set to transparent by decoders.
         # comment this line and watch the result if you don't understand this.
@@ -174,8 +173,8 @@ class WilsonAnimation(Maze):
         # pad a five-seconds delay to help to see the resulting path clearly.
         self.pad_delay_frame(500)
         self.write_to_gif(filename)
-        
-        
+
+
     def make_wison_animation(self, delay, trans_index, **kwargs):
         '''
         animating the Wilson algorithm.
@@ -191,7 +190,7 @@ class WilsonAnimation(Maze):
                 self.loop_erased_random_walk(cell)
         self.clear()
 
-    
+
     def init_tree(self, root):
         self.tree = set([root])
         self.mark_cell(root, 1)
@@ -199,11 +198,11 @@ class WilsonAnimation(Maze):
 
     def loop_erased_random_walk(self, cell):
         '''
-        start a loop erased random walk from this cell until it hits the tree. 
+        start a loop erased random walk from this cell until it hits the tree.
         '''
         self.begin_path(cell)
         current_cell = cell
-        
+
         while current_cell not in self.tree:
             current_cell = self.move_one_step(current_cell)
             self.refresh_frame()
@@ -212,12 +211,12 @@ class WilsonAnimation(Maze):
         self.tree = self.tree.union(self.path)
         self.mark_path(self.path, 1)
 
-        
+
     def begin_path(self, cell):
         self.path = [cell]
         self.mark_cell(cell, 2)
 
-        
+
     def move_one_step(self, cell):
         next_cell = random.choice(self.get_neighbors(cell))
 
@@ -328,11 +327,11 @@ class WilsonAnimation(Maze):
         to serve as the background, it does not need the graphics control block.
         '''
         if kwargs:
-            self.set_colors(kwargs)
+            self.set_colors(**kwargs)
         else:
             self.writer.data = self.encode_frame() + self.writer.data
-        
-        
+
+
     def encode_frame(self):
         '''
         encode the frame, but not write the result to the stream.
@@ -357,11 +356,11 @@ class WilsonAnimation(Maze):
         self.frame_box = None
         return descriptor + self.writer.LZW_encode(input_data, self.init_table)
 
-        
+
     def write_to_gif(self, filename):
         self.writer.save(filename)
-        
-    
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-width', metavar='w', type=int, default=101,
@@ -380,8 +379,9 @@ def main():
                         help='output file name')
 
     args = parser.parse_args()
-    WilsonAnimation(args.width, args.height, args.margin, args.scale, args.speed, args.loop)(args.filename)
+    WilsonAnimation(args.width, args.height, args.margin,
+                    args.scale, args.speed, args.loop)(args.filename)
 
-    
+
 if __name__ == '__main__':
-    main() 
+    main()

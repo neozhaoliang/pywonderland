@@ -17,7 +17,7 @@ class DataBlock(object):
         self.bitstream = bytearray()
         self.num_bits = 0
 
-        
+
     def encode_bits(self, num, size):
         '''
         given a number 'num', encode it as a binary string of
@@ -25,7 +25,7 @@ class DataBlock(object):
         Example: num = 3, size = 5
         the binary string for 3 is '00011', here we padded extra zeros
         at the left to make its length to be 5.
-        The tricky part is that in a gif file, the encoded binary data stream 
+        The tricky part is that in a gif file, the encoded binary data stream
         increase from lower (least significant) bits to higher (most significant) bits,
         so we have to reverse it as 11000 and pack this string at the end of bitstream!
         '''
@@ -37,7 +37,7 @@ class DataBlock(object):
                 self.bitstream[-1] |= 1 << self.num_bits % 8
             self.num_bits += 1
 
-            
+
     def dump_bytes(self):
         '''
         pack the LZW encoded image data into blocks.
@@ -52,7 +52,7 @@ class DataBlock(object):
             bytestream += bytearray([len(self.bitstream)]) + self.bitstream
         return bytestream
 
-    
+
 
 class GIFWriter(object):
 
@@ -72,14 +72,14 @@ class GIFWriter(object):
                100, 100, 100,
                255, 0, 255,
                150, 200, 100]
-    
+
     def __init__(self, width, height, loop):
         self.logical_screen_descriptor = pack('<6s2H3B', b'GIF89a', width, height, 0b10010001, 0, 0)
         self.global_color_table = bytearray(self.palette)
         self.loop_control_block = pack('<3B8s3s2BHB', 0x21, 0xFF, 11, b'NETSCAPE', b'2.0', 3, 1, loop, 0)
         self.data = bytearray()
         self.trailor = bytearray([0x3B])
-        
+
 
     def graphics_control_block(self, delay, trans_index):
         return pack("<4BH2B", 0x21, 0xF9, 4, 0b00000101, delay, trans_index, 0)
@@ -111,7 +111,7 @@ class GIFWriter(object):
     def LZW_encode(self, input_data, init_table):
         '''
         encode the input image data with LZW algorithm.
-        by specifying different initial code tables one can color an image in different ways. 
+        by specifying different initial code tables one can color an image in different ways.
 
         I think this is the most difficult part and it deserves more explanation.
         In our animation there are 4 possible states of a cell: wall(0), tree(1), path(2), and filled(3).
@@ -130,7 +130,7 @@ class GIFWriter(object):
         {'0': 0, '1': 1, '2': 2, '3': 3}
 
         hmm, not the same with ours ... but the meaning of the keys in the two dicts are different: the key '0' in
-        out init table is the state of the cell, whereas the key '0' in the dict the decoder reconstructs is 
+        out init table is the state of the cell, whereas the key '0' in the dict the decoder reconstructs is
         the 0-th color in the global color table. so when the decoder sees some 'x' in the encoded stream,
         it really thinks the cell is colored with 'x', this is exactly what we want.
         '''
@@ -148,7 +148,7 @@ class GIFWriter(object):
         for c in input_data:
             c = str(c)
             pattern += c
-            if not pattern in code_table:
+            if pattern not in code_table:
                 # add new code in the table
                 code_table[pattern] = next_code
                 # output the prefix to bitstream
@@ -158,7 +158,7 @@ class GIFWriter(object):
 
                 next_code += 1
                 # why should we compare with 2 ** code_length + 1 here?
-                # hint: the largest code in the code_table will be 2 ** code_length. 
+                # hint: the largest code in the code_table will be 2 ** code_length.
                 if next_code == 2**code_length + 1:
                     code_length += 1
                 if next_code == MAX_CODES:
@@ -170,4 +170,4 @@ class GIFWriter(object):
         stream.encode_bits(code_table[pattern], code_length)
         stream.encode_bits(END_CODE, code_length)
 
-        return bytearray([PALETTE_BITS]) + stream.dump_bytes() + bytearray([0])    
+        return bytearray([PALETTE_BITS]) + stream.dump_bytes() + bytearray([0])
