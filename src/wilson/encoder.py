@@ -1,9 +1,6 @@
 from struct import pack
 
 
-__all__ = ['GIFWriter']
-
-
 # constants for LZW encoding, do not modify these!
 PALETTE_BITS = 2
 CLEAR_CODE = 4

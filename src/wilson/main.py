@@ -130,6 +130,11 @@ class Maze(object):
 
 class WilsonAnimation(Maze):
 
+    '''
+    our animation contains basically two parts:
+    run the algorithm, and write to the file.
+    '''
+
     def __init__(self, width, height, margin, scale, speed, loop):
         '''
         scale: size of a cell in pixels.
