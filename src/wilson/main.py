@@ -208,7 +208,7 @@ class WilsonAnimation(Maze):
             current_cell = self.move_one_step(current_cell)
             self.refresh_frame()
 
-        # once the walk meets the tree, and the path to the tree.
+        # once the walk meets the tree, add the path to the tree.
         self.tree = self.tree.union(self.path)
         self.mark_path(self.path, 1)
 
