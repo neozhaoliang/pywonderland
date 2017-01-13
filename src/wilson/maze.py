@@ -163,7 +163,7 @@ class WilsonAnimation(Maze):
         self.make_wison_animation(delay=2, trans_index=3,
                                   wall_color=0, tree_color=1, path_color=2)
 
-        # pad a three-second delay to help to see the resulting maze clearly.
+        # pad a three-seconds delay to help to see the resulting maze clearly.
         self.pad_delay_frame(300)
 
         # in the dfs algorithm step the walls are unchanged throughout,
@@ -171,16 +171,20 @@ class WilsonAnimation(Maze):
         self.make_dfs_animation(delay=5, trans_index=0, wall_color=0,
                                 tree_color=0, path_color=2, fill_color=3)
 
-        # pad a five-second delay to help to see the resulting path clearly.
+        # pad a five-seconds delay to help to see the resulting path clearly.
         self.pad_delay_frame(500)
         self.write_to_gif(filename)
         
         
     def make_wison_animation(self, delay, trans_index, **kwargs):
+        '''
+        animating the Wilson algorithm.
+        '''
         self.set_delay(delay)
         self.set_transparent(trans_index)
         self.set_colors(**kwargs)
-        
+
+        # initially the tree only contains the root.
         self.init_tree(self.start)
         for cell in self.cells:
             if cell not in self.tree:
@@ -194,6 +198,9 @@ class WilsonAnimation(Maze):
 
 
     def loop_erased_random_walk(self, cell):
+        '''
+        start a loop erased random walk from this cell until it hits the tree. 
+        '''
         self.begin_path(cell)
         current_cell = cell
         
@@ -201,6 +208,7 @@ class WilsonAnimation(Maze):
             current_cell = self.move_one_step(current_cell)
             self.refresh_frame()
 
+        # once the walk meets the tree, and the path to the tree.
         self.tree = self.tree.union(self.path)
         self.mark_path(self.path, 1)
 
@@ -212,6 +220,8 @@ class WilsonAnimation(Maze):
         
     def move_one_step(self, cell):
         next_cell = random.choice(self.get_neighbors(cell))
+
+        # if next_cell is already in path, then we have found a loop in our path, erase it!
         if next_cell in self.path:
             self.erase_loop(next_cell)
         else:
@@ -233,10 +243,14 @@ class WilsonAnimation(Maze):
 
 
     def make_dfs_animation(self, delay, trans_index, **kwargs):
+        '''
+        animating the depth first search algorithm.
+        '''
         self.set_delay(delay)
         self.set_transparent(trans_index)
         self.set_colors(**kwargs)
 
+        # despite a stack to run the dfs, we need a dict to remember each step.
         from_to = dict()
         stack = [(self.start, self.start)]
         visited = set([self.start])
@@ -266,6 +280,7 @@ class WilsonAnimation(Maze):
             path.append(tmp)
 
         self.mark_path(path, 2)
+        # show the path
         self.refresh_frame()
 
 
