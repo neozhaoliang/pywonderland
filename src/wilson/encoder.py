@@ -68,10 +68,14 @@ class GIFWriter(object):
        (iii) the LZW enconded data of the frame.
     5. finally the trailor '0x3B'.
     '''
+    palette = [0, 0, 0,
+               100, 100, 100,
+               255, 0, 255,
+               150, 200, 100]
     
-    def __init__(self, width, height, palette, loop):
+    def __init__(self, width, height, loop):
         self.logical_screen_descriptor = pack('<6s2H3B', b'GIF89a', width, height, 0b10010001, 0, 0)
-        self.global_color_table = bytearray(palette)
+        self.global_color_table = bytearray(self.palette)
         self.loop_control_block = pack('<3B8s3s2BHB', 0x21, 0xFF, 11, b'NETSCAPE', b'2.0', 3, 1, loop, 0)
         self.data = bytearray()
         self.trailor = bytearray([0x3B])
