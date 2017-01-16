@@ -4,6 +4,13 @@ Draw generalized Penrose tilings using de Bruijn's pentagrid methond.
 Reference:
 
 "Algebraic theory of Penrose's non-periodic tilings of the plane", N.G. de Bruijn.
+
+Usage of this script: just run
+
+    python penrose.py
+
+each time you run this script it renders a different pattern,
+these patterns are almost surely not isomorphic with each other.
 '''
 from itertools import combinations, product
 import numpy as np
@@ -12,7 +19,11 @@ import cairo
 
 GRIDS = [np.exp(2j * np.pi * i / 5) for i in range(5)]
 
-# five real numbers defining the shift in each direction
+# five real numbers defining the shift in each direction,
+# this tuple completely determines the resulting pattern.
+# two tuples (a1, a2, a3, a4, a5) and (b1, b2, b3. b4, b5) determine isomorphic
+# patterns if and only if
+# (a1 + a2 + a3 + a4 + a5) - (b1 + b2 + b3 + b4 + b5) is an integer.
 SHIFT = np.random.random(5)
 
 THIN_RHOMBUS_COLOR = np.random.random(3)

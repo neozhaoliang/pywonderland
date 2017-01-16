@@ -27,6 +27,13 @@ import random
 from encoder import GIFWriter
 
 
+# four possibel states of a cell
+WALL = 0
+TREE = 1
+PATH = 2
+FILL = 3
+
+
 class Maze(object):
 
     '''
@@ -109,15 +116,21 @@ class Maze(object):
 
 
     def mark_wall(self, cellA, cellB, index):
+        '''
+        mark the space between two adjacent cells.
+        '''
         wall = ((cellA[0] + cellB[0])//2,
                 (cellA[1] + cellB[1])//2)
         self.mark_cell(wall, index)
 
 
     def check_wall(self, cellA, cellB):
+        '''
+        check if two adjacent cells are connected. 
+        '''
         x = (cellA[0] + cellB[0]) // 2
         y = (cellA[1] + cellB[1]) // 2
-        return self.grid[x][y] == 0
+        return self.grid[x][y] == WALL
 
 
     def mark_path(self, path, index):
@@ -201,7 +214,7 @@ class WilsonAnimation(Maze):
 
     def init_tree(self, root):
         self.tree = set([root])
-        self.mark_cell(root, 1)
+        self.mark_cell(root, TREE)
 
 
     def loop_erased_random_walk(self, cell):
@@ -217,12 +230,12 @@ class WilsonAnimation(Maze):
 
         # once the walk meets the tree, add the path to the tree.
         self.tree = self.tree.union(self.path)
-        self.mark_path(self.path, 1)
+        self.mark_path(self.path, TREE)
 
 
     def begin_path(self, cell):
         self.path = [cell]
-        self.mark_cell(cell, 2)
+        self.mark_cell(cell, PATH)
 
 
     def move_one_step(self, cell):
@@ -238,14 +251,14 @@ class WilsonAnimation(Maze):
 
     def erase_loop(self, cell):
         index = self.path.index(cell)
-        self.mark_path(self.path[index:], 0)
-        self.mark_cell(self.path[index], 2)
+        self.mark_path(self.path[index:], WALL)
+        self.mark_cell(self.path[index], PATH)
         self.path = self.path[:index+1]
 
 
     def add_to_path(self, cell):
-        self.mark_cell(cell, 2)
-        self.mark_wall(self.path[-1], cell, 2)
+        self.mark_cell(cell, PATH)
+        self.mark_wall(self.path[-1], cell, PATH)
         self.path.append(cell)
 
 
@@ -265,8 +278,8 @@ class WilsonAnimation(Maze):
         while stack:
             parent, child = stack.pop()
             from_to[parent] = child
-            self.mark_cell(child, 3)
-            self.mark_wall(parent, child, 3)
+            self.mark_cell(child, FILL)
+            self.mark_wall(parent, child, FILL)
 
             if child == self.end:
                 break
@@ -286,7 +299,7 @@ class WilsonAnimation(Maze):
             tmp = from_to[tmp]
             path.append(tmp)
 
-        self.mark_path(path, 2)
+        self.mark_path(path, PATH)
         # show the path
         self.refresh_frame()
 

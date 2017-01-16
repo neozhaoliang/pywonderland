@@ -35,12 +35,12 @@ Mandelbrot 集 [[View Code](./src/misc/mandelbrot.py)]
 
 ---
 ### Domino Shuffling Algorithm Animation
-多米诺洗牌算法 [[View Code](./src/domino/)] [[View Gif Animation](./img/dominoshuffling.gif)] [[Wiki](https://en.wikipedia.org/wiki/Aztec_diamond)]
+多米诺洗牌算法 [[View Code](./src/domino/)] [[Arctic Cirlce Phenomena](./img/randomtiling.png)] [[Wiki](https://en.wikipedia.org/wiki/Aztec_diamond)]
 
 <br>
 
 <p align="center">
-<img src="./img/randomtiling.png">
+<img src="./img/dominoshuffling.gif">
 </p>
 
 <br>
