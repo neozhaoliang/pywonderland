@@ -18,7 +18,6 @@ A collection of python scripts that aimed at drawing beautiful figures or animat
 - [Beauty of Roots](#beauty-of-roots)
 - [Generalized Penrose Tilings](#generalized-penrose-tilings)
 - [Wilson Algorithm Animation](#wilson-algorithm-animation)
-- [Lorenz Attractor Animation](#lorenz-attractor-animation)
 
 ---
 ### Mandelbrot Set
@@ -143,20 +142,6 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 
 <br>
 
-[[Back to Top](#contents)]
-
-
----
-### Lorenz Attractor Animation
-Lorenz 吸引子 [[View Code](./src/misc/lorenz.py)][[View Video](./img/lorenz.mp4)]
-
-<br>
-
-<p align="center">
-<img src="./img/lorenz.png"/>
-</p>
-
-<br>
 [[Back to Top](#contents)]
 
 
