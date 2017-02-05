@@ -10,15 +10,21 @@ MAX_CODES = 4096
 
 class DataBlock(object):
 
+    '''
+    write bits into bytearrays.
+    '''
+
     def __init__(self):
+        # write bits into this array.
         self.bitstream = bytearray()
+        # a counter holds how many bit were written.
         self.num_bits = 0
 
 
     def encode_bits(self, num, size):
         '''
         given a number 'num', encode it as a binary string of
-        length size, and pad it at the end of bitstream.
+        length 'size', and pad it at the end of bitstream.
         Example: num = 3, size = 5
         the binary string for 3 is '00011', here we padded extra zeros
         at the left to make its length to be 5.
@@ -65,12 +71,15 @@ class GIFWriter(object):
        (iii) the LZW enconded data of the frame.
     5. finally the trailor '0x3B'.
     '''
-    palette = [0, 0, 0,
-               100, 100, 100,
-               255, 0, 255,
-               150, 200, 100]
+    palette = [0, 0, 0,         # wall color
+               100, 100, 100,   # tree color
+               255, 0, 255,     # path color
+               150, 200, 100]   # fill color
 
     def __init__(self, width, height, loop):
+        '''
+        these attributes are listed in the order they appear in the file.
+        '''
         self.logical_screen_descriptor = pack('<6s2H3B', b'GIF89a', width, height, 0b10010001, 0, 0)
         self.global_color_table = bytearray(self.palette)
         self.loop_control_block = pack('<3B8s3s2BHB', 0x21, 0xFF, 11, b'NETSCAPE', b'2.0', 3, 1, loop, 0)
@@ -79,10 +88,17 @@ class GIFWriter(object):
 
 
     def graphics_control_block(self, delay, trans_index):
+        '''
+        this block specifies the delay time and transparent index of the coming frame.
+        '''
         return pack("<4BH2B", 0x21, 0xF9, 4, 0b00000101, delay, trans_index, 0)
 
 
     def image_descriptor(self, left, top, width, height):
+        '''
+        this block specifies the region of the coming frame.
+        the ending byte field is 0 since we do not need a local color table.
+        '''
         return pack('<B4HB', 0x2C, left, top, width, height, 0)
 
 
@@ -97,6 +113,9 @@ class GIFWriter(object):
 
 
     def save(self, filename):
+        '''
+        note the 'wb' mode here!
+        '''
         with open(filename, 'wb') as f:
             f.write(self.logical_screen_descriptor
                     + self.global_color_table
@@ -155,7 +174,7 @@ class GIFWriter(object):
 
                 next_code += 1
                 # why should we compare with 2 ** code_length + 1 here?
-                # hint: the largest code in the code_table will be 2 ** code_length.
+                # hint: the next code you add to code_table will be 2 ** code_length.
                 if next_code == 2**code_length + 1:
                     code_length += 1
                 if next_code == MAX_CODES:

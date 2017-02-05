@@ -27,7 +27,7 @@ import random
 from encoder import GIFWriter
 
 
-# four possibel states of a cell
+# four possible states of a cell
 WALL = 0
 TREE = 1
 PATH = 2
@@ -146,6 +146,15 @@ class WilsonAnimation(Maze):
     '''
     our animation contains basically two parts:
     run the algorithm, and write to the file.
+
+    to write to the file, we will need several attributes:
+    1. delay: control the delay between frames.
+    2. trans_index: control which transparent color is used.
+    3. init_dict: map the maze into an image (to communicate with our laz encoder)
+
+    to run the animation, we will need these data structures:
+    1. self.tree: maintain the cells that have been added to the tree.
+    2. self.path: maintain the path of the loop erased random walk.
     '''
 
     def __init__(self, width, height, margin, scale, speed, loop):
@@ -172,8 +181,8 @@ class WilsonAnimation(Maze):
         # comment this line and watch the result if you don't understand this.
         self.paint_background()
 
-        # pad a one-second delay
-        self.pad_delay_frame(100)
+        # pad a two-seconds delay, get ready!
+        self.pad_delay_frame(200)
 
         # in the wilson algorithm step no cells are 'filled',
         # hence it's safe to use color 3 as the transparent color.
@@ -239,6 +248,17 @@ class WilsonAnimation(Maze):
 
 
     def move_one_step(self, cell):
+        '''
+        the most fundamental operation in wilson algorithm:
+        choose a random neighbor z of current cell, and move to z.
+        
+        1. if z already in current path, then a loop is found, erase this loop
+           and start the walk from z again.
+
+        2. if z is not in current path, then add z to current path.
+
+        repeat this procedure until z 'hits' the tree.
+        '''
         next_cell = random.choice(self.get_neighbors(cell))
 
         # if next_cell is already in path, then we have found a loop in our path, erase it!
@@ -251,8 +271,13 @@ class WilsonAnimation(Maze):
 
     def erase_loop(self, cell):
         index = self.path.index(cell)
+
+        # erase the loop
         self.mark_path(self.path[index:], WALL)
+
+        # re-mark this cell
         self.mark_cell(self.path[index], PATH)
+
         self.path = self.path[:index+1]
 
 
@@ -270,7 +295,7 @@ class WilsonAnimation(Maze):
         self.set_transparent(trans_index)
         self.set_colors(**kwargs)
 
-        # despite a stack to run the dfs, we need a dict to remember each step.
+        # besides a stack to run the dfs, we need a dict to remember each step.
         from_to = dict()
         stack = [(self.start, self.start)]
         visited = set([self.start])
