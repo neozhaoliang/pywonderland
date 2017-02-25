@@ -150,7 +150,7 @@ class WilsonAnimation(Maze):
     to write to the file, we will need several attributes:
     1. delay: control the delay between frames.
     2. trans_index: control which transparent color is used.
-    3. init_dict: map the maze into an image (to communicate with our laz encoder)
+    3. init_dict: map the maze into an image (to communicate with our LZW encoder)
 
     to run the animation, we will need these data structures:
     1. self.tree: maintain the cells that have been added to the tree.
@@ -202,6 +202,7 @@ class WilsonAnimation(Maze):
 
         # pad a five-seconds delay to help to see the resulting path clearly.
         self.pad_delay_frame(500)
+        # finally save the bits stream in 'wb' mode.
         self.write_to_gif(filename)
 
 
@@ -215,9 +216,14 @@ class WilsonAnimation(Maze):
 
         # initially the tree only contains the root.
         self.init_tree(self.start)
+
+        # for each cell in the maze that is not in the tree yet,
+        # start a loop erased random walk from this cell until the walk hits the tree.
         for cell in self.cells:
             if cell not in self.tree:
                 self.loop_erased_random_walk(cell)
+
+        # there may be some changes that has not been written to the file, write them.
         self.clear()
 
 
