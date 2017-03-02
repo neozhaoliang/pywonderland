@@ -18,6 +18,7 @@ A collection of python scripts that aimed at drawing beautiful figures or animat
 - [Beauty of Roots](#beauty-of-roots)
 - [Generalized Penrose Tilings](#generalized-penrose-tilings)
 - [Wilson Algorithm Animation](#wilson-algorithm-animation)
+- [Reaction Diffusion Simulation](#reaction-diffusion-simulation)
 
 ---
 ### Mandelbrot Set
@@ -145,6 +146,19 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 [[Back to Top](#contents)]
 
 
+---
+### Reaction Diffusion Simulation
+反应扩散方程模拟 [[View Code](./src/grayscott/)] [[Wiki](https://en.wikipedia.org/wiki/Loop-erased_random_walk)] [[Pmneila's Javascript Animation](http://pmneila.github.io/jsexp/grayscott/)]
+Written with modern OpenGL shading language and pyglet.
+Currently only a coarse version and will be improved later.
+<br>
+<p align="center">
+<img src="./img/grayscott.png"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
 
 ## Dependencies
 
