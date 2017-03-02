@@ -6,7 +6,6 @@ from shader import Shader
 from framebuffer import FrameBuffer
 
 
-
 def create_texture_from_array(array):
     '''
     create a pyglet texture instance from a numpy ndarray.
@@ -43,7 +42,7 @@ def GrayScott(width, height, scale, pattern):
     window.set_location(100, 100)
     width //= scale
     height //= scale
-    
+
     rU, rV, feed, kill = species[pattern]
     with reaction_shader:
         reaction_shader.set_uniformi('uv_texture', 0)
@@ -65,7 +64,7 @@ def GrayScott(width, height, scale, pattern):
         render_shader.set_uniformf('color5', *palette[4])
         render_shader.set_vertex_attrib('position', [(-1, -1), (1, -1), (1, 1,), (-1, 1)])
         render_shader.set_vertex_attrib('texcoord', [(0, 0), (1, 0), (1, 1,), (0, 1)])
-        
+
     uv_grid = np.zeros((height, width, 4), dtype=np.float32)
     uv_grid[:, :, 0] = 1.0
     r = 32
@@ -78,13 +77,11 @@ def GrayScott(width, height, scale, pattern):
     with FrameBuffer() as fbo:
         fbo.attach_texture(uv_texture)
 
-        
     @window.event
     def on_key_press(symbol, modifiers):
         if symbol == pyglet.window.key.ENTER:
             pyglet.image.get_buffer_manager().get_color_buffer().save('screenshot{:03d}.png'.format(np.random.randint(0, 1000)))
-            
-           
+
     @window.event
     def on_draw():
         gl.glClearColor(0, 0, 0, 0)
@@ -107,8 +104,6 @@ def GrayScott(width, height, scale, pattern):
 
         with render_shader:
             gl.glDrawArrays(gl.GL_QUADS, 0, 4)
-            
-
 
     pyglet.clock.schedule(lambda dt: None)
     window.set_visible(True)
