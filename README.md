@@ -150,7 +150,7 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 ### Reaction Diffusion Simulation
 反应扩散方程模拟 [[View Code](./src/grayscott/)] [[Wiki](https://en.wikipedia.org/wiki/Reaction%E2%80%93diffusion_system)] [[Pmneila's Javascript Animation](http://pmneila.github.io/jsexp/grayscott/)]
 
-<br>
+
 Written with modern OpenGL shading language and pyglet.
 Currently only a coarse version and will be improved later.
 <br>
