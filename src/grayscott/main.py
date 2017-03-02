@@ -66,11 +66,11 @@ def GrayScott(width, height, scale, pattern):
         render_shader.set_vertex_attrib('position', [(-1, -1), (1, -1), (1, 1,), (-1, 1)])
         render_shader.set_vertex_attrib('texcoord', [(0, 0), (1, 0), (1, 1,), (0, 1)])
         
-    uv_grid = np.zeros((height,width,4), dtype=np.float32)
-    uv_grid[:,:,0] = 1.0
+    uv_grid = np.zeros((height, width, 4), dtype=np.float32)
+    uv_grid[:, :, 0] = 1.0
     r = 32
-    uv_grid[height/2-r : height/2+r,  width/2-r : width/2+r,  0] = 0.50
-    uv_grid[height/2-r : height/2+r,  width/2-r : width/2+r,  1] = 0.25
+    uv_grid[height//2-r : height//2+r,  width//2-r : width//2+r,  0] = 0.50
+    uv_grid[height//2-r : height//2+r,  width//2-r : width//2+r,  1] = 0.25
     uv_texture = create_texture_from_array(uv_grid)
     gl.glActiveTexture(gl.GL_TEXTURE0)
     gl.glBindTexture(uv_texture.target, uv_texture.id)
