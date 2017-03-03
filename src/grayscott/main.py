@@ -52,8 +52,8 @@ def GrayScott(width, height, scale, pattern):
         reaction_shader.set_uniformf('kill', kill)
         reaction_shader.set_uniformf('rU', rU)
         reaction_shader.set_uniformf('rV', rV)
-        reaction_shader.set_vertex_attrib('position', [(-1, -1), (1, -1), (1, 1,), (-1, 1)])
-        reaction_shader.set_vertex_attrib('texcoord', [(0, 0), (1, 0), (1, 1,), (0, 1)])
+        reaction_shader.set_vertex_attrib('position', [(-1, -1), (1, -1), (-1, 1,), (1, 1)])
+        reaction_shader.set_vertex_attrib('texcoord', [(0, 0), (1, 0), (0, 1), (1, 1)])
 
     with render_shader:
         render_shader.set_uniformi('uv_texture', 0)
@@ -62,8 +62,8 @@ def GrayScott(width, height, scale, pattern):
         render_shader.set_uniformf('color3', *palette[2])
         render_shader.set_uniformf('color4', *palette[3])
         render_shader.set_uniformf('color5', *palette[4])
-        render_shader.set_vertex_attrib('position', [(-1, -1), (1, -1), (1, 1,), (-1, 1)])
-        render_shader.set_vertex_attrib('texcoord', [(0, 0), (1, 0), (1, 1,), (0, 1)])
+        render_shader.set_vertex_attrib('position', [(-1, -1), (1, -1), (-1, 1), (1, 1)])
+        render_shader.set_vertex_attrib('texcoord', [(0, 0), (1, 0), (0, 1), (1, 1)])
 
     uv_grid = np.zeros((height, width, 4), dtype=np.float32)
     uv_grid[:, :, 0] = 1.0
@@ -94,7 +94,7 @@ def GrayScott(width, height, scale, pattern):
 
         with fbo:
             with reaction_shader:
-                gl.glDrawArrays(gl.GL_QUADS, 0, 4)
+                gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
 
         gl.glViewport(0, 0, window.width, window.height)
         gl.glMatrixMode(gl.GL_PROJECTION)
@@ -103,7 +103,7 @@ def GrayScott(width, height, scale, pattern):
         gl.glMatrixMode(gl.GL_MODELVIEW)
 
         with render_shader:
-            gl.glDrawArrays(gl.GL_QUADS, 0, 4)
+            gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
 
     pyglet.clock.schedule(lambda dt: None)
     window.set_visible(True)
@@ -112,4 +112,4 @@ def GrayScott(width, height, scale, pattern):
 
 if __name__ == '__main__':
     print('press \'ENTER\' to save snapshots, or \'ESC\' to exit')
-    GrayScott(600, 400, 2, 'spots and loops')
+    GrayScott(600, 400, 2, 'solitons')
