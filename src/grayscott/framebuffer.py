@@ -1,3 +1,8 @@
+'''
+this script is only a very simple helper class for handling the
+frame buffer object(fbo).
+'''
+
 import ctypes as ct
 import pyglet.gl as gl
 
