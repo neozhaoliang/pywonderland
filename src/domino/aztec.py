@@ -206,7 +206,7 @@ def main():
     parser.add_argument('-order', metavar='o', type=int,
                         default=60, help='order of az graph')
     parser.add_argument('-filename', metavar='f',
-                        default='randomtiling.png', help='output fileanme')
+                        default='randomtiling.png', help='output filename')
     args = parser.parse_args()
 
     az = AzGraph(0)

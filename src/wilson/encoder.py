@@ -17,7 +17,7 @@ class DataBlock(object):
     def __init__(self):
         # write bits into this array.
         self.bitstream = bytearray()
-        # a counter holds how many bit were written.
+        # a counter holds how many bits have been written.
         self.num_bits = 0
 
 
@@ -129,10 +129,11 @@ class GIFWriter(object):
         encode the input image data with LZW algorithm.
         by specifying different initial code tables one can color an image in different ways.
 
-        I think this is the most difficult part and it deserves more explanation.
+        I think this is the most difficult part and deserves more explanations.
         In our animation there are 4 possible states of a cell: wall(0), tree(1), path(2), and filled(3).
         in some frames we want to color those walls with black, and in some frames we want to color them transparent,
-        so we need a dict to maps the states to the colors (in fact to the indices of the colors in the global color table).
+        so we need a dict to maps the states to the colors (more precisely, map to the indices of the colors
+        in the global color table).
 
         For example, if we want to color the walls and the tree with 0, i.e. the 0-th color in the global color table,
         color the path with 1 (the 1-th color in the global color table), and color the filled cells with 2,

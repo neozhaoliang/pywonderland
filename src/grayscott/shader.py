@@ -128,6 +128,19 @@ class Shader(object):
 
 
     def set_vertex_attrib(self, name, data):
+        '''
+        this is an ugly way to set vertex attribute data in a shader.
+        lacks the flexibility of setting several attributes in one vertex buffer.
+        
+        name: the attribute name in the shader.
+        data: a list of vertex attributes (positions, colors, texcoords, normals,...)
+        
+        example: 
+        name = 'positions'
+        data = [(1, 1, 0), (2, 2, 1), ...]
+        
+        the items in data must all be 1D lists(or tuples) of the same length.
+        '''
         data_flatten = [x for vertex in data for x in vertex]
         size = len(data[0])
         data_ctype = (gl.GLfloat * len(data_flatten))(*data_flatten)

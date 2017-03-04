@@ -1,6 +1,5 @@
 '''
-this script is only a very simple helper class for handling the
-frame buffer object(fbo).
+ A very simple helper class for handling the frame buffer object(fbo).
 '''
 
 import ctypes as ct
@@ -25,7 +24,7 @@ class FrameBuffer(object):
         
     def attach_texture(self, texture):
         '''
-        texture must be an instance of the texture class in pyglet.
+        texture must be an instance of pyglet's texture class.
         '''
         gl.glFramebufferTexture2DEXT(gl.GL_FRAMEBUFFER_EXT, gl.GL_COLOR_ATTACHMENT0_EXT,
                                      texture.target, texture.id, texture.level)

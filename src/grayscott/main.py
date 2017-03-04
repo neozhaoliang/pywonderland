@@ -26,7 +26,7 @@ species = { 'spots_and_loops': [0.2097, 0.105, 0.018, 0.051],
             'solitons':        [0.14, 0.06, 0.035, 0.065],
             'coral':           [0.16, 0.08, 0.060, 0.062],
             'fingerprint' :    [0.19, 0.05, 0.060, 0.062],
-            'worms':            [0.16, 0.08, 0.050, 0.065],
+            'worms':           [0.16, 0.08, 0.050, 0.065],
 }
 
 # palette will be used for coloring the uv_texture.
