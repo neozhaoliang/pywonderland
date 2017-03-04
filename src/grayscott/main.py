@@ -26,7 +26,7 @@ species = { 'spots_and_loops': [0.2097, 0.105, 0.018, 0.051],
             'solitons':        [0.14, 0.06, 0.035, 0.065],
             'coral':           [0.16, 0.08, 0.060, 0.062],
             'fingerprint' :    [0.19, 0.05, 0.060, 0.062],
-            'worm':            [0.16, 0.08, 0.050, 0.065],
+            'worms':            [0.16, 0.08, 0.050, 0.065],
 }
 
 # palette will be used for coloring the uv_texture.
@@ -67,7 +67,7 @@ def GrayScott(width, height, scale, pattern):
     pattern:
         must be one of 'solitons', 'worms', 'spots_and_loops', etc. 
     '''
-    window = pyglet.window.Window(width, height, caption='GrayScott Simullation',
+    window = pyglet.window.Window(width, height, caption='GrayScott Simulation',
                                   visible=False, vsync=False)
     window.set_location(100, 100)
     width //= scale
@@ -116,7 +116,7 @@ def GrayScott(width, height, scale, pattern):
         fbo.attach_texture(uv_texture)
 
     @window.event
-    def on_key_press(symbol, modifiers):
+    def on_key_press(symbol, _):
         '''
         prese 'Enter' to take snapshots.
         '''
