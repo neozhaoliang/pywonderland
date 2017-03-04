@@ -8,13 +8,13 @@ How to save the animation as a video:
 
     count += 1
     ```
-    this will take a snapshot at the speed of each 10 frames.
+    this will take a snapshot with the frequency of each 10 frames.
     
-2. use ffmpeg to convert the images into a video, for example in commad line, run
+2. use ffmpeg to convert the images into a video, for example run command line
 
     ``` bash
     ffmpeg -loglevel quiet -framerate 10 -i screenshot%04d.png -c:v libvpx -crf 10 -b:v 2M grayscott.webm
     ```
-
+    the -framerate specifies the number of frames persecond, -b:v specifies the bitrate(the higher the better quality but larger file)	
 
 
