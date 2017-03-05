@@ -44,13 +44,13 @@ class GrayScott(pyglet.window.Window):
     '''
 
     # pattern: [rU, rV, feed, kill]
-    species = { 'spots_and_loops': [0.2097, 0.105, 0.018, 0.051],
-                'zebrafish':       [0.16, 0.08, 0.035, 0.060],
-                'solitons':        [0.14, 0.06, 0.035, 0.065],
-                'coral':           [0.16, 0.08, 0.060, 0.062],
-                'fingerprint' :    [0.19, 0.05, 0.060, 0.062],
-                'worms':           [0.16, 0.08, 0.050, 0.065],
-    }
+    species = {'spots_and_loops': [0.2097, 0.105, 0.018, 0.051],
+               'zebrafish':       [0.16, 0.08, 0.035, 0.060],
+               'solitons':        [0.14, 0.06, 0.035, 0.065],
+               'coral':           [0.16, 0.08, 0.060, 0.062],
+               'fingerprint' :    [0.19, 0.05, 0.060, 0.062],
+               'worms':           [0.16, 0.08, 0.050, 0.065],
+              }
 
     # palette will be used for coloring the uv_texture.
     palette = [(0.0, 0.0, 0.0, 0.0),
@@ -85,7 +85,7 @@ class GrayScott(pyglet.window.Window):
         # we need a framebuffer to do the offscreen rendering.
         # once we finished computing the reaction-diffusion step with the reaction_shader,
         # we render the result to this 'invisible' buffer since we do not want to show it.
-        # the final image is further colored by the render_shader and will be rendered to the window.
+        # the final image is further colored and will be rendered to the window.
         with FrameBuffer() as self.fbo:
             self.fbo.attach_texture(self.uv_texture)
 
@@ -98,8 +98,8 @@ class GrayScott(pyglet.window.Window):
         uv_grid = np.zeros((height, width, 4), dtype=np.float32)
         uv_grid[:, :, 0] = 1.0
         r = 32
-        uv_grid[height//2-r : height//2+r,  width//2-r : width//2+r,  0] = 0.50
-        uv_grid[height//2-r : height//2+r,  width//2-r : width//2+r,  1] = 0.25
+        uv_grid[height//2-r : height//2+r, width//2-r : width//2+r, 0] = 0.50
+        uv_grid[height//2-r : height//2+r, width//2-r : width//2+r, 1] = 0.25
         uv_texture = create_texture_from_array(uv_grid)
         # the texture is bind to unit '0'.
         gl.glActiveTexture(gl.GL_TEXTURE0)

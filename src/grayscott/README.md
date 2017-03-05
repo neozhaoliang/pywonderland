@@ -8,7 +8,7 @@ How to save the animation as a video:
 
     count += 1
     ```
-    this will take snapshots with the frequency of each 10 frames.
+    this will take a screenshot every 10 frames.
     
 2. use ffmpeg to convert the images into a video, for example run command line
 

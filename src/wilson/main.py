@@ -78,6 +78,9 @@ class Maze(object):
                 self.cells.append((x, y))
 
         def neighborhood(cell):
+            '''
+            note the space between adjacent cells.
+            '''
             x, y = cell
             neighbors = []
             if x >= 2 + margin:
@@ -126,7 +129,7 @@ class Maze(object):
 
     def check_wall(self, cellA, cellB):
         '''
-        check if two adjacent cells are connected. 
+        check if two adjacent cells are connected.
         '''
         x = (cellA[0] + cellB[0]) // 2
         y = (cellA[1] + cellB[1]) // 2
@@ -134,6 +137,9 @@ class Maze(object):
 
 
     def mark_path(self, path, index):
+        '''
+        don't forget mark the spaces between adjacent cells.
+        '''
         for cell in path:
             self.mark_cell(cell, index)
         for cellA, cellB in zip(path[1:], path[:-1]):
@@ -257,7 +263,7 @@ class WilsonAnimation(Maze):
         '''
         the most fundamental operation in wilson algorithm:
         choose a random neighbor z of current cell, and move to z.
-        
+
         1. if z already in current path, then a loop is found, erase this loop
            and start the walk from z again.
 
@@ -437,6 +443,7 @@ def main():
     args = parser.parse_args()
     WilsonAnimation(args.width, args.height, args.margin,
                     args.scale, args.speed, args.loop)(args.filename)
+
 
 
 if __name__ == '__main__':
