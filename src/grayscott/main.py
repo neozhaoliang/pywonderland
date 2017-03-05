@@ -193,9 +193,6 @@ class GrayScott(pyglet.window.Window):
 
 
     def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
-        '''
-        when dragging the mouse, it jumps between 'mouse up' and 'mouse down'.
-        '''
         if self.mouse_down:
             bx = (x + dx) / float(self.width)
             by = (y + dy) / float(self.height)
