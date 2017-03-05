@@ -3,21 +3,21 @@ import pyglet.gl as gl
 
 
 class Shader(object):
-    
+
     def __init__(self, vert, frag):
         self.program = gl.glCreateProgram()
         self.compile_and_attach_shader(vert, gl.GL_VERTEX_SHADER)
         self.compile_and_attach_shader(frag, gl.GL_FRAGMENT_SHADER)
         self.link()
-        
-        
+
+
     def compile_and_attach_shader(self, source_strings, shader_type):
         '''
         source_strings:
             a list of one or more strings that are possibly read from some files.
         shader_type:
-            must be one of gl.GL_VERTEX_SHADER, gl.GL_FRAGMENT_SHADER, gl.GL_GEOMETRY_SHADER 
-        
+            must be one of gl.GL_VERTEX_SHADER, gl.GL_FRAGMENT_SHADER, gl.GL_GEOMETRY_SHADER
+
         main steps to compile and attach a shader:
 
         1. glCreateShader:
@@ -46,7 +46,7 @@ class Shader(object):
         # 3. compile the shader
         gl.glCompileShader(shader)
 
-        # 4. retrieve the compile status 
+        # 4. retrieve the compile status
         compile_status = gl.GLint(0)
         gl.glGetShaderiv(shader, gl.GL_COMPILE_STATUS, ct.byref(compile_status))
 
@@ -61,8 +61,8 @@ class Shader(object):
         # 6. else attach the shader to our program
         else:
             gl.glAttachShader(self.program, shader)
-            
-    
+
+
     def link(self):
         '''
         main steps to link the program:
@@ -75,31 +75,31 @@ class Shader(object):
                 print the error log if link failed
         '''
         gl.glLinkProgram(self.program)
-        
+
         link_status = gl.GLint(0)
         gl.glGetProgramiv(self.program, gl.GL_LINK_STATUS, ct.byref(link_status))
-        
+
         if not link_status:
             info_length = gl.GLint(0)
             gl.glGetProgramiv(self.program, gl.GL_INFO_LOG_LENGTH, ct.byref(info_length))
             error_info = ct.create_string_buffer(info_length.value)
             gl.glGetProgramInfoLog(self.program, info_length, None, error_info)
             print(error_info.value)
-            
-            
+
+
     def bind(self):
         gl.glUseProgram(self.program)
-        
-        
+
+
     def unbind(self):
         gl.glUseProgram(0)
-        
+
 
     def __enter__(self):
         self.bind()
         return self
 
-        
+
     def __exit__(self, exception_type, exception_value, traceback):
         self.unbind()
 
@@ -111,8 +111,8 @@ class Shader(object):
           3: gl.glUniform3i,
           4: gl.glUniform4i
         }[len(vals)](location, *vals)
-        
-        
+
+
     def set_uniformf(self, name, *vals):
         location = gl.glGetUniformLocation(self.program, name.encode('ascii'))
         { 1: gl.glUniform1f,
@@ -120,8 +120,8 @@ class Shader(object):
             3: gl.glUniform3f,
             4: gl.glUniform4f
         }[len(vals)](location, *vals)
-        
-        
+
+
     def set_uniform_matrix(self, name, mat):
         location = gl.glGetUniformLocation(self.program, name.encode('ascii'))
         gl.glUniformMatrix4fv(location, 1, False, (ct.c_float * 16)(*mat))
@@ -131,32 +131,32 @@ class Shader(object):
         '''
         this is an ugly way to set vertex attribute data in a shader.
         lacks the flexibility of setting several attributes in one vertex buffer.
-        
+
         name: the attribute name in the shader.
         data: a list of vertex attributes (positions, colors, texcoords, normals,...)
-        
-        example: 
+
+        example:
         name = 'positions'
         data = [(1, 1, 0), (2, 2, 1), ...]
-        
+
         the items in data must all be 1D lists(or tuples) of the same length.
         '''
         data_flatten = [x for vertex in data for x in vertex]
         size = len(data[0])
         data_ctype = (gl.GLfloat * len(data_flatten))(*data_flatten)
-        
+
         vbo_id = gl.GLuint(0)
         gl.glGenBuffers(1, ct.byref(vbo_id))
         gl.glBindBuffer(gl.GL_ARRAY_BUFFER, vbo_id)
         gl.glBufferData(gl.GL_ARRAY_BUFFER, ct.sizeof(data_ctype), data_ctype, gl.GL_STATIC_DRAW)
-        
+
         location = gl.glGetAttribLocation(self.program, name.encode('ascii'))
         gl.glEnableVertexAttribArray(location)
         gl.glVertexAttribPointer(location, size, gl.GL_FLOAT, gl.GL_FALSE, 0, 0)
         gl.glBindBuffer(gl.GL_ARRAY_BUFFER, 0)
         return vbo_id
 
-        
+
     @classmethod
     def from_files(self, vert_file, frag_file):
         with open(vert_file, 'r') as f:

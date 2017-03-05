@@ -17,11 +17,11 @@ class FrameBuffer(object):
     def bind(self):
         gl.glBindFramebufferEXT(gl.GL_FRAMEBUFFER_EXT, self.buff_id)
 
-    
+
     def unbind(self):
         gl.glBindFramebufferEXT(gl.GL_FRAMEBUFFER_EXT, 0)
 
-        
+
     def attach_texture(self, texture):
         '''
         texture must be an instance of pyglet's texture class.
@@ -29,7 +29,7 @@ class FrameBuffer(object):
         gl.glFramebufferTexture2DEXT(gl.GL_FRAMEBUFFER_EXT, gl.GL_COLOR_ATTACHMENT0_EXT,
                                      texture.target, texture.id, texture.level)
 
-        
+
     def __enter__(self):
         self.bind()
         return self

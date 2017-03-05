@@ -1,4 +1,4 @@
-# pylint: disable = unused-variable
+# pylint: disable = unused-argument
 '''
 A GrayScott reaction-diffusion simulator written with pyglet and GLSL.
 
@@ -58,7 +58,7 @@ class GrayScott(pyglet.window.Window):
                (1.0, 1.0, 0.0, 0.21),
                (1.0, 0.0, 0.0, 0.4),
                (1.0, 1.0, 1.0, 0.6)]
-    
+
     def __init__(self, width, height, scale, pattern):
         '''
         width, height:
@@ -90,7 +90,7 @@ class GrayScott(pyglet.window.Window):
             self.fbo.attach_texture(self.uv_texture)
 
         # why do we need this?
-        # the reason is in the 'on_mouse_drag' function. 
+        # the reason is in the 'on_mouse_drag' function.
         self.mouse_down = False
 
 
@@ -110,7 +110,7 @@ class GrayScott(pyglet.window.Window):
     def set_shader_data(self, pattern):
         rU, rV, feed, kill = GrayScott.species[pattern]
         color1, color2, color3, color4, color5 = GrayScott.palette
-        
+
         with self.reaction_shader:
             self.reaction_shader.set_uniformi('uv_texture', 0)
             self.reaction_shader.set_uniformf('dx', 1.0/self.tex_width)
@@ -185,8 +185,6 @@ class GrayScott(pyglet.window.Window):
 
     def on_mouse_release(self, x, y, button, modifiers):
         self.mouse_down = False
-        bx = x / float(self.width)
-        by = y / float(self.height)
         self.set_view(self.tex_width, self.tex_height)
         with self.fbo:
             with self.reaction_shader:
@@ -206,9 +204,9 @@ class GrayScott(pyglet.window.Window):
                 with self.reaction_shader:
                     self.reaction_shader.set_uniformf('brush', bx, by)
                     gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
- 
+
 
 if __name__ == '__main__':
-    app = GrayScott(width=600, height=480, scale=2, pattern='zebrafish')
+    app = GrayScott(width=600, height=480, scale=2, pattern='solitons')
     print(app.__doc__)
     app.run()
