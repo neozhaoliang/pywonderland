@@ -11,15 +11,15 @@ You may use your mouse to draw on the screen at any stage.
  
 1. run `python main.py` or `python3 main.py` you will see the simulation run in a window popped by pyglet.
 
-2. to change to another pattern, press keyboard 's'.
+2. to change to another pattern, press keyboard 's' (short for 'species').
 
-3. to color it another way, press 'p'.
+3. to color it another way, press 'p' (short for 'pattern').
 
 4. to save a screenshot, press 'enter'.
 
-5. to save current config into a json file, press 'ctrl + s'.
+5. to save current config into a json file, press 'ctrl + s' (short for 'save').
 
-6. to load a favorable config from the json file, press 'ctrl + o'. enter the line number of the config you chose and then draw on the blank screen to see the pattern.
+6. to load a favorable config from the json file, press 'ctrl + o' (short for 'open'). enter the line number of the config you chose and then draw on the blank screen to see the pattern.
 
 7. press 'esc' to close the window.
 

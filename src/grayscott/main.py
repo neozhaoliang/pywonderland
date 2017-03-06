@@ -45,7 +45,7 @@ class GrayScott(pyglet.window.Window):
         1. press 'space' to clear the window to blank.
         2. press 'p' to change to a random palette.
         4. press 's' to change to another pattern.
-        5. press 'r' to reset to a default pattern and palette.
+        5. press 'r' to reset to default.
         6. press 'ctrl + s' to save current config to json file.
         7. press 'ctrl + o' to load config from json file.
         8. press 'Enter' to take screenshots.
@@ -141,8 +141,6 @@ class GrayScott(pyglet.window.Window):
 
 
     def set_pattern(self, pattern):
-        self.pattern = pattern
-        print('current pattern: ' + pattern)
         rU, rV, feed, kill = GrayScott.species[pattern]
         with self.reaction_shader:
             self.reaction_shader.set_uniformf('feed', feed)
@@ -214,8 +212,10 @@ class GrayScott(pyglet.window.Window):
             if not modifiers:
                 pattern = self.pattern
                 while pattern == self.pattern:
-                    pattern = np.random.choice(list(GrayScott.species.keys()))
+                    self.pattern = np.random.choice(list(GrayScott.species.keys()))
                 self.set_pattern(pattern)
+                print('current pattern: ' + pattern + ' , draw on it!')
+
 
         # change to a random palette
         if symbol == pyglet.window.key.P:
@@ -240,13 +240,13 @@ class GrayScott(pyglet.window.Window):
             if modifiers & pyglet.window.key.LCTRL:
                 num = input('enter the line numer in json file: ')
                 with open('palette.json', 'r') as f:
-                    for i, line in enumerate(f):
+                    for i, line in enumerate(f, start=1):
                         if i == int(num):
                             data = json.loads(line)
                             for key, item in data.items():
                                 self.set_pattern(key)
                                 self.set_palette(item)
-                                print('this is a blank screen, draw on it!')
+                                print('if it is a blank screen, draw on it!')
 
 
     def on_mouse_press(self, x, y, button, modifiers):
@@ -283,6 +283,7 @@ class GrayScott(pyglet.window.Window):
         alphas = sorted(np.random.random(5))
         palette = np.random.random((5, 4))
         palette[0] = 0.0
+        #palette[-1] = 1.0
         palette[:, -1] = alphas
         print('current palette:')
         print(palette)
