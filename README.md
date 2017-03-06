@@ -150,14 +150,14 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 ### Reaction Diffusion Simulation
 反应扩散方程模拟 [[View Code](./src/grayscott/)] [[Wiki](https://en.wikipedia.org/wiki/Reaction%E2%80%93diffusion_system)] [[View Webm Animation](./img/grayscott.webm)] [[Pmneila's Javascript Animation](http://pmneila.github.io/jsexp/grayscott/)]
 
-
-Written with modern OpenGL shading language and pyglet.
-Currently only a coarse version and will be improved later.
 <br>
 <p align="center">
 <img src="./img/grayscott.png"/>
 </p>
 
+more images: [[worms](./img/worms2.png)] [[bacteria](./img/bacteria.png)] [[unstable](./img/unstable.png)] [[spirals](./img/spirals.png)]
+
+see the doc for how to use this program.
 <br>
 
 [[Back to Top](#contents)]
