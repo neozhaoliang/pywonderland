@@ -21,7 +21,7 @@ You may use your mouse to draw on the screen at any stage.
 
 6. to load a favorable config from the json file, press 'ctrl + o'. enter the line number of the config you chose and then draw on the blank screen to see the pattern.
 
-7. press 'exit' to close the window.
+7. press 'esc' to close the window.
 
 
 I have pre-computed some configs in the `palette.json` file.

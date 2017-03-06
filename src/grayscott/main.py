@@ -227,6 +227,7 @@ class GrayScott(pyglet.window.Window):
                 self.set_palette(GrayScott.palette_default)
                 self.set_pattern('bacteria2')
 
+        # save current config to the json file
         if symbol == pyglet.window.key.S:
             if modifiers & pyglet.window.key.LCTRL:
                 with open('palette.json', 'a+') as f:
@@ -234,7 +235,7 @@ class GrayScott(pyglet.window.Window):
                     f.write(data + '\n')
                 print('config saved')
 
-
+        # load a config from the json file.
         if symbol == pyglet.window.key.O:
             if modifiers & pyglet.window.key.LCTRL:
                 num = input('enter the line numer in json file: ')
@@ -249,11 +250,14 @@ class GrayScott(pyglet.window.Window):
 
 
     def on_mouse_press(self, x, y, button, modifiers):
+        '''
+        press mouse to add 'v'.
+        '''
         self.mouse_down = True
         bx = x / float(self.width)
         by = y / float(self.height)
         self.update_brush(bx, by)
-        
+
 
     def on_mouse_release(self, x, y, button, modifiers):
         self.mouse_down = False
@@ -265,7 +269,7 @@ class GrayScott(pyglet.window.Window):
             bx = x / float(self.width)
             by = y / float(self.height)
             self.update_brush(bx, by)
-            
+
 
     def update_brush(self, *brush):
         self.set_viewport(self.tex_width, self.tex_height)
@@ -284,7 +288,7 @@ class GrayScott(pyglet.window.Window):
         print(palette)
         self.set_palette(palette)
 
-    
+
     def run(self):
         self.set_visible(True)
         pyglet.clock.schedule(lambda dt: None)
