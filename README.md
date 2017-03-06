@@ -155,7 +155,7 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 <img src="./img/grayscott.png"/>
 </p>
 
-more images: [[worms](./img/worms2.png)] [[bacteria](./img/bacteria.png)] [[unstable](./img/unstable.png)] [[spirals](./img/spirals.png)]
+more images: [[worms](./img/worms2.png)] [[bacteria](./img/bacteria.png)] [[unstable](./img/unstable.png)] [[spirals](./img/spirals.png)] [[zebrafish](./img/zebrafish.png)]
 
 see the doc for how to use this program.
 <br>
