@@ -1,5 +1,5 @@
 '''
-Draw generalized Penrose tilings using de Bruijn's pentagrid methond.
+Draw generalized Penrose tilings using de Bruijn's pentagrid method.
 
 Reference:
 
