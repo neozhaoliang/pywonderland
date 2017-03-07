@@ -13,7 +13,7 @@ You may use your mouse to draw on the screen at any stage.
 
 2. to change to another pattern, press keyboard 's' (short for 'species').
 
-3. to color it another way, press 'p' (short for 'pattern').
+3. to color it another way, press 'p' (short for 'palette').
 
 4. to save a screenshot, press 'enter'.
 
