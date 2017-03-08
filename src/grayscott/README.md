@@ -1,4 +1,6 @@
-# How to use this program
+# A GrayScott Reaction - Diffusion Simulator Written with Pyglet and GLSL.
+
+This program is motivated by [pmneila's Javascript project](http://pmneila.github.io/jsexp/grayscott/).
 
 
 ## Keyboard and mouse interface:
@@ -15,11 +17,13 @@ Run `python main.py` or `python3 main.py` you will see the simulation run in a w
 
 + Press `Ctrl` + `s` (short for "save") to save current config to a json file.
 
-+ Press `ctrl` + `o` (short for "open") to load a favorable config from the json file. Enter the line number of the config then it will be loaded. The screen might become blank, just draw on it.
++ Press `Ctrl` + `o` (short for "open") to load a favorable config from the json file. Enter the line number of the config then it will be loaded. The screen might become blank, just draw on it.
 
++ Press `Ctrl` + `r` to restore to default config.
 + press `Esc` to close the window.
 
-I have pre-computed some configs in the `palette.json` file.
+I have pre-computed some configs in the `palette.json` file. They are used in the gif image in the front page.
+
 
 ## How to save the animation as a video:
 
