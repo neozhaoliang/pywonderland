@@ -65,14 +65,6 @@ class GrayScott(pyglet.window.Window):
                                 (1.0, 0.0, 0.0, 0.4),
                                 (1.0, 1.0, 1.0, 0.6)])
 
-    '''
-    # try this palette!
-    palette_default = np.array([[0.0, 0.0, 0.0, 0.0687],
-                                [0.0347, 0.284, 0.254, 0.131],
-                                [0.39, 0.075, 0.01, 0.30],
-                                [0.9, 0.28, 0.8, 0.63],
-                                [0.52, 0.81, 0.21, 0.96]])
-    '''
 
     def __init__(self, width, height, pattern, scale=2):
         '''
@@ -236,15 +228,11 @@ class GrayScott(pyglet.window.Window):
         # load a config from the json file.
         if symbol == pyglet.window.key.O:
             if modifiers & pyglet.window.key.LCTRL:
-                num = input('> enter the line number in json file: ')
-                with open('palette.json', 'r') as f:
-                    for i, line in enumerate(f, start=1):
-                        if i == int(num):
-                            data = json.loads(line)
-                            for key, item in data.items():
-                                self.use_pattern(key)
-                                self.use_palette(item)
-                                print('> config loaded. If the window is blank, draw on it!\n')
+                try:
+            	    num = str(input('> enter the line number in json file: '))
+            	    self.load_config(num)
+                except:
+                    print('> invalid input\n')
 
 
     def on_mouse_press(self, x, y, button, modifiers):
@@ -283,11 +271,25 @@ class GrayScott(pyglet.window.Window):
         # the rgb of the first row is set to 0 to make the background black.
         palette[0] = 0.0
         palette[:, -1] = alphas
+        palette = palette.round(3)
         print('> current palette:')
         print(palette)
         print('\n')
         self.use_palette(palette)
         self.palette = palette
+
+
+    def load_config(self, num):
+        with open('palette.json', 'r') as f:
+            for i, line in enumerate(f, start=1):
+                if str(i) == num:
+                    data = json.loads(line)
+                    for key, item in data.items():
+                        self.use_pattern(key)
+                        self.use_palette(item)
+                        print('> config loaded. If the window is blank, draw on it!\n')
+                    return
+            print('> config does not exist in json file\n')
 
 
     def run(self):

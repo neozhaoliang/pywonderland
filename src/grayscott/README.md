@@ -22,7 +22,7 @@ Run `python main.py` or `python3 main.py` you will see the simulation run in a w
 + Press `Ctrl` + `r` to restore to default config.
 + press `Esc` to close the window.
 
-I have pre-computed some configs in the `palette.json` file. They are used in the gif image in the front page.
+I put some configs in the `palette.json` file. Do have a try!
 
 
 ## How to save the animation as a video:
