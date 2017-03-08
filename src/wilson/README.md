@@ -54,6 +54,6 @@ m c w c w c m
 m m m m m m m
 ```
 
-Each character represents a square (5x5 pixels by default) in our image. `m` means "margin", these squares are served as the border of the image and **are not used in our animation.** The width of the margin can be changed (default to 2 but the exammple shows only 1). `w` means this a "wall", and `c` means this is a "cell". **Our grid graph contains only the cells. Walls and margins are not considered to be part of the graph.**
+Each character represents a square (5x5 pixels by default) in our image. `m` means "margin", these squares are served as the border of the image and **are not used in our animation.** The width of the margin can be changed (default to 2 but the example shows only 1). `w` means this a "wall", and `c` means this is a "cell". **Our grid graph contains only the cells. Walls and margins are not considered to be part of the graph.**
 
 As the algorithm runs, the cells become connected and some walls might be set to "in tree" or "in path", but they are still **not** treated as part of the graph.
