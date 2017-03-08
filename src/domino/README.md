@@ -16,17 +16,20 @@
     ```
 	$ python aztec.py -o 200 -size 1000 -f filename
     ```
-    
+
 2. To make gif animations of the domino shuffling algorithm, for example, create a gif image of size 400x400 which animates the first 40 steps of the algorithm, run
+
 	```
 	$ python anim.py -order 40 -size 400
 	```
-    
-    or simply
-	
-    ```
+
+	or simply
+
+	```
 	$ python anim.py -o 40 -s 400
     ```
+
+**Important Note:** for windows users you need to set the `CONVERTER` variable in `anim.py` to be the path to your `convert.exe`.
 
 ## What is domino shuffling algorithm
 
