@@ -1,29 +1,3 @@
-'''
-An implementation of the domino shuffling algorithm on aztec diamond graphs.
-
-The algorithm comes from algebraic combinatorics, it picks a random tiling
-from all domino tilings of an aztec diamond graph with equal probability.
-It consists of three steps: deletion, sliding, and creation.
-For a detail discussion see the paper "generalized domino shuffling" by James Propp:
-https://arxiv.org/abs/math/0111034
-
-Usage of this script:
-
-To sample a random tiling of an order 200 az graph and output an image of
-size 1000x1000, run
-
-$ python aztec.py -order 200 -size 1000
-
-or simply
-
-$ python aztec.py -o 200 -size 1000
-
-This will output an image named 'randomtiling.png' in current directory.
-You may also specify the name of the image by adding the '-f' option:
-
-$ python aztec.py -o 200 -size 1000 -f filename
-'''
-
 import argparse
 import random
 import cairo

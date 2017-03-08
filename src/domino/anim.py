@@ -1,23 +1,3 @@
-'''
-Make gif animations of the domino shuffling algorithm.
-
-This script requires imagemagick be installed on your computer.
-For Windows users you may also need to manually set the variable
-
-'CONVERTER'
-
-to be the path to your convert.exe
-
-Usage: to create a gif image of size 400x400 which animates the first
-40 steps of the algorithm, run
-
-$ python anim.py -order 40 -size 400
-
-or simply
-
-$ python anim.py -o 40 -s 400
-
-'''
 import os
 import glob
 import subprocess

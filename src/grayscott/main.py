@@ -1,18 +1,5 @@
 # pylint: disable = unused-argument
-'''
-A GrayScott reaction-diffusion simulator written with pyglet and GLSL.
 
-This program is motivated by pmneila's Javascript project:
-
-    "http://pmneila.github.io/jsexp/grayscott/"
-
-
-Usage: just run
-
-    python main.py
-
-and enjoy the result!
-'''
 import json
 import numpy as np
 import pyglet

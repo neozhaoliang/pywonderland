@@ -1,27 +1,3 @@
-'''
-Make gif animations of Wilson's uniform spanning tree algorithm and other maze-solving algorithms.
-
-Wilson's algorithm comes from probability, it samples a random spanning tree with equal probability
-among all spanning trees of a given simple, finite, connected graph. It's runs as follows:
-
-1. choose any vertex v as the root, maintain a tree T, initially T = {v}.
-2. for any vertex z that not in T, start a loop erased random walk from z, until the walk 'hits' T.
-   then add the resulting path of the walk to T.
-3. repeat step 2 until all vertices of the graph are in T.
-
-for the proof of the correctness of this algorithm see Wilson's original paper:
-
-    "Generating random spanning trees more quickly than the cover time".
-
-The maze-solving part is a bit arbitrary and you may implement any algorithm you like, I've chosen
-the depth first search algorithm for simplicity.
-
-Example Usage: simply run
-
-    python main.py
-
-and enjoy the result!
-'''
 import argparse
 import random
 from encoder import GIFWriter
