@@ -29,9 +29,7 @@ The algorithm runs as follows:
 
 For the proof of the correctness of this algorithm see Wilson's original paper:
 
-    ```
     "Generating random spanning trees more quickly than the cover time".
-    ```
 
 The maze-solving part is a bit arbitrary and you may implement any algorithm you like, I've chosen the depth first search algorithm for simplicity.
 
