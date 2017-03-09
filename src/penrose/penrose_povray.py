@@ -44,11 +44,10 @@ def tile(num_lines):
 camera = Camera('location', (0, 60, -100), 'look_at', (0, 0, 40))
 light1 = LightSource((50, -50, -50), 'color', (1, 1, 1))
 light2 = LightSource((-50, 50, -50), 'color', (1, 1, 1))
+objects = [light1, light2]
 
 
-
-objects =[light1, light2]
-
+# ----- floor -----
 for rhombi, color in tile(NUM_LINES):
     p1, p2, p3, p4 = rhombi
     polygon = Polygon(5, p1, p2, p3, p4, p1,
@@ -64,9 +63,11 @@ for rhombi, color in tile(NUM_LINES):
         objects.append(cylinder)
     objects.append(polygon)
 
-
+    
+# ----- left wall -----
 THIN_RHOMBUS_COLOR = (0.75, 0.25, 1)
 FAT_RHOMBUS_COLOR = (1, 0.25, 0.5)
+
 for rhombi, color in tile(NUM_LINES):
     p1, p2, p3, p4 = rhombi
     polygon = Polygon(5, p1, p2, p3, p4, p1,
@@ -84,8 +85,11 @@ for rhombi, color in tile(NUM_LINES):
         objects.append(cylinder)
     objects.append(polygon)
 
+
+# ----- right wall -----
 THIN_RHOMBUS_COLOR = (0.5, 0, 1)
 FAT_RHOMBUS_COLOR = (0, 0.5, 1)
+
 for rhombi, color in tile(NUM_LINES):
     p1, p2, p3, p4 = rhombi
     polygon = Polygon(5, p1, p2, p3, p4, p1,
