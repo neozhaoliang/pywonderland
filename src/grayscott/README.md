@@ -1,4 +1,4 @@
-# A GrayScott Reaction - Diffusion Simulator Written with Pyglet and GLSL.
+# A Reaction - Diffusion Simulator Written with Pyglet and GLSL.
 
 This program is motivated by [pmneila's Javascript project](http://pmneila.github.io/jsexp/grayscott/).
 
