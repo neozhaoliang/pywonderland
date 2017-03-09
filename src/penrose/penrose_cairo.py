@@ -69,7 +69,8 @@ def rhombus(r, s, kr, ks):
     for index[r], index[s] in [(kr, ks), (kr+1, ks), (kr+1, ks+1), (kr, ks+1)]:
         vertices.append(np.dot(index, GRIDS))
 
-    return vertices, color
+    vertices_real = [(z.real, z.imag) for z in vertices]
+    return vertices_real, color
 
 
 def tile(num_lines):
@@ -93,11 +94,11 @@ def render(imgsize, num_lines):
 
     for rhombus, color in tile(num_lines):
         A, B, C, D = rhombus
-        ctx.move_to(A.real, A.imag)
-        ctx.line_to(B.real, B.imag)
-        ctx.line_to(C.real, C.imag)
-        ctx.line_to(D.real, D.imag)
-        ctx.line_to(A.real, A.imag)
+        ctx.move_to(*A)
+        ctx.line_to(*B)
+        ctx.line_to(*C)
+        ctx.line_to(*D)
+        ctx.line_to(*A)
         ctx.set_source_rgb(*color)
         ctx.fill_preserve()
         ctx.set_source_rgb(*EDGE_COLOR)

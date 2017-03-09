@@ -9,7 +9,7 @@ Run `main.py` and wait for roughly half one minute, you will see a `.gif` file g
 
 You can also specify the image size, number of loops, colors and speed by passing arguments to it, or even implement a different maze-solving algorithm if you can dig deep into the code and fully understand it.
 
-This program can be run with both python2.7+ and python3+, it's written with pure python: no third-party modules nor software are needed, just built-in modules `struct` and `random` and some built-in functions. I could write it faster by using `numpy` arrays and its fancy indexing, but I like keeping the code 'clean'.
+This program can be run with both python2.7+ and python3+, it's written with pure python: no third-party modules nor software are needed, just built-in modules `struct` and `random` and some built-in functions. I could write it faster by using `numpy` arrays and its fancy indexing, but I like to keep the code of "pure blood".
 
 ## How did it come out
 
