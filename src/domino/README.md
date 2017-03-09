@@ -29,7 +29,9 @@
 	$ python anim.py -o 40 -s 400
     ```
 
-**Important Note:** for windows users you need to set the `CONVERTER` variable in `anim.py` to be the path to your `convert.exe`.
+<p>
+**Important Note:** `anim.py` requires `ImageMagick` be installed on your computer. For windows users you also need to set the `CONVERTER` variable in `anim.py` to be the path to your `convert.exe`.
+</p>
 
 ## What is domino shuffling algorithm
 
