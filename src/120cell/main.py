@@ -87,7 +87,6 @@ bottom = min([v[2] for v in verts_3d])
 camera = Camera('location', (0, 60, -100), 'look_at', (0, 0, 40))
 light1 = LightSource((50, -50, -50), 'color', (1, 1, 1))
 light2 = LightSource((-50, 50, -50), 'color', (1, 1, 1))
-objects = [light1, light2]
 
 
 # ----- floor -----
@@ -164,13 +163,13 @@ for rhombi, color in tile(NUM_LINES):
 right = pov_union(objects_pool, 'rotate', (0, 60, 0), 'translate', (10, 0, 10), 'scale', SCALE)
 
 
-# ----- wall are finished, let's draw the 120-cell!
+# ----- walls are finished, let's draw the 120-cell!
 objects_pool = []
 
 # firstly the vertices
 for v in verts_3d:
     ball = Sphere(v, CELL_120_EDGE_THICKNESS)
-    objects.append(ball)
+    objects_pool.append(ball)
 
 # and the edges
 for i, j in EDGES:
