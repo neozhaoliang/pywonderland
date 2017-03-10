@@ -8,7 +8,7 @@ import re
 SIGMA = [0, 1, 2]
 
 
-class Automaton:
+class Automaton(object):
 
     """
     To build an automaton, just name an automaton state as the starting state, then all states that are
@@ -42,7 +42,7 @@ class Automaton:
         return self
 
 
-class AutomatonState:
+class AutomatonState(object):
 
     def __init__(self, accept=False):
         self.accept = accept
@@ -50,7 +50,7 @@ class AutomatonState:
         self.transitions = dict()
 
 
-    def all_transitions(self):
+    def all_transitions(self, symbol, target):
         raise NotImplementedError
 
 
@@ -109,7 +109,7 @@ class NFAState(AutomatonState):
     def add_transition(self, symbol, target):
         try:
             self.transitions[symbol].add(target)
-        except:
+        except KeyError:
             self.transitions[symbol] = {target}
 
 
@@ -155,7 +155,7 @@ class DFAState(AutomatonState):
 
 
 
-class NFA_to_DFA:
+class NFA_to_DFA(object):
 
     def __init__(self, nfa):
         self.initial = nfa.initial
@@ -176,7 +176,7 @@ class NFA_to_DFA:
                 if t:
                     try:
                         dfa_state = Q[t]
-                    except:
+                    except KeyError:
                         dfa_state = self.construct_dfa_state_from_subset(t)
                         Q[t] = dfa_state
                         stack.append(t)
@@ -211,7 +211,7 @@ class NFA_to_DFA:
 
 
 
-class Hopcroft:
+class Hopcroft(object):
 
     def __init__(self, dfa):
         self.initial = dfa.initial
@@ -327,7 +327,6 @@ class Hopcroft:
             if state in p:
                 return p
         raise ValueError("partition does contain given state, something must be wrong")
-        return None
 
 
 
@@ -349,7 +348,7 @@ def Parse(filename):
                 num = int(s.group(1))
                 try:
                     state = T[num]
-                except:
+                except KeyError:
                     state = NFAState()
                     T[num] = state
 
@@ -359,7 +358,7 @@ def Parse(filename):
                     b = int(w[1])
                     try:
                         target = T[b]
-                    except:
+                    except KeyError:
                         target = NFAState()
                         T[b] = target
 
@@ -370,7 +369,7 @@ def Parse(filename):
                     b = int(w)
                     try:
                         target = T[b]
-                    except:
+                    except KeyError:
                         target = NFAState()
                         T[b] = target
 
