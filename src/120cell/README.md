@@ -1,12 +1,9 @@
-# The 120 cell
-
-Currently only a coarse version, many brute force code, to be cleaned.
-
+# Render the 120-Cell Polytope with POV-Ray and Vapory
 
 ## How to use this program
 
 
-This program needs the raytracer `POV-Ray` and the module `vapory` be installed on your computer. Just run `main.py`.
+This program needs the raytracer `POV-Ray` and the module `vapory` be installed on your computer. Just run `main.py`. It runs much faster than I thought.
 
 If you don't want to run POV - Ray in a python shell, you may wait a few seconds until POV-Ray pops the display window, close it to
 kill the process, and run `povray render.ini`. This will restart the rendering in shell.
