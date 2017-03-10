@@ -1,4 +1,6 @@
 # pylint: disable=unused-import
+# pylint: disable=undefined-variable
+# pylint: disable=used-before-assignment
 
 from itertools import combinations, product
 import numpy as np
@@ -8,7 +10,6 @@ from cell120 import VERTS, EDGES, FACES
 
 # ----- Penrose Drawing Functions
 def rhombus(r, s, kr, ks):
-    global THIN_RHOMBUS_COLOR, FAT_RHOMBUS_COLOR
     if (s - r)**2 % 5 == 1:
         color = THIN_RHOMBUS_COLOR
     else:
@@ -32,7 +33,7 @@ def tile(num_lines):
             yield rhombus(r, s, kr, ks)
 
 
-# ----- POV-Ray help function 
+# ----- POV-Ray help function
 class Media(POVRayElement):
     """Media()"""
 
@@ -47,8 +48,8 @@ def stereo_projection(point_4d, pole):
     return np.array([x, y, z]) * 4 * pole / (w - 2 * pole)
 
 
-# ----- global settings 
-# the pole for stereographic projection 
+# ----- global settings
+# the pole for stereographic projection
 POLE = 2
 
 # for penrose tiling drawings
@@ -57,7 +58,7 @@ SHIFT = np.random.random(5)
 GRIDS = [np.exp(2j * np.pi * i / 5) for i in range(5)]
 
 
-# objects in our scene will be scaled 
+# objects in our scene will be scaled
 SCALE = 10
 
 # edge color and thickness of the rhombus
@@ -69,17 +70,17 @@ DEFAULT_PENROSE_TEXTURE = Finish('ambient', 0.3, 'diffuse', 0.7, 'phong', 1)
 
 # edge color and thickness of the 120-cell
 CELL_120_EDGE_THICKNESS = 0.05
-CELL_120_EDGE_TEXTURE = Texture('T_Chrome_4D', Pigment( 'color', (1, 1, 1), 'transmit', 0 ),
+CELL_120_EDGE_TEXTURE = Texture('T_Chrome_4D', Pigment('color', (1, 1, 1), 'transmit', 0),
                                 Finish('reflection', 0.4, 'brilliance', 0.4))
 
 # setting for the faces of the 120-cell
 INTERIOR = Interior(Media('intervals', 1, 'samples', 1, 1, 'emission', 1))
-CELL_120_FACE_TEXTURE = Texture(Pigment('color', 'Blue' , 'transmit', 0.7),
-                                Finish ('reflection', 0, 'brilliance', 0))
+CELL_120_FACE_TEXTURE = Texture(Pigment('color', 'Blue', 'transmit', 0.7),
+                                Finish('reflection', 0, 'brilliance', 0))
 
 
 # ----- init job for our secen
-verts_3d = np.array([stereo_projection(v, POLE)  for v in VERTS])
+verts_3d = np.array([stereo_projection(v, POLE) for v in VERTS])
 
 # the bottom of the 120-cell
 bottom = min([v[2] for v in verts_3d])
@@ -98,7 +99,7 @@ for rhombi, color in tile(NUM_LINES):
     polygon = Polygon(5, p1, p2, p3, p4, p1,
                       Texture(Pigment('color', color), DEFAULT_PENROSE_TEXTURE))
     objects_pool.append(polygon)
-    
+
     for p, q in zip(rhombi, [p2, p3, p4, p1]):
         cylinder = Cylinder(p, q, RHOMBUS_EDGE_THICKNESS,
                             Texture(Pigment('color', RHOMBUS_EDGE_COLOR), DEFAULT_PENROSE_TEXTURE))
@@ -112,7 +113,7 @@ for rhombi, color in tile(NUM_LINES):
 
 floor = pov_union(objects_pool, 'rotate', (90, 0, 0), 'scale', SCALE)
 
-    
+
 # ----- left wall -----
 objects_pool = []
 THIN_RHOMBUS_COLOR = (0.75, 0.25, 1)
@@ -123,7 +124,7 @@ for rhombi, color in tile(NUM_LINES):
     polygon = Polygon(5, p1, p2, p3, p4, p1,
                       Texture(Pigment('color', color), DEFAULT_PENROSE_TEXTURE))
     objects_pool.append(polygon)
-    
+
     for p, q in zip(rhombi, [p2, p3, p4, p1]):
         cylinder = Cylinder(p, q, RHOMBUS_EDGE_THICKNESS,
                             Texture(Pigment('color', RHOMBUS_EDGE_COLOR), DEFAULT_PENROSE_TEXTURE))
@@ -185,7 +186,7 @@ for i1, i2, i3, i4, i5 in FACES:
     v1, v2, v3, v4, v5 = [verts_3d[x] for x in [i1, i2, i3, i4, i5]]
     polygon = Polygon(6, v1, v2, v3, v4, v5, v1)
     objects_pool.append(polygon)
-    
+
 faces = pov_union(objects_pool, CELL_120_FACE_TEXTURE, INTERIOR)
 cell120 = pov_union([verts_and_edges, faces], 'translate', (0, -bottom, 4), 'scale', 7)
 
