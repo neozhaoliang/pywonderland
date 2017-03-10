@@ -19,6 +19,7 @@ A collection of python scripts that aimed at drawing beautiful figures or animat
 - [Generalized Penrose Tilings](#generalized-penrose-tilings)
 - [Wilson Algorithm Animation](#wilson-algorithm-animation)
 - [Reaction Diffusion Simulation](#reaction-diffusion-simulation)
+- [The 120-cell](#the-120-cell)
 
 ---
 ### Mandelbrot Set
@@ -157,6 +158,20 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 <br>
 
 [[Back to Top](#contents)]
+
+
+---
+### The 120-cell
+120 胞腔 [[View Code](./src/120cell/)][[Wiki](https://en.wikipedia.org/wiki/120-cell)]
+
+<br>
+<p align="center">
+<img src="./img/120cell.png"/>
+</p>
+<br>
+
+[[Back to Top](#contents)]
+
 
 ## Dependencies
 
