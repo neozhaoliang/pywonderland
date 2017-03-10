@@ -121,12 +121,12 @@ Littlewood 多项式的根 [[View Code](./src/misc/rootsart.py)] [[Origin](http:
 
 ---
 ### Generalized Penrose Tilings
-彭罗斯铺砌 [[View Code](./src/penrose/)] [[Wiki](https://en.wikipedia.org/wiki/Penrose_tiling)]
+彭罗斯铺砌 [[View Code](./src/misc/penrose.py)] [[Wiki](https://en.wikipedia.org/wiki/Penrose_tiling)]
 
 <br>
 
 <p align="center">
-<img src="./img/penrose_povray.png"/>
+<img src="./img/penrose.gif"/>
 </p>
 
 <br>
