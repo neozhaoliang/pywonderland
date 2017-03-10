@@ -182,10 +182,10 @@ verts_and_edges = pov_union(objects_pool, CELL_120_EDGE_TEXTURE)
 
 # finally the faces
 objects_pool = []
-for i1, i2, i3, i4, i5 in FACES:
-    v1, v2, v3, v4, v5 = [verts_3d[x] for x in [i1, i2, i3, i4, i5]]
-    polygon = Polygon(6, v1, v2, v3, v4, v5, v1)
-    objects_pool.append(polygon)
+for f in FACES:
+    pentagon_verts = [verts_3d[index] for index in f]
+    pentagon = Polygon(5, *pentagon_verts)
+    objects_pool.append(pentagon)
 
 faces = pov_union(objects_pool, CELL_120_FACE_TEXTURE, INTERIOR)
 cell120 = pov_union([verts_and_edges, faces], 'translate', (0, -bottom, 4), 'scale', 7)
