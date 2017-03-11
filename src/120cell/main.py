@@ -53,9 +53,10 @@ def pov_union(object_list, *args):
 THIN_RHOMBUS_COLOR = None
 FAT_RHOMBUS_COLOR = None
 NUM_LINES = 15
-SHIFT = np.random.random(5)
 GRIDS = [np.exp(2j * np.pi * i / 5) for i in range(5)]
 
+# if these 5 numbers sum to an integer then it's the standard Penrose pattern
+SHIFT = [0.1, 0.2, -0.3, 0.6, -0.6]
 
 def rhombus(r, s, kr, ks):
     if (s - r)**2 % 5 == 1:
@@ -133,6 +134,9 @@ objects_pool = []
 THIN_RHOMBUS_COLOR = (0.75, 0.25, 1)
 FAT_RHOMBUS_COLOR = (1, 0.25, 0.5)
 
+# change to the 'star' pattern
+SHIFT = [0.5, 0.5, 0.5, 0.5, 0.5]
+
 for rhombi, color in tile(NUM_LINES):
     p1, p2, p3, p4 = rhombi
     polygon = Polygon(5, p1, p2, p3, p4, p1,
@@ -157,6 +161,9 @@ left = pov_union(objects_pool, 'rotate', (0, -60, 0), 'translate', (-10, 0, 10),
 objects_pool = []
 THIN_RHOMBUS_COLOR = (0.5, 0, 1)
 FAT_RHOMBUS_COLOR = (0, 0.5, 1)
+
+# now use a completely random pattern
+SHIFT = np.random.random(5)
 
 for rhombi, color in tile(NUM_LINES):
     p1, p2, p3, p4 = rhombi
@@ -204,7 +211,11 @@ for f in FACES:
 faces = pov_union(objects_pool, CELL_120_FACE_TEXTURE, INTERIOR)
 cell120 = pov_union([verts_and_edges, faces], 'translate', (0, -bottom, 4), 'scale', 7)
 
+correct = 0.6
+pillar = Cylinder((0, -correct, 0), (0, correct, 0), 1,
+                  Pigment('color', 'CadetBlue'),
+                  Finish('ambient', 0.2, 'diffuse', 0.8), 'translate', (0, 0, 4), 'scale', 80)
 
-scene = Scene(camera, objects=[light1, light2, floor, left, right, cell120],
+scene = Scene(camera, objects=[light1, light2, floor, left, right, cell120, pillar],
               included=['colors.inc', 'metals.inc'])
 scene.render('penrose_povray.png', width=600, height=480, antialiasing=0.001, remove_temp=False)
