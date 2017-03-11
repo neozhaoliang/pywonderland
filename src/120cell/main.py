@@ -5,10 +5,58 @@
 from itertools import combinations, product
 import numpy as np
 from vapory import *
+
+# Media is not implemented when this script was written
+try:
+    from vapory import Media
+
+except ImportError:
+    class Media(POVRayElement):
+        """Media()"""
+
 from cell120 import VERTS, EDGES, FACES
 
 
-# ----- Penrose Drawing Functions
+
+# ---- global settings for our scene
+
+# objects in our scene will be scaled
+SCALE = 10
+
+# edge color, edge thickness and texture of the rhombus
+RHOMBUS_EDGE_COLOR = (1, 1, 1)
+RHOMBUS_EDGE_THICKNESS = 0.05
+DEFAULT_PENROSE_TEXTURE = Finish('ambient', 0.3, 'diffuse', 0.7, 'phong', 1)
+
+
+# color, thickness, and texture of the edges 120-cell
+CELL_120_EDGE_COLOR = (1, 1, 1)
+CELL_120_EDGE_THICKNESS = 0.05
+CELL_120_EDGE_TEXTURE = Texture('T_Chrome_4D', Pigment('color', CELL_120_EDGE_COLOR, 'transmit', 0),
+                                Finish('reflection', 0.4, 'brilliance', 0.4))
+
+# color, texture of the faces of the 120-cell
+CELL_120_FACE_COLOR = 'Blue'
+INTERIOR = Interior(Media('intervals', 1, 'samples', 1, 1, 'emission', 1))
+CELL_120_FACE_TEXTURE = Texture(Pigment('color', CELL_120_FACE_COLOR, 'transmit', 0.7),
+                                Finish('reflection', 0, 'brilliance', 0))
+
+# A helper function for objects union
+def pov_union(object_list, *args):
+    return Object(Union(*object_list), *args)
+
+
+
+# ----- settings for the Penrose tilings
+
+# we will set these colors later
+THIN_RHOMBUS_COLOR = None
+FAT_RHOMBUS_COLOR = None
+NUM_LINES = 15
+SHIFT = np.random.random(5)
+GRIDS = [np.exp(2j * np.pi * i / 5) for i in range(5)]
+
+
 def rhombus(r, s, kr, ks):
     if (s - r)**2 % 5 == 1:
         color = THIN_RHOMBUS_COLOR
@@ -33,59 +81,24 @@ def tile(num_lines):
             yield rhombus(r, s, kr, ks)
 
 
-# ----- POV-Ray help function
-class Media(POVRayElement):
-    """Media()"""
+# ----- settings for the 120-cell projection
 
+# the pole for stereographic projection
+POLE = 2
 
-def pov_union(object_list, *args):
-    return Object(Union(*object_list), *args)
-
-
-# ----- project 4d vertices to 3d
+# project 4d vertices to 3d
 def stereo_projection(point_4d, pole):
     x, y, z, w = point_4d
     return np.array([x, y, z]) * 4 * pole / (w - 2 * pole)
 
-
-# ----- global settings
-# the pole for stereographic projection
-POLE = 2
-
-# for penrose tiling drawings
-NUM_LINES = 15
-SHIFT = np.random.random(5)
-GRIDS = [np.exp(2j * np.pi * i / 5) for i in range(5)]
-
-
-# objects in our scene will be scaled
-SCALE = 10
-
-# edge color and thickness of the rhombus
-RHOMBUS_EDGE_COLOR = (1, 1, 1)
-RHOMBUS_EDGE_THICKNESS = 0.05
-
-# default texture for rhombus
-DEFAULT_PENROSE_TEXTURE = Finish('ambient', 0.3, 'diffuse', 0.7, 'phong', 1)
-
-# edge color and thickness of the 120-cell
-CELL_120_EDGE_THICKNESS = 0.05
-CELL_120_EDGE_TEXTURE = Texture('T_Chrome_4D', Pigment('color', (1, 1, 1), 'transmit', 0),
-                                Finish('reflection', 0.4, 'brilliance', 0.4))
-
-# setting for the faces of the 120-cell
-INTERIOR = Interior(Media('intervals', 1, 'samples', 1, 1, 'emission', 1))
-CELL_120_FACE_TEXTURE = Texture(Pigment('color', 'Blue', 'transmit', 0.7),
-                                Finish('reflection', 0, 'brilliance', 0))
-
-
-# ----- init job for our secen
 verts_3d = np.array([stereo_projection(v, POLE) for v in VERTS])
-
 # the bottom of the 120-cell
 bottom = min([v[2] for v in verts_3d])
 
-camera = Camera('location', (0, 60, -100), 'look_at', (0, 0, 40))
+
+# ----- now begin our scene
+
+camera = Camera('location', (0, 60, -100), 'look_at', (0, 0, 110))
 light1 = LightSource((50, -50, -50), 'color', (1, 1, 1))
 light2 = LightSource((-50, 50, -50), 'color', (1, 1, 1))
 
@@ -94,6 +107,7 @@ light2 = LightSource((-50, 50, -50), 'color', (1, 1, 1))
 objects_pool = []
 THIN_RHOMBUS_COLOR = (1, 0, 1)
 FAT_RHOMBUS_COLOR = (0, 1, 1)
+
 for rhombi, color in tile(NUM_LINES):
     p1, p2, p3, p4 = rhombi
     polygon = Polygon(5, p1, p2, p3, p4, p1,
