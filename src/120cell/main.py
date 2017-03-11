@@ -17,11 +17,10 @@ except ImportError:
 from cell120 import VERTS, EDGES, FACES
 
 
-
 # ---- global settings for our scene
 
 # objects in our scene will be scaled
-SCALE = 10
+SCALE = 1.5
 
 # edge color, edge thickness and texture of the rhombus
 RHOMBUS_EDGE_COLOR = (1, 1, 1)
@@ -99,9 +98,9 @@ bottom = min([v[2] for v in verts_3d])
 
 # ----- now begin our scene
 
-camera = Camera('location', (0, 60, -100), 'look_at', (0, 0, 110))
-light1 = LightSource((50, -50, -50), 'color', (1, 1, 1))
-light2 = LightSource((-50, 50, -50), 'color', (1, 1, 1))
+camera = Camera('location', (0, 12, -30), 'look_at', (0, 0, 20))
+light = LightSource((-30, 10, -30), 'color', (1, 1, 1))
+
 
 
 # ----- floor -----
@@ -126,7 +125,7 @@ for rhombi, color in tile(NUM_LINES):
                         Texture(Pigment('color', RHOMBUS_EDGE_COLOR), DEFAULT_PENROSE_TEXTURE))
         objects_pool.append(sphere)
 
-floor = pov_union(objects_pool, 'rotate', (90, 0, 0), 'scale', SCALE)
+floor = pov_union(objects_pool, 'scale', SCALE, 'rotate', (90, 0, 0))
 
 
 # ----- left wall -----
@@ -154,7 +153,7 @@ for rhombi, color in tile(NUM_LINES):
                         Texture(Pigment('color', RHOMBUS_EDGE_COLOR), DEFAULT_PENROSE_TEXTURE))
         objects_pool.append(sphere)
 
-left = pov_union(objects_pool, 'rotate', (0, -60, 0), 'translate', (-10, 0, 10), 'scale', SCALE)
+left = pov_union(objects_pool, 'scale', SCALE, 'rotate', (0, -45, 0), 'translate', (-18, 0, 18))
 
 
 # ----- right wall -----
@@ -182,7 +181,7 @@ for rhombi, color in tile(NUM_LINES):
                         Texture(Pigment('color', RHOMBUS_EDGE_COLOR), DEFAULT_PENROSE_TEXTURE))
         objects_pool.append(sphere)
 
-right = pov_union(objects_pool, 'rotate', (0, 60, 0), 'translate', (10, 0, 10), 'scale', SCALE)
+right = pov_union(objects_pool, 'scale', SCALE, 'rotate', (0, 45, 0), 'translate', (18, 0, 18)) 
 
 
 # ----- walls are finished, let's draw the 120-cell!
@@ -209,13 +208,8 @@ for f in FACES:
     objects_pool.append(pentagon)
 
 faces = pov_union(objects_pool, CELL_120_FACE_TEXTURE, INTERIOR)
-cell120 = pov_union([verts_and_edges, faces], 'translate', (0, -bottom, 4), 'scale', 7)
+cell120 = pov_union([verts_and_edges, faces], 'scale', SCALE, 'translate', (0, -bottom, 0))
 
-correct = 0.6
-pillar = Cylinder((0, -correct, 0), (0, correct, 0), 1,
-                  Pigment('color', 'CadetBlue'),
-                  Finish('ambient', 0.2, 'diffuse', 0.8), 'translate', (0, 0, 4), 'scale', 80)
-
-scene = Scene(camera, objects=[light1, light2, floor, left, right, cell120, pillar],
+scene = Scene(camera, objects=[light, floor, left, right, cell120],
               included=['colors.inc', 'metals.inc'])
 scene.render('penrose_povray.png', width=600, height=480, antialiasing=0.001, remove_temp=False)
