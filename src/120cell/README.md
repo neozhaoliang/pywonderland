@@ -5,6 +5,8 @@
 
 The scene in the front page contains 3 non-isomorphic generalized Penrose tilings (patterns on the walls and floor) plus the 120-cell, a 4D polytope. (projected to 3D of course).
 
+If you watch on the pattern on the left wall, you will see there some "stars", so this is not a standard Penrose tiling. Watch the pattern on the right wall (just watch the cyan rhombus), it does not have any star, but it contains patterns that also do not occur in standard Penrose tilings, so it's not a Penrose tiling too. ** Only the pattern on the floor is the Penrose Tiling.**
+
 My previous code was a bunch of shit and it  even took me hours to debug when I tried to add something new into the scene. Now it's more readable.
 
 ## How to use this program
