@@ -59,7 +59,7 @@ floor = Penrose(num_lines= 10,
                 **penrose_config).put_objs('scale', 1.5,
                                            'rotate', (90, 0, 0))
 
-cell_120 = Cell_120(**cell_120_config).put_objs('scale', 1.5,
+cell_120 = Cell_120(**cell_120_config).put_objs('scale', 2,
                                                 'translate',
                                                 (0, -Cell_120.bottom, 0))
 
