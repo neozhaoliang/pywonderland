@@ -1,32 +1,30 @@
 # pylint: disable=unused-import
+# pylint: disable=undefined-variable
+
 
 import numpy as np
 from vapory import *
 from penrose import Penrose
 from cell120 import Cell_120
 
+# when this script was written 'Media' is not implemented yet
 try:
     from vapory import Media
 except ImportError:
     class Media(POVRayElement):
         """Media()"""
 
-
+        
 default = Finish('ambient', 0.3, 'diffuse', 0.7, 'phong', 1)
 
-
 penrose_config = {'vertex_size': 0.05,
-                  'vertex_texture': Texture(Pigment('color', 'White'),
-                                            default),
+                  'vertex_texture': Texture(Pigment('color', 'White'), default),
                   'edge_thickness': 0.05,
-                  'edge_texture': Texture(Pigment('color', 'White'),
-                                          default),
+                  'edge_texture': Texture(Pigment('color', 'White'), default),
                   'default': default}
 
-
 cell_120_config = {'vertex_size': 0.05,
-                   'vertex_texture': Texture(Pigment('color', 'White'),
-                                             default),
+                   'vertex_texture': Texture(Pigment('color', 'White'), default),
                    'edge_thickness': 0.05,
                    'edge_texture': Texture('T_Chrome_4D',
                                            Pigment('color', 'White', 'transmit', 0),
@@ -36,6 +34,7 @@ cell_120_config = {'vertex_size': 0.05,
                    'interior': Interior(Media('intervals', 1, 'samples', 1, 1, 'emission', 1))}
 
 
+# shift = [0.5] * 5: the star pattern 
 leftwall = Penrose(num_lines = 12,
                    shift = (0.5, 0.5, 0.5, 0.5, 0.5),
                    thin_color = (0.75, 0.25, 1),
@@ -44,6 +43,7 @@ leftwall = Penrose(num_lines = 12,
                                               'rotate', (0, -45, 0),
                                               'translate', (-18, 0, 18))
 
+# a random pattern
 rightwall = Penrose(num_lines = 12,
                     shift = np.random.random(5),
                     thin_color = (0.5, 0, 1),
@@ -52,16 +52,17 @@ rightwall = Penrose(num_lines = 12,
                                                'rotate', (0, 45, 0),
                                                'translate', (18, 0, 18))
 
+# when the numbers in shift sums to zero (mod 1), it's the standard Penrose tiling.
 floor = Penrose(num_lines= 12,
                 shift = (0.1, 0.2, -0.3, 0.6, -0.6),
                 thin_color = (1, 0, 1),
                 fat_color = (0, 1, 1),
-                **penrose_config).put_objs('scale', 1.5, 'rotate', (90, 0, 0))
+                **penrose_config).put_objs('scale', 1.5,
+                                           'rotate', (90, 0, 0))
 
-polytope = Cell_120(**cell_120_config)
-cell_120 = polytope.put_objs('scale', 1.5,
-                             'translate',
-                             (0, -polytope.bottom, 0))
+cell_120 = Cell_120(**cell_120_config).put_objs('scale', 1.5,
+                                                'translate',
+                                                (0, -Cell_120.bottom, 0))
 
 camera = Camera('location', (0, 12, -30), 'look_at', (0, 0, 20))
 light = LightSource((-30, 10, -30), 'color', (1, 1, 1))

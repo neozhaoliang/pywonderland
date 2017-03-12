@@ -1,4 +1,6 @@
 # pylint: disable=unused-import
+# pylint: disable=undefined-variable
+
 
 import numpy as np
 from vapory import *
@@ -8,9 +10,12 @@ from data import VERTS, EDGES, FACES
 class Cell_120(object):
 
     def __init__(self, **config):
+        # north pole for stereographic projection
         self.pole = 2
+        # project to 3d
         self.verts_3d = np.array([self.stereo_projection(v) for v in VERTS])
-        self.bottom = min(v[2] for v in self.verts_3d)
+        # the lowest point
+        Cell_120.bottom = min(v[2] for v in self.verts_3d)
         self.objs = self.compute_pov_objs(**config)
 
 

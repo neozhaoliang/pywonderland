@@ -1,4 +1,5 @@
 # pylint: disable=unused-import
+# pylint: disable=undefined-variable
 
 from itertools import combinations, product
 import numpy as np
