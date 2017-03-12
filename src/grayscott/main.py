@@ -231,7 +231,7 @@ class GrayScott(pyglet.window.Window):
                 try:
             	    num = str(input('> enter the line number in json file: '))
             	    self.load_config(num)
-                except:
+                except ValueError:
                     print('> invalid input\n')
 
 
