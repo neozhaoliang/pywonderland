@@ -5,6 +5,7 @@
 
 The scene in the front page contains 3 non-isomorphic generalized Penrose tilings (patterns on the walls and floor) plus the 120-cell, a 4D polytope. (projected to 3D of course).
 
+My previous code was a bunch of shit and it  even tookk me hours to debug when I tried to add something new into the scene. Now it's more readable.
 
 ## How to use this program
 
