@@ -1,13 +1,12 @@
 # pylint: disable=unused-import
 # pylint: disable=undefined-variable
 
-
 import numpy as np
 from vapory import *
 from penrose import Penrose
 from cell120 import Cell_120
 
-# when this script was written 'Media' is not implemented yet
+# 'Media' was not implemented yet when this script was written
 try:
     from vapory import Media
 except ImportError:

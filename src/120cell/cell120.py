@@ -1,7 +1,6 @@
 # pylint: disable=unused-import
 # pylint: disable=undefined-variable
 
-
 import numpy as np
 from vapory import *
 from data import VERTS, EDGES, FACES
