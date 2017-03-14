@@ -16,7 +16,6 @@ A collection of python scripts for drawing beautiful figures or animating intere
 - [Newton Fractal](#newton-fractal)
 - [The E8 Pattern](#the-e8-pattern)
 - [The Modular Group](#the-modular-group)
-- [Beauty of Roots](#beauty-of-roots)
 - [Generalized Penrose Tilings](#generalized-penrose-tilings)
 - [Wilson Algorithm Animation](#wilson-algorithm-animation)
 - [Reaction Diffusion Simulation](#reaction-diffusion-simulation)
@@ -100,20 +99,6 @@ Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikip
 
 <p align="center">
 <img src="./img/modulargroup.png"/>
-</p>
-
-<br>
-[[Back to Top](#contents)]
-
-
----
-### Beauty of Roots
-Littlewood 多项式的根 [[View Code](./src/misc/rootsart.py)] [[Origin](http://www.math.ucr.edu/home/baez/roots/)]
-
-<br>
-
-<p align="center">
-<img src="./img/rootsart.png"/>
 </p>
 
 <br>
