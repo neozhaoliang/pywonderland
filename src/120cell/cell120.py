@@ -45,8 +45,7 @@ class Cell_120(object):
         faces_pool = []
         for f in FACES:
             pentagon_verts = [self.verts_3d[index] for index in f]
-            pentagon_verts_closed = pentagon_verts + [pentagon_verts[-1],]
-            pentagon = Polygon(6, *pentagon_verts_closed)
+            pentagon = Polygon(5, *pentagon_verts)
             faces_pool.append(pentagon)
 
         faces = Object(Union(*faces_pool), config['face_texture'], config['interior'])
