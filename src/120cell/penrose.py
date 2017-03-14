@@ -62,7 +62,7 @@ class Penrose(object):
         for r, s in combinations(range(5), 2):
             for kr, ks in product(range(-self.num_lines, self.num_lines+1), repeat=2):
                 yield self.rhombus(r, s, kr, ks)
-        
+
 
     def put_objs(self, *args):
         return Object(self.objs, *args)

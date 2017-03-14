@@ -3,16 +3,23 @@
 
 ## How to use this program
 
+
+Both these two scripts can be run directly with python2 or 3, i.e. simply run `python aztec.py` or `python anim.py` and enjoy the result!
+
+You can also pass arguments to them:
+
 1. To sample a random tiling of an order 200 az graph and output an image of size 1000x1000, run
 	```
 	$ python aztec.py -order 200 -size 1000
 	```
-    or simply
+    or
 
 	```
 	$ python aztec.py -o 200 -size 1000
 	```
+	
 	This will output an image named "randomtiling.png" in current directory. You may also specify the name of the image by adding the `-f` option:
+    
     ```
 	$ python aztec.py -o 200 -size 1000 -f filename
     ```
@@ -23,14 +30,14 @@
 	$ python anim.py -order 40 -size 400
 	```
 
-	or simply
+	or
 
 	```
 	$ python anim.py -o 40 -s 400
     ```
 
 
-**Important Note: **  `anim.py` requires `ImageMagick` be installed on your computer. For windows users you also need to set the `CONVERTER` variable in `anim.py` to be the path to your `convert.exe`.
+Important: `anim.py` requires `ImageMagick` be installed on your computer. For windows users you also need to set the `CONVERTER` variable in `anim.py` to be the path to your `convert.exe`.
 
 
 ## What is domino shuffling algorithm

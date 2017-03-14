@@ -186,8 +186,7 @@ class GrayScott(pyglet.window.Window):
     def on_key_press(self, symbol, modifiers):
         # take screenshots
         if symbol == pyglet.window.key.ENTER:
-            index = np.random.randint(0, 1000)
-            pyglet.image.get_buffer_manager().get_color_buffer().save('screenshot{:03d}.png'.format(index))
+            self.save_screenshot()
 
         # exit the simulation
         if symbol == pyglet.window.key.ESCAPE:
@@ -200,11 +199,7 @@ class GrayScott(pyglet.window.Window):
         # change to a random pattern
         if symbol == pyglet.window.key.S:
             if not modifiers:
-                pattern = self.pattern
-                while pattern == self.pattern:
-                    self.pattern = np.random.choice(list(GrayScott.species.keys()))
-                self.use_pattern(self.pattern)
-                print('> current pattern: ' + self.pattern + ', draw on it!\n')
+                self.change_a_random_pattern()
 
         # change to a random palette
         if symbol == pyglet.window.key.P:
@@ -213,32 +208,20 @@ class GrayScott(pyglet.window.Window):
         # reset to default config
         if symbol == pyglet.window.key.R:
             if modifiers & pyglet.window.key.LCTRL:
-                self.use_palette(GrayScott.palette_default)
-                self.use_pattern('bacteria2')
-                print('> using default config\n')
+                self.restore_default()
 
         # save current config to the json file
         if symbol == pyglet.window.key.S:
             if modifiers & pyglet.window.key.LCTRL:
-                with open('palette.json', 'a+') as f:
-                    data = json.dumps({self.pattern: self.palette.tolist()})
-                    f.write(data + '\n')
-                print('> config saved\n')
+                self.save_config()
 
         # load a config from the json file.
         if symbol == pyglet.window.key.O:
             if modifiers & pyglet.window.key.LCTRL:
-                try:
-            	    num = str(input('> enter the line number in json file: '))
-            	    self.load_config(num)
-                except ValueError:
-                    print('> invalid input\n')
+                self.load_config()
 
 
     def on_mouse_press(self, x, y, button, modifiers):
-        '''
-        press mouse to add 'v'.
-        '''
         self.mouse_down = True
         bx = x / float(self.width)
         by = y / float(self.height)
@@ -255,6 +238,42 @@ class GrayScott(pyglet.window.Window):
             bx = x / float(self.width)
             by = y / float(self.height)
             self.update_brush(bx, by)
+
+
+    def save_screenshot(self):
+        index = np.random.randint(0, 1000)
+        pyglet.image.get_buffer_manager().get_color_buffer().save('screenshot{:03d}.png'.format(index))
+
+
+    def save_config(self):
+        with open('palette.json', 'a+') as f:
+            data = json.dumps({self.pattern: self.palette.tolist()})
+            f.write(data + '\n')
+            print('> config saved\n')
+
+
+    def load_config(self):
+        try:
+            num = str(input('> enter the line number in json file: '))
+            with open('palette.json', 'r') as f:
+                for i, line in enumerate(f, start=1):
+                    if str(i) == num:
+                        data = json.loads(line)
+                        for key, item in data.items():
+                            self.use_pattern(key)
+                            self.use_palette(item)
+                            print('> config loaded. If the window is blank, draw on it!\n')
+                            return
+                print('> config does not exist in json file\n')
+
+        except ValueError:
+            print('> invalid input\n')
+
+
+    def restore_default(self):
+        self.use_palette(GrayScott.palette_default)
+        self.use_pattern('bacteria2')
+        print('> using default config\n')
 
 
     def update_brush(self, *brush):
@@ -279,17 +298,12 @@ class GrayScott(pyglet.window.Window):
         self.palette = palette
 
 
-    def load_config(self, num):
-        with open('palette.json', 'r') as f:
-            for i, line in enumerate(f, start=1):
-                if str(i) == num:
-                    data = json.loads(line)
-                    for key, item in data.items():
-                        self.use_pattern(key)
-                        self.use_palette(item)
-                        print('> config loaded. If the window is blank, draw on it!\n')
-                    return
-            print('> config does not exist in json file\n')
+    def change_a_random_pattern(self):
+        pattern = self.pattern
+        while pattern == self.pattern:
+            self.pattern = np.random.choice(list(GrayScott.species.keys()))
+        self.use_pattern(self.pattern)
+        print('> current pattern: ' + self.pattern + ', draw on it!\n')
 
 
     def run(self):

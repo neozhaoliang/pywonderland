@@ -178,18 +178,8 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 
 Python libs:
 
-+ `numpy`
-+ `matplotlib`
-+ `scipy`
-+ `cairo`
-+ `palettable`
-+ `tqdm`
-+ `numba`
-+ `pyglet`
-+ `vapory`
+`numpy`, `matplotlib`, `scipy`, `cairo`, [`palettable`](https://github.com/jiffyclub/palettable), [`tqdm`](https://github.com/tqdm/tqdm), [`numba`](https://github.com/numba/numba), `pyglet`, [`vapory`](https://github.com/Zulko/vapory)
 
 Softwares:
 
-+ `ImageMagick`
-+ `FFmpeg`
-+ `POV-Ray`
+`ImageMagick`, `FFmpeg`, `POV-Ray`

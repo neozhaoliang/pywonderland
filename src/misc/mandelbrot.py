@@ -21,7 +21,7 @@ def color(z, i):
         v = max(0, 2-v)
         return v, v**1.5, v**3
 
-    
+
 @jit
 def iterate(c):
     z = 0j
