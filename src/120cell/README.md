@@ -5,7 +5,7 @@
 
 The scene in the front page contains 3 non-isomorphic generalized Penrose tilings (patterns on the walls and floor) plus the 120-cell, a 4D polytope. (projected to 3D of course).
 
-Look at the pattern on the left wall, you will see some "stars" there, so this is not a standard Penrose tiling. Watch the pattern on the right wall (just watch the cyan rhombus), it does not have any stars, but it contains "defected star" patterns that also do not occur in standard Penrose tilings, so it's not a Penrose tiling neither. **Only the pattern on the floor is the Penrose Tiling.**
+Look at the pattern on the left wall, you will see some "stars" there, so this is not a standard Penrose tiling. Watch the pattern on the right wall, it does not have any stars, but it contains "defected star" pattern that also do not occur in standard Penrose tilings, so it's not a Penrose tiling either. **Only the pattern on the floor is the Penrose Tiling.**
 
 My previous code was a bunch of shit and it  even took me hours to debug when I tried to add something new into the scene. Now it's more readable.
 
@@ -14,7 +14,14 @@ My previous code was a bunch of shit and it  even took me hours to debug when I 
 
 This program needs the raytracer `POV-Ray` and the module `vapory` be installed on your computer. Just run `main.py`. It runs much faster than I thought.
 
-The runtime of this script on my computer is 4 minutes, and I'm sure it will be faster on yours (my computer is an outdated laptop).
+Oh, I used `palettable` now, you need to
+
+```
+pip install palettable
+```
+if you do not have this module.
+
+The runtime of this script on my computer is 2 minutes, and I'm sure it will be faster on yours (my computer is an outdated laptop).
 
 
 ## About the code
