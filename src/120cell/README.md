@@ -14,9 +14,6 @@ My previous code was a bunch of shit and it  even took me hours to debug when I 
 
 This program needs the raytracer `POV-Ray` and the module `vapory` be installed on your computer. Just run `main.py`. It runs much faster than I thought.
 
-If you don't want to run POV - Ray in a python shell, you may wait a few seconds until POV-Ray pops the display window, close it to
-kill the process, and run `povray render.ini`. This will restart the rendering in shell.
-
 The runtime of this script on my computer is 4 minutes, and I'm sure it will be faster on yours (my computer is an outdated laptop).
 
 

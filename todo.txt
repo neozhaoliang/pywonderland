@@ -1,6 +1,7 @@
-I'll be on leave for a few months. Here are some projects I'll add in this repo:
+Some Projectd to be added in this repo:
 
-1. Fluid Simulation with Navier - Stokes equation. (Pyglet + GLSL)
+1. Fluid Simulation with Navier-Stokes equation. (Pyglet + GLSL)
 2. 2D Hyperbolic tilings. (POV-Ray)
 3. 3D hyperbolic honeycombs. (POV-Ray)
-4. Conformal transformations and image warppings. (PIL)
+4. Escher's hyperbolic circle limits.
+5. Take some examples from shadertoy.
