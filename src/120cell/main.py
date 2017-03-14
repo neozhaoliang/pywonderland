@@ -8,11 +8,8 @@ from penrose import Penrose
 from cell120 import Cell_120
 
 # 'Media' was not implemented yet when this script was written
-try:
-    from vapory import Media, Irid
-except ImportError:
-    class Media(POVRayElement):
-        """Media()"""
+class Media(POVRayElement):
+    """Media()"""
 
 
 colorlist = Set1_6.mpl_colors
