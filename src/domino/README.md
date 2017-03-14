@@ -4,7 +4,7 @@
 ## How to use this program
 
 
-Both these two scripts can be run directly with python2 or 3, i.e. simply run `python aztec.py` or `python anim.py` and enjoy the result!
+Both these two scripts can be run directly with python2 or 3, simply run `python aztec.py` or `python anim.py` and enjoy the result!
 
 You can also pass arguments to them:
 

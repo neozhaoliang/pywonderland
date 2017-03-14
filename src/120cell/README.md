@@ -3,26 +3,21 @@
 
 ## About the scene
 
-The scene in the front page contains 3 non-isomorphic generalized Penrose tilings (patterns on the walls and floor) plus the 120-cell, a 4D polytope. (projected to 3D of course).
+The scene in the front page contains 3 non-isomorphic generalized Penrose tilings (patterns on the walls and floor) plus the 120-cell, a 4D polytope (projected to 3D of course).
 
-Look at the pattern on the left wall, you will see some "stars" there, so this is not a standard Penrose tiling. Watch the pattern on the right wall, it does not have any stars, but it contains "defected star" pattern that also do not occur in standard Penrose tilings, so it's not a Penrose tiling either. **Only the pattern on the floor is the Penrose Tiling.**
+Look at the pattern on the left wall, you can see some "stars" in it, so this is not a standard Penrose tiling. For the pattern on the right wall, it does not contain any stars, but there are "defected star" patterns that also do not occur in standard Penrose tilings, so it's not a Penrose tiling either. **Only the pattern on the floor is the Penrose Tiling.**
 
-My previous code was a bunch of shit and it  even took me hours to debug when I tried to add something new into the scene. Now it's more readable.
+My previous code was a bunch of shit and it  even took myself hours to debug when I tried to add something new into the scene. Now it's more readable.
 
 ## How to use this program
 
+Simply run `python main.py`, nothing else.
 
-This program needs the raytracer `POV-Ray` and the module `vapory` be installed on your computer. Just run `main.py`. It runs much faster than I thought.
+This program needs the raytracer `POV-Ray` and the modules `vapory` and `palettable` be installed on your computer. `vapory` is a light wrapper of POV-Ray. Don't be afraid of it, its syntax is almost a plain translation of that of POV-Ray's and you will have no difficulty switching between these two.
 
-Oh, I used `palettable` now, you need to
-
-```
-pip install palettable
-```
-if you do not have this module.
+`palettable` is used here just for supplying the colors of the Penrose rhombus.
 
 The runtime of this script on my computer is 2 minutes, and I'm sure it will be faster on yours (my computer is an outdated laptop).
-
 
 ## About the code
 
@@ -30,7 +25,7 @@ To understand the code, you need to
 
 + Know some baics about `POV-Ray`, like its syntax, lights, textures, CSG, ... but you don't need to have a decent knowledge of it (like me).
 
-+ Understand how did we draw Penrose tilings in this repo before.
++ Understand how we draw Penrose tilings in this repo before.
 
 + Read the wiki page about 120-cell.
 

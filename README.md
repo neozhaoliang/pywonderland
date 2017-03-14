@@ -1,8 +1,8 @@
 # A Tour in the Wonderland of Math with Python
 
-A collection of python scripts that aimed at drawing beautiful figures or animating interesting algorithms in mathematics.
+A collection of python scripts for drawing beautiful figures or animating interesting algorithms in mathematics.
 
-**This repository will be always under construction as there are too many interesting things in math that can be shown by code.** Pull requests, issues, questions, and suggestions are all welcomed!
+**This repository will be always under construction since there are too many interesting things in math that can be shown by code.** Pull requests, issues, questions, and suggestions are all welcomed!
 
 
 [![Code Health](https://landscape.io/github/neozhaoliang/pywonderland/master/landscape.svg?style=flat)](https://landscape.io/github/neozhaoliang/pywonderland/master) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![PyPI](https://img.shields.io/pypi/pyversions/Django.svg)]()

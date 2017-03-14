@@ -1,12 +1,11 @@
 # A Reaction - Diffusion Simulator Written with Pyglet and GLSL.
 
-This program is motivated by [pmneila's Javascript project](http://pmneila.github.io/jsexp/grayscott/).
+This program is motivated by [pmneila's Javascript project](http://pmneila.github.io/jsexp/grayscott/). Simply run `python main.py` to play with the simulation.
 
 
 ## Keyboard and mouse interface:
 
- 
-Run `python main.py` or `python3 main.py` you will see the simulation run in a window popped by pyglet. You may click or drag your mouse to draw on the screen at any stage.
+You may click or drag your mouse to draw on the screen at any stage.
 
 
 + Press `s` (short for "species") to change to another pattern.
@@ -30,6 +29,7 @@ I put some configs in the `palette.json` file. Do have a try!
 1. Set a global variable `count=0` as the counter, and in the function `on_draw()`, write
 
     ``` python
+    global count
     if count % 10 == 0:
         pyglet.image.get_buffer_manager().get_color_buffer().save('screenshot{:04d}.png'.format(count // 10))
 
