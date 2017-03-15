@@ -9,18 +9,25 @@ from shader import Shader
 from framebuffer import FrameBuffer
 
 
-def create_texture_from_array(array):
+def create_uv_texture(width, height):
     '''
     create a pyglet texture instance from a numpy ndarray.
     remember that we have not bound it to any texture unit.
     '''
-    height, width = array.shape[:2]
+    uv_grid = np.zeros((height, width, 4), dtype=np.float32)
+    uv_grid[:, :, 0] = 1.0
+    r = 32
+    uv_grid[height//2-r : height//2+r, width//2-r : width//2+r, 0] = 0.50
+    uv_grid[height//2-r : height//2+r, width//2-r : width//2+r, 1] = 0.25
+
     texture = pyglet.image.Texture.create_for_size(gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F_ARB)
     gl.glBindTexture(texture.target, texture.id)
     gl.glTexImage2D(texture.target, texture.level, gl.GL_RGBA32F_ARB,
-                    width, height, 0, gl.GL_RGBA, gl.GL_FLOAT, array.ctypes.data)
+                    width, height, 0, gl.GL_RGBA, gl.GL_FLOAT, uv_grid.ctypes.data)
     gl.glBindTexture(texture.target, 0)
+    
     return texture
+
 
 
 class GrayScott(pyglet.window.Window):
@@ -88,14 +95,14 @@ class GrayScott(pyglet.window.Window):
 
         self.tex_width = width // scale
         self.tex_height = height // scale
-        self.uv_texture = self.create_texture(width//scale, height//scale)
+        self.uv_texture = create_uv_texture(width//scale, height//scale)
         # the texture is bind to unit '0'.
         gl.glActiveTexture(gl.GL_TEXTURE0)
         gl.glBindTexture(self.uv_texture.target, self.uv_texture.id)
 
         # set the uniforms and attributes in the two shaders.
-        self.set_reation_shader()
-        self.set_render_shader()
+        self.init_reaction_shader()
+        self.init_render_shader()
 
         # we need a framebuffer to do the offscreen rendering.
         # once we finished computing the reaction-diffusion step with the reaction_shader,
@@ -109,17 +116,7 @@ class GrayScott(pyglet.window.Window):
         self.mouse_down = False
 
 
-    def create_texture(self, width, height):
-        uv_grid = np.zeros((height, width, 4), dtype=np.float32)
-        uv_grid[:, :, 0] = 1.0
-        r = 32
-        uv_grid[height//2-r : height//2+r, width//2-r : width//2+r, 0] = 0.50
-        uv_grid[height//2-r : height//2+r, width//2-r : width//2+r, 1] = 0.25
-        uv_texture = create_texture_from_array(uv_grid)
-        return uv_texture
-
-
-    def set_reation_shader(self):
+    def init_reaction_shader(self):
         with self.reaction_shader:
             self.reaction_shader.set_uniformi('uv_texture', 0)
             self.reaction_shader.set_uniformf('dx', 1.0/self.tex_width)
@@ -128,7 +125,7 @@ class GrayScott(pyglet.window.Window):
             # since we will call 'GL_TRIANGLE_STRIP' to draw them.
             self.reaction_shader.set_vertex_attrib('position', [(-1, -1), (1, -1), (-1, 1,), (1, 1)])
             self.reaction_shader.set_vertex_attrib('texcoord', [(0, 0), (1, 0), (0, 1), (1, 1)])
-            self.reaction_shader.set_uniformf('brush', -1, -1)
+            self.reaction_shader.set_uniformf('u_mouse', -1, -1)
         self.use_pattern(self.pattern)
 
 
@@ -141,7 +138,7 @@ class GrayScott(pyglet.window.Window):
             self.reaction_shader.set_uniformf('rV', rV)
 
 
-    def set_render_shader(self):
+    def init_render_shader(self):
         with self.render_shader:
             self.render_shader.set_uniformi('uv_texture', 0)
             self.render_shader.set_vertex_attrib('position', [(-1, -1), (1, -1), (-1, 1), (1, 1)])
@@ -194,7 +191,7 @@ class GrayScott(pyglet.window.Window):
 
         # clear to blank window
         if symbol == pyglet.window.key.SPACE:
-            self.update_brush(-10,- 10)
+            self.update_mouse(-10,- 10)
 
         # change to a random pattern
         if symbol == pyglet.window.key.S:
@@ -225,19 +222,19 @@ class GrayScott(pyglet.window.Window):
         self.mouse_down = True
         bx = x / float(self.width)
         by = y / float(self.height)
-        self.update_brush(bx, by)
+        self.update_mouse(bx, by)
 
 
     def on_mouse_release(self, x, y, button, modifiers):
         self.mouse_down = False
-        self.update_brush(-1, -1)
+        self.update_mouse(-1, -1)
 
 
     def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
         if self.mouse_down:
             bx = x / float(self.width)
             by = y / float(self.height)
-            self.update_brush(bx, by)
+            self.update_mouse(bx, by)
 
 
     def save_screenshot(self):
@@ -276,11 +273,11 @@ class GrayScott(pyglet.window.Window):
         print('> using default config\n')
 
 
-    def update_brush(self, *brush):
+    def update_mouse(self, *u_mouse):
         self.set_viewport(self.tex_width, self.tex_height)
         with self.fbo:
             with self.reaction_shader:
-                self.reaction_shader.set_uniformf('brush', *brush)
+                self.reaction_shader.set_uniformf('u_mouse', *u_mouse)
                 gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
 
 

@@ -12,13 +12,13 @@ uniform float feed;
 uniform float kill;
 
 uniform sampler2D uv_texture;
-uniform vec2 brush;
+uniform vec2 u_mouse;
 
 out vec4 result;
 
 void main()
 {
-    if(brush.x < -5.0)
+    if(u_mouse.x < -5.0)
     {
         result = vec4(1.0, 0.0, 0.0, 1.0);
         return;
@@ -35,9 +35,9 @@ void main()
     float dv = rV * lapl.g + uv.r * uv.g * uv.g - (feed + kill) * uv.g;
     vec2 dst = uv + vec2(du, dv);
 
-    if(brush.x > 0.0)
+    if(u_mouse.x > 0.0)
     {
-        vec2 diff = (uv_texcoord - brush) / vec2(dx, dy);
+        vec2 diff = (uv_texcoord - u_mouse) / vec2(dx, dy);
         float dist = dot(diff, diff);
         if(dist < 1.0)
         {  dst.g = 0.9;}
