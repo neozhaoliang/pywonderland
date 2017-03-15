@@ -1,7 +1,4 @@
-Some Projectd to be added in this repo:
+Some Projects to be added in this repo:
 
 1. Fluid Simulation with Navier-Stokes equation. (Pyglet + GLSL)
-2. 2D Hyperbolic tilings. (POV-Ray)
-3. 3D hyperbolic honeycombs. (POV-Ray)
-4. Escher's hyperbolic circle limits.
-5. Take some examples from shadertoy.
+2. 3D hyperbolic honeycombs. (POV-Ray)
