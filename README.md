@@ -1,4 +1,4 @@
-![](./alice.png)
+<p align="center"><img src="./alice.png"></p>
 
 # A Tour in the Wonderland of Math with Python
 
