@@ -26,14 +26,10 @@ A collection of python scripts for drawing beautiful figures or animating intere
 Mandelbrot 集 [[View Code](./src/misc/mandelbrot.py)]
 
 <br>
-
 <p align="center">
 <img src="./img/mandelbrot.png"/>
 </p>
-
 <br>
-[[Back to Top](#contents)]
-
 
 ---
 ### Domino Shuffling Algorithm Animation
@@ -46,7 +42,7 @@ Mandelbrot 集 [[View Code](./src/misc/mandelbrot.py)]
 </p>
 
 <br>
-[[Back to Top](#contents)]
+
 
 
 ---
@@ -61,7 +57,7 @@ Mandelbrot 集 [[View Code](./src/misc/mandelbrot.py)]
 </p>
 
 <br>
-[[Back to Top](#contents)]
+
 
 ---
 ### Newton Fractal
@@ -74,8 +70,6 @@ Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikip
 </p>
 
 <br>
-[[Back to Top](#contents)]
-
 
 ---
 ### The E8 Pattern
@@ -88,8 +82,6 @@ Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikip
 </p>
 
 <br>
-[[Back to Top](#contents)]
-
 
 ---
 ### The Modular Group
@@ -102,8 +94,6 @@ Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikip
 </p>
 
 <br>
-[[Back to Top](#contents)]
-
 
 ---
 ### Generalized Penrose Tilings
@@ -116,8 +106,6 @@ Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikip
 </p>
 
 <br>
-[[Back to Top](#contents)]
-
 
 ---
 ### Wilson Algorithm Animation
@@ -131,9 +119,6 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 
 <br>
 
-[[Back to Top](#contents)]
-
-
 ---
 ### Reaction Diffusion Simulation
 反应扩散方程模拟 [[View Code](./src/grayscott/)] [[Wiki](https://en.wikipedia.org/wiki/Reaction%E2%80%93diffusion_system)] [[View Webm Animation](./img/grayscott.webm)] [[Pmneila's Javascript Animation](http://pmneila.github.io/jsexp/grayscott/)]
@@ -143,9 +128,6 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 <img src="./img/grayscott.gif"/>
 </p>
 <br>
-
-[[Back to Top](#contents)]
-
 
 ---
 ### The 120-cell
@@ -157,9 +139,7 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 </p>
 <br>
 
-[[Back to Top](#contents)]
-
-
+---
 ## Dependencies
 
 Python libs:
