@@ -29,10 +29,14 @@
 Mandelbrot 集 [[View Code](./src/misc/mandelbrot.py)]
 
 <br>
+
 <p align="center">
 <img src="./img/mandelbrot.png"/>
 </p>
+
 <br>
+
+[[Back to Top](#contents)]
 
 ---
 ### Domino Shuffling Algorithm Animation
