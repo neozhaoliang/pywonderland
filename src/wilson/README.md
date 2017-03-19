@@ -1,6 +1,6 @@
-# Wilson Algorithm Simulation
+# Wilson Algorithm Animation
 
-Make gif animations of Wilson's uniform spanning tree algorithm and other maze-solving algorithms.
+> Make gif animations of Wilson's uniform spanning tree algorithm and the depth-first search algorithms.
 
 
 ## How to use this program
@@ -9,7 +9,7 @@ Run `main.py` and wait for roughly half one minute, you will see a `.gif` file g
 
 You can also specify the image size, number of loops, colors and speed by passing arguments to it, or even implement a different maze-solving algorithm if you can dig deep into the code and fully understand it.
 
-This program can be run with both python2.7+ and python3+. It's written with pure python: no third-party modules nor software are needed, just built-in modules `struct` and `random` and some built-in functions. I could write it faster by using `numpy` arrays and its fancy indexing, but I like to keep the code being "pure blooded".
+This program can be run with both python2.7+ and python3+. It's written with pure python: no third-party modules or software are needed, just built-in modules `struct` and `random` and some built-in functions. I could write it faster by using `numpy` arrays and its fancy indexing, but I like to keep the code being "pure blooded".
 
 ## How did it come out
 
@@ -57,3 +57,7 @@ m m m m m m m
 Each character represents a square (5x5 pixels by default) in our image. `m` means "margin", these squares are served as the border of the image and **are not used in our animation.** The width of the margin can be changed (default to 2 but the example shows only 1). `w` means this a "wall", and `c` means this is a "cell". **Our grid graph contains only the cells. Walls and margins are not considered to be part of the graph.**
 
 As the algorithm runs, the cells become connected and some walls might be set to "in tree" or "in path", but they are still **not** treated as part of the graph.
+
+## Where to learn the GIF89a specification
+
+The best and possibly the only reference you will need is [What's in a GIF](http://giflib.sourceforge.net/whatsinagif/index.html). You should read these three articles word by word before you can encode your gif image bits by bits.

@@ -25,7 +25,7 @@ To understand the code, you need to
 
 + Know some baics about `POV-Ray`, like its syntax, lights, textures, CSG, ... but you don't need to have a decent knowledge of it (like me).
 
-+ Understand how we draw Penrose tilings in this repo before.
++ Understand how we drew Penrose tilings in this repo before.
 
 + Read the wiki page about 120-cell.
 

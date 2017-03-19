@@ -20,8 +20,9 @@
 - [The Modular Group](#the-modular-group)
 - [Generalized Penrose Tilings](#generalized-penrose-tilings)
 - [Wilson Algorithm Animation](#wilson-algorithm-animation)
-- [Reaction Diffusion Simulation](#reaction-diffusion-simulation)
+- [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
 - [The 120-cell](#the-120-cell)
+- [Fluid Simulation with Navier-Stokes Equation](#fluid-simulation-with-navier-stokes-equation)
 
 ---
 ### Mandelbrot Set
@@ -122,7 +123,7 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 <br>
 
 ---
-### Reaction Diffusion Simulation
+### Reaction-Diffusion Simulation
 反应扩散方程模拟 [[View Code](./src/grayscott/)] [[Wiki](https://en.wikipedia.org/wiki/Reaction%E2%80%93diffusion_system)] [[View Webm Animation](./img/grayscott.webm)] [[Pmneila's Javascript Animation](http://pmneila.github.io/jsexp/grayscott/)]
 
 <br>
@@ -142,6 +143,10 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 <br>
 
 ---
+### Fluid Simulation with Navier-Stokes Equation
+Navier - Stokes 方程流体模拟 [[View Code](./src/navierstokes/)] [[Wiki](https://en.wikipedia.org/wiki/Navier-Stokes_equations)]
+
+
 ## Dependencies
 
 Python libs:
