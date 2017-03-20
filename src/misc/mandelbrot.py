@@ -14,7 +14,7 @@ RADIUS = 100
 
 @jit
 def color(z, i):
-    v = np.log2(i + 1 - np.log2(np.log2(abs(z)))) / 5
+    v = np.log2(i + 1 - np.log2(np.log2(abs(z)))) / 5.5
     if v < 1.0:
         return v**4, v**2.5, v
     else:
