@@ -1,1 +1,1 @@
-# A Fluid Simulator with Navier Stokes Equation.
+# Fluid Simulation with Navier-Stokes Equation.
