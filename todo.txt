@@ -1,4 +1,4 @@
-Some Projects to be added in this repo:
+I'll be on leave for a few months. Some projects to be added later in this year:
 
 1. Fluid Simulation with Navier-Stokes equation. (Pyglet + GLSL)
 2. 3D hyperbolic honeycombs. (POV-Ray)

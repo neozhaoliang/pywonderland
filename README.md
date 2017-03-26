@@ -22,7 +22,6 @@
 - [Wilson Algorithm Animation](#wilson-algorithm-animation)
 - [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
 - [The 120-cell](#the-120-cell)
-- [Fluid Simulation with Navier-Stokes Equation](#fluid-simulation-with-navier-stokes-equation)
 
 ---
 ### Mandelbrot Set
@@ -165,15 +164,6 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 
 [[Back to Top](#contents)]
 
----
-### Fluid Simulation with Navier-Stokes Equation
-Navier - Stokes 方程流体模拟 [[View Code](./src/navierstokes/)] [[Wiki](https://en.wikipedia.org/wiki/Navier-Stokes_equations)]
-
-<br>
-to be added
-<br>
-
-[[Back to Top](#contents)]
 
 ---
 ## Dependencies
