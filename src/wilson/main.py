@@ -122,6 +122,23 @@ class Maze(object):
             self.mark_wall(cellA, cellB, index)
 
 
+    def begin_path(self, cell):
+        self.path = [cell]
+        self.mark_cell(cell, PATH)
+
+    
+    def erase_loop(self, cell):
+        index = self.path.index(cell)
+
+        # erase the loop
+        self.mark_path(self.path[index:], WALL)
+
+        # re-mark this cell
+        self.mark_cell(self.path[index], PATH)
+
+        self.path = self.path[:index+1]
+
+
 
 class WilsonAnimation(Maze):
 
@@ -230,9 +247,6 @@ class WilsonAnimation(Maze):
         self.mark_path(self.path, TREE)
 
 
-    def begin_path(self, cell):
-        self.path = [cell]
-        self.mark_cell(cell, PATH)
 
 
     def move_one_step(self, cell):
@@ -257,16 +271,6 @@ class WilsonAnimation(Maze):
         return next_cell
 
 
-    def erase_loop(self, cell):
-        index = self.path.index(cell)
-
-        # erase the loop
-        self.mark_path(self.path[index:], WALL)
-
-        # re-mark this cell
-        self.mark_cell(self.path[index], PATH)
-
-        self.path = self.path[:index+1]
 
 
     def add_to_path(self, cell):
@@ -300,6 +304,49 @@ class WilsonAnimation(Maze):
                 for next_cell in self.get_neighbors(child):
                     if (next_cell not in visited) and (not self.check_wall(child, next_cell)):
                         stack.append((child, next_cell))
+                        visited.add(next_cell)
+
+            self.refresh_frame()
+        self.clear()
+
+        # retrieve the path
+        path = [self.start]
+        tmp = self.start
+        while tmp != self.end:
+            tmp = from_to[tmp]
+            path.append(tmp)
+
+        self.mark_path(path, PATH)
+        # show the path
+        self.refresh_frame()
+
+
+    def make_bfs_animation(self, delay, trans_index, **kwargs):
+        '''
+        animating the breadth first search algorithm.
+        '''
+        self.set_delay(delay)
+        self.set_transparent(trans_index)
+        self.set_colors(**kwargs)
+
+        import collections
+        # besides a stack to run the dfs, we need a dict to remember each step.
+        from_to = dict()
+        queue = collections.deque([(self.start, self.start)])
+        visited = set([self.start])
+
+        while queue:
+            parent, child = queue.popleft()
+            from_to[parent] = child
+            self.mark_cell(child, FILL)
+            self.mark_wall(parent, child, FILL)
+
+            if child == self.end:
+                break
+            else:
+                for next_cell in self.get_neighbors(child):
+                    if (next_cell not in visited) and (not self.check_wall(child, next_cell)):
+                        queue.append((child, next_cell))
                         visited.add(next_cell)
 
             self.refresh_frame()

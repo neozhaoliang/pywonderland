@@ -1,6 +1,6 @@
-# A Reaction - Diffusion Simulator Written with Pyglet and GLSL.
+# Reaction-Diffusion Simulation with Pyglet and GLSL.
 
-This program is motivated by [pmneila's Javascript project](http://pmneila.github.io/jsexp/grayscott/). Simply run `python main.py` to play with the simulation.
+This program is motivated by [pmneila's Javascript project](http://pmneila.github.io/jsexp/grayscott/). Simply run `main.py` to play with the simulation.
 
 
 ## Keyboard and mouse interface:
@@ -24,7 +24,7 @@ You may click or drag your mouse to draw on the screen at any stage.
 I put some configs in the `palette.json` file. Do have a try!
 
 
-## How to save the animation as a video:
+## How to save the animation to a video:
 
 1. Set a global variable `count=0` as the counter, and in the function `on_draw()`, write
 
@@ -48,8 +48,8 @@ I put some configs in the `palette.json` file. Do have a try!
 
 `pyglet.gl` is only a thin wrapper of `OpenGL`, so one has to write his own helper classes to manage things like `vbo`, `vao`, `shader`, `fbo`, ..., etc. There are some modules like `vispy` and `gletools` that do this work, but that lays the burden of learning one more package.
 
-I wrote two helper classes `shader.py` (adapted from other people's work) and `framebuffer.py`. They are not meant to be serious tools, just kept simple and can be served for our work.
+I wrote two helper classes `shader.py` (adapted from other people's work) and `framebuffer.py`. They are not meant to be serious tools, just kept simple and suffice for our work.
 
-The GLSL code borrows heavily from pmneila's work, the most genius part in his code (and also the most tricky thing if you want to understand the code) is the use of a `brush` variable to control the interface between the shader and the mouse and keyboard.
+The GLSL code borrows heavily from pmneila's work, the most genius part in his code (and also the most tricky thing if you want to understand the code) is the use of a `brush` variable as the interface between the shader and the mouse.
 
 I found it hard to program buttons and menus in pyglet, so let this be a command line version, pardon me with this.
