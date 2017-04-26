@@ -7,8 +7,6 @@ The scene in the front page contains 3 non-isomorphic generalized Penrose tiling
 
 Look at the pattern on the left wall, you can see some "stars" in it, so this is not a standard Penrose tiling. For the pattern on the right wall, it does not contain any stars, but there are "defected star" patterns that also do not occur in standard Penrose tilings, so it's not a Penrose tiling either. **Only the pattern on the floor is the Penrose Tiling.**
 
-My previous code was a bunch of shit and it  even took myself hours to debug when I tried to add something new into the scene. Now it's more readable.
-
 ## How to use this program
 
 Simply run `python main.py`, nothing else.
@@ -17,7 +15,7 @@ This program needs the raytracer `POV-Ray` and the modules `vapory` and `paletta
 
 `palettable` is used here just for supplying the colors of the Penrose rhombus.
 
-The runtime of this script on my computer is 2 minutes, and I'm sure it will be faster on yours (my computer is an outdated laptop).
+The runtime of this script on my computer is 8 minutes, and I'm sure it will be faster on yours (my computer is an outdated laptop).
 
 ## About the code
 
