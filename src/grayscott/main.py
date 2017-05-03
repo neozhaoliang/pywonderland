@@ -25,7 +25,7 @@ def create_uv_texture(width, height):
     gl.glTexImage2D(texture.target, texture.level, gl.GL_RGBA32F_ARB,
                     width, height, 0, gl.GL_RGBA, gl.GL_FLOAT, uv_grid.ctypes.data)
     gl.glBindTexture(texture.target, 0)
-    
+
     return texture
 
 

@@ -32,9 +32,9 @@ class GeneralizedPenroseTiling(object):
             two tuples (a1, a2, a3, a4, a5) and (b1, b2, b3. b4, b5) determine isomorphic
             patterns if and only if
             (a1 + a2 + a3 + a4 + a5) - (b1 + b2 + b3 + b4 + b5) is an integer.
- 
+
         palette:
-            three colors (rgb tuples) for fat rhombus, thin rhombus and edges. 
+            three colors (rgb tuples) for fat rhombus, thin rhombus and edges.
         '''
         self.num_lines = num_lines
         self.shift = shift
