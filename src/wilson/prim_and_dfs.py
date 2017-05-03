@@ -9,7 +9,7 @@ def Prim_and_DFS(width, height, margin, scale, speed, loop):
                   margin + 2*(height//4 - margin//2))
     canvas = Animation(maze, scale, speed, loop)
     canvas.paint_background()
-    canvas.pad_delay_frame(200)
+    canvas.pad_delay_frame(100)
 
     # a set holds all cells that are already in the tree
     tree = set([maze.start])
@@ -33,7 +33,7 @@ def Prim_and_DFS(width, height, margin, scale, speed, loop):
         remaining.remove(unexplored)
 
         # we also update the frontier set.
-        # note the function discard() does raise KeyError if the key does not exist.
+        # note the function discard() doesn't raise a KeyError if the key does not exist.
         for v in tree:
             frontier.discard((v, unexplored))
 
