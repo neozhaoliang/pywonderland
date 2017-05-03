@@ -5,7 +5,7 @@
 
 ## How to use this program
 
-Run `main.py` and wait for roughly half one minute, you will see a `.gif` file generated in current directory. Enjoy it!
+Simply run `python wilson_and_dfs.py`, `python random_dfs.py` and `python prim_and_dfs.py`. Each of them will generate a `.gif` file in current directory, enjoy it!
 
 You can also specify the image size, number of loops, colors and speed by passing arguments to it, or even implement a different maze-solving algorithm if you can dig deep into the code and fully understand it.
 

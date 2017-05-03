@@ -65,7 +65,7 @@ class GIFWriter(object):
     1. always begins with the logical screen descriptor.
     2. then follows the global color table.
     3. then follows the loop control block (specify the number of loops of the file)
-    4. then follows the image data of the frames. each frame is further divided into:
+    4. then follows the image data of the frames, each frame is further divided into:
        (i) a graphics control block that specify the delay time and transparent color of the coming frame.
        (ii) the image descriptor for the coming frame.
        (iii) the LZW enconded data of the frame.
