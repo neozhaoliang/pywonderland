@@ -3,7 +3,6 @@ import random
 from maze import *
 
 
-
 class WilsonMaze(Maze):
     '''
     If you want to implement your own maze generating algorithms,
@@ -152,5 +151,4 @@ def Wilson_and_DFS(width, height, margin, loop, scale, speed):
     canvas.write_to_gif('wilson_and_dfs.gif')
 
 
-Wilson_and_DFS(width=101, height=81, margin=2,
-               loop=0, scale=5, speed=30)
+Wilson_and_DFS(width=101, height=81, margin=2, loop=0, scale=5, speed=30)

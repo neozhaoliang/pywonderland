@@ -124,7 +124,7 @@ Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikip
 
 ---
 ### Wilson Algorithm Animation
-Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki/Loop-erased_random_walk)] [[Mike Bostock's Javascript Animation](https://bl.ocks.org/mbostock/11357811)]
+Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki/Loop-erased_random_walk)] [[Mike Bostock's Javascript Animation](https://bl.ocks.org/mbostock/11357811)] [[Prim's Algorithm Animation](./img/prim.gif)]
 
 <br>
 

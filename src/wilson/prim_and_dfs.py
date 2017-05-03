@@ -2,27 +2,29 @@ import random
 from maze import *
 
 
-
 def Prim_and_DFS(width, height, margin, scale, speed, loop):
     maze = Maze(width, height, margin)
+    # start from roughly the center of the maze
+    maze.start = (margin + 2*(width //4 - margin//2),
+                  margin + 2*(height//4 - margin//2))
     canvas = Animation(maze, scale, speed, loop)
     canvas.paint_background()
     canvas.pad_delay_frame(200)
 
-    # cells that are already in the tree
+    # a set holds all cells that are already in the tree
     tree = set([maze.start])
     maze.mark_cell(maze.start, TREE)
 
-    # cells that are not in the tree
+    # a set holds all cells that are not in the tree
     remaining = set(maze.cells) - tree
 
-    # maintain the set edges that connect the explored cells (tree)
+    # a set maintaining the edges that connect the explored cells (tree)
     # and the unexplored cells (remaining).
     frontier = set([(maze.start, v) for v in maze.get_neighbors(maze.start)])
 
     while remaining:
+        # choose a random edge
         connection, = random.sample(frontier, 1)
-        frontier.remove(connection)
         explored, unexplored = connection
         maze.mark_cell(unexplored, TREE)
         maze.mark_wall(explored, unexplored, TREE)
@@ -40,13 +42,13 @@ def Prim_and_DFS(width, height, margin, scale, speed, loop):
                 frontier.add((unexplored, v))
 
         canvas.refresh_frame()
-
     canvas.clear()
-    canvas.pad_delay_frame(300)
 
+    canvas.pad_delay_frame(300)
     canvas.set_speed(10)
     canvas.set_transparent(0)
 
+    maze.start = (margin, margin)
     from_to = dict()
     visited = set([maze.start])
     stack = [(maze.start, maze.start)]
@@ -79,5 +81,4 @@ def Prim_and_DFS(width, height, margin, scale, speed, loop):
     canvas.write_to_gif('prim_and_dfs.gif')
 
 
-Prim_and_DFS(width=101, height=81, margin=2,
-     scale=5, speed=20, loop=0)
+Prim_and_DFS(width=101, height=81, margin=2, scale=5, speed=20, loop=0)
