@@ -61,7 +61,7 @@ class AzGraph(object):
 
     def fill_block(self, i, j, dominoes):
         '''
-        Fill a block with two dominoes of given orientations.
+        Fill a block with two parallel dominoes of given orientations.
         '''
         for cell, fill in zip(self.block(i, j), dominoes):
             self.tile[cell] = fill
@@ -70,8 +70,8 @@ class AzGraph(object):
     def delete(self):
         '''
         Delete all bad blocks in a tiling.
-        A block is called bad if it contains a pair of parellel dominoes that
-        has orientations toward each other.
+        A block is called bad if it contains a pair of parallel dominoes that
+        have orientations toward each other.
         '''
         for i, j in self.cells:
             try:
@@ -103,8 +103,8 @@ class AzGraph(object):
     def create(self):
         '''
         Fill all holes with pairs of dominoes that leaving each other.
-        This is a somewhat subtle step since after the sliding we are working
-        on a larger (hence different) chessboard now!
+        This is a somewhat subtle step since after sliding the chessboard
+        is colored in a different fashion!
         '''
         for i, j in self.cells:
             try:
