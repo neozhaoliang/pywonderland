@@ -2,14 +2,15 @@ import os
 import glob
 import subprocess
 import argparse
-from PIL import Image
 import aztec
 
 
+# this script requires ImageMagick be installed on your computer.
+# windows users also need to set 'CONVERTER' to be the path to your convert.exe.
 CONVERTER = 'convert'
 
 
-def make_animation(order, size, filename, delay=15):
+def make_animation(order, size, filename):
     '''
     Render one frame for each step in the algorithm
     '''
@@ -24,16 +25,10 @@ def make_animation(order, size, filename, delay=15):
         az.create()
         az.render(size, order + 1, '_tmp{:03d}.png'.format(3 * i + 2))
 
-    # pad some frames at the end
-    im = Image.open('_tmp{:03d}.png'.format(3 * order - 1))
-    for i in range(30):
-        im.save('_tmp{:03d}.png'.format(3 * order + i))
-
-    delay = str(int(delay))
     command = [CONVERTER,
-               '-delay', delay,
                '-layers', 'Optimize',
-               '_tmp*.png',
+               '-delay', '15', '_tmp%03d.png[0-{}]'.format(3 * order - 2),
+               '-delay', '500', '_tmp{:03d}.png'.format(3 * order - 1),
                filename]
     subprocess.check_call(command)
 

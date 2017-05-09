@@ -13,17 +13,18 @@ E_COLOR = (0.25, 0.8, 0.5)
 class AzGraph(object):
     '''
     Use a dict to represent a tiling of an az graph.
+    Items in the dict are of the form {cell: type} where a cell is a 1x1 unit square
+    and is specified by the coordinate of its left bottom corner. Each cell has five
+    possible types: 'n', 's', 'w', 'e', None, here None means it's an empty cell.
 
-    Each cell (a 1x1 square) is specified by the coordinate of its left-bottom corner.
-
-    A cell has five possible types: 'n', 's', 'w', 'e', None,
-    where None means it's an empty cell.
-
-    Be careful that one should always start from the boundary when
-    deleting or filling blocks, this is an implicit but important part in the algorithm.
+    Be careful that one should always start from the boundary when deleting or filling
+    blocks, this is an implicit but important part in the algorithm.
     '''
 
     def __init__(self, n):
+        '''
+        Create an az graph of order n with an empty tiling.
+        '''
         self.order = n
 
         self.cells = []
@@ -102,8 +103,8 @@ class AzGraph(object):
     def create(self):
         '''
         Fill all holes with pairs of dominoes that leaving each other.
-        This is a somewhat subtle step in this program since after the sliding step
-        we are working on a larger (hence different) chessboard now!
+        This is a somewhat subtle step since after the sliding we are working
+        on a larger (hence different) chessboard now!
         '''
         for i, j in self.cells:
             try:
