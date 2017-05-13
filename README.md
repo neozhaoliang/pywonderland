@@ -19,10 +19,10 @@
 - [The E8 Pattern](#the-e8-pattern)
 - [The Modular Group](#the-modular-group)
 - [Generalized Penrose Tilings](#generalized-penrose-tilings)
-- [Wilson's Uniform Spanning Tree Algorithm Animation](#wilson's-uniform-spanning-tree-algorithm-animation)
+- [Wilson's Uniform Spanning Tree Algorithm Animation](#wilsons-uniform-spanning-tree-algorithm-animation)
 - [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
 - [The 120-cell](#the-120-cell)
-- [Conway's Game of Life Animation](#conway's-game-of-life-animation)
+- [Conway's Game of Life Animation](#conways-game-of-life-animation)
 
 ---
 ### Mandelbrot Set

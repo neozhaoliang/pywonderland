@@ -213,7 +213,6 @@ class WilsonAlgoAnimation(Maze):
 
         if next_cell in self.path:
             self.erase_loop(next_cell)
-
         else:
             self.add_to_path(next_cell)
 
@@ -222,13 +221,10 @@ class WilsonAlgoAnimation(Maze):
 
     def erase_loop(self, cell):
         index = self.path.index(cell)
-
         # erase the loop
         self.mark_path(self.path[index:], WALL)
-
         # re-mark this cell
         self.mark_cell(self.path[index], PATH)
-
         self.path = self.path[:index+1]
 
 
@@ -304,6 +300,9 @@ class WilsonAlgoAnimation(Maze):
 
 
     def encode_frame(self):
+        '''
+        Encode current maze into a frame of the GIF file.
+        '''
         if self.frame_box:
             left, top, right, bottom = self.frame_box
         else:
@@ -314,13 +313,16 @@ class WilsonAlgoAnimation(Maze):
         descriptor = self.writer.image_descriptor(left * self.scale, top * self.scale,
                                                   width * self.scale, height * self.scale)
 
+        # flatten the pixels of the region into a 1D list.
         input_data = [0] * width * height * self.scale * self.scale
         for i in range(len(input_data)):
             y = i // (width * self.scale * self.scale)
             x = (i % (width * self.scale)) // self.scale
             value =  self.grid[x + left][y + top]
+            # map the value of the cell to the color index.
             input_data[i] = self.colormap[value]
 
+        # and don't forget to reset frame_box and num_changes.
         self.num_changes = 0
         self.frame_box = None
         return descriptor + self.writer.LZW_encode(input_data)
@@ -338,7 +340,7 @@ class WilsonAlgoAnimation(Maze):
 
     def clear_remaining_changes(self):
         '''
-        output (possibly) remaining changes
+        Output (possibly) remaining changes.
         '''
         if self.num_changes > 0:
             self.write_current_frame()
