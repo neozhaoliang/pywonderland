@@ -19,9 +19,10 @@
 - [The E8 Pattern](#the-e8-pattern)
 - [The Modular Group](#the-modular-group)
 - [Generalized Penrose Tilings](#generalized-penrose-tilings)
-- [Wilson Algorithm Animation](#wilson-algorithm-animation)
+- [Wilson's Uniform Spanning Tree Algorithm Animation](#wilson's-uniform-spanning-tree-algorithm-animation)
 - [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
 - [The 120-cell](#the-120-cell)
+- [Conway's Game of Life Animation](#conway's-game-of-life-animation)
 
 ---
 ### Mandelbrot Set
@@ -123,9 +124,8 @@ Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikip
 [[Back to Top](#contents)]
 
 ---
-### Wilson Algorithm Animation
-Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki/Loop-erased_random_walk)] [[Mike Bostock's Javascript Animation](https://bl.ocks.org/mbostock/11357811)] [[Prim's Algorithm Animation](./img/prim.gif)]
-
+### Wilson's Uniform Spanning Tree Algorithm Animation
+Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki/Loop-erased_random_walk)] [[Mike Bostock's Javascript Animation](https://bl.ocks.org/mbostock/11357811)]
 <br>
 
 <p align="center">
@@ -164,6 +164,19 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 
 [[Back to Top](#contents)]
 
+---
+### Conway's Game of Life Animation
+Conway 的生命游戏 [[View Code](./src/conway)] [[Wiki](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)]
+
+<br>
+
+<p align="center">
+<img src="./img/conway.gif"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
 
 ---
 ## Dependencies

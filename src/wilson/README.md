@@ -1,22 +1,13 @@
-# Wilson's Uniform Spanning Tree Algorithm Animation
+# Wilson Algorithm Animation
+
+> Make gif animations of Wilson's uniform spanning tree algorithm and the depth-first search algorithm.
 
 
+## How to use this program
 
-## About this program
+Run `main.py` and wait for roughly half one minute, you will see a `.gif` file generated in current directory. Enjoy it!
 
-The original idea of writing this program was to make gif animations of Wilson's uniform spanning tree algorithm. Now I have rewritten the code and added two more scripts to illustrate how to use the scripts here to implement various maze generating algorithms.
-
-You may simply run
-
-``` bash
-python wilson_and_dfs.py
-python random_dfs.py
-python prim_and_dfs.py
-```
-
-Each of them will generate a `.gif` file in current directory, enjoy them!
-
-You can also specify the image size, number of loops, colors and speed by passing arguments to it, or even implement a different maze-solving algorithm if you can dig deep into the code and fully understand them.
+You can also specify the image size, number of loops, colors and speed by passing arguments to it, or even implement a different maze-solving algorithm if you can dig deep into the code and fully understand it.
 
 This program can be run with both python2.7+ and python3+. It's written in pure python: no third-party modules or software are needed, just built-in modules `struct` and `random` and some built-in functions. I could write it faster by using `numpy` arrays and its fancy indexing, but I prefer to keep the code being "pure blooded".
 
