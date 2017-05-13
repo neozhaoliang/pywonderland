@@ -409,7 +409,8 @@ def main():
 
     # pad five seconds delay to help to see the resulting path clearly.
     anim.pad_delay_frame(500)
-    # finally save the bits stream in 'wb' mode.
+
+    # finally save the bytestream in 'wb' mode.
     anim.write_to_gif(args.filename)
 
 
