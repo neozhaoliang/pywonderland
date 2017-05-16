@@ -22,7 +22,6 @@
 - [Wilson's Uniform Spanning Tree Algorithm Animation](#wilsons-uniform-spanning-tree-algorithm-animation)
 - [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
 - [The 120-cell](#the-120-cell)
-- [Conway's Game of Life Animation](#conways-game-of-life-animation)
 
 ---
 ### Mandelbrot Set
@@ -125,7 +124,7 @@ Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikip
 
 ---
 ### Wilson's Uniform Spanning Tree Algorithm Animation
-Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki/Loop-erased_random_walk)] [[Mike Bostock's Javascript Animation](https://bl.ocks.org/mbostock/11357811)]
+Wilson 一致生成树算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki/Loop-erased_random_walk)] [[Mike Bostock's Javascript Animation](https://bl.ocks.org/mbostock/11357811)]
 <br>
 
 <p align="center">
@@ -158,20 +157,6 @@ Wilson 算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wikipedia.org/wiki
 
 <p align="center">
 <img src="./img/120cell.png"/>
-</p>
-
-<br>
-
-[[Back to Top](#contents)]
-
----
-### Conway's Game of Life Animation
-Conway 的生命游戏 [[View Code](./src/conway)] [[Wiki](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)]
-
-<br>
-
-<p align="center">
-<img src="./img/conway.gif"/>
 </p>
 
 <br>

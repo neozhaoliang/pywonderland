@@ -157,7 +157,7 @@ class WilsonAlgoAnimation(Maze):
         self.speed = speed
         self.trans_index = 3
         self.delay = 2
-        self.colormap = {0: 0, 1: 1, 2: 2, 3: 3}
+        self.colormap = {i: i for i in range(4)}
 
 
     def run_wilson_algorithm(self, delay, trans_index, **kwargs):
@@ -318,7 +318,7 @@ class WilsonAlgoAnimation(Maze):
         for i in range(len(input_data)):
             y = i // (width * self.scale * self.scale)
             x = (i % (width * self.scale)) // self.scale
-            value =  self.grid[x + left][y + top]
+            value = self.grid[x + left][y + top]
             # map the value of the cell to the color index.
             input_data[i] = self.colormap[value]
 
@@ -376,12 +376,12 @@ def main():
                         help='size of a cell in pixels')
     parser.add_argument('-loop', type=int, default=0,
                         help='number of loops of the animation, default to 0 (loop infinitely)')
-    parser.add_argument('-filename', metavar='-f', type=str, default='wilson.gif',
+    parser.add_argument('-filename', type=str, default='wilson.gif',
                         help='output file name')
 
     args = parser.parse_args()
     anim = WilsonAlgoAnimation(args.width, args.height, args.margin,
-                    args.scale, args.speed, args.loop)
+                               args.scale, args.speed, args.loop)
 
     # here we need to paint the blank background because the region that has not been
     # covered by any frame will be set to transparent by decoders.

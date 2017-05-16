@@ -38,8 +38,4 @@ def render(imgsize):
 
 
 if __name__ == '__main__':
-    import time
-    start = time.time()
     render(imgsize=400)
-    end = time.time()
-    print('runtime: {:03f} seconds'.format(end - start))

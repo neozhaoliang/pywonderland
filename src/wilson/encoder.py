@@ -144,8 +144,8 @@ class GIFWriter(object):
                 pattern = c
 
                 next_code += 1
-                # why should we compare with 2 ** code_length + 1 here?
-                # hint: the next code you add to code_table will be 2 ** code_length.
+                # why should we compare with 2**code_length+1 here?
+                # hint: the next code you add to code_table will be 2**code_length.
                 if next_code == 2**code_length + 1:
                     code_length += 1
                 if next_code == MAX_CODES:

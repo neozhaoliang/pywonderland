@@ -32,28 +32,28 @@ cell_120_config = {'vertex_size': 0.05,
 
 
 # shift = [0.5] * 5: the star pattern
-leftwall = Penrose(num_lines = 10,
-                   shift = (0.5, 0.5, 0.5, 0.5, 0.5),
-                   thin_color = colorlist[0],
-                   fat_color = colorlist[1],
+leftwall = Penrose(num_lines=10,
+                   shift=(0.5, 0.5, 0.5, 0.5, 0.5),
+                   thin_color=colorlist[0],
+                   fat_color=colorlist[1],
                    **penrose_config).put_objs('scale', 1.5,
                                               'rotate', (0, -45, 0),
                                               'translate', (-18, 0, 18))
 
 # a random pattern
-rightwall = Penrose(num_lines = 10,
-                    shift = np.random.random(5),
-                    thin_color = colorlist[2],
-                    fat_color = colorlist[3],
+rightwall = Penrose(num_lines=10,
+                    shift=np.random.random(5),
+                    thin_color=colorlist[2],
+                    fat_color=colorlist[3],
                     **penrose_config).put_objs('scale', 1.5,
                                                'rotate', (0, 45, 0),
                                                'translate', (18, 0, 18))
 
 # when the numbers in shift sums to zero (mod 1), it's the standard Penrose tiling.
-floor = Penrose(num_lines= 10,
-                shift = (0.1, 0.2, -0.3, 0.6, -0.6),
-                thin_color = colorlist[4],
-                fat_color = colorlist[5],
+floor = Penrose(num_lines=10,
+                shift=(0.1, 0.2, -0.3, 0.6, -0.6),
+                thin_color=colorlist[4],
+                fat_color=colorlist[5],
                 **penrose_config).put_objs('scale', 1.5,
                                            'rotate', (90, 0, 0))
 
