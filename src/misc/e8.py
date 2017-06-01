@@ -1,8 +1,16 @@
-# ----------------------------------
-# This script draws the picture of E8 projected to its Coxeter plane.
-# For a detailed discussion of the math see Humphreys's book
-# "Reflection Groups and Coxeter Groups", section 17, chapter 3.
-# -----------------------------------
+# -*- coding: utf-8 -*-
+
+"""
+~~~~~~~~~~~~~~
+The E8 picture
+~~~~~~~~~~~~~~
+
+This script draws the picture of E8 projected to its Coxeter plane.
+For a detailed discussion of the math see Humphreys's book
+
+    Reflection Groups and Coxeter Groups, section 17, chapter 3.
+"""
+
 from itertools import product, combinations
 import cairo
 import numpy as np

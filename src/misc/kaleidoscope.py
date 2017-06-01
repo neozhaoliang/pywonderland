@@ -1,36 +1,37 @@
-'''
-A kaleidoscope pattern with icosahedral symmetry.
-'''
+# -*- coding: utf-8 -*-
+
+"""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A kaleidoscope pattern with icosahedral symmetry
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""
+
 import numpy as np
-from PIL import Image
+import matplotlib.pyplot as plt
 from matplotlib.colors import hsv_to_rgb
 
 
 def Klein(z):
-    '''Klein's j-function'''
+    """Klein's j-function."""
     return 1728 * (z * (z**10 + 11 * z**5 - 1))**5 / \
         (-(z**20 + 1) + 228 * (z**15 - z**5) - 494 * z**10)**3
 
 
 def RiemannSphere(z):
-    '''
-    map the complex plane to Riemann's sphere via stereographic projection
-    '''
+    """Map the complex plane to Riemann's sphere via stereographic projection.
+    """
     t = 1 + z.real*z.real + z.imag*z.imag
     return 2*z.real/t, 2*z.imag/t, 2/t-1
 
 
 def Mobius(z):
-    '''
-    distort the result image by a mobius transformation
-    '''
+    """Distort the resulting image by a Mobius transformation."""
     return (z - 20)/(3*z + 1j)
 
 
 def main(imgsize):
-    x = np.linspace(-6, 6, imgsize)
-    y = np.linspace(6, -6, imgsize)
-    z = x[None, :] + y[:, None]*1j
+    y, x = np.ogrid[6: -6: imgsize*1j, -6: 6: imgsize*1j]
+    z = x + y*1j
     z = RiemannSphere(Klein(Mobius(Klein(z))))
 
     # define colors in hsv space
@@ -41,12 +42,12 @@ def main(imgsize):
 
     # transform to rgb space
     img = hsv_to_rgb(HSV)
-    Image.fromarray(np.uint8(img*255)).save('kaleidoscope.png')
+    fig = plt.figure(figsize=(imgsize/100.0, imgsize/100.0), dpi=100)
+    ax = fig.add_axes([0, 0, 1, 1], aspect=1)
+    ax.axis('off')
+    ax.imshow(img)
+    fig.savefig('kaleidoscope.png')
 
 
 if __name__ == '__main__':
-    import time
-    start = time.time()
-    main(imgsize=800)
-    end = time.time()
-    print('runtime: {:3f} seconds'.format(end - start))
+    main(imgsize=600)

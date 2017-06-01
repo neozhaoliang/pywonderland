@@ -1,46 +1,42 @@
-# --------------------
-# Draw the hyperbolic tiling of the Poincare upper plane by fundamental domains
+# -*- coding: utf-8 -*-
+
+"""
+Draw the hyperbolic tiling of the Poincare upper plane by fundamental domains
 # of the modular group PSL_2(Z).
-# --------------------
 
 
-# ----------------------------------------------------
-# A short introduction to the math behind this script
-# ----------------------------------------------------
-#
-# PSL_2(Z) is an infinite group acts discretely on the upper plane by
-# fractional linear transformations:
-#
-#                az + b
-# PSL_2(Z) = {   ------   , a,b,c,d in Z, ad-bc=1   }
-#                cz + d
-#
-# This group has three generators A, B, C, where
-#
-# A: z --> z+1
-# B: z --> z-1
-# C: z --> -1/z
-#
-# Each element "g" in the group can be written as a word in ["A", "B", "C"],
-# for example  "AAAAAC", "ACBBB", ...
-# To draw the hyperbolc tiling, one just starts from a fundamental domain "D",
-# map it to "g(D)" for each element "g" in the group (up to a given length),
-# then draw all these "g(D)"s. The main problem here is the word representation of
-# "g" is generally not unique, so it's not obvious how to traverse each element only once
-# without omitting any.
+A short introduction to the math behind this script:
 
-# Here is the deep math:
-# the modular group is an automatic group: there exists a DFA such that
-# the words accepted by the DFA are eactly the elements of the group
-# under the shortest-lex-order representation, thus finding all elements
-# in this group amounts to traversing a finite directed graph, which is
-# a much easier job. (we will use breadth-first-search here)
-# --------------------
+PSL_2(Z) is an infinite group acts discretely on the upper plane by
+fractional linear transformations:
+
+              az + b
+PSL_2(Z) = {  ------ , a,b,c,d in Z, ad-bc=1 }
+              cz + d
+
+This group has three generators A, B, C, where
+A: z --> z+1
+B: z --> z-1
+C: z --> -1/z
+
+Each element g in this group can be written as a word in ["A", "B", "C"],
+for example "AAAAAC", "ACBBB", ...
+To draw the hyperbolc tiling, one just starts from a fundamental domain D,
+map it to g(D) for each element g in the group (up to a given length),
+then draw all these g(D)s. The main problem here is the word representation of
+g is generally not unique, so it's not obvious how to traverse each element
+only once without omitting any.
+
+Here is the deep math: the modular group is an automatic group:
+there exists a DFA such that the words accepted by the DFA are eactly
+the elements of the group under the shortest-lex-order representation,
+thus finding all elements in this group amounts to traversing a finite
+directed graph, which is a much easier job. (we will use bfs here)
+"""
 
 import collections
 import cmath
 import cairo
-
 
 
 # None means 'infinity'
@@ -71,8 +67,8 @@ def transform(symbol, domain):
 # for example the path
 # 0 --> 1 --> 3 -- > 4 --> 8
 # correspondes to the element "ACAA" because the first step took 0 to 1 is
-# labelled by "A", the second step took 1 to 3 is labelled by "C", the third step
-# took 3 to 4 is labelled by "A", ...
+# labelled by "A", the second step took 1 to 3 is labelled by "C",
+# the third step took 3 to 4 is labelled by "A", ...
 automaton = {0: {'A': 1, 'B': 2, 'C': 3},
              1: {'A': 1, 'C': 3},
              2: {'B': 2, 'C': 3},
@@ -98,10 +94,9 @@ def traverse(length, start_domain):
 
 
 class HyperbolicDrawing(cairo.Context):
-    '''
-    A quick extension of the cairo.Context class for drawing hyperbolic objects
-    in the Poincare upper plane
-    '''
+    """A quick extension of the `cairo.Context` class for drawing hyperbolic
+    objects in the Poincare upper plane.
+    """
     def set_axis(self, **kwargs):
         surface = self.get_target()
         width = surface.get_width()
@@ -139,13 +134,11 @@ class HyperbolicDrawing(cairo.Context):
             else:
                 self.arc(center, 0, r, theta0, theta1)
 
-
     def render_domain(self, domain, facecolor=None,
                       edgecolor=(0, 0, 0), linewidth=0.01):
         # the points defining the domain may contain the infinity (None).
         # In this program the infinity always appear at the end,
         # we use 10000 as infinity when drawing lines.
-
         x0, y0 = domain[0].real, domain[0].imag
         if domain[-1] is None:
             x1 = domain[-2].real

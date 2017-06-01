@@ -1,8 +1,14 @@
-'''
-A fast Mandelbrot set wallpaper renderer
+# -*- coding: utf-8 -*-
 
-reddit discussion: https://www.reddit.com/r/math/comments/2abwyt/smooth_colour_mandelbrot/
-'''
+"""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A fast Mandelbrot set wallpaper renderer
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+reddit discussion:
+    https://www.reddit.com/r/math/comments/2abwyt/smooth_colour_mandelbrot
+"""
+
 import numpy as np
 from PIL import Image
 from numba import jit
@@ -33,9 +39,8 @@ def iterate(c):
 
 
 def main(xmin, xmax, ymin, ymax, width, height):
-    x = np.linspace(xmin, xmax, width)
-    y = np.linspace(ymax, ymin, height)
-    z = x[None, :] + y[:, None]*1j
+    y, x = np.ogrid[ymax: ymin: height*1j, xmin: xmax: width*1j]
+    z = x + y*1j
     red, green, blue = np.asarray(np.frompyfunc(iterate, 1, 3)(z)).astype(np.float)
     img = np.dstack((red, green, blue))
     Image.fromarray(np.uint8(img*255)).save('mandelbrot.png')

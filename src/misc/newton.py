@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+
+"""
+~~~~~~~~~~~~~~~~~~
+The Newton Fractal
+~~~~~~~~~~~~~~~~~~
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 from numba import jit
@@ -26,9 +34,8 @@ def iterate(z):
 
 
 def render(imgsize):
-    x = np.linspace(-1, 1, imgsize)
-    y = np.linspace(1, -1, imgsize)
-    z = x[None, :] + y[:, None] * 1j
+    y, x = np.ogrid[1: -1: imgsize*1j, -1: 1: imgsize*1j]
+    z = x +y*1j
     img = np.frompyfunc(iterate, 1, 1)(z).astype(np.float)
     fig = plt.figure(figsize=(imgsize/100.0, imgsize/100.0), dpi=100)
     ax = fig.add_axes([0, 0, 1, 1], aspect=1)

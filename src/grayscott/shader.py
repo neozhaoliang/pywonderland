@@ -4,44 +4,36 @@ import pyglet.gl as gl
 
 class Shader(object):
 
-    def __init__(self, vert, frag):
+    def __init__(self, vert_file, frag_file):
         self.program = gl.glCreateProgram()
-        self.compile_and_attach_shader(vert, gl.GL_VERTEX_SHADER)
-        self.compile_and_attach_shader(frag, gl.GL_FRAGMENT_SHADER)
+        self.compile_and_attach_shader(vert_file, gl.GL_VERTEX_SHADER)
+        self.compile_and_attach_shader(frag_file, gl.GL_FRAGMENT_SHADER)
         self.link()
 
-
-    def compile_and_attach_shader(self, source_strings, shader_type):
-        '''
-        source_strings:
-            a list of one or more strings that are possibly read from some files.
-        shader_type:
-            must be one of gl.GL_VERTEX_SHADER, gl.GL_FRAGMENT_SHADER, gl.GL_GEOMETRY_SHADER
-
-        main steps to compile and attach a shader:
-
+    def compile_and_attach_shader(self, shader_file, shader_type):
+        """Main steps to compile and attach a shader:
         1. glCreateShader:
-                create a shader of given type
+                create a shader of given type.
         2. glShaderSource:
-                load source code into the shader
+                load source code into the shader.
         3. glCompileShader:
-                compile the shader
+                compile the shader.
         4. glGetShaderiv:
-                retrieve the compile status
+                retrieve the compile status.
         5. glGetShaderInfoLog:
-                print the error info if compiling failed
+                print the error info if compiling failed.
         6. glAttachShader:
-                attach the shader to our program if compiling successed
-        '''
-        # a preprocessing to make the code compatible with python3.
-        src = tuple(s.encode('ascii') for s in source_strings)
+                attach the shader to our program if compiling successed.
+        """
+        with open(shader_file, 'r') as f:
+            src = f.read().encode('ascii')
 
         # 1. create a shader
         shader = gl.glCreateShader(shader_type)
 
         # 2. load source code into the shader
-        src_p = (ct.c_char_p * len(src))(*src)
-        gl.glShaderSource(shader, len(src), ct.cast(ct.pointer(src_p), ct.POINTER(ct.POINTER(ct.c_char))), None)
+        src_p = ct.c_char_p(src)
+        gl.glShaderSource(shader, 1, ct.cast(ct.pointer(src_p), ct.POINTER(ct.POINTER(ct.c_char))), None)
 
         # 3. compile the shader
         gl.glCompileShader(shader)
@@ -62,18 +54,15 @@ class Shader(object):
         else:
             gl.glAttachShader(self.program, shader)
 
-
     def link(self):
-        '''
-        main steps to link the program:
-
+        """Main steps to link the program:
         1. glLinkProgram:
                 linke the shaders in the program to create an executable
         2. glGetProgramiv:
                 retrieve the link status
         3. glGetProgramInfoLog:
                 print the error log if link failed
-        '''
+        """
         gl.glLinkProgram(self.program)
 
         link_status = gl.GLint(0)
@@ -86,23 +75,18 @@ class Shader(object):
             gl.glGetProgramInfoLog(self.program, info_length, None, error_info)
             print(error_info.value)
 
-
     def bind(self):
         gl.glUseProgram(self.program)
 
-
     def unbind(self):
         gl.glUseProgram(0)
-
 
     def __enter__(self):
         self.bind()
         return self
 
-
     def __exit__(self, exception_type, exception_value, traceback):
         self.unbind()
-
 
     def set_uniformi(self, name, *vals):
         location = gl.glGetUniformLocation(self.program, name.encode('ascii'))
@@ -112,7 +96,6 @@ class Shader(object):
           4: gl.glUniform4i
         }[len(vals)](location, *vals)
 
-
     def set_uniformf(self, name, *vals):
         location = gl.glGetUniformLocation(self.program, name.encode('ascii'))
         { 1: gl.glUniform1f,
@@ -121,26 +104,19 @@ class Shader(object):
             4: gl.glUniform4f
         }[len(vals)](location, *vals)
 
-
     def set_uniform_matrix(self, name, mat):
         location = gl.glGetUniformLocation(self.program, name.encode('ascii'))
         gl.glUniformMatrix4fv(location, 1, False, (ct.c_float * 16)(*mat))
 
-
     def set_vertex_attrib(self, name, data):
-        '''
-        this is an ugly way to set vertex attribute data in a shader.
-        lacks the flexibility of setting several attributes in one vertex buffer.
+        """This is an ugly way to set vertex attribute data in a shader, it lacks
+        the flexibility of setting several attributes in one vertex buffer.
 
         name: the attribute name in the shader.
         data: a list of vertex attributes (positions, colors, texcoords, normals,...)
-
-        example:
-        name = 'positions'
-        data = [(1, 1, 0), (2, 2, 1), ...]
-
+        example: name = 'positions', data = [(1, 1, 0), (2, 2, 1), ...]
         the items in data must all be 1D lists(or tuples) of the same length.
-        '''
+        """
         data_flatten = [x for vertex in data for x in vertex]
         size = len(data[0])
         data_ctype = (gl.GLfloat * len(data_flatten))(*data_flatten)
@@ -155,12 +131,3 @@ class Shader(object):
         gl.glVertexAttribPointer(location, size, gl.GL_FLOAT, gl.GL_FALSE, 0, 0)
         gl.glBindBuffer(gl.GL_ARRAY_BUFFER, 0)
         return vbo_id
-
-
-    @classmethod
-    def from_files(self, vert_file, frag_file):
-        with open(vert_file, 'r') as f:
-            vert = f.readlines()
-        with open(frag_file, 'r') as f:
-            frag = f.readlines()
-        return Shader(vert, frag)
