@@ -7,7 +7,7 @@ and the Depth-First Search Algorithm.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Usage: python wilson.py [-width] [-height] [-scale]
-                        [-marign] [-loop] [-filename]
+                        [-margin] [-loop] [-filename]
 
 Optional arguments:
     width, height: size of the maze (not the image), should both be odd.
@@ -20,6 +20,7 @@ Optional arguments:
 
 :copyright (c) 2016 by Zhao Liang.
 """
+
 import time
 import os
 import argparse
@@ -169,8 +170,7 @@ class WilsonAlgoAnimation(BaseMaze):
         self.clear_remaining_changes()
 
     def loop_erased_random_walk(self, cell):
-        """Start a loop erased random walk from a
-        given cell until it hits the tree."""
+        """Start a loop erased random walk from a given cell until it hits the tree."""
         self.path = [cell]
         self.mark_cell(cell, PATH)
         current_cell = cell
@@ -358,6 +358,8 @@ def main():
 
     # finally save the bytestream in 'wb' mode.
     anim.write_to_gif(args.filename)
+
+    # print the stats.
     runtime = (time.time() - start) / 60.0
     fsize = os.path.getsize(args.filename) / 1024.0
     print('runtime: {:.1f} minutes, size: {:.1f} kb, bitrate: {:.2f} kb/min'.format(runtime, fsize, fsize/runtime))

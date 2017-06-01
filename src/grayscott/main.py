@@ -22,9 +22,7 @@ else:
 
 import pyglet
 pyglet.options['debug_gl'] = False
-
 import pyglet.gl as gl
-import pyglet.window.key as key
 
 from shader import Shader
 from framebuffer import FrameBuffer
