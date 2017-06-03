@@ -209,7 +209,7 @@ class GrayScott(pyglet.window.Window):
             self.update_mouse(-10,- 10)
 
         if symbol == pyglet.window.key.S:
-            if not modifiers:
+            if modifiers != pyglet.window.key.LCTRL:
                 self.change_pattern()
 
         if symbol == pyglet.window.key.P:
