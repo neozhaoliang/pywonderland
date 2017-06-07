@@ -65,4 +65,4 @@ camera = Camera('location', (0, 12, -30), 'look_at', (0, 0, 20))
 light = LightSource((-30, 30, -30), 'color', (1, 1, 1))
 objects = [light, leftwall, rightwall, floor, cell_120]
 scene = Scene(camera, objects, included=['colors.inc'])
-scene.render('penrose_120_cell.png', width=600, height=480, antialiasing=0.001)
+scene.render('penrose_120cell.png', width=600, height=480, antialiasing=0.001)

@@ -20,7 +20,7 @@ Optional arguments:
 
 import argparse
 import random
-import cairo
+import cairocffi as cairo
 
 
 # 4 colors for the 4 types of dominoes

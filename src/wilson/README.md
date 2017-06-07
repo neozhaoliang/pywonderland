@@ -1,27 +1,24 @@
-# Wilson Algorithm Animation
+# Wilson's Uniform Spanning Tree Algorithm Animation
 
 > Make gif animations of Wilson's uniform spanning tree algorithm and the depth-first search algorithm.
 
 
 ## How to use this program
 
-Run `main.py` and wait for roughly half one minute, you will see a `.gif` file generated in current directory. Enjoy it!
+Run `wilspn.py` and wait for a few seconds, you will see a `.gif` file generated in current directory. Enjoy it!
 
-You can also specify the image size, number of loops, colors and speed by passing arguments to it, or even implement a different maze-solving algorithm if you can dig deep into the code and fully understand it.
+This program can be run with both python2.7+ and python3+. It's written in pure python: no third-party modules nor softwares are needed, just built-in modules `struct` and `random` and some built-in functions. I could write it faster by using `numpy` arrays but I prefer to keep the code being "pure blooded".
 
-This program can be run with both python2.7+ and python3+. It's written in pure python: no third-party modules or software are needed, just built-in modules `struct` and `random` and some built-in functions. I could write it faster by using `numpy` arrays and its fancy indexing, but I prefer to keep the code being "pure blooded".
+The code has been modified many times to make it more readable and improve the efficiency. Since Wilson's algorithm is a random algorithm, its runtime is uncertain. On my old laptop with 1.83GHzx4 Celeron processors the average runtime is about 40 seconds with python3.5 and 25 seconds with python2.7.
 
-## How did it come out
 
-This project is motivated by Mike Bostock's wonderful [Javascript animation](https://bl.ocks.org/mbostock/11357811), and also many other nice animations on his website. I learned Wilson's algorithm about 7 years ago and had the idea of writing a python version to produce GIF animations the first sight when I saw Mike's page, but rendering a GIF image which possibly consists of thousands of frames is definitely a formidable task. It's about one year ago when I occasionally touched the GIF89a specification and finally realized the approach of encoding the frames bits and bytes.
+##  What is Wilson's algorithm
 
-## What is Wilson algorithm
-
-Wilson algorithm comes from probability theory, it's quite important in study and is also appealing in its appearance. It chooses a random spanning tree from all such trees of a graph G (G should be finite, undirected and connected) with equal probability. Think about the crucial point here: each spanning tree has the same probability being chosen. Even for a 2d grid graph of a moderate size (for example, 50x50) the number of spanning trees is such a huge number that one can not simply list all trees first and then use a random int to sample.
+Wilson's algorithm comes from probability theory, it's quite important in study and is also appealing in its appearance. It chooses a random spanning tree from all such trees of a graph G (G should be finite, undirected and connected) with equal probability. Think about the crucial point here: each spanning tree has the same probability being chosen. Even for a 2d grid graph of a moderate size (for example, 50x50) the number of spanning trees is such a huge number that one can not simply list all trees first and then use a random int to sample.
 
 The algorithm runs as follows:
 
-1. Choose any vertex `v` as the root, maintain a tree `T`, initially `T` = {`v`}.
+1. Choose any vertex `v` as the root, maintain a tree `T`, initially `T = {v}`.
 
 2. For any vertex `z` that is not in `T`, start a loop erased random walk from `z`, until the walk 'hits' `T` (You should see what "loop erased random walk" means from the animation), then add the resulting path of the walk to `T`.
 
@@ -34,9 +31,14 @@ For the proof of the correctness of this algorithm see Wilson's original paper:
 The maze-solving part is a bit arbitrary and you may implement any algorithm you like, I've chosen the depth first search algorithm for simplicity.
 
 
+## How did it come out
+
+This project is motivated by Mike Bostock's wonderful [Javascript animation](https://bl.ocks.org/mbostock/11357811), and also many other nice animations on his website. I learned Wilson's algorithm about 7 years ago and had the idea of writing a python version to produce GIF animations the first sight when I saw Mike's page, but rendering a GIF image which possibly consists of thousands of frames is definitely a formidable task. It's about one year ago when I occasionally touched the GIF89a specification and finally realized the approach of encoding the frames bits and bytes.
+
+
 ## About the code
 
-~~The gif image in the front page contains roughly 3000 frames but its size is only about 223K~~ (The example file has been replaced by a smaller file hence the number of frames is not as large as 3000, but for most time you run the script you will indeed get an image contains thousands of frames while the file size is around 200KB~500KB). How could one do this? There are two key points:
+For most time you run the script you will get an image contains 2000~3000 frames while the file size is around 200KB~500KB. How could one do this? There are two key points:
 
 1. **Only update the region that has been changed** by maintaining a rectangle that defines the position of current frame. If you use some image processing tool like `ImageMagick` to unpack the example gif image into frames you will soon understand what this means.
 
@@ -57,6 +59,7 @@ m m m m m m m
 Each character represents a square (5x5 pixels by default) in our image. `m` means "margin", these squares are served as the border of the image and **are not used in our animation.** The width of the margin can be changed (default to 2 but the example shows only 1). `w` means this a "wall", and `c` means this is a "cell". **Our grid graph contains only the cells. Walls and margins are not considered to be part of the graph.**
 
 As the algorithm runs, the cells become connected and some walls might be set to "in tree" or "in path", but they are still **not** treated as part of the graph.
+
 
 ## Where to learn the GIF89a specification
 

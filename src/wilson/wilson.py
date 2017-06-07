@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
@@ -12,20 +13,26 @@ Usage: python wilson.py [-width] [-height] [-scale]
 Optional arguments:
     width, height: size of the maze (not the image), should both be odd.
     scale: the size of the image will be (width * scale) * (height * scale).
-           In other words, each cell in the maze will occupy (scale * scale)
-           pixels in the image.
+           In other words, each cell in the maze will occupy a square of
+           (scale * scale) pixels in the image.
     margin: size of the border of the image.
     loop: number of loops of the image, default to 0 (loop infinitely).
     filename: the output file.
 
-:copyright (c) 2016 by Zhao Liang.
+Copyright (c) 2016 by Zhao Liang.
 """
 
-import time
-import os
 import argparse
 import random
-from encoder import GIFWriter
+from struct import pack
+
+
+# constants for LZW encoding, do not modify these!
+PALETTE_BITS = 2
+CLEAR_CODE = 4
+END_CODE = 5
+MAX_CODES = 4096
+
 
 # four possible states of a cell.
 WALL = 0
@@ -33,16 +40,102 @@ TREE = 1
 PATH = 2
 FILL = 3
 
-# a dict for mapping cells to colors.
-CELL_TO_COLOR = {'wall_color': 0, 'tree_color': 1,
-                 'path_color': 2, 'fill_color': 3}
+
+class GIFWriter(object):
+    """
+    Structure of a GIF file: (in the order they appear)
+    1. always begins with the logical screen descriptor.
+    2. then follows the global color table.
+    3. then follows the loop control block (specify the number of loops)
+    4. then follows the image data of the frames, each frame is further divided into:
+       (i) a graphics control block that specify the delay and transparent color of this frame.
+       (ii) the image descriptor.
+       (iii) the LZW enconded data.
+    5. finally the trailor '0x3B'.
+    """
+
+    def __init__(self, width, height, loop):
+        self.logical_screen_descriptor = pack('<6s2H3B', b'GIF89a', width, height, 0b10010001, 0, 0)
+        self.global_color_table = bytearray([0, 0, 0,          # wall color
+                                             100, 100, 100,    # tree color
+                                             255, 0, 255,      # path color
+                                             150, 200, 100])   # fill color
+        self.loop_control_block = pack('<3B8s3s2BHB', 0x21, 0xFF, 11, b'NETSCAPE', b'2.0', 3, 1, loop, 0)
+        self.data = bytearray()
+        self.trailor = bytearray([0x3B])
+
+    @staticmethod
+    def graphics_control_block(delay, trans_index):
+        """This block specifies the delay and transparent color of a frame."""
+        return pack("<4BH2B", 0x21, 0xF9, 4, 0b00000101, delay, trans_index, 0)
+
+    @staticmethod
+    def image_descriptor(left, top, width, height):
+        """This block specifies the position of a frame (relative to the window).
+        The ending byte field is 0 since we do not need a local color table."""
+        return pack('<B4HB', 0x2C, left, top, width, height, 0)
+
+    @staticmethod
+    def pad_delay_frame(delay, trans_index):
+        """Pad a 1x1 pixel frame for delay."""
+        control = GIFWriter.graphics_control_block(delay, trans_index)
+        descriptor = GIFWriter.image_descriptor(0, 0, 1, 1)
+        data = bytearray([PALETTE_BITS, 1, trans_index, 0])
+        return control + descriptor + data
+
+    def save_gif(self, filename):
+        """Note the 'wb' mode here!"""
+        with open(filename, 'wb') as f:
+            f.write(self.logical_screen_descriptor +
+                    self.global_color_table +
+                    self.loop_control_block +
+                    self.data +
+                    self.trailor)
 
 
-class BaseMaze(object):
-    """This class defines the structure of a maze and
-    some methods we will need for running algorithms on it."""
+class DataBlock(object):
+    """Write bits into a bytearray and then pack this bytearray into data blocks.
+    This class is used for the LZW algorithm when encoding maze into frames."""
 
-    def __init__(self, width, height, margin):
+    def __init__(self):
+        self.bitstream = bytearray()  # write bits into this array.
+        self.num_bits = 0  # a counter holds how many bits have been written.
+
+    def encode_bits(self, num, size):
+        """Given a number `num`, encode it as a binary string of length `size`,
+        and pad it at the end of bitstream.
+        Example: num = 3, size = 5. The binary string for 3 is '00011',
+        here we padded extra zeros at the left to make its length to be 5.
+        The tricky part is that in a gif file, the encoded binary data stream
+        increase from lower (least significant) bits to higher
+        (most significant) bits, so we have to reverse it as '11000' and pack
+        this string at the end of bitstream!
+        """
+        string = bin(num)[2:].zfill(size)
+        for digit in reversed(string):
+            if len(self.bitstream) * 8 == self.num_bits:
+                self.bitstream.append(0)
+            if digit == '1':
+                self.bitstream[-1] |= 1 << self.num_bits % 8
+            self.num_bits += 1
+
+    def dump_bytes(self):
+        """Pack the LZW encoded image data into blocks.
+        Each block is of length <= 255 and is preceded by a byte
+        in 0-255 that indicates the length of this block.
+        """
+        bytestream = bytearray()
+        while len(self.bitstream) > 255:
+            bytestream += bytearray([255]) + self.bitstream[:255]
+            self.bitstream = self.bitstream[255:]
+        if self.bitstream:
+            bytestream += bytearray([len(self.bitstream)]) + self.bitstream
+        return bytestream
+
+
+class WilsonAlgoAnimation(object):
+
+    def __init__(self, width, height, margin, scale, loop):
         """
         width, height: size of the maze, should both be odd numbers.
         margin: size of the border of the maze.
@@ -55,17 +148,13 @@ class BaseMaze(object):
         2: it's in the path
         3: it's filled (this will not be used until the depth-first search animation)
 
-        Initially all cells are walls.
-        Adjacent cells in the maze are spaced out by one cell.
-
-        frame_box: maintains the region that to be updated.
-        num_changes: output the frame once this number of cells are changed.
+        Initially all cells are walls. Adjacent cells in the maze are spaced out by one cell.
         """
         self.width = width
         self.height = height
         self.grid = [[0]*height for _ in range(width)]
-        self.num_changes = 0
-        self.frame_box = None
+        self.num_changes = 0   # a counter holds how many cells are changed.
+        self.frame_box = None  # maintains the region that to be updated.
 
         # shrink the maze a little to pad some margin at the border of the window.
         self.cells = []
@@ -87,10 +176,22 @@ class BaseMaze(object):
             return neighbors
 
         self.graph = {v: neighborhood(v) for v in self.cells}
-
         # we will look for a path between this start and end.
         self.start = (margin, margin)
         self.end = (width - margin - 1, height - margin -1)
+
+        self.tree = set()  # a set holds all cells that are in the tree.
+        self.path = []     # a list holds the path in the loop erased random walk.
+
+        self.scale = scale     # each cell will occupy (scale * scale) pixels in the GIF image.
+        self.speed = 10        # output the frame once this number of cells are changed.
+        self.trans_index = 3   # the index of the transparent color in the global color table.
+        self.delay = 5         # delay between successive frames.
+
+        # a dict that maps the state of the cells to the colors.
+        # the keys are the states of the cells, and the values are the index of the colors.
+        self.colormap = {i: i for i in range(2**PALETTE_BITS)}
+        self.writer = GIFWriter(width * scale, height * scale, loop)  # size of the image is scaled.
 
     def get_neighbors(self, cell):
         return self.graph[cell]
@@ -111,8 +212,8 @@ class BaseMaze(object):
 
     def mark_wall(self, cellA, cellB, index):
         """Mark the space between two adjacent cells."""
-        wall = ((cellA[0] + cellB[0])//2,
-                (cellA[1] + cellB[1])//2)
+        wall = ((cellA[0] + cellB[0]) // 2,
+                (cellA[1] + cellB[1]) // 2)
         self.mark_cell(wall, index)
 
     def check_wall(self, cellA, cellB):
@@ -127,28 +228,6 @@ class BaseMaze(object):
             self.mark_cell(cell, index)
         for cellA, cellB in zip(path[1:], path[:-1]):
             self.mark_wall(cellA, cellB, index)
-
-
-class WilsonAlgoAnimation(BaseMaze):
-    """Our animation contains two parts: run the algorithms and write to the file.
-    """
-
-    def __init__(self, width, height, margin, scale, loop):
-        """
-        scale: a cell in the maze will occupy (scale * scale) pixels in the image.
-        loop: number of loops of the GIF image, 0 means loop infinitely.
-        speed: control how often a frame is rendered.
-        trans_index: index of the transparent color in the global color table.
-        delay: delay between two successive frames.
-        colormap: a dict that maps the maze to an image.
-        """
-        BaseMaze.__init__(self, width, height, margin)
-        self.scale = scale
-        self.speed = 30
-        self.delay = 2
-        self.trans_index = 3
-        self.colormap = {i: i for i in range(4)}
-        self.writer = GIFWriter(width * scale, height * scale, loop)
 
     def run_wilson_algorithm(self, speed, delay, trans_index, **kwargs):
         """Animating Wilson's uniform spanning tree algorithm."""
@@ -250,18 +329,11 @@ class WilsonAlgoAnimation(BaseMaze):
 
         self.mark_path(path, PATH)
         # show the path
-        self.refresh_frame()
-
-    def set_colors(self, **kwargs):
-        for key, val in kwargs.items():
-            self.colormap[CELL_TO_COLOR[key]] = val
-
-    def pad_delay_frame(self, delay):
-        self.writer.data += self.writer.pad_delay_frame(delay, self.trans_index)
+        self.clear_remaining_changes()
 
     def encode_frame(self):
-        """Encode current maze into a frame but not write to the file.
-        Note the graphics control block is not added here."""
+        """Use LZW algorithm to encode the region bounded by `frame_box`
+        into one frame of the image."""
         if self.frame_box:
             left, top, right, bottom = self.frame_box
         else:
@@ -269,22 +341,43 @@ class WilsonAlgoAnimation(BaseMaze):
 
         width = right - left + 1
         height = bottom - top + 1
-        descriptor = self.writer.image_descriptor(left * self.scale, top * self.scale,
-                                                  width * self.scale, height * self.scale)
+        descriptor = GIFWriter.image_descriptor(left * self.scale, top * self.scale,
+                                                width * self.scale, height * self.scale)
 
-        # flatten the pixels of the region into a 1D list.
-        input_data = [0] * width * height * self.scale * self.scale
-        for i in range(len(input_data)):
+        stream = DataBlock()
+        code_length = PALETTE_BITS + 1
+        next_code = END_CODE + 1
+        code_table = {str(c): c for c in range(2**PALETTE_BITS)}
+        stream.encode_bits(CLEAR_CODE, code_length)  # always start with the clear code.
+
+        pattern = str()
+        for i in range(width * height * self.scale * self.scale):
             y = i // (width * self.scale * self.scale)
             x = (i % (width * self.scale)) // self.scale
-            value = self.grid[x + left][y + top]
-            # map the value of the cell to the color index.
-            input_data[i] = self.colormap[value]
+            val = self.grid[x + left][y + top]
+            c = self.colormap[val]
+            c = str(c)
+            pattern += c
+            if pattern not in code_table:
+                code_table[pattern] = next_code  # add new code in the table.
+                stream.encode_bits(code_table[pattern[:-1]], code_length)  # output the prefix.
+                pattern = c   # suffix becomes the current pattern.
 
-        # and don't forget to reset `frame_box` and `num_changes`.
+                next_code += 1
+                if next_code == 2**code_length + 1:
+                    code_length += 1
+                if next_code == MAX_CODES:
+                    next_code = END_CODE + 1
+                    stream.encode_bits(CLEAR_CODE, code_length)
+                    code_length = PALETTE_BITS + 1
+                    code_table = {str(c): c for c in range(2**PALETTE_BITS)}
+
+        stream.encode_bits(code_table[pattern], code_length)
+        stream.encode_bits(END_CODE, code_length)
+
         self.num_changes = 0
         self.frame_box = None
-        return descriptor + self.writer.LZW_encode(input_data)
+        return descriptor + bytearray([PALETTE_BITS]) + stream.dump_bytes() + bytearray([0])
 
     def paint_background(self, **kwargs):
         """Insert current frame at the beginning to use it as the background.
@@ -293,27 +386,33 @@ class WilsonAlgoAnimation(BaseMaze):
             self.set_colors(**kwargs)
         self.writer.data = self.encode_frame() + self.writer.data
 
-    def output_current_frame(self):
-        """Output current frame to the data stream. Note the graphics control
-        block here. This method will not be directly called: it's called by
-        `refresh_frame()` and `clear_remaining_changes()`."""
+    def output_frame(self):
+        """Output current frame to the data stream. This method will not be directly called:
+        it's called by `refresh_frame()` and `clear_remaining_changes()`."""
         control = self.writer.graphics_control_block(self.delay, self.trans_index)
         self.writer.data += control + self.encode_frame()
 
     def refresh_frame(self):
         if self.num_changes >= self.speed:
-            self.output_current_frame()
+            self.output_frame()
 
     def clear_remaining_changes(self):
         if self.num_changes > 0:
-            self.output_current_frame()
+            self.output_frame()
+
+    def set_colors(self, **kwargs):
+        color_dict = {'wc': 0, 'tc': 1, 'pc': 2, 'fc': 3}
+        for key, val in kwargs.items():
+            self.colormap[color_dict[key]] = val
+
+    def pad_delay_frame(self, delay):
+        self.writer.data += GIFWriter.pad_delay_frame(delay, self.trans_index)
 
     def write_to_gif(self, filename):
-        self.writer.save(filename)
+        self.writer.save_gif(filename)
 
 
 def main():
-    start = time.time()
     parser = argparse.ArgumentParser()
     parser.add_argument('-width', type=int, default=121,
                         help='width of the maze')
@@ -329,8 +428,7 @@ def main():
                         help='output file name')
 
     args = parser.parse_args()
-    anim = WilsonAlgoAnimation(args.width, args.height, args.margin,
-                               args.scale, args.loop)
+    anim = WilsonAlgoAnimation(args.width, args.height, args.margin, args.scale, args.loop)
 
     # here we need to paint the blank background because the region that has not been
     # covered by any frame will be set to transparent by decoders.
@@ -343,15 +441,15 @@ def main():
     # in the wilson algorithm step no cells are 'filled',
     # hence it's safe to use color 3 as the transparent color.
     anim.run_wilson_algorithm(speed=30, delay=2, trans_index=3,
-                              wall_color=0, tree_color=1, path_color=2)
+                              wc=0, tc=1, pc=2)
 
     # pad three seconds delay to help to see the resulting maze clearly.
     anim.pad_delay_frame(300)
 
     # in the dfs algorithm step the walls are unchanged throughout,
     # hence it's safe to use color 0 as the transparent color.
-    anim.run_dfs_algorithm(speed=10, delay=5, trans_index=0, wall_color=0,
-                           tree_color=0, path_color=2, fill_color=3)
+    anim.run_dfs_algorithm(speed=10, delay=5, trans_index=0, wc=0,
+                           tc=0, pc=2, fc=3)
 
     # pad five seconds delay to help to see the resulting path clearly.
     anim.pad_delay_frame(500)
@@ -359,10 +457,6 @@ def main():
     # finally save the bytestream in 'wb' mode.
     anim.write_to_gif(args.filename)
 
-    # print the stats.
-    runtime = (time.time() - start) / 60.0
-    fsize = os.path.getsize(args.filename) / 1024.0
-    print('runtime: {:.1f} minutes, size: {:.1f} kb, bitrate: {:.2f} kb/min'.format(runtime, fsize, fsize/runtime))
 
 if __name__ == '__main__':
     main()
