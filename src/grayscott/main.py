@@ -206,7 +206,7 @@ class GrayScott(pyglet.window.Window):
 
         # clear to blank window
         if symbol == pyglet.window.key.SPACE:
-            self.update_mouse(-10,- 10)
+            self.update_mouse(-10, -10)
 
         if symbol == pyglet.window.key.S:
             if modifiers != pyglet.window.key.LCTRL:

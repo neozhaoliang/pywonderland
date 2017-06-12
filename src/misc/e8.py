@@ -12,7 +12,7 @@ For a detailed discussion of the math see Humphreys's book
 """
 
 from itertools import product, combinations
-import cairo
+import cairocffi as cairo
 import numpy as np
 from palettable.colorbrewer.qualitative import Set1_8
 

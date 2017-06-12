@@ -1,5 +1,6 @@
 # Render the 120-Cell Polytope with POV-Ray and Vapory
 
+Note: This is a very coarse version and will be rewritten later.
 
 ## About the scene
 

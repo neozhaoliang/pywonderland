@@ -36,7 +36,7 @@ directed graph, which is a much easier job. (we will use bfs here)
 
 import collections
 import cmath
-import cairo
+import cairocffi as cairo
 
 
 # None means 'infinity'

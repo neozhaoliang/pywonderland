@@ -136,14 +136,14 @@ class AztecDiamond(object):
         ctx.scale(size/(2.0*extent), -size/(2.0*extent))
         ctx.translate(extent, -extent)
 
-        if bg_color:
+        if bg_color is not None:
             ctx.set_source_rgb(*bg_color)
             ctx.paint()
 
         margin = 0.1
 
         for (i, j) in self.cells:
-            if self.is_black(i, j) and self.tile[(i, j)]:
+            if (self.is_black(i, j) and self.tile[(i, j)] is not None):
                 if self.tile[(i, j)] == 'n':
                     ctx.rectangle(i - 1 + margin, j + margin,
                                   2 - 2 * margin, 1 - 2 * margin)

@@ -9,7 +9,7 @@ Run `wilspn.py` and wait for a few seconds, you will see a `.gif` file generated
 
 This program can be run with both python2.7+ and python3+. It's written in pure python: no third-party modules nor softwares are needed, just built-in modules `struct` and `random` and some built-in functions. I could write it faster by using `numpy` arrays but I prefer to keep the code being "pure blooded".
 
-The code has been modified many times to make it more readable and improve the efficiency. Since Wilson's algorithm is a random algorithm, its runtime is uncertain. On my old laptop with 1.83GHzx4 Celeron processors the average runtime is about 40 seconds with python3.5 and 25 seconds with python2.7.
+The code has been modified many times to make it more readable and improve the efficiency. Since Wilson's algorithm is a random algorithm, its runtime is uncertain. On my old laptop with 1.83GHzx4 Celeron processors the bitrate is about 1000kb/min, or in other words, it takes 30 seconds to generate a file of 500kb.
 
 
 ##  What is Wilson's algorithm
@@ -27,6 +27,10 @@ The algorithm runs as follows:
 For the proof of the correctness of this algorithm see Wilson's original paper:
 
     "Generating random spanning trees more quickly than the cover time".
+    
+Or the book by Russell Lyons and Yuval Peres:
+
+	"Probability on Trees and Networks".
 
 The maze-solving part is a bit arbitrary and you may implement any algorithm you like, I've chosen the depth first search algorithm for simplicity.
 
