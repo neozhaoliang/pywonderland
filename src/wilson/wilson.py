@@ -326,7 +326,7 @@ class WilsonAlgoAnimation(object):
         self.path.append(cell)
 
     def run_dfs_algorithm(self, speed, delay, trans_index, **kwargs):
-        """Animating the breadth-first search algorithm."""
+        """Animating the depth-first search algorithm."""
         self.speed = speed
         self.delay = delay
         self.trans_index = trans_index
