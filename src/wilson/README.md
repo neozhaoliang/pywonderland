@@ -42,7 +42,7 @@ This project is motivated by Mike Bostock's wonderful [Javascript animation](htt
 
 ## About the code
 
-For most time you run the script you will get an image contains 2000~3000 frames while the file size is around 200KB~500KB. How could one do this? There are two key points:
+For most time you run the script you will get an image contains 2000-3000 frames while the file size is around 200-500KB. How could one do this? There are two key points:
 
 1. **Only update the region that has been changed** by maintaining a rectangle that defines the position of current frame. If you use some image processing tool like `ImageMagick` to unpack the example gif image into frames you will soon understand what this means.
 
