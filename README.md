@@ -22,6 +22,7 @@
 - [Wilson's Uniform Spanning Tree Algorithm Animation](#wilsons-uniform-spanning-tree-algorithm-animation)
 - [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
 - [The 120-cell](#the-120-cell)
+- [Lorenz Attractor Animation](#lorenz-attractor-animation)
 
 ---
 ### Mandelbrot Set
@@ -157,6 +158,20 @@ Wilson 一致生成树算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wik
 
 <p align="center">
 <img src="./img/120cell.png"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
+
+---
+### Lorenz Attractor Animation
+洛伦兹吸引子动画 [[View Code](./src/misc/lorenz.py)][[View Webm Animation](./img/lorenz.webm)]
+
+<br>
+
+<p align="center">
+<img src="./img/lorenz.png"/>
 </p>
 
 <br>

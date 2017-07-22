@@ -11,6 +11,7 @@ This program can be run with both python2.7+ and python3+. It's written in pure 
 
 The code has been modified many times to make it more readable and improve the efficiency. Since Wilson's algorithm is a random algorithm, its runtime is uncertain. On my old laptop with 1.83GHzx4 Celeron processors the bitrate is about 1000kb/min, or in other words, it takes 30 seconds to generate a file of 500kb.
 
+**Update:** I have added another script `ust.py` to show how Wilson's algorithm works. It outputs static `.png` files, not GIF animations, and ***it erases all loops after the walk hits the tree.*** But this is just another way of erasing loops and does not change the probability of the resulting spanning tree.
 
 ##  What is Wilson's algorithm
 

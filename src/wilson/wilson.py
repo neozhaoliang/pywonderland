@@ -3,8 +3,8 @@
 
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Make GIF Animations of Wilson's Uniform Spanning Tree Algorithm
-and the Depth-First Search Algorithm.
+Make GIF animations of Wilson's uniform spanning tree algorithm
+and the depth-first search algorithm.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Usage: python wilson.py [-width] [-height] [-scale]
@@ -19,6 +19,14 @@ Optional arguments:
     loop: number of loops of the image, default to 0 (loop infinitely).
     filename: the output file.
 
+Reference for Wilson's algorithm:
+
+    Probability on Trees and Networks, by Russell Lyons and Yuval Peres.
+    
+Reference for the GIF89a specification:
+
+    http://giflib.sourceforge.net/whatsinagif/index.html
+    
 Copyright (c) 2016 by Zhao Liang.
 """
 import argparse

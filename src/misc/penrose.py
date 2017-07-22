@@ -92,9 +92,10 @@ class GeneralizedPenroseTiling(object):
                 yield self.rhombus(r, s, kr, ks)
 
     def render(self, imgsize, filename):
-        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, imgsize, imgsize)
+        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, imgsize[0], imgsize[1])
         ctx = cairo.Context(surface)
-        ctx.scale(imgsize/(2.0*self.num_lines), imgsize/(2.0*self.num_lines))
+        max_size = max(imgsize)
+        ctx.scale(max_size/(2.0*self.num_lines), max_size/(2.0*self.num_lines))
         ctx.translate(self.num_lines, self.num_lines)
         ctx.set_line_join(2)
         ctx.set_line_width(0.1)
@@ -119,5 +120,6 @@ class GeneralizedPenroseTiling(object):
 if __name__ == '__main__':
     from palettable.colorbrewer.qualitative import Set1_8
     palette = random.sample(Set1_8.mpl_colors, 3)
-    tiling = GeneralizedPenroseTiling(10, np.random.random(5), palette)
-    tiling.render(imgsize=480, filename='penrose.png')
+    shift = np.random.random(5)
+    tiling = GeneralizedPenroseTiling(30, shift, palette)
+    tiling.render(imgsize=(800, 400), filename='penrose.png')

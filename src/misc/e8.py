@@ -82,12 +82,12 @@ cartan = np.dot(delta, delta.transpose())
 eigenvals, eigenvecs = np.linalg.eigh(cartan)
 
 # The eigenvalues returned by eigh() are in ascending order
-# and the eigenvectors are listed by columns
+# and the eigenvectors are listed by columns.
 c = eigenvecs[:, 0]
 u = np.sum([c[i] * delta[i] for i in [0, 2, 4, 6]], axis=0)
 v = np.sum([c[j] * delta[j] for j in [1, 3, 5, 7]], axis=0)
 
-# Gram-Schimdt u, v and normalize them to unit vectors
+# Gram-Schimdt u, v and normalize them to unit vectors.
 u /= np.linalg.norm(u)
 v = v - np.dot(u, v) * u
 v /= np.linalg.norm(v)

@@ -1,11 +1,9 @@
 # Reaction-Diffusion Simulation with Pyglet and GLSL.
 
-This program is motivated by [pmneila's Javascript project](http://pmneila.github.io/jsexp/grayscott/). Simply run `main.py` to play with the simulation.
+This program is motivated by [pmneila's Javascript project](http://pmneila.github.io/jsexp/grayscott/). Run `main.py` to play with the simulation.
 
 
 ## Keyboard and mouse interface:
-
-You may click or drag your mouse to draw on the screen at any stage.
 
 
 + Press `s` (short for "species") to change to another pattern.
@@ -44,9 +42,10 @@ I put some configs in the `palette.json` file. Do have a try!
     ```
     `-i screenshot%04d.png` specifies the images files, `-framerate` specifies the number of frames persecond, `-c:v libvpx` is the encoder, `-b:v` specifies the bitrate (the higher the better quality but larger file).	
 
+
 ## About the code
 
-`pyglet.gl` is only a thin wrapper of `OpenGL`, so one has to write his own helper classes to manage things like `vbo`, `vao`, `shader`, `fbo`, ..., etc. There are some modules like `vispy` and `gletools` that do this work, but that lays the burden of learning one more package.
+`pyglet.gl` is only a thin wrapper of `OpenGL`, so one has to write his own helper classes to manage things like `vbo`, `vao`, `shader`, `fbo`, etc. There are some modules like `vispy` and `gletools` that do this job, but that lays the burden of learning one more package.
 
 I wrote two helper classes `shader.py` (adapted from other people's work) and `framebuffer.py`. They are not meant to be serious tools, just kept simple and suffice for our work.
 

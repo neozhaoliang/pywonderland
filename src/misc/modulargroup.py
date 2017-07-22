@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
-Draw the hyperbolic tiling of the Poincare upper plane by fundamental domains
-# of the modular group PSL_2(Z).
-
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Draw the hyperbolic tiling of the Poincare upper plane
+by fundamental domains of the modular group PSL_2(Z).
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A short introduction to the math behind this script:
 
@@ -21,17 +22,17 @@ C: z --> -1/z
 
 Each element g in this group can be written as a word in ["A", "B", "C"],
 for example "AAAAAC", "ACBBB", ...
-To draw the hyperbolc tiling, one just starts from a fundamental domain D,
-map it to g(D) for each element g in the group (up to a given length),
-then draw all these g(D)s. The main problem here is the word representation of
-g is generally not unique, so it's not obvious how to traverse each element
-only once without omitting any.
+To draw the hyperbolic tiling, one just starts from any fundamental domain D
+(usually there is a classical choice of this domain), map it to g(D) for each
+element g in the group (up to a given length), then draw all these g(D)s.
+The main problem here is the word representation of g is generally not unique,
+so it's not obvious how to traverse each element only once without omitting any.
 
-Here is the deep math: the modular group is an automatic group:
+Here is the deep math: the modular group is an automatic group, i.e.
 there exists a DFA such that the words accepted by the DFA are eactly
 the elements of the group under the shortest-lex-order representation,
 thus finding all elements in this group amounts to traversing a finite
-directed graph, which is a much easier job. (we will use bfs here)
+directed graph, which is a much easier job. (we will use breadth-first search here)
 """
 
 import collections
@@ -61,14 +62,14 @@ def transform(symbol, domain):
     return [func(z) for z in domain]
 
 
-# the automaton that generates all words in the modular group.
-# "0" is the starting state.
-# each element g correspondes to a unique path starts from "0".
+# The automaton that generates all words in the modular group,
+# 0 is the starting state.
+# Each element g correspondes to a unique path starts from 0.
 # for example the path
 # 0 --> 1 --> 3 -- > 4 --> 8
-# correspondes to the element "ACAA" because the first step took 0 to 1 is
-# labelled by "A", the second step took 1 to 3 is labelled by "C",
-# the third step took 3 to 4 is labelled by "A", ...
+# correspondes to the element "ACAA" because the first step takes 0 to 1 is
+# labelled by "A", the second step takes 1 to 3 is labelled by "C",
+# the third step takes 3 to 4 is labelled by "A", ...
 automaton = {0: {'A': 1, 'B': 2, 'C': 3},
              1: {'A': 1, 'C': 3},
              2: {'B': 2, 'C': 3},
@@ -158,7 +159,7 @@ class HyperbolicDrawing(cairo.Context):
         self.stroke()
 
 
-width = 800
+width = 1200
 height = 400
 
 length = 15
@@ -166,7 +167,7 @@ fund_domain = [cmath.exp(cmath.pi*1j/3), cmath.exp(cmath.pi*2j/3), None]
 
 surface = cairo.ImageSurface(cairo.FORMAT_RGB24, width, height)
 ctx = HyperbolicDrawing(surface)
-ctx.set_axis(xlim=[-2, 2], ylim=[0, 2], background_color=(1, 1, 1))
+ctx.set_axis(xlim=[-3, 3], ylim=[0, 2], background_color=(.8, .8, .8))
 ctx.set_line_join(2)
 # draw the x-axis
 ctx.move_to(-2, 0)

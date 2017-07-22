@@ -16,11 +16,14 @@ from numba import jit
 def f(z):
     # z*z*z is faster than z**3
     return z*z*z - 1
+    #return z**5 + 0.25*z*z + 1.17
+
 
 
 @jit('complex64(complex64)', nopython=True)
 def df(z):
     return 3*z*z
+    #return 5*z**4 + 0.5*z
 
 
 @jit('float64(complex64)', nopython=True)

@@ -8,6 +8,8 @@ Domino shuffling algorithm on Aztec diamond graphs
 This script samples a random domino tiling of an Aztec diamond graph
 with uniform probability.
 
+Matplotlib is slower than cairo but it renders better images.
+
 Usage: python aztec.py [-s] [-o] [-f]
 
 Optional arguments:
@@ -20,14 +22,8 @@ Optional arguments:
 
 import argparse
 import random
-import cairocffi as cairo
-
-
-# 4 colors for the 4 types of dominoes
-N_COLOR = (1, 0.25, 0.5)
-S_COLOR = (0.75, 0.5, 0.25)
-W_COLOR = (0.1, 0.25, 0.75)
-E_COLOR = (0.25, 0.8, 0.5)
+import matplotlib.pyplot as plt
+import matplotlib.patches as mps
 
 
 class AztecDiamond(object):
@@ -120,54 +116,35 @@ class AztecDiamond(object):
                 pass
         return self
 
-    def render(self, size, extent, filename, bg_color=(1, 1, 1)):
+    def render(self, size, filename):
         """Draw current tiling (might have holes) to a png image with cairo.
         size:
             image size in pixels, e.g. size = 600 means 600x600
-        extent:
-            range of the axis: [-extent, extent] x [-extent, extent]
         filename:
             output filename, must be a .png image.
-        bg_color:
-            background color, default to white.
-            If set to None then transparent background will show through.
         """
-        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, size, size)
-        ctx = cairo.Context(surface)
-        ctx.scale(size/(2.0*extent), -size/(2.0*extent))
-        ctx.translate(extent, -extent)
+        fig = plt.figure(figsize=(size/100.0, size/100.0), dpi=100)
+        ax = fig.add_axes([0, 0, 1, 1], aspect=1)
+        ax.axis([-self.order-1, self.order+1, -self.order-1, self.order+1])
+        ax.axis('off')
+        linewidth = fig.dpi * fig.get_figwidth() / (20.0 * (self.order + 1))
 
-        if bg_color is not None:
-            ctx.set_source_rgb(*bg_color)
-            ctx.paint()
-
-        margin = 0.1
-
-        for (i, j) in self.cells:
-            if (self.is_black(i, j) and self.tile[(i, j)] is not None):
+        for i, j in self.cells:
+            if self.is_black(i, j):
                 if self.tile[(i, j)] == 'n':
-                    ctx.rectangle(i - 1 + margin, j + margin,
-                                  2 - 2 * margin, 1 - 2 * margin)
-                    ctx.set_source_rgb(*N_COLOR)
-
+                    p = mps.Rectangle((i-1, j), 2, 1, fc='r')
                 if self.tile[(i, j)] == 's':
-                    ctx.rectangle(i + margin, j + margin,
-                                  2 - 2 * margin, 1 - 2 * margin)
-                    ctx.set_source_rgb(*S_COLOR)
-
+                    p = mps.Rectangle((i, j), 2, 1, fc='y')
                 if self.tile[(i, j)] == 'w':
-                    ctx.rectangle(i + margin, j + margin,
-                                  1 - 2 * margin, 2 - 2 * margin)
-                    ctx.set_source_rgb(*W_COLOR)
-
+                    p = mps.Rectangle((i, j), 1, 2, fc='b')
                 if self.tile[(i, j)] == 'e':
-                    ctx.rectangle(i + margin, j - 1 + margin,
-                                  1 - 2 * margin, 2 - 2 * margin)
-                    ctx.set_source_rgb(*E_COLOR)
+                    p = mps.Rectangle((i, j-1), 1, 2, fc='g')
 
-                ctx.fill()
+                p.set_linewidth(linewidth)
+                p.set_edgecolor('w')
+                ax.add_patch(p)
 
-        surface.write_to_png(filename)
+        fig.savefig(filename)
 
 
 def main():
@@ -183,7 +160,7 @@ def main():
     az = AztecDiamond(0)
     for _ in range(args.order):
         az = az.delete().slide().create()
-    az.render(args.size, args.order + 1, args.filename)
+    az.render(args.size, args.filename)
 
 
 if __name__ == '__main__':
