@@ -201,9 +201,7 @@ Poincare 双曲铺砌 [[View Code](./src/poincare/)]
 <br>
 
 <p align="center">
-<img src="./img/honeycomb433.png"/>
-<img src="./img/honeycomb633.png"/>
-<img src="./img/honeycomb634.png"/>
+<img src="./img/honeycomb.gif"/>
 </p>
 
 <br>

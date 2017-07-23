@@ -1,6 +1,13 @@
 # Render the 120-Cell Polytope with POV-Ray and Vapory
 
-Note: This is a very coarse version and will be rewritten later.
+**Note: This is a very coarse version and will be rewritten later.**
+
+Future features will contain:
+
+1. Use Todd - Coxeter algorithm to generate all vertices.
+2. A pyglet version of jenn3d to play with various polytopes.
+3. POV-Ray rendering of various 4d polytopes.
+
 
 ## About the scene
 
