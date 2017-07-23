@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 
 def grid_graph(*size):
-    
+    """return a grid graph stored in a dict."""
     def neighbors(v):
         neighborhood = []
         for i in range(len(size)):
@@ -26,9 +26,9 @@ def grid_graph(*size):
 
 width, height = 48, 36
 G = grid_graph(width, height)
-root = random.choice(G.keys())
-tree = set([root]) 
-parent = dict() 
+root = random.choice(G.keys())  # choose any vertex as the root.
+tree = set([root])  # initially the tree contains only the root.
+parent = dict()  # remember the latest step.
 
 for vertex in G:
     v = vertex
@@ -36,7 +36,7 @@ for vertex in G:
         neighbor = random.choice(G[v])
         parent[v] = neighbor
         v = neighbor
-
+    # do you see how the loop is erased in the above code?
     v = vertex
     while v not in tree:
         tree.add(v)   
@@ -47,11 +47,13 @@ ax = fig.add_axes([0, 0, 1, 1], aspect=1)
 ax.axis('off')
 ax.axis([-1, width, -1, height])
 
+# draw the edges.
 for key, item in parent.items():
     a, b = key
     x, y = item
     ax.plot([a, x], [b, y], 'k-', lw=3)
 
+# draw the root.
 x, y = root
 ax.plot(x, y, 'ro', ms=7)
 plt.savefig('ust_{}x{}.png'.format(width, height))

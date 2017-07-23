@@ -23,6 +23,8 @@
 - [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
 - [The 120-cell](#the-120-cell)
 - [Lorenz Attractor Animation](#lorenz-attractor-animation)
+- [2D Hyperbolic Tilings](#2d-hyperbolic-tilings)
+- [3D Hyperbolic Honeycombs](#3d-hyperbolic-honeycombs)
 
 ---
 ### Mandelbrot Set
@@ -172,6 +174,36 @@ Wilson 一致生成树算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wik
 
 <p align="center">
 <img src="./img/lorenz.png"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
+
+---
+### 2D Hyperbolic Tilings
+Poincare 双曲铺砌 [[View Code](./src/poincare/)]
+
+<br>
+
+<p align="center">
+<img src="./img/poincare.png"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
+
+---
+### 3D Hyperbolic Honeycombs
+双曲蜂巢 [[View Code](./src/honeycomb)]
+
+<br>
+
+<p align="center">
+<img src="./img/honeycomb433.png"/>
+<img src="./img/honeycomb633.png"/>
+<img src="./img/honeycomb634.png"/>
 </p>
 
 <br>

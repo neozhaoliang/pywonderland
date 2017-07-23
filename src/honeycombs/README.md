@@ -1,2 +1,0 @@
-# 3D Hyperbolic Honeycombs
-
