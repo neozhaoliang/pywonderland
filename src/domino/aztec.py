@@ -24,10 +24,10 @@ import cairocffi as cairo
 
 
 # 4 colors for the 4 types of dominoes
-N_COLOR = (1, 0.25, 0.5)
-S_COLOR = (0.75, 0.5, 0.25)
-W_COLOR = (0.1, 0.25, 0.75)
-E_COLOR = (0.25, 0.8, 0.5)
+N_COLOR = (1, 0, 0)
+S_COLOR = (0.75, 0.75, 0)
+W_COLOR = (0, 0.5, 0)
+E_COLOR = (0, 0, 1)
 
 
 class AztecDiamond(object):
@@ -133,6 +133,7 @@ class AztecDiamond(object):
             If set to None then transparent background will show through.
         """
         surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, size, size)
+        surface.set_fallback_resolution(100, 100)
         ctx = cairo.Context(surface)
         ctx.scale(size/(2.0*extent), -size/(2.0*extent))
         ctx.translate(extent, -extent)

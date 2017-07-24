@@ -54,7 +54,7 @@ FILL = 3
 
 class DataBlock(object):
     """Write bits into a bytearray and then pack this bytearray into data blocks.
-    This class is used for the LZW algorithm when encoding maze into frames."""
+    This class is used in the LZW algorithm when encoding maze into frames."""
 
     def __init__(self):
         self._bitstream = bytearray()  # write bits into this array.
@@ -62,7 +62,7 @@ class DataBlock(object):
 
     def encode_bits(self, num, size):
         """Given a number `num`, encode it as a binary string of length `size`,
-        and pad it at the end of bitstream.
+        and pack it at the end of bitstream.
         Example: num = 3, size = 5. The binary string for 3 is '00011',
         here we padded extra zeros at the left to make its length to be 5.
         The tricky part is that in a gif file, the encoded binary data stream
@@ -133,7 +133,7 @@ class GIFWriter(object):
         `bytearray([PALETTE_BITS, 1, trans_index, 0])`, this works fine for decoders
         like firefox and chrome but fails for some decoders like eye of gnome
         when `PALETTE_BITS` is 7 or 8. Using the LZW encoding is a bit tedious but it's
-        safe for all possible values of `PALETTE_BITS` and all decoders.
+        safe for all possible values of `PALETTE_BITS` (0-7) and all decoders.
         """
         control = GIFWriter.graphics_control_block(delay, trans_index)
         descriptor = GIFWriter.image_descriptor(0, 0, 1, 1)

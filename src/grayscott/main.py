@@ -285,6 +285,7 @@ class GrayScott(pyglet.window.Window):
 
     def run(self):
         self.set_visible(True)
+        #pyglet.clock.schedule_interval(lambda dt: None, 1.0/240)
         pyglet.clock.schedule(lambda dt: None)
         pyglet.app.run()
 

@@ -159,7 +159,7 @@ class HyperbolicDrawing(cairo.Context):
         self.stroke()
 
 
-width = 1200
+width = 800
 height = 400
 
 length = 15
@@ -167,7 +167,7 @@ fund_domain = [cmath.exp(cmath.pi*1j/3), cmath.exp(cmath.pi*2j/3), None]
 
 surface = cairo.ImageSurface(cairo.FORMAT_RGB24, width, height)
 ctx = HyperbolicDrawing(surface)
-ctx.set_axis(xlim=[-3, 3], ylim=[0, 2], background_color=(.8, .8, .8))
+ctx.set_axis(xlim=[-2, 2], ylim=[0, 2], background_color=(1, 1, 1))
 ctx.set_line_join(2)
 # draw the x-axis
 ctx.move_to(-2, 0)

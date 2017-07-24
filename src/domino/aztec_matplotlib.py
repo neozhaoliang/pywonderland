@@ -117,7 +117,7 @@ class AztecDiamond(object):
         return self
 
     def render(self, size, filename):
-        """Draw current tiling (might have holes) to a png image with cairo.
+        """Draw current tiling to a png file.
         size:
             image size in pixels, e.g. size = 600 means 600x600
         filename:
@@ -130,7 +130,7 @@ class AztecDiamond(object):
         linewidth = fig.dpi * fig.get_figwidth() / (20.0 * (self.order + 1))
 
         for i, j in self.cells:
-            if self.is_black(i, j):
+            if self.is_black(i, j) and self.tile[(i, j)] is not None:
                 if self.tile[(i, j)] == 'n':
                     p = mps.Rectangle((i-1, j), 2, 1, fc='r')
                 if self.tile[(i, j)] == 's':

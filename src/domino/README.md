@@ -1,4 +1,4 @@
-# An Implementation of the Domino Shuffling Algorithm on Aztec Diamond Graphs.
+# Domino Shuffling Algorithm on Aztec Diamond Graphs.
 
 ## What is domino shuffling algorithm
 
@@ -14,3 +14,6 @@ Well I think I should stop preaching here. If you want to learn more about this 
 ## About the code
 
 I haven't much to say about the code. You must understand the algorithm before you can understand the code, and you get understanding of the code soonly after you understand the algorithm (so please turn to the papers first).
+
+
+There are two files `aztec.py` and `aztec_matplotlib.py` in this directory. They do the same job (random sampling) but one uses `cairo` for drawing and the other uses `matplotlib`. `cairo` is much faster than `matplotlib` but `matplotlib` renders better and much smaller images. So I used `cairo` to generate GIF animations and `matplotlib` to draw perfectly random tilings.
