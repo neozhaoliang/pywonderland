@@ -10,7 +10,7 @@ with uniform probability.
 
 Matplotlib is slower than cairo but it renders better images.
 
-Usage: python aztec.py [-s] [-o] [-f]
+Usage: python aztec_matplotlib.py [-s] [-o] [-f]
 
 Optional arguments:
     -s    size of the image.
