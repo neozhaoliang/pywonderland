@@ -24,7 +24,7 @@ from palettable.colorbrewer.qualitative import Set1_8
 
 
 def tile(girds, shifts, nlines):
-    """Compute all rhombus lie in a given number of grid lines."""
+    """Generate all rhombi that lie in a given number of grid lines."""
     for r, s in combinations(range(5), 2):
         for kr, ks in product(range(-nlines, nlines+1), repeat=2):
             # if s-r = 1 or 4 then this is a thin rhombus, otherwise it's fat.
@@ -39,16 +39,16 @@ def tile(girds, shifts, nlines):
             point = (grids[r] * (ks - shifts[s])
                      - grids[s] * (kr - shifts[r])) *1j / grids[s-r].imag
 
-            # 5 integers that indicate the intersection point's position:
+            # 5 integers that indicate the position of the intersection point.
             # the i-th integer n_i indicates that this point lies in the n_i-th strip
             # in the i-th grid.
             index = [np.ceil((point/grid).real + shift)
                      for grid, shift in zip(grids, shifts)]
 
-            # Be careful of the accuracy problem here:
+            # Be careful of the accuracy problem here.
             # Mathematically the r-th and s-th item of index should be kr and ks,
-            # but programmingly it might not.
-            # So we have to manually set them to be the correct values.
+            # but programmingly it might not be the case,
+            # so we have to manually set them to be the correct values.
             verts = []
             for index[r], index[s] in [(kr, ks), (kr+1, ks), (kr+1, ks+1), (kr, ks+1)]:
                 verts.append(np.dot(index, grids))
@@ -97,6 +97,9 @@ def render(imgsize, nlines, grids, shifts, palette, filename):
 if __name__ == '__main__':
     palette = random.sample(Set1_8.mpl_colors, 3)
     grids = [np.exp(2j*np.pi*i/5) for i in range(5)]
+    # if the five real numbers in `shifts` sum to an integer then
+    # it's the famous Penrose tiling.
     shifts = np.random.random(5)
+    #shifts = (0.5, 0.5, 0.5, 0.5, 0.5)
     render(imgsize=(800, 400), nlines=30, grids=grids,
            shifts=shifts, palette=palette, filename='penrose.png')
