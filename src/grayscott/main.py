@@ -14,11 +14,10 @@ For how to use mouse and keyboard to play with the simulation see the doc below.
 import json
 import numpy as np
 
-import sys
-if sys.version_info[0] >= 3:
-    input = input
-else:
-    input = raw_input
+try:
+    raw_input
+except NameError:
+    raw_input = input
 
 import pyglet
 pyglet.options['debug_gl'] = False
@@ -247,7 +246,7 @@ class GrayScott(pyglet.window.Window):
     def load_config(self):
         """Load a config from the json file."""
         try:
-            num = int(input('> Enter the line number in json file: '))
+            num = int(raw_input('> Enter the line number in json file: ').strip())
         except ValueError:
             print('> Invalid input.\n')
             return
