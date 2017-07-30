@@ -1,6 +1,0 @@
-I'll be on leave for a few months. There are a lot more fun projects I want to add:
-
-1. Fluid Simulation with Navier-Stokes equation. (Pyglet + GLSL)
-2. 3D hyperbolic honeycombs. (POV-Ray)
-3. Black hole simulation. (Pyglet + GLSL)
-4. Escher's circle limit art.
