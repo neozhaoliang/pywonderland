@@ -25,14 +25,16 @@ TL;DR:
 	    4. `pip install` the Python modules
 5. To start the Docker build process, __type:__ `docker build -t pywonderland .`
 6. Go get some coffee or walk the dog or watch if you want but the automated process of building the pywonderland Docker container can several minutes.
-    * I ignore the `debconf: delaying package configuration, since apt-utils is not installed` message because it will not go away even if I install apt-utils beforehand.
+    * I ignore the `debconf: delaying package configuration, since apt-utils is not installed` error messages because they will not go away even if I install apt-utils beforehand.
 	* The `numba` part seems to take an especially long time for a relatively small download and it generates some scary looking error messages that I have just ignored.
-7. To start the pywonderland container, __type:__ `docker run -it -v ~/data_from_docker:/data_to_host --rm --name pywonderland pywonderland`
+7. To start the pywonderland container, __type:__
+    * `docker run -it -v ~/data_from_docker:/data_to_host --rm --name pywonderland pywonderland`
 8. Your command prompt should change because now you should be running inside the container.
 9. To run four of the pywonderland scripts, type, `source four_images.sh`
 10. You should see that there are no .png files at the start of this script and four at the end.
 11. To get back to Kansas, __type:__ `exit`
-12. To verify that the four images have been copied from the Docker container to your computer, __type:__ `ls ~/data_from_docker`
+12. To verify that the four images have been copied from the Docker container to your computer, __type:__
+    * `ls ~/data_from_docker`
     * Mac users can __type:__ `open ~/data_from_docker/*`
 
 __Known Issues__ help wanted:
