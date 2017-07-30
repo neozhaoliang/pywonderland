@@ -3,6 +3,7 @@ __Q__: How can I work with pywonderland on my computer without installing all of
 __A__: Docker will allow you to create a Linux container running Python 3 where we can install pywonderland and all of its dependencies.
 
 __Process__ Steps 1-6 only need to be done once.:
+
 TL;DR:
 * `mkdir ~/data_from_docker`
 * `docker build -t pywonderland .`
