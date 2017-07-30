@@ -11,7 +11,9 @@ TL;DR:
 * `exit`
 * `ls ~/data_from_docker`  # or `open ~/data_from_docker/*` on the Mac.
 
-1. Make sure that [Docker](https://www.docker.com/get-docker) is running on your computer.  _I use a Mac but other platforms should also work..._
+1. Make sure that [Docker](https://www.docker.com/get-docker) is running on your computer.
+    * _I use a Mac but other platforms should also work..._
+    * Mac users with homebrew installed can __type: __ `brew install docker`
 2. Open a terminal, clone this repo, and `cd` into the repo's `src` directory and then `ls`.
 3. To create a local directory that will also be visible from within the Docker container, __type:__ `mkdir ~/data_from_docker`
 4. To see the steps that Docker will automatically execute, __type:__ `cat Dockerfile`
