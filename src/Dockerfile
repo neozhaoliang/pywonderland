@@ -18,8 +18,8 @@ RUN apt-get update \
  && pip install cairocffi numpy matplotlib palettable pillow pyglet scipy tqdm vapory \
  && echo "Starting of numba... (get a coffee)" \
  && pip install numba \
- && echo "=================================================================" \
- && echo "Please type: docker run -it --rm --name pywonderland pywonderland"
+ && echo "=====================================================================================================" \
+ && echo "Please type: docker run -it -v ~/data_from_docker:/data_to_host --rm --name pywonderland pywonderland"
 
 CMD [ "bash" ]
-# CMD [ "python", "./src/misc/mandelbrot.py"]
+# CMD [ "source", "four_images.sh"]
