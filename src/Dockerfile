@@ -12,7 +12,8 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN apt-get update \
+RUN apt-get clean \
+ && apt-get update \
  && apt-get upgrade --yes \
  && apt-get install libcairo2-dev ImageMagick povray --yes \
  && pip install cffi==1.7.0 cairocffi numpy matplotlib palettable pillow pyglet scipy tqdm vapory \
