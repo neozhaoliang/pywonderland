@@ -15,7 +15,7 @@ COPY . .
 RUN apt-get update \
  && apt-get upgrade --yes \
  && apt-get install libcairo2-dev ImageMagick povray --yes \
- && pip install cffi==1.5.2 cairocffi numpy matplotlib palettable pillow pyglet scipy tqdm vapory \
+ && pip install cffi==1.7.0 cairocffi numpy matplotlib palettable pillow pyglet scipy tqdm vapory \
  && echo "Starting of numba... (get a coffee)" \
  && pip install numba \
  && echo "=====================================================================================================" \
