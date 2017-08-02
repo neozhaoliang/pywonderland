@@ -468,6 +468,10 @@ def main():
                         help='output file name')
 
     args = parser.parse_args()
+
+    if (args.width * args.height % 2 == 0):
+        raise ValueError('The width and height of the maze must both be odd integers!')
+
     anim = WilsonAlgoAnimation(args.width, args.height, args.margin, args.scale, args.loop)
 
     # here we need to paint the blank background because the region that has not been

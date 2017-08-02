@@ -13,6 +13,7 @@
 ## Contents
 
 - [Mandelbrot Set](#mandelbrot-set)
+- [Julia Set](#julia-set)
 - [Domino Shuffling Algorithm Animation](#domino-shuffling-algorithm-animation)
 - [Icosahedral Kaleidoscope](#icosahedral-kaleidoscope)
 - [Newton Fractal](#newton-fractal)
@@ -34,6 +35,20 @@ Mandelbrot 集 [[View Code](./src/misc/mandelbrot.py)]
 
 <p align="center">
 <img src="./img/mandelbrot.png"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
+
+---
+### Julia Set
+Julia 集 [[View Code](./src/misc/julia.py)]
+
+<br>
+
+<p align="center">
+<img src="./img/julia.png"/>
 </p>
 
 <br>
