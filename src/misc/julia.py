@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
@@ -30,7 +31,7 @@ def main(xmin, xmax, ymin, ymax, width, height):
     z = x + y*1j
     img = np.asarray(np.frompyfunc(escape, 2, 1)(z, CONST)).astype(np.float)
     img /= np.max(img)
-    img = np.sin(img**2 * np.pi)
+    img = np.sin(img**2 * np.pi) # a simple way to smooth the coloring.
     fig = plt.figure(figsize=(width/100.0, height/100.0), dpi=100)
     ax = fig.add_axes([0, 0, 1, 1], aspect=1)
     ax.axis('off')
@@ -39,4 +40,4 @@ def main(xmin, xmax, ymin, ymax, width, height):
 
 
 if __name__ == '__main__':
-    main(-2, 2, -1.6, 1.6, 600, 480)
+    main(-2, 2, -1.6, 1.6, 800, 640)
