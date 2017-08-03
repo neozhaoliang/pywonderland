@@ -27,7 +27,7 @@ def escape(z):
 
 
 def main(xmin, xmax, ymin, ymax, width, height):
-    y, x = np.ogrid[ymax: ymin: height*1j, xmin: xmax: width*1j]
+    y, x = np.ogrid[ymax: ymin: height*2j, xmin: xmax: width*2j]
     z = x + y*1j
     img = np.asarray(np.frompyfunc(escape, 1, 1)(z)).astype(np.float)
     img /= np.max(img)

@@ -1,13 +1,14 @@
-<p align="center"><img src="./alice.png"></p>
-
 # A Tour in the Wonderland of Math with Python
+
+
+<p align="center"><img src="./alice.png"></p>
 
 > A collection of python scripts for drawing beautiful figures or animating interesting algorithms in mathematics.
 
 **This repository will be always under construction since there are too many interesting things in math that can be shown by code.** Pull requests, issues, questions, and suggestions are all welcomed!
 
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![PyPI](https://img.shields.io/pypi/pyversions/Django.svg)]()
+[![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT) [![PyPI](https://img.shields.io/pypi/pyversions/Django.svg)]()
 
 
 ## Contents

@@ -30,7 +30,7 @@ def Mobius(z):
 
 
 def main(imgsize):
-    y, x = np.ogrid[6: -6: imgsize*1j, -6: 6: imgsize*1j]
+    y, x = np.ogrid[6: -6: imgsize*2j, -6: 6: imgsize*2j]
     z = x + y*1j
     z = RiemannSphere(Klein(Mobius(Klein(z))))
 
@@ -50,4 +50,4 @@ def main(imgsize):
 
 
 if __name__ == '__main__':
-    main(imgsize=400)
+    main(imgsize=800)
