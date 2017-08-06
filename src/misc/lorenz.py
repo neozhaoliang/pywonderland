@@ -86,5 +86,5 @@ def animate(i):
 anim = FuncAnimation(fig, animate, init_func=init, interval=5, 
                      frames=500, blit=True)
 #fig.show()
-anim.save('lorenz.webm', writer='ffmpeg', fps=30, dpi=200,
+anim.save('lorenz.webm', writer='ffmpeg', fps=30, dpi=100,
           bitrate=1000, codec='libvpx', extra_args=['-crf', '10'])

@@ -189,7 +189,7 @@ Wilson 一致生成树算法 [[View Code](./src/wilson/)] [[Wiki](https://en.wik
 <br>
 
 <p align="center">
-<img src="./img/lorenz.gif"/>
+<img src="./img/lorenz.png"/>
 </p>
 
 <br>
