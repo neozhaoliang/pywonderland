@@ -282,14 +282,17 @@ class GrayScott(pyglet.window.Window):
         print('> Current pattern: ' + self.pattern
               + '. If the screen is blank, draw on it!\n')
 
-    def run(self):
+    def run(self, fps=None):
+        """fps: frames per second."""
         self.set_visible(True)
-        #pyglet.clock.schedule_interval(lambda dt: None, 1.0/240)
-        pyglet.clock.schedule(lambda dt: None)
+        if fps is None:
+            pyglet.clock.schedule(lambda dt: None)
+        else:
+            pyglet.clock.schedule_interval(lambda dt: None, 1.0/fps)
         pyglet.app.run()
 
 
 if __name__ == '__main__':
     app = GrayScott(width=600, height=480, scale=2)
     print(app.__doc__)
-    app.run()
+    app.run(fps=300)
