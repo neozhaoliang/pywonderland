@@ -108,18 +108,15 @@ class Shader(object):
         location = gl.glGetUniformLocation(self.program, name.encode('ascii'))
         gl.glUniformMatrix4fv(location, 1, False, (ct.c_float * 16)(*mat))
 
-    def set_vertex_attrib(self, name, data):
-        """This is an ugly way to set vertex attribute data in a shader, it lacks
-        the flexibility of setting several attributes in one vertex buffer.
+    def set_vertex_attrib(self, name, data, size=2, stride=0, offset=0):
+        """Set vertex attribute data in a shader, lacks the flexibility of
+        setting several attributes in one vertex buffer.
 
         name: the attribute name in the shader.
-        data: a list of vertex attributes (positions, colors, texcoords, normals,...)
-        example: name = 'positions', data = [(1, 1, 0), (2, 2, 1), ...]
-        the items in data must all be 1D lists(or tuples) of the same length.
+        data: a list of vertex attributes (positions, colors, ...)
+        example: name = 'positions', data = [0, 0, 0, 1, 1, 0, 1, 1].
         """
-        data_flatten = [x for vertex in data for x in vertex]
-        size = len(data[0])
-        data_ctype = (gl.GLfloat * len(data_flatten))(*data_flatten)
+        data_ctype = (gl.GLfloat * len(data))(*data)
 
         vbo_id = gl.GLuint(0)
         gl.glGenBuffers(1, ct.byref(vbo_id))
@@ -128,6 +125,6 @@ class Shader(object):
 
         location = gl.glGetAttribLocation(self.program, name.encode('ascii'))
         gl.glEnableVertexAttribArray(location)
-        gl.glVertexAttribPointer(location, size, gl.GL_FLOAT, gl.GL_FALSE, 0, 0)
+        gl.glVertexAttribPointer(location, size, gl.GL_FLOAT, gl.GL_FALSE, stride, ct.c_void_p(offset))
         gl.glBindBuffer(gl.GL_ARRAY_BUFFER, 0)
         return vbo_id

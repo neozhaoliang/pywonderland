@@ -162,16 +162,16 @@ class GrayScott(pyglet.window.Window):
             self.reaction_shader.set_uniformf('dy', 1.0/self.tex_height)
             # the order of the vertices and texcoords matters,
             # since we will call 'GL_TRIANGLE_STRIP' to draw them.
-            self.reaction_shader.set_vertex_attrib('position', [(-1, -1), (1, -1), (-1, 1,), (1, 1)])
-            self.reaction_shader.set_vertex_attrib('texcoord', [(0, 0), (1, 0), (0, 1), (1, 1)])
+            self.reaction_shader.set_vertex_attrib('position', [-1, -1, 1, -1, -1, 1, 1, 1])
+            self.reaction_shader.set_vertex_attrib('texcoord', [0, 0, 1, 0, 0, 1, 1, 1])
             self.reaction_shader.set_uniformf('u_mouse', -1, -1)
         self.use_pattern(self.pattern)
 
     def init_render_shader(self):
         with self.render_shader:
             self.render_shader.set_uniformi('uv_texture', 0)
-            self.render_shader.set_vertex_attrib('position', [(-1, -1), (1, -1), (-1, 1), (1, 1)])
-            self.render_shader.set_vertex_attrib('texcoord', [(0, 0), (1, 0), (0, 1), (1, 1)])
+            self.render_shader.set_vertex_attrib('position', [-1, -1, 1, -1, -1, 1, 1, 1])
+            self.render_shader.set_vertex_attrib('texcoord', [0, 0, 1, 0, 0, 1, 1, 1])
         self.use_palette(self.palette)
 
     def update_mouse(self, *u_mouse):
