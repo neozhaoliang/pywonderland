@@ -202,7 +202,7 @@ class WilsonAlgoAnimation(object):
         self.graph = {v: neighborhood(v) for v in self.cells}
         # we will look for a path between this start and end.
         self.start = (margin, margin)
-        self.end = (width - margin - 1, height - margin -1)
+        self.end = (width - margin - 1, height - margin - 1)
         self.path = []  # a list holds the path in the loop erased random walk.
 
         self.scale = scale     # each cell will occupy (scale * scale) pixels in the GIF image.

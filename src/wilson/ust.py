@@ -26,7 +26,7 @@ def grid_graph(*size):
 
 width, height = 48, 36
 G = grid_graph(width, height)
-root = random.choice(G.keys())  # choose any vertex as the root.
+root = random.choice(list(G.keys()))  # choose any vertex as the root.
 tree = set([root])  # initially the tree contains only the root.
 parent = dict()  # remember the latest step.
 

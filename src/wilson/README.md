@@ -2,7 +2,6 @@
 
 > Make gif animations of Wilson's uniform spanning tree algorithm and the depth-first search algorithm.
 
-
 ## How to use this program
 
 Run `wilspn.py` and wait for a few seconds, you will see a `.gif` file generated in current directory. Enjoy it!
@@ -39,7 +38,7 @@ The maze-solving part is a bit arbitrary and you may implement any algorithm you
 
 ## How did it come out
 
-This project is motivated by Mike Bostock's wonderful [Javascript animation](https://bl.ocks.org/mbostock/11357811), and also many other nice animations on his website. I learned Wilson's algorithm about 7 years ago and had the idea of writing a python version to produce GIF animations the first sight when I saw Mike's page, but rendering a GIF image which possibly consists of thousands of frames is definitely a formidable task. It's about one year ago when I occasionally touched the GIF89a specification and finally realized the approach of encoding the frames bits and bytes.
+This project is motivated by Mike Bostock's wonderful [Javascript animation](https://bl.ocks.org/mbostock/11357811), and also many other nice animations on his website. I learned Wilson's algorithm about 7 years ago and had the idea of writing a python version to produce GIF animations the first sight when I saw Mike's page, but rendering a GIF image which possibly consists of thousands of frames is definitely a formidable task. It's about one year ago when I occasionally touched the GIF89a specification that finally realized the approach of encoding the frames bits and bytes.
 
 
 ## About the code
