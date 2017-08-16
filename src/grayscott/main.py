@@ -40,13 +40,6 @@ SPECIES = {'bacteria1':       [0.16, 0.08, 0.035, 0.065],
            'worms2':          [0.16, 0.08, 0.054, 0.063],
            'zebrafish':       [0.16, 0.08, 0.035, 0.060],}
 
-DEFAULT_PATTERN = 'unstable'
-DEFAULT_PALETTE = np.array([(0.0, 0.0, 0.0, 0.0),
-                            (0.0, 1.0, 0.0, 0.2),
-                            (1.0, 1.0, 0.0, 0.21),
-                            (1.0, 0.0, 0.0, 0.4),
-                            (1.0, 1.0, 1.0, 0.6)])
-
 
 def create_uv_texture(width, height):
     """Create a pyglet texture instance from a numpy ndarray."""
@@ -72,11 +65,10 @@ class GrayScott(pyglet.window.Window):
     |   1. press 'space' to clear the window to blank.       |
     |   2. press 'p' to change to a random palette.          |
     |   3. press 's' to change to another pattern.           |
-    |   4. press 'Ctrl + r' to reset to default.             |
-    |   5. press 'Ctrl + s' to save current config.          |
-    |   6. press 'Ctrl + o' to load config from json file.   |
-    |   7. press 'Enter' to take screenshots.                |
-    |   8. press 'Esc' to exit.                              |
+    |   4. press 'Ctrl + s' to save current config.          |
+    |   5. press 'Ctrl + o' to load config from json file.   |
+    |   6. press 'Enter' to take screenshots.                |
+    |   7. press 'Esc' to exit.                              |
     ----------------------------------------------------------
     """
 
@@ -89,12 +81,24 @@ class GrayScott(pyglet.window.Window):
         """
         pyglet.window.Window.__init__(self, width, height, caption='GrayScott Simulation',
                                       visible=False, vsync=False)
+
+        # palette is used for coloring the pattern.
+        self.pattern = 'unstable'
+        self.palette = np.array([(0.0, 0.0, 0.0, 0.0),
+                                 (0.0, 1.0, 0.0, 0.2),
+                                 (1.0, 1.0, 0.0, 0.21),
+                                 (1.0, 0.0, 0.0, 0.4),
+                                 (1.0, 1.0, 1.0, 0.6)])
+
+        # we use `reaction_shader` to do the computations in a backend framebuffer,
+        # and `render_shader` to show the pattern in the frontend window buffer.
         self.reaction_shader = Shader('./glsl/default.vert', './glsl/reaction.frag')
         self.render_shader = Shader('./glsl/default.vert', './glsl/render.frag')
-        self.pattern = DEFAULT_PATTERN
-        self.palette = DEFAULT_PALETTE
+
+        # size of the texture.
         self.tex_width = width // scale
         self.tex_height = height // scale
+
         self.uv_texture = create_uv_texture(width//scale, height//scale)
         gl.glActiveTexture(gl.GL_TEXTURE0)
         gl.glBindTexture(self.uv_texture.target, self.uv_texture.id)
@@ -109,7 +113,7 @@ class GrayScott(pyglet.window.Window):
         # put all patterns in a list for iterating over them.
         self._species = list(SPECIES.keys())
 
-        # set the uniforms and attributes in the two shaders.
+        # set the uniforms and varying attributes in the two shaders.
         self.init_reaction_shader()
         self.init_render_shader()
 
@@ -165,14 +169,14 @@ class GrayScott(pyglet.window.Window):
             self.reaction_shader.set_vertex_attrib('position', [-1, -1, 1, -1, -1, 1, 1, 1])
             self.reaction_shader.set_vertex_attrib('texcoord', [0, 0, 1, 0, 0, 1, 1, 1])
             self.reaction_shader.set_uniformf('u_mouse', -1, -1)
-        self.use_pattern(self.pattern)
+            self.use_pattern(self.pattern)
 
     def init_render_shader(self):
         with self.render_shader:
             self.render_shader.set_uniformi('uv_texture', 0)
             self.render_shader.set_vertex_attrib('position', [-1, -1, 1, -1, -1, 1, 1, 1])
             self.render_shader.set_vertex_attrib('texcoord', [0, 0, 1, 0, 0, 1, 1, 1])
-        self.use_palette(self.palette)
+            self.use_palette(self.palette)
 
     def update_mouse(self, *u_mouse):
         self.set_viewport(self.tex_width, self.tex_height)
@@ -214,10 +218,6 @@ class GrayScott(pyglet.window.Window):
         if symbol == pyglet.window.key.P:
             self.change_palette()
 
-        if symbol == pyglet.window.key.R:
-            if modifiers & pyglet.window.key.LCTRL:
-                self.restore_default()
-
         if symbol == pyglet.window.key.S:
             if modifiers & pyglet.window.key.LCTRL:
                 self.save_config()
@@ -230,11 +230,6 @@ class GrayScott(pyglet.window.Window):
         index = np.random.randint(0, 1000)
         img = pyglet.image.get_buffer_manager().get_color_buffer()
         img.save('screenshot{:03d}.png'.format(index))
-
-    def restore_default(self):
-        self.use_palette(DEFAULT_PALETTE)
-        self.use_pattern(DEFAULT_PATTERN)
-        print('> Using default config.\n')
 
     def save_config(self):
         """Save current config to the json file."""
