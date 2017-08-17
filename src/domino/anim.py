@@ -9,12 +9,15 @@ This script requires ImageMagick be installed on your computer.
 Windows users also need to set the variable `CONVERTER` below
 to be the path to your `convert.exe`.
 
-For efficiency considering we use the cairocffi lib instead of
-matplotlib to draw the frames of the animation.
+Here for efficiency considerings we use the cairocffi lib
+instead of matplotlib to draw the frames of the animation.
 
 Usage: python anim.py [-s] [-o] [-f]
 
-Optional arguments here are the same with those in aztec.py.
+Optional arguments:
+    -s    size of the image.
+    -o    order of the Aztec diamond graph.
+    -f    output file. Must be a .gif file.
 
 :copyright (c) 2015 by Zhao Liang.
 """
