@@ -1,33 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Domino shuffling algorithm on Aztec diamond graphs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This script samples a random domino tiling of an Aztec diamond graph
-with uniform probability.
-
-Usage: python aztec.py [-s] [-o] [-f]
-
-Optional arguments:
-    -s    size of the image.
-    -o    order of the Aztec diamond graph.
-    -f    output file.
-
-:copyright (c) 2015 by Zhao Liang.
-"""
-
-import argparse
 import random
-import cairocffi as cairo
-
-
-# 4 colors for the 4 types of dominoes
-N_COLOR = (1, 0, 0)
-S_COLOR = (0.75, 0.75, 0)
-W_COLOR = (0, 0.5, 0)
-E_COLOR = (0, 0, 1)
 
 
 class AztecDiamond(object):
@@ -36,10 +9,6 @@ class AztecDiamond(object):
     1x1 unit square and is specified by the coordinate of its left bottom
     corner. Each cell has five possible types: 'n', 's', 'w', 'e', None,
     here None means it's an empty cell.
-
-    Be careful that one should always start from the boundary when
-    deleting or filling blocks, this is an implicit but important
-    part in the algorithm.
     """
 
     def __init__(self, n):
@@ -77,20 +46,22 @@ class AztecDiamond(object):
 
     def delete(self):
         """Delete all bad blocks in a tiling.
-        A block is called bad if it contains a pair of parallel dominoes that
-        have orientations toward each other.
+        A block is called bad if it contains a pair of parallel
+        dominoes that have orientations toward each other.
         """
         for i, j in self.cells:
             try:
                 if (self.check_block(i, j, ['n', 'n', 's', 's'])
-                        or self.check_block(i, j, ['e', 'w', 'e', 'w'])):
+                    or self.check_block(i, j, ['e', 'w', 'e', 'w'])):
                     self.fill_block(i, j, [None]*4)
             except KeyError:
                 pass
         return self
 
     def slide(self):
-        """Move all dominoes one step according to their orientations."""
+        """Move all dominoes one step according to their orientations.
+        Note this method returns a new Aztec graph, not the original one!
+        """
         new_board = AztecDiamond(self.order + 1)
         for (i, j) in self.cells:
             if self.tile[(i, j)] == 'n':
@@ -119,73 +90,3 @@ class AztecDiamond(object):
             except KeyError:
                 pass
         return self
-
-    def render(self, size, extent, filename, bg_color=(1, 1, 1)):
-        """Draw current tiling (might have holes) to a png image with cairo.
-        size:
-            image size in pixels, e.g. size = 600 means 600x600
-        extent:
-            range of the axis: [-extent, extent] x [-extent, extent]
-        filename:
-            output filename, must be a .png image.
-        bg_color:
-            background color, default to white.
-            If set to None then transparent background will show through.
-        """
-        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, size, size)
-        surface.set_fallback_resolution(100, 100)
-        ctx = cairo.Context(surface)
-        ctx.scale(size/(2.0*extent), -size/(2.0*extent))
-        ctx.translate(extent, -extent)
-
-        if bg_color is not None:
-            ctx.set_source_rgb(*bg_color)
-            ctx.paint()
-
-        margin = 0.1
-
-        for (i, j) in self.cells:
-            if (self.is_black(i, j) and self.tile[(i, j)] is not None):
-                if self.tile[(i, j)] == 'n':
-                    ctx.rectangle(i - 1 + margin, j + margin,
-                                  2 - 2 * margin, 1 - 2 * margin)
-                    ctx.set_source_rgb(*N_COLOR)
-
-                if self.tile[(i, j)] == 's':
-                    ctx.rectangle(i + margin, j + margin,
-                                  2 - 2 * margin, 1 - 2 * margin)
-                    ctx.set_source_rgb(*S_COLOR)
-
-                if self.tile[(i, j)] == 'w':
-                    ctx.rectangle(i + margin, j + margin,
-                                  1 - 2 * margin, 2 - 2 * margin)
-                    ctx.set_source_rgb(*W_COLOR)
-
-                if self.tile[(i, j)] == 'e':
-                    ctx.rectangle(i + margin, j - 1 + margin,
-                                  1 - 2 * margin, 2 - 2 * margin)
-                    ctx.set_source_rgb(*E_COLOR)
-
-                ctx.fill()
-
-        surface.write_to_png(filename)
-
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-size', metavar='s', type=int,
-                        default=800, help='image size')
-    parser.add_argument('-order', metavar='o', type=int,
-                        default=60, help='order of az graph')
-    parser.add_argument('-filename', metavar='f', type=str,
-                        default='randomtiling.png', help='output filename')
-    args = parser.parse_args()
-
-    az = AztecDiamond(0)
-    for _ in range(args.order):
-        az = az.delete().slide().create()
-    az.render(args.size, args.order + 1, args.filename)
-
-
-if __name__ == '__main__':
-    main()
