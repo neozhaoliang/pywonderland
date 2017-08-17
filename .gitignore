@@ -1,5 +1,5 @@
 *~
 *.pyc
 __pycache__/
-src/*.png
-src/*.gif
+src/../*.png
+src/../*.gif
