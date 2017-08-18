@@ -65,22 +65,22 @@ def draw_with_cairo(az, size, extent, filename, bg_color=(1, 1, 1)):
             if az.tile[(i, j)] == 'n':
                 ctx.rectangle(i - 1 + margin, j + margin,
                               2 - 2 * margin, 1 - 2 * margin)
-                ctx.set_source_rgb(*N_COLOR)
+                ctx.set_source_rgb(1, 0, 0)
 
             if az.tile[(i, j)] == 's':
                 ctx.rectangle(i + margin, j + margin,
                               2 - 2 * margin, 1 - 2 * margin)
-                ctx.set_source_rgb(*S_COLOR)
+                ctx.set_source_rgb(0.75, 0.75, 0)
 
             if az.tile[(i, j)] == 'w':
                 ctx.rectangle(i + margin, j + margin,
                               1 - 2 * margin, 2 - 2 * margin)
-                ctx.set_source_rgb(*W_COLOR)
+                ctx.set_source_rgb(0, 0.5, 0)
 
             if az.tile[(i, j)] == 'e':
                 ctx.rectangle(i + margin, j - 1 + margin,
                               1 - 2 * margin, 2 - 2 * margin)
-                ctx.set_source_rgb(*E_COLOR)
+                ctx.set_source_rgb(0, 0, 1)
 
                 ctx.fill()
 
