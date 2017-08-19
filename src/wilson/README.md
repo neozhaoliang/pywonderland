@@ -68,4 +68,4 @@ As the algorithm runs, the cells become connected and some walls might be set to
 
 ## Where to learn the GIF89a specification
 
-The best and possibly the only reference you will need is [What's in a GIF](http://giflib.sourceforge.net/whatsinagif/index.html). You should read these three articles word by word before you can encode your gif image bits by bits.
+The best and possibly the only reference you will need is [What's in a GIF](http://giflib.sourceforge.net/whatsinagif/index.html). You should read these three articles word by word before you can encode your gif image bits by bit.
