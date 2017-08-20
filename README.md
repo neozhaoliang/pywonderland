@@ -9,6 +9,7 @@
 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT) [![PyPI](https://img.shields.io/pypi/pyversions/Django.svg)]()
+[![Requirements Status](https://requires.io/github/maxkrivich/pywonderland/requirements.svg?branch=master)](https://requires.io/github/maxkrivich/pywonderland/requirements/?branch=master)
 
 
 ## Contents
@@ -228,6 +229,10 @@ Poincare 双曲铺砌 [[View Code](./src/poincare/)]
 ## Dependencies
 
 Python libs:
+
+```sh
+$ pip install -r requirements.txt
+```
 
 `numpy`, `matplotlib`, `scipy`, `cairo`, [`palettable`](https://github.com/jiffyclub/palettable), [`tqdm`](https://github.com/tqdm/tqdm), [`numba`](https://github.com/numba/numba), `pyglet`, [`vapory`](https://github.com/Zulko/vapory)
 
