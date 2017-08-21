@@ -133,7 +133,7 @@ class GIFWriter(object):
         `bytearray([PALETTE_BITS, 1, trans_index, 0])`, this works fine for decoders
         like firefox and chrome but fails for some decoders like eye of gnome
         when `PALETTE_BITS` is 7 or 8. Using the LZW encoding is a bit tedious but it's
-        safe for all possible values of `PALETTE_BITS` (0-7) and all decoders.
+        safe for all possible values of `PALETTE_BITS` (1-8) and all decoders.
         """
         control = GIFWriter.graphics_control_block(delay, trans_index)
         descriptor = GIFWriter.image_descriptor(0, 0, 1, 1)
