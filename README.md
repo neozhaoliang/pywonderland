@@ -7,7 +7,7 @@
 
 **This repository will be always under construction since there are too many interesting things in math that can be shown by code.** Pull requests, issues, questions, and suggestions are all welcomed!
 
-
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/pywonderland/Lobby)
 [![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT) [![PyPI](https://img.shields.io/pypi/pyversions/Django.svg)]()
 [![Requirements Status](https://requires.io/github/maxkrivich/pywonderland/requirements.svg?branch=master)](https://requires.io/github/maxkrivich/pywonderland/requirements/?branch=master)
 
