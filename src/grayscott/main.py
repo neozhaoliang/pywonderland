@@ -17,7 +17,7 @@ import numpy as np
 try:
     raw_input
 except NameError:
-    raw_input = input  # pylint: disable=redefining-built-in
+    raw_input = input  # pylint: disable=redefined-builtin
 
 import pyglet
 pyglet.options['debug_gl'] = False
@@ -184,17 +184,17 @@ class GrayScott(pyglet.window.Window):
             with self.reaction_shader:
                 self.reaction_shader.set_uniformf('u_mouse', *u_mouse)
 
-    def on_mouse_press(self, x, y, button, modifiers):  # pylint: disable=unused-arguement
+    def on_mouse_press(self, x, y, button, modifiers):  # pylint: disable=unused-argument
         self.mouse_down = True
         bx = x / float(self.width)
         by = y / float(self.height)
         self.update_mouse(bx, by)
 
-    def on_mouse_release(self, x, y, button, modifiers):  # pylint: disable=unused-arguement
+    def on_mouse_release(self, x, y, button, modifiers):  # pylint: disable=unused-argument
         self.mouse_down = False
         self.update_mouse(-1, -1)
 
-    def on_mouse_drag(self, x, y, dx, dy, button, modifiers):  # pylint: disable=unused-arguement
+    def on_mouse_drag(self, x, y, dx, dy, button, modifiers):  # pylint: disable=unused-argument
         if self.mouse_down:
             bx = x / float(self.width)
             by = y / float(self.height)
