@@ -4,7 +4,7 @@
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Make GIF animations of Wilson's uniform spanning tree algorithm
-and the depth-first search algorithm.
+and the depth/breadth-first search algorithm.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Usage: python wilson.py [-width] [-height] [-scale]
@@ -34,16 +34,29 @@ import random
 from struct import pack
 
 
+MODE = 'bfs'
+
+PALETTE = [0, 0, 0,         # wall color
+           100, 100, 100,   # tree color
+           255, 0, 255,     # path color
+           150, 200, 100]   # fill color
+
+if MODE == 'dfs':
+    PALETTE_BITS = 2
+
+if MODE == 'bfs':
+    PALETTE_BITS = 8
+
+    from colorsys import hls_to_rgb
+    
+    for i in range(2**PALETTE_BITS - 4):
+        r, g, b = hls_to_rgb(i / 360.0, 0.5, 1.0)
+        PALETTE += [int(round(255*r)), int(round(255*g)), int(round(255*b))]
+
 # constants for LZW encoding.
-PALETTE_BITS = 2
 CLEAR_CODE = 2**PALETTE_BITS
 END_CODE = CLEAR_CODE + 1
 MAX_CODES = 4096
-
-BYTE = 1  # the packed byte in the logical screen descriptor.
-BYTE = BYTE << 3 | (PALETTE_BITS - 1)  # color resolution.
-BYTE = BYTE << 1 | 0                   # sorted flag.
-BYTE = BYTE << 3 | (PALETTE_BITS - 1)  # size of the global color table.
 
 # four possible states of a cell.
 WALL = 0
@@ -107,11 +120,13 @@ class GIFWriter(object):
 
     def __init__(self, width, height, loop):
         """Attributes are listed in the order they appear in the GIF file."""
+        BYTE = 1  # the packed byte in the logical screen descriptor.
+        BYTE = BYTE << 3 | (PALETTE_BITS - 1)  # color resolution.
+        BYTE = BYTE << 1 | 0                   # sorted flag.
+        BYTE = BYTE << 3 | (PALETTE_BITS - 1)  # size of the global color table.
         self.logical_screen_descriptor = pack('<6s2H3B', b'GIF89a', width, height, BYTE, 0, 0)
-        self.global_color_table = bytearray([0, 0, 0,         # wall color
-                                             100, 100, 100,   # tree color
-                                             255, 0, 255,     # path color
-                                             150, 200, 100])  # fill color
+
+        self.global_color_table = bytearray(PALETTE)  # fill color
         self.loop_control = pack('<3B8s3s2BHB', 0x21, 0xFF, 11, b'NETSCAPE', b'2.0', 3, 1, loop, 0)
         self.data = bytearray()
         self.trailor = bytearray([0x3B])
@@ -371,6 +386,50 @@ class WilsonAlgoAnimation(object):
         # show the path
         self.clear_remaining_changes()
 
+    def run_bfs_algorithm(self, speed, delay, trans_index, **kwargs):
+        """Animating the breadth-first search algorithm with colors.
+        The maze is colored according to their distance with the start."""
+        from collections import deque
+
+        self.speed = speed
+        self.delay = delay
+        self.trans_index = trans_index
+        self.set_colors(**kwargs)
+
+        def dist_to_color(d):
+            """map a distance to a color index."""
+            return max(d % 256, 4)
+
+        dist = 0
+        from_to = dict()  # a dict to remember each step.
+        queue = deque([(self.start, self.start, dist)])
+        self.mark_cell(self.start, dist_to_color(dist))
+        visited = set([self.start])
+
+        while len(queue) > 0:
+            parent, child, dist = queue.popleft()
+            from_to[child] = parent
+            self.mark_cell(child, dist_to_color(dist))
+            self.mark_wall(parent, child, dist_to_color(dist))
+            
+            for next_cell in self.get_neighbors(child):
+                if (next_cell not in visited) and (not self.barrier(child, next_cell)):
+                    queue.append((child, next_cell, dist+1))
+                    visited.add(next_cell)
+
+            self.refresh_frame()
+        self.clear_remaining_changes()
+
+        # retrieve the path
+        path = [self.end]
+        parent = self.end
+        while parent != self.start:
+            parent = from_to[parent]
+            path.append(parent)
+        self.mark_path(path, PATH)
+        # show the path
+        self.clear_remaining_changes()
+
     def encode_frame(self):
         """Use LZW algorithm to encode the region bounded by `frame_box`
         into one frame of the image."""
@@ -484,16 +543,21 @@ def main():
 
     # in the Wilson's algorithm animation no cells are filled,
     # hence it's safe to use color 3 as the transparent color.
-    anim.run_wilson_algorithm(speed=30, delay=2, trans_index=3,
+    anim.run_wilson_algorithm(speed=50, delay=2, trans_index=3,
                               wc=0, tc=1, pc=2)
 
     # pad three seconds delay to help to see the resulting maze clearly.
     anim.pad_delay_frame(300)
 
-    # in the DFS algorithm animation the walls are unchanged throughout,
-    # hence it's safe to use color 0 as the transparent color.
-    anim.run_dfs_algorithm(speed=10, delay=5, trans_index=0,
-                           wc=0, tc=0, pc=2, fc=3)
+    if MODE == 'dfs':
+        # in the DFS algorithm animation the walls are unchanged throughout,
+        # hence it's safe to use color 0 as the transparent color.
+        anim.run_dfs_algorithm(speed=10, delay=5, trans_index=0,
+                               wc=0, tc=0, pc=2, fc=3)
+
+    if MODE == 'bfs':
+        anim.run_bfs_algorithm(speed=30, delay=5, trans_index=0,
+                               wc=0, tc=0, pc=2, fc=3)
 
     # pad five seconds delay to help to see the resulting path clearly.
     anim.pad_delay_frame(500)

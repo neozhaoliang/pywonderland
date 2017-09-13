@@ -21,9 +21,9 @@ import numpy as np
 import cairocffi as cairo
 
 
-palette = [0xE41A1C, 0x377EB8, 0x4DAF4A, 0x984EA3, 0xFF7F00, 0xFFFF33,
-           0xA65628, 0xF781BF, 0x66C2A5, 0xFC8D62, 0x8DA0CB, 0xE78AC3,
-           0xA6D854, 0xFFD92F, 0xE5C494, 0xB3B3B3]
+palette = ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3', '#FF7F00', '#FFFF33',
+           '#A65628', '#F781BF', '#66C2A5', '#FC8D62', '#8DA0CB', '#E78AC3',
+           '#A6D854', '#FFD92F', '#E5C494', '#B3B3B3']
 
 WIDTH = 1200
 HEIGHT = 720
@@ -31,15 +31,15 @@ NUM_LINES = 25
 THIN_COLOR, FAT_COLOR, EDGE_COLOR = random.sample(palette, 3)
 GRIDS = [np.exp(2j*np.pi*i/5) for i in range(5)]
 SHIFTS = np.random.random(5)
-BACKGROUND_COLOR = 0x000000
+BACKGROUND_COLOR = '#000000'
 LINE_WIDTH = 0.1
 
 
-def hex_to_rgb(value):
-    r = ((value >> (8 * 2)) & 255) / 255.0
-    g = ((value >> (8 * 1)) & 255) / 255.0
-    b = ((value >> (8 * 0)) & 255) / 255.0
-    return np.asarray([r, g, b])
+def htmlcolor_to_rgb(s):
+    if not (s.startswith('#') and len(s) == 7):
+        raise ValueError("Bad html color format. Expected: '#RRGGBB' ")
+    return [1.0 * int(n, 16) / 255 for n in (s[1:3], s[3:5], s[5:])]
+
 
 
 def compute_rhombus(r, s, kr, ks):
@@ -81,16 +81,16 @@ def main():
     ctx.scale(scale, scale)
     ctx.translate(NUM_LINES, NUM_LINES)
 
-    ctx.set_source_rgb(*hex_to_rgb(BACKGROUND_COLOR))
+    ctx.set_source_rgb(*htmlcolor_to_rgb(BACKGROUND_COLOR))
     ctx.paint()
 
     for r, s in itertools.combinations(range(5), 2):
         for kr, ks in itertools.product(range(-NUM_LINES, NUM_LINES + 1), repeat=2):
             # if s-r = 1 or 4 then this is a thin rhombus, otherwise it's fat.
             if (s-r == 1 or s-r == 4):
-                color = hex_to_rgb(THIN_COLOR)
+                color = htmlcolor_to_rgb(THIN_COLOR)
             else:
-                color = hex_to_rgb(FAT_COLOR)
+                color = htmlcolor_to_rgb(FAT_COLOR)
 
             ctx.set_source_rgb(*color)
             A, B, C, D = compute_rhombus(r, s, kr, ks)
@@ -101,11 +101,11 @@ def main():
             ctx.close_path()
             ctx.fill_preserve()
 
-            ctx.set_source_rgb(*hex_to_rgb(EDGE_COLOR))
+            ctx.set_source_rgb(*htmlcolor_to_rgb(EDGE_COLOR))
             ctx.stroke()
 
     print('shifts in the five directions:\n{}'.format(SHIFTS))
-    print('thin color: {:X} fat color: {:X} edge color: {:X}'.format(THIN_COLOR, FAT_COLOR, EDGE_COLOR))
+    print('thin color: {} fat color: {} edge color: {}'.format(THIN_COLOR, FAT_COLOR, EDGE_COLOR))
     surface.write_to_png('aperiodic_tiling.png')
 
 
