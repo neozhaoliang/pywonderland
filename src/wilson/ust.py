@@ -20,7 +20,7 @@ def grid_graph(*size):
                 if 0 <= w[i] < size[i]:
                     neighborhood.append(tuple(w))
         return neighborhood
-        
+
     return {v: neighbors(v) for v in product(*map(range, size))}
 
 
@@ -39,7 +39,7 @@ for vertex in G:
     # do you see how the loop is erased in the above code?
     v = vertex
     while v not in tree:
-        tree.add(v)   
+        tree.add(v)
         v = parent[v]
 
 fig = plt.figure(figsize=(4.8, 3.6), dpi=100)

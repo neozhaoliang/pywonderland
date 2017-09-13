@@ -10,27 +10,27 @@ SIGMA = [0, 1, 2]
 
 class Automaton:
     """
-    To build an automaton, just name an automaton state as the starting state, then all states that are 
+    To build an automaton, just name an automaton state as the starting state, then all states that are
     reachable from this start will automatically be assigned a number.
-    
+
     The advantage of this approach of representating an automaton is that all the "dead states"
     (states that are not reachable from the start) are automatically discarded.
-    
+
     The disadvantage is that you can not see all the states and the transition table at the first glance.
     So let's write a draw() function to visualize it!
     """
-    
+
     def __init__(self, initial):
         self.initial = initial
         self.num_states = self.number_states(self.initial, 0)
-    
+
     def number_states(self, state, next_number):
         if state.number is None:
             state.number = next_number
             next_number += 1
             for symbol, target in state.all_transitions():
                 next_number = self.number_states(target, next_number)
-        return next_number 
+        return next_number
 
     def draw(self, filename, program="dot"):
         """
@@ -41,18 +41,18 @@ class Automaton:
         self.initial.draw(G, set(), color="red")
         G.draw(filename, prog=program)
         return self
-        
+
 
 class AutomatonState:
-    
+
     def __init__(self, accept=False):
         self.accept = accept
-        self.number = None  
+        self.number = None
         self.transitions = dict()
-        
+
     def all_transitions(self):
         raise NotImplementedError
-        
+
     def add_transition(self):
         raise NotImplementedError
 
@@ -61,7 +61,7 @@ class AutomatonState:
             return
 
         seen.add(self)
-        
+
         if self.accept:
             G.add_node(self.number, shape="doublecircle", color=color)
         else:
@@ -77,25 +77,25 @@ class AutomatonState:
 
 
 class NFA(Automaton):
-    
+
     def __init__(self, initial):
         Automaton.__init__(self, initial)
-        
+
     def asDFA(self):
         return NFA_to_DFA(self)()
-   
+
 
 class DFA(Automaton):
-    
+
     def __init__(self, initial):
         Automaton.__init__(self, initial)
-    
+
     def minimize(self):
         return Hopcroft(self)()
-   
+
 
 class NFAState(AutomatonState):
-    
+
     def __init__(self, accept=False):
         AutomatonState.__init__(self, accept)
 
@@ -104,62 +104,62 @@ class NFAState(AutomatonState):
             self.transitions[symbol].add(target)
         except:
             self.transitions[symbol] = {target}
-    
+
     def all_transitions(self):
         transitions = set()
         for symbol, targets in self.transitions.items():
             transitions |= { (symbol, target) for target in targets }
         return transitions
-            
+
     def epsilon_closure(self):
-        
+
         epsilon_closure = {self}
         stack = [self]
-        
+
         while stack:
             state = stack.pop()
             for target in state.transitions.get(None, set()):
                 if target not in epsilon_closure:
                     stack.append(target)
                     epsilon_closure.add(target)
-                    
+
         return frozenset(epsilon_closure)
 
 
 class DFAState(AutomatonState):
-    
+
     def __init__(self, accept=False):
         AutomatonState.__init__(self, accept)
-        
+
     def add_transition(self, symbol, target):
         if symbol is None:
             raise ValueError("DFA can not contain epsilon transitions")
         if symbol in self.transitions:
             raise ValueError("state already contains given transition")
-        
+
         self.transitions[symbol] = target
-        
+
     def all_transitions(self):
         return set(self.transitions.items())
-    
+
 
 class NFA_to_DFA:
-    
+
     def __init__(self, nfa):
         self.initial = nfa.initial
-        
+
     def __call__(self):
-        
+
         q0 = self.initial.epsilon_closure()
         Q = {q0: self.construct_dfa_state_from_subset(q0)}
-        
+
         stack = [q0]
         while stack:
             q = stack.pop()
-            
+
             for symbol in SIGMA:
                 t = self.delta_closure(q, symbol)
-                
+
                 if t:
                     try:
                         dfa_state = Q[t]
@@ -167,9 +167,9 @@ class NFA_to_DFA:
                         dfa_state = self.construct_dfa_state_from_subset(t)
                         Q[t] = dfa_state
                         stack.append(t)
-                        
+
                     Q[q].add_transition(symbol, dfa_state)
-                    
+
         return DFA(Q[q0])
 
     def delta_closure(self, q, c):
@@ -182,8 +182,8 @@ class NFA_to_DFA:
                 delta_closure |= target.epsilon_closure()
 
         return frozenset(delta_closure)
-        
-        
+
+
     def construct_dfa_state_from_subset(self, q):
         """
         return a new DFA state corresponding the subset q
@@ -194,14 +194,14 @@ class NFA_to_DFA:
             if state.accept == True:
                 return DFAState(True)
         return DFAState(False)
-        
-        
+
+
 class Hopcroft:
-    
+
     def __init__(self, dfa):
-        self.initial = dfa.initial  
+        self.initial = dfa.initial
         self.P = self.initial_partition()
-        
+
     def __call__(self):
         try:
             s1, s2 = self.initial_partition()
@@ -211,11 +211,11 @@ class Hopcroft:
                 W = {s2}
         except:
             W = self.initial_partition()
-            
+
         while W:
             A = W.pop()
             for c in SIGMA:
-                
+
                 # We should be careful that if we modify a set while iterating over it then unpredictable things would happen.
                 # So iterate over another but same partition!
                 T = frozenset(self.P)
@@ -236,11 +236,11 @@ class Hopcroft:
                                 W.add(s1)
                             else:
                                 W.add(s2)
-                                
+
         # now self.P is our final partition
         # let's make it a DFA
         result_dfa = dict()
-        
+
         def aux(subset):
             state = next(iter(subset))
             dfa_state = DFAState(state.accept)
@@ -252,12 +252,12 @@ class Hopcroft:
                 if target_subset not in result_dfa:
                     aux(target_subset)
                 dfa_state.add_transition(symbol, result_dfa[target_subset])
-                
+
             return dfa_state
-            
+
         initial_subset = self.current_partition_containing(self.initial)
         return DFA(aux(initial_subset))
-        
+
     def initial_partition(self):
         """
         partition all the states into accepted and non-accepted
@@ -273,16 +273,16 @@ class Hopcroft:
             for target in state.transitions.values():
                 if target not in set.union(s1, s2):
                     aux(target)
-                    
+
         aux(self.initial)
-        
+
         """
         be careful of the case that all states are accepted
         """
         if s1 and s2:
             return {frozenset(s1), frozenset(s2)}
         return {frozenset(s1)}
-            
+
     def split(self, S, c, B):
         """
         try to split set S into two subsets {s1, s2} by a pair (B, c)
@@ -290,7 +290,7 @@ class Hopcroft:
         """
         s1 = set()
         s2 = set()
-        
+
         for x in S:
             y = x.transitions.get(c, None)
             if y in B:
@@ -300,7 +300,7 @@ class Hopcroft:
         if s1 and s2:
             return {frozenset(s1), frozenset(s2)}
         return None
-        
+
     def current_partition_containing(self, state):
         """
         return the subset that contains the given state in current partition
@@ -320,11 +320,11 @@ def Parse(filename):
     while True:
         L = f.readline()
         if L:
-            
+
             # if L is a comment line or a blank line
             if len(L) < 2 or L[0] == "#":
                 continue
-            
+
             s = re.search("([0-9]+):", L)
             if s:
                 num = int(s.group(1))
@@ -369,7 +369,7 @@ def Parse(filename):
 
         else:
             break
-        
+
     f.close()
     return NFA(initial)
 

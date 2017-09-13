@@ -121,7 +121,7 @@ class GrayScott(pyglet.window.Window):
 
         # put all patterns in a list for iterating over them.
         self._species = list(SPECIES.keys())
- 
+
         # set the uniforms and varying attributes in the two shaders.
         self.init_reaction_shader()
         self.init_render_shader()
@@ -157,7 +157,7 @@ class GrayScott(pyglet.window.Window):
         if self.video_on:
             if (self.frame_count % self.skip == 0) and (self.frame_count < self.max_frames):
                 self.save_video_frame(self.frame_count // self.skip)
-            
+
         self.frame_count += 1
 
     def use_pattern(self, pattern):

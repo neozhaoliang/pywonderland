@@ -61,7 +61,7 @@ def compute_rhombus(r, s, kr, ks):
     # in the i-th grid.
     index = [np.ceil((intersect_point/grid).real + shift)
              for grid, shift in zip(GRIDS, SHIFTS)]
-    
+
     # Be careful of the accuracy problem here.
     # Mathematically the r-th and s-th item of index should be kr and ks,
     # but programmingly it might not be the case,

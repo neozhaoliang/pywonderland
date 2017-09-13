@@ -5,7 +5,7 @@
 Make 3D Animations of Lorenz Attractor with Matplotlib
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-code adapted from 
+code adapted from
 
 "https://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d/"
 
@@ -14,8 +14,8 @@ code adapted from
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
-from scipy.integrate import odeint  
-from mpl_toolkits.mplot3d import Axes3D  
+from scipy.integrate import odeint
+from mpl_toolkits.mplot3d import Axes3D
 
 
 # number of particles.
@@ -44,17 +44,17 @@ ax.axis('off')
 lines = []
 points = []
 colors = plt.cm.gist_ncar(np.linspace(0, 1, num_particles))
-  
+
 for c in colors:
     lines.extend(ax.plot([], [], '-', c=c))
     points.extend(ax.plot([], [], 'o', c=c))
-    
+
 
 x0 = -15 + 30 * np.random.random((num_particles, 3))
 t = np.linspace(0, 4, 1001)
 x_t = np.array([odeint(derivative, point, t) for point in x0])
 
-    
+
 def init():
     for line, point in zip(lines, points):
         line.set_data([], [])
@@ -72,18 +72,18 @@ def animate(i):
         x, y, z = x_j[:i].T
         line.set_data(x, y)
         line.set_3d_properties(z)
-        
+
         # note that plot() receives a list parameter so we have
         # to write x[-1:] instead of x[-1]!
-        point.set_data(x[-1:], y[-1:]) 
+        point.set_data(x[-1:], y[-1:])
         point.set_3d_properties(z[-1:])
 
     ax.view_init(30, 0.3*i)
-    fig.canvas.draw() 
-    return lines + points 
+    fig.canvas.draw()
+    return lines + points
 
 
-anim = FuncAnimation(fig, animate, init_func=init, interval=5, 
+anim = FuncAnimation(fig, animate, init_func=init, interval=5,
                      frames=500, blit=True)
 #fig.show()
 

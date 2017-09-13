@@ -7,8 +7,11 @@ Make GIF animations of Wilson's uniform spanning tree algorithm
 and the depth/breadth-first search algorithm.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Usage: python wilson.py [-width] [-height] [-scale]
-                        [-margin] [-loop] [-filename]
+Usage:
+       1. set `MODE` to 'bfs' or 'dfs'.
+       2. run
+          python wilson.py [-width] [-height] [-scale]
+                           [-margin] [-loop] [-filename]
 
 Optional arguments:
     width, height: size of the maze (not the image), should both be odd integers.
@@ -22,11 +25,11 @@ Optional arguments:
 Reference for Wilson's algorithm:
 
     Probability on Trees and Networks, by Russell Lyons and Yuval Peres.
-    
+
 Reference for the GIF89a specification:
 
     http://giflib.sourceforge.net/whatsinagif/index.html
-    
+
 Copyright (c) 2016 by Zhao Liang.
 """
 import argparse
@@ -48,7 +51,7 @@ if MODE == 'bfs':
     PALETTE_BITS = 8
 
     from colorsys import hls_to_rgb
-    
+
     for i in range(2**PALETTE_BITS - 4):
         r, g, b = hls_to_rgb(i / 360.0, 0.5, 1.0)
         PALETTE += [int(round(255*r)), int(round(255*g)), int(round(255*b))]
@@ -126,7 +129,7 @@ class GIFWriter(object):
         BYTE = BYTE << 3 | (PALETTE_BITS - 1)  # size of the global color table.
         self.logical_screen_descriptor = pack('<6s2H3B', b'GIF89a', width, height, BYTE, 0, 0)
 
-        self.global_color_table = bytearray(PALETTE)  # fill color
+        self.global_color_table = bytearray(PALETTE)
         self.loop_control = pack('<3B8s3s2BHB', 0x21, 0xFF, 11, b'NETSCAPE', b'2.0', 3, 1, loop, 0)
         self.data = bytearray()
         self.trailor = bytearray([0x3B])
@@ -411,10 +414,10 @@ class WilsonAlgoAnimation(object):
             from_to[child] = parent
             self.mark_cell(child, dist_to_color(dist))
             self.mark_wall(parent, child, dist_to_color(dist))
-            
+
             for next_cell in self.get_neighbors(child):
                 if (next_cell not in visited) and (not self.barrier(child, next_cell)):
-                    queue.append((child, next_cell, dist+1))
+                    queue.append((child, next_cell, dist + 1))
                     visited.add(next_cell)
 
             self.refresh_frame()

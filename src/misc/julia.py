@@ -3,7 +3,7 @@
 
 """
 ~~~~~~~~~~~~~~~~~~~
-A Julia Set Fractal 
+A Julia Set Fractal
 ~~~~~~~~~~~~~~~~~~~
 """
 
