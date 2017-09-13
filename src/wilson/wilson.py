@@ -53,7 +53,7 @@ if MODE == 'bfs':
     from colorsys import hls_to_rgb
 
     for i in range(2**PALETTE_BITS - 4):
-        r, g, b = hls_to_rgb(i / 360.0, 0.5, 1.0)
+        r, g, b = hls_to_rgb((i / 360.0) % 1, 0.5, 1.0)
         PALETTE += [int(round(255*r)), int(round(255*g)), int(round(255*b))]
 
 # constants for LZW encoding.
