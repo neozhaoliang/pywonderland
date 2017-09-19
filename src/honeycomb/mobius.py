@@ -6,9 +6,8 @@ from utils import (Geometry, isinfinite, e2snorm, s2enorm, e2hnorm,
 class Mobius(object):
 
     """
-    A Mobius transformation is a complex function of 
-    the form z --> (a*z+b) / (c*z+d) which can be
-    represented as a 2x2 matrix
+    A Mobius transformation is a complex function of the form
+    z --> (a*z+b) / (c*z+d) which can be represented as a 2x2 matrix
     [[a, b],
      [c, d]].
     """
@@ -21,15 +20,13 @@ class Mobius(object):
         return str(self.mat)
 
     def __mul__(self, M):
-        """The composition of two Mobius transformations is the product
-        of their matrices.
+        """
+        The composition of two Mobius transformations is the product of their matrices.
         """
         return Mobius(np.dot(self.mat, M.mat))
 
     def __call__(self, z):
-        """
-        Apply this Mobius transformation to a complex number z.
-        """
+        """Apply this Mobius transformation to a complex number z."""
         a, b, c, d = self.mat.ravel()
         if isinfinite(z):
             return a / c
@@ -50,8 +47,7 @@ class Mobius(object):
 
     def normalize(self):
         """
-        Rescale the components of the matrix so that it
-        has determinant ad - bc = 1.
+        Rescale the components of the matrix so that its determinant ad - bc = 1.
         """
         det = np.sqrt(np.linalg.det(self.mat))
         self.mat /= det
@@ -64,7 +60,7 @@ class Mobius(object):
         theta: an angle in [0, 2*pi]
         a: a complex number in the unit disk.
 
-        Return the unique Mobius transformation that firstly rotate around
+        Return the unique Mobius transformation that firstly rotates around
         the origin with angle `theta`, and then translates the origin to `a`.
 
         In Euclidean geometry it's simply
@@ -108,10 +104,9 @@ class Mobius(object):
         """
         p1, p2: two complex numbers.
         return the unique Mobius transformation that translates
-        p1 to p2 along the geodesic line in this geometry g.
+        p1 to p2 along the geodesic line in geometry g.
         
-        This transformation is conjugate with the one that translates
-        the origin to some point z.
+        This transformation is conjugate with a translation z --> z + a.
         """
         T = Mobius.isometry(g, 0, -p1)        
         S = Mobius.isometry(g, 0, T(p2))
@@ -147,7 +142,7 @@ class Mobius(object):
     @staticmethod
     def triple_to_triple(triple_z, triple_w):
         """
-        Return the transformation that maps (z1, z2, z3) to (w1, w2, w3).
+        Return the unique Mobius transformation that maps (z1, z2, z3) to (w1, w2, w3).
         """
         M1 = Mobius.three_points(*triple_z)
         M2 = Mobius.three_points(*triple_w)
@@ -156,7 +151,7 @@ class Mobius(object):
     @staticmethod
     def elliptic(g, p, theta):
         """
-        Return the elliptic transformation whose fixed point is `p` and 
+        Return the elliptic Mobius transformation whose fixed point is `p` and 
         rotates around `p` with angle `theta`.
         A Mobius transformation is called elliptic if and only if it is
         conjugate to a rotation z --> exp^{theta*1j} * z.
@@ -166,24 +161,23 @@ class Mobius(object):
         return T.inverse() * S * T
 
     @staticmethod
-    def hyperbolic(g, p, scale):
+    def hyperbolic(g, fixed, scale):
         """
-        Return the hyperbolic transformation whose fixed point is `p` and
-        dilation around `p` with scaling `scale`.
+        Return the hyperbolic Mobius transformation whose fixed point is `fixed` and
+        scaling `scale`.
         A Mobius transformation is called hyperbolic if and only if it is
         conjugate to a dilation z --> k*z.
         """
-        M1 = Mobius.isometry(g, 0, -p)
+        M1 = Mobius.isometry(g, 0, -fixed)
         M2 = Mobius.scale(scale)
-        M3 = Mobius.isometry(g, 0, p)
+        M3 = Mobius.isometry(g, 0, fixed)
         return M3 * M2 * M1
 
     @staticmethod
     def hyperbolic2(g, fixed, point, offset):
         """
-        A variation of the `hyperbolic` function above,
-        returns the hyperbolic transformation that moves `point`
-        along the geodesic line with distance `offset`.
+        A variation of the `hyperbolic` function above, return the hyperbolic transformation
+        that moves `point` along the geodesic line with distance `offset`.
         """
         M1 = Mobius.isometry(g, 0, -fixed)
         eradius = abs(M1(point))
