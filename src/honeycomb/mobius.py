@@ -3,6 +3,49 @@ from utils import (Geometry, isinfinite, e2snorm, s2enorm, e2hnorm,
                    h2enorm)
 
 
+class Quaternion(object):
+
+    """
+    A quaternion can be represented as x*1 + y*i + z*j + w*k
+    where x, y, z, w are real numbers and {1, i, j, k} satisfy
+    i^2 = j^2 = k^2 = -1, ij=-ji=k, jk=-kj=i, ik=-ki=j.
+    """
+
+    def __init__(self, x=0, y=0, z=0, w=0):
+        self.q = np.array([x, y, z, w]).astype(np.float)
+        self.norm = np.linalg.norm(self.q)
+
+    def __str__(self):
+        return str(self.q)
+
+    def to_complex(self):
+        return complex(self.q[0], self.q[1])
+
+    def from_complex(self, z):
+        return Quaternion(z.real, z.imag, 0, 0)
+
+    def normalize(self):
+        self.q /= self.norm
+
+    def __sub__(self, Q2):
+        return Quaternion(*(self.q - Q2.q))
+
+    def __add__(self, Q2):
+        return Quaternion(*(self.q + Q2.q))
+
+    def __mul__(self, r):
+        return Quaternion(*(self.q * r))
+
+    @staticmethod
+    def cross(q1, q2):
+        return Quaternion(*np.cross(q1.q[:3], q2.q[:3]))
+
+    @staticmethod
+    def dot(q1, q2):
+        return np.dot(q1.q, q2.q)
+
+
+
 class Mobius(object):
 
     """
