@@ -21,20 +21,33 @@ class Quaternion(object):
     def to_complex(self):
         return complex(self.q[0], self.q[1])
 
-    def from_complex(self, z):
+    @staticmethod
+    def from_complex(z):
         return Quaternion(z.real, z.imag, 0, 0)
 
     def normalize(self):
         self.q /= self.norm
+        return self
 
-    def __sub__(self, Q2):
-        return Quaternion(*(self.q - Q2.q))
+    def __sub__(self, q2):
+        return Quaternion(*(self.q - q2.q))
 
-    def __add__(self, Q2):
-        return Quaternion(*(self.q + Q2.q))
+    def __add__(self, q2):
+        return Quaternion(*(self.q + q2.q))
+
+    def __rmul__(self, r):
+        return Quaternion(*(self.q * r))
 
     def __mul__(self, r):
         return Quaternion(*(self.q * r))
+
+    def __neg__(self):
+        self.q *= -1
+        return self
+
+    def __div__(self, r):
+        self.q /= r
+        return self
 
     @staticmethod
     def cross(q1, q2):
@@ -44,6 +57,19 @@ class Quaternion(object):
     def dot(q1, q2):
         return np.dot(q1.q, q2.q)
 
+    @staticmethod
+    def dist(q1, q2):
+        return np.linalg.norm(q1.q - q2.q)
+
+    def valid(self):
+        return all(np.isfinite(self.q))
+
+    def isDNE(self):
+        return any(np.isnan(self.q))
+
+    @staticmethod
+    def DNE():
+        return Quaternion(np.NaN, np.NaN, np.NaN, np.NaN)
 
 
 class Mobius(object):
