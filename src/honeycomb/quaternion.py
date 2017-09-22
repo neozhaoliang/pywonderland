@@ -10,7 +10,7 @@ class Quaternion(np.ndarray):
     # tolerance for comparing if two quaternions are equal.
     _epsilon = 1e-6
     
-    def __new__(cls, vec):
+    def __new__(cls, vec=(1, 0, 0, 0)):
         """
         We have no type checking here for simplicity. Here `vec` should be a 1-d list
         of length 3 or 4. If len(vec) is 3 then the vector part is initialized by `vec`.
@@ -144,6 +144,9 @@ class Quaternion(np.ndarray):
     
         else:
             raise TypeError("cannot divide a quaternion by this input.")
+
+    def __rdiv__(self, other):
+        return other * self.inverse()
      
     def normalize(self):
         """Invalid quaternions cannot be normalized."""
@@ -163,6 +166,7 @@ class Quaternion(np.ndarray):
     def cross(self, other):
         """
         By using negative indices `other` can be either a quaternion or a 3-d vector.
+        The returned type is a 3-d vector.
         """
         return Quaternion(np.cross(self[-3:], other[-3:]))
 
@@ -186,7 +190,7 @@ class Quaternion(np.ndarray):
     def rotate_in_xy_plane(self, angle, center=complex(0, 0)):
         """Rotate in the xy-plane about a center."""
         u = complex(self) - center
-        u *= complex(np.cos(anlge), np.sin(angle))
+        u *= complex(np.cos(angle), np.sin(angle))
         u += center
         self[1], self[2] = u.real, u.imag
 
@@ -231,11 +235,12 @@ class Quaternion(np.ndarray):
     
     def rotate_vector(self, v):
         """
-        Rotate a 3-d vector `v` with this quaternion.The returned type is also a 3-d vector.
+        Rotate a 3-d vector `v` with this quaternion.The returned type is a quaternion.
         """
         self.normalize()
         v_new = self * Quaternion(v) * self.conjugate()
-        return np.asarray(v_new[1:])
+        v_new[0] = 0
+        return v_new
     
     def to_matrix(self):
         """Return the 3x3 matrix representation of this quaternion."""
