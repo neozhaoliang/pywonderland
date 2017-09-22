@@ -81,7 +81,7 @@ class Quaternion(np.ndarray):
     
     def __hash__(self):
         """
-        We must make sure that equal quaternions have the same hash value.
+        We should try to ensure that equal quaternions have the same hash value.
         Note two quaternions are equal if and only if all of their components
         are the same if rounded to the accuracy determined by `Quaternion._epsilon`,
         so we simply use the hash value of this rounded array.
@@ -100,7 +100,7 @@ class Quaternion(np.ndarray):
         if any(np.isnan(self)):
             return False
         
-        elif abs(self) > Quaternion._epsilon:
+        elif max(np.absolute(self)) > Quaternion._epsilon:
             return True
         
         else:
