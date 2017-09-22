@@ -9,7 +9,6 @@
 
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/pywonderland/Lobby)
 [![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT) [![PyPI](https://img.shields.io/pypi/pyversions/Django.svg)]()
-[![Requirements Status](https://requires.io/github/maxkrivich/pywonderland/requirements.svg?branch=master)](https://requires.io/github/maxkrivich/pywonderland/requirements/?branch=master)
 
 
 ## Contents
