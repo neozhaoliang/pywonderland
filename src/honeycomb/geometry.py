@@ -8,10 +8,10 @@ Geometry = Enum("Geometry", ["Euclidean", "Spherical", "Hyperbolic"])
 # --- conversions between Euclidean, Spherical and Hyperbolic distances ---
 
 def h2enorm(x):
-    return 1.0 if not is_finite(x) else np.tanh(0.5 * x)
+    return 1.0 if np.isnan(x) else np.tanh(0.5 * x)
 
 def e2hnorm(x):
-    if not -1 < x < 1:
+    if not 0 <= x < 1:
         raise ValueError("Invaid Euclidean distance encountered.")
     else:
         return 2.0 * np.arctanh(x)

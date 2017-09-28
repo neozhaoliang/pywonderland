@@ -18,9 +18,25 @@ class Vector(object):
 
     def __complex__(self):
         return complex(self[0], self[1])
-      
-    def clone(self):
-        return Vector(self.vector)
+
+    def norm(self):
+        return np.linalg.norm(self.vector)
+
+    def normalize(self):
+        self.vector /= self.norm()
+
+    def conjugate(self):
+        x, y, z, w = self
+        return Vector([-x, -y, -z, w])
+
+    def __add__(self, other):
+        return Vector(self.vector + other.vector)
+
+    def __sub__(self, other):
+        return Vector(self.vector - other.vector)
+
+    def inverse(self):
+        return self.conjugate() / (self.norm() * self.norm())
 
     def dot(self, other):
         return np.dot(self.vector, other.vector)
@@ -48,3 +64,19 @@ class Vector(object):
                         [t*x*y + s*z, c + t*y*y, t*y*z - s*x],
                         [t*x*z - s*y, t*y*z + s*x, c + t*z*z]])
         return Vector(np.dot(mat, self[:3]))
+
+
+
+class Circle(object):
+
+    def __init__(self, center, radius):
+        self.center = center
+        self.radius = radius
+
+
+class Sphere(object):
+
+    def __init__(self, center, radius, normal):
+        self.center = center
+        self.radius = radius
+        self.normal = normal
