@@ -1,6 +1,5 @@
 import numpy as np
 from geometry import Geometry
-from primitives import Vector, Circle
 from helpers import infinite
 
 
@@ -12,10 +11,10 @@ class Mobius(object):
         self.matrix /= np.sqrt(np.linalg.det(self.matrix))
 
     def __getitem__(self, item):
-        return self.matrix.__getitem(items)
-    
-    def __str__(self):
-        return str(self.matrix)
+        return self.matrix.__getitem__(item)
+
+    def __repr__(self):
+        return "Mobius{}".format(str(self.matrix))
 
     def inverse(self):
         a, b, c, d = self.matrix.ravel()
@@ -24,15 +23,10 @@ class Mobius(object):
 
     def __mul__(self, other):
         if not isinstance(other, Mobius):
-            raise TypeError("Cannot multiply a Mobius transformation by this input.")      
+            raise ValueError("A Mobius transformation is expected.")
         else:
             return Mobius(np.dot(self.matrix, other.matrix))
 
-    @classmethod
-    def scale(cls, c):
-        return cls([[c, 0],
-                    [0, 1]])
-    
     @classmethod
     def from_three_points(cls, z1, z2, z3):
         if infinite(z1):
@@ -58,14 +52,19 @@ class Mobius(object):
         return M2.inverse() * M1
 
     @classmethod
-    def isometry(cls, geome, angle, point):
+    def scale(cls, c):
+        return cls([[c, 0],
+                    [0, 1]])
+
+    @classmethod
+    def isometry(cls, geom, angle, point):
         rot = complex(np.cos(angle), np.sin(angle))
 
         if geom == Geometry.Euclidean:
             return cls([[rot, point],
                         [ 0,    1  ]])
         
-        if geome == Geometry.Hyperbolic:
+        if geom == Geometry.Hyperbolic:
             return cls([[          rot          ,     point],
                         [point.conjugate() * rot,       1  ]])
         
@@ -76,7 +75,7 @@ class Mobius(object):
     @classmethod
     def parabolic(cls, geom, p1, p2):
         M1 = cls.isometry(geom, 0, -p1)        
-        M2 = cls.isometry(geom, 0, T(p2))
+        M2 = cls.isometry(geom, 0, M1(p2))
         return M1.inverse() * M2 * M1
         
     @classmethod
@@ -94,33 +93,8 @@ class Mobius(object):
 
     def __call__(self, point):
         a, b, c, d = self.matrix.ravel()
-      
-        if isinstance(point, (int, float, complex)):
-            if infinite(point):
-                return a / c          
-            else:
-                return (a * point + b) / (c * point + d)
-        
-        elif isinstance(point, Vector):
-            if infinite(point):
-                return Vector.from_complex(a / c)            
-            else:
-                qa = Vector.from_complex(a)
-                qb = Vector.from_complex(b)
-                qc = Vector.from_complex(c)
-                qd = Vector.from_complex(d)
-                return (qa * point + qb) / (qc * point + qd)
-            
+
+        if infinite(point):
+            return a / c
         else:
-            raise TypeError("A complex number or a vector is expected.")
-
-
-
-class Isometry(object):
-
-    def __init__(self, mobius, circle):
-        self.mobius = mobius
-        self.circle = circle
-
-    def __call__(self, point):
-        pass
+            return (a*point + b) / (c*point + d)
