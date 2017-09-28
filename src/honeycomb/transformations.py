@@ -5,7 +5,7 @@ from helpers import infinite
 
 class Mobius(object):
     
-    def __init__(self, matrix):
+    def __init__(self, matrix=np.eye(2)):
         self.matrix = np.eye(2).astype(np.complex)
         self.matrix[:] = matrix
         self.matrix /= np.sqrt(np.linalg.det(self.matrix))
@@ -91,10 +91,10 @@ class Mobius(object):
         M3 = cls.isometry(geom, 0, fixed)
         return M3 * M2 * M1
 
-    def __call__(self, point):
+    def __call__(self, p):
         a, b, c, d = self.matrix.ravel()
 
-        if infinite(point):
+        if infinite(p):
             return a / c
         else:
-            return (a*point + b) / (c*point + d)
+            return (a * p + b) / (c * p + d)
