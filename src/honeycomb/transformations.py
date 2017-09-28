@@ -1,6 +1,7 @@
 import numpy as np
 from geometry import Geometry
 from primitives import Vector, Circle
+from helpers import infinite
 
 
 class Mobius(object):
@@ -25,7 +26,7 @@ class Mobius(object):
         if not isinstance(other, Mobius):
             raise TypeError("Cannot multiply a Mobius transformation by this input.")      
         else:
-            return Mobius(np.dot(self.mat, other.mat))
+            return Mobius(np.dot(self.matrix, other.matrix))
 
     @classmethod
     def scale(cls, c):
@@ -34,7 +35,21 @@ class Mobius(object):
     
     @classmethod
     def from_three_points(cls, z1, z2, z3):
-        pass
+        if infinite(z1):
+            return cls([[ 0,  z3 - z2],
+                        [-1,     z3  ]])
+
+        elif infinite(z2):
+            return cls([[1, -z1],
+                        [1, -z3]])
+
+        elif infinite(z3):
+            return cls([[-1,     z1  ],
+                        [ 0,  z1 - z2]])
+
+        else:
+            return cls([[z2 - z3, -z1 * (z2 - z3)],
+                        [z2 - z1, -z3 * (z2 - z1)]])
 
     @classmethod
     def from_triple_to_triple(cls, triple_z, triple_w):
@@ -78,7 +93,26 @@ class Mobius(object):
         return M3 * M2 * M1
 
     def __call__(self, point):
-        pass
+        a, b, c, d = self.matrix.ravel()
+      
+        if isinstance(point, (int, float, complex)):
+            if infinite(point):
+                return a / c          
+            else:
+                return (a * point + b) / (c * point + d)
+        
+        elif isinstance(point, Vector):
+            if infinite(point):
+                return Vector.from_complex(a / c)            
+            else:
+                qa = Vector.from_complex(a)
+                qb = Vector.from_complex(b)
+                qc = Vector.from_complex(c)
+                qd = Vector.from_complex(d)
+                return (qa * point + qb) / (qc * point + qd)
+            
+        else:
+            raise TypeError("A complex number or a vector is expected.")
 
 
 
