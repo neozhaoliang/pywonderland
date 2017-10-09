@@ -229,10 +229,6 @@ Poincare 双曲铺砌 [[View Code](./src/poincare/)]
 
 Python libs:
 
-```sh
-$ pip install -r requirements.txt
-```
-
 `numpy`, `matplotlib`, `scipy`, `cairo`, [`palettable`](https://github.com/jiffyclub/palettable), [`tqdm`](https://github.com/tqdm/tqdm), [`numba`](https://github.com/numba/numba), `pyglet`, [`vapory`](https://github.com/Zulko/vapory)
 
 Softwares:
