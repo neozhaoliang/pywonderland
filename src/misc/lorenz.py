@@ -85,9 +85,10 @@ def animate(i):
 
 anim = FuncAnimation(fig, animate, init_func=init, interval=5,
                      frames=500, blit=True)
-#fig.show()
 
 # Note: this `dpi` has nothing to do with the dpi settings in `plt.figure()`,
-# it determines the size of the video together with `figsize`.
-anim.save('lorenz.webm', writer='ffmpeg', fps=30, dpi=200,
-          bitrate=1000, codec='libvpx', extra_args=['-crf', '10'])
+# this dpi determines the size of the video together with `figsize`.
+# The range of `crf` is 0~51, the lower crf the better quality and the larger
+# size of the video.
+anim.save('lorenz.mp4', writer='ffmpeg', fps=30, dpi=200,
+          codec='libx264', extra_args=['-crf', '5'])
