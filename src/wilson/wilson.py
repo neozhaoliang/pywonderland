@@ -44,6 +44,7 @@ PALETTE = [0, 0, 0,         # wall color
            255, 0, 255,     # path color
            150, 200, 100]   # fill color
 
+# 
 if MODE == 'dfs':
     PALETTE_BITS = 2
 
@@ -198,6 +199,7 @@ class WilsonAlgoAnimation(object):
         self.num_changes = 0   # a counter holds how many cells are changed.
         self.frame_box = None  # maintains the region that to be updated.
 
+        # -----------------------------------------
         # shrink the maze a little to pad some margin at the border of the window.
         self.cells = []
         for y in range(margin, height - margin, 2):
@@ -216,6 +218,47 @@ class WilsonAlgoAnimation(object):
             if y <= height - 3 - margin:
                 neighbors.append((x, y+2))
             return neighbors
+
+        # ----------------------------------------
+        # This is how I generated the GIF with the self-defined text 'UST'.
+        # It firstly use PIL to generate a 2d mask image (black and white)
+        # that contains the text, then use this mask to determine the
+        # structure of the graph. Note the crucial point here: the word
+        # 'UST' does not destroy the connectivity of the graph!
+        # This trick does not apply to characters like 'O', 'A', 'P', etc.
+        # You may also use a pixel image as the mask (must also preserve
+        # the connectivity of the graph).
+        """
+        from PIL import Image, ImageFont, ImageDraw
+
+        img = Image.new('L', (width, height), 'white')
+        text = 'UST'
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.truetype('ubuntu.ttf', 50)
+        size_w, size_h = font.getsize(text)
+        xy = (width - size_w) // 2, height // 2 - size_h * 3 // 4
+        draw.text(xy, text, 'black', font)
+
+        self.cells = []
+        for y in range(margin, height - margin, 2):
+            for x in range(margin, width - margin, 2):
+                if img.getpixel((x, y)) == 255:
+                    self.cells.append((x, y))
+        
+        def neighborhood(cell):
+            x, y = cell
+            neighbors = []
+            if x >= 2 + margin and img.getpixel((x-2, y)) == 255:
+                    neighbors.append((x-2, y))
+            if y >= 2 + margin and img.getpixel((x, y-2)) == 255:
+                neighbors.append((x, y-2))
+            if x <= width - 3 - margin and img.getpixel((x+2, y)) == 255:
+                neighbors.append((x+2, y))
+            if y <= height - 3 - margin and img.getpixel((x, y+2)) == 255:
+                neighbors.append((x, y+2))
+            return neighbors
+        """
+        # --------------------------------------------
 
         self.graph = {v: neighborhood(v) for v in self.cells}
         # we will look for a path between this start and end.
@@ -368,13 +411,10 @@ class WilsonAlgoAnimation(object):
             from_to[child] = parent
             self.mark_cell(child, FILL)
             self.mark_wall(parent, child, FILL)
-            if child == self.end:
-                break
-            else:
-                for next_cell in self.get_neighbors(child):
-                    if (next_cell not in visited) and (not self.barrier(child, next_cell)):
-                        stack.append((child, next_cell))
-                        visited.add(next_cell)
+            for next_cell in self.get_neighbors(child):
+                if (next_cell not in visited) and (not self.barrier(child, next_cell)):
+                    stack.append((child, next_cell))
+                    visited.add(next_cell)
 
             self.refresh_frame()
         self.clear_remaining_changes()
