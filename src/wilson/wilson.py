@@ -44,7 +44,9 @@ PALETTE = [0, 0, 0,         # wall color
            255, 0, 255,     # path color
            150, 200, 100]   # fill color
 
-# 
+# I just used the two algorithms `dfs` and `bfs` to demonstrate
+# how to set `PALETTE_BITS` and `global_color_table` in a GIF file.
+# The smaller `PALETTE_BITS`, the fewer colors and the smaller image size.
 if MODE == 'dfs':
     PALETTE_BITS = 2
 
@@ -227,16 +229,17 @@ class WilsonAlgoAnimation(object):
         # 'UST' does not destroy the connectivity of the graph!
         # This trick does not apply to characters like 'O', 'A', 'P', etc.
         # You may also use a pixel image as the mask (must also preserve
-        # the connectivity of the graph).
+        # the connectivity of the graph). To use the code, uncomment the
+        # following lines and also comment out the section above. 
         """
         from PIL import Image, ImageFont, ImageDraw
 
         img = Image.new('L', (width, height), 'white')
         text = 'UST'
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype('ubuntu.ttf', 50)
+        font = ImageFont.truetype('ubuntu.ttf', 60)
         size_w, size_h = font.getsize(text)
-        xy = (width - size_w) // 2, height // 2 - size_h * 3 // 4
+        xy = (width - size_w) // 2, height // 2 - size_h * 5 // 8
         draw.text(xy, text, 'black', font)
 
         self.cells = []
