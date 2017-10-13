@@ -369,5 +369,5 @@ class GrayScott(pyglet.window.Window):
       
 
 if __name__ == '__main__':
-    app = GrayScott(width=480, height=320, scale=1, config=1, video=True, mask='PYTHON.png')
+    app = GrayScott(width=480, height=320, scale=1, config=10, video=True, mask='batman.jpg', flip=True)
     app.run(fps=None)  # use max fps.
