@@ -103,13 +103,12 @@ class GrayScott(pyglet.window.Window):
             self.reaction_shader = Shader('./glsl/default.vert', './glsl/reaction_with_mask.frag')
             img = Image.open(mask).convert('L').resize((self.tex_width, self.tex_height))
             img = (np.asarray(img) / 255.0).astype(np.float32)
-            feed_texture = np.zeros(img.shape+(4,), dtype=np.float32)
+            mask_texture = np.zeros(img.shape+(4,), dtype=np.float32)
             if flip:
-                img = img[::-1]
+                mask_texture[:, :, 0] = img[::-1]
             else:
-                img = 1 - img[::-1]
-            feed_texture[:, :, 0] = img * SPECIES[self.pattern][2]
-            self.feed_texture = create_texture_from_array(feed_texture)
+                mask_texture[:, :, 0] = 1 - img[::-1]
+            self.mask_texture = create_texture_from_array(mask_texture)
             
         self.render_shader = Shader('./glsl/default.vert', './glsl/render.frag')
         
@@ -117,7 +116,7 @@ class GrayScott(pyglet.window.Window):
         uv_grid = np.zeros((self.tex_height, self.tex_width, 4), dtype=np.float32)
         uv_grid[:, :, 0] = 1.0
 
-        if self.feed_texture is None:
+        if self.mask_texture is None:
             # start evovling from the center.
             uv_grid[self.tex_height//2, self.tex_width//2, 1] = 1.0
         else:
@@ -130,9 +129,9 @@ class GrayScott(pyglet.window.Window):
         # Bind the (one or two) texture(s).
         gl.glActiveTexture(gl.GL_TEXTURE0)
         gl.glBindTexture(self.uv_texture.target, self.uv_texture.id)
-        if self.feed_texture is not None:
+        if self.mask_texture is not None:
             gl.glActiveTexture(gl.GL_TEXTURE1)
-            gl.glBindTexture(self.feed_texture.target, self.feed_texture.id)
+            gl.glBindTexture(self.mask_texture.target, self.mask_texture.id)
             
         # Use an invisible buffer to do the computation.
         with FrameBuffer() as self.fbo:
@@ -175,8 +174,8 @@ class GrayScott(pyglet.window.Window):
     def init_reaction_shader(self):
         with self.reaction_shader:
             self.reaction_shader.set_uniformi('uv_texture', 0)
-            if self.feed_texture is not None:
-                self.reaction_shader.set_uniformi('feed_texture', 1)
+            if self.mask_texture is not None:
+                self.reaction_shader.set_uniformi('mask_texture', 1)
             self.reaction_shader.set_uniformf('dx', 1.0/self.tex_width)
             self.reaction_shader.set_uniformf('dy', 1.0/self.tex_height)
             # the order of the vertices and texcoords matters,
@@ -198,11 +197,10 @@ class GrayScott(pyglet.window.Window):
     def use_pattern(self, pattern):
         rU, rV, feed, kill = SPECIES[pattern]
         with self.reaction_shader:
+            self.reaction_shader.set_uniformf('feed', feed)
             self.reaction_shader.set_uniformf('kill', kill)
             self.reaction_shader.set_uniformf('rU', rU)
             self.reaction_shader.set_uniformf('rV', rV)
-            if self.feed_texture is None:
-                self.reaction_shader.set_uniformf('feed', feed)
                 
                 
     def use_palette(self, palette):

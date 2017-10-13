@@ -8,7 +8,8 @@ uniform float dy;
 uniform float rU;
 uniform float rV;
 
-uniform sampler2D feed_texture;
+uniform sampler2D mask_texture;
+uniform float feed;
 uniform float kill;
 
 uniform sampler2D uv_texture;
@@ -23,7 +24,7 @@ void main()
         result = vec4(1.0, 0.0, 0.0, 1.0);
         return;
     }
-    float feed = texture(feed_texture, uv_texcoord).r;
+    float feed_uv = texture(mask_texture, uv_texcoord).r * feed;
     vec2 uv  = texture(uv_texture, uv_texcoord).rg;
     vec2 uv0 = texture(uv_texture, uv_texcoord + vec2(dx, 0.0)).rg;
     vec2 uv1 = texture(uv_texture, uv_texcoord + vec2(0.0, dy)).rg;
@@ -31,8 +32,8 @@ void main()
     vec2 uv3 = texture(uv_texture, uv_texcoord + vec2(0.0, -dy)).rg;
 
     vec2 lapl = uv0 + uv1 + uv2 + uv3 - 4.0 * uv;
-    float du = rU * lapl.r - uv.r * uv.g * uv.g + feed * (1.0 - uv.r);
-    float dv = rV * lapl.g + uv.r * uv.g * uv.g - (feed + kill) * uv.g;
+    float du = rU * lapl.r - uv.r * uv.g * uv.g + feed_uv * (1.0 - uv.r);
+    float dv = rV * lapl.g + uv.r * uv.g * uv.g - (feed_uv + kill) * uv.g;
     vec2 dst = uv + 0.6 * vec2(du, dv);
 
     if(u_mouse.x > 0.0)
