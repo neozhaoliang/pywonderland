@@ -200,7 +200,7 @@ class WilsonAlgoAnimation(object):
         self.grid = [[0]*height for _ in range(width)]
         self.num_changes = 0   # a counter holds how many cells are changed.
         self.frame_box = None  # maintains the region that to be updated.
-
+        """
         # -----------------------------------------
         # shrink the maze a little to pad some margin at the border of the window.
         self.cells = []
@@ -260,7 +260,7 @@ class WilsonAlgoAnimation(object):
             if y <= height - 3 - margin and img.getpixel((x, y+2)) == 255:
                 neighbors.append((x, y+2))
             return neighbors
-        """
+        
         # --------------------------------------------
 
         self.graph = {v: neighborhood(v) for v in self.cells}

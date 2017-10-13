@@ -90,3 +90,4 @@ ENV/
 
 src/**/*.png
 src/**/*.gif
+!src/**/PYTHON.png
