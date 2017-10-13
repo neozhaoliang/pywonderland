@@ -5,8 +5,8 @@ from PIL import Image, ImageFont, ImageDraw
 
 def generate_text_mask(width, height, text, font_file, fontsize):
     """
-    This function helps you generate an black-white image with text
-    in it so that can be used as the mask in the main program.
+    This function helps you generate a black-white image with text
+    in it so that it can be used as the mask image in the main program.
 
     params: 
         width, height: size of the image.
