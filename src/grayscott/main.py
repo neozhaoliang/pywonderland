@@ -116,36 +116,38 @@ class GrayScott(pyglet.window.Window):
         # Genetate the uv_texture
         uv_grid = np.zeros((self.tex_height, self.tex_width, 4), dtype=np.float32)
         uv_grid[:, :, 0] = 1.0
-        
-        # If using self-defined feed texture we start evovling from the 4 corners.
+
         if self.feed_texture is None:
             # start evovling from the center.
             uv_grid[self.tex_height//2, self.tex_width//2, 1] = 1.0
         else:
             # start evovling from 10 random points.
-            rows = np.random.choice(range(self.tex_height), 10)
-            cols = np.random.choice(range(self.tex_width), 10)
-            uv_grid[rows, cols, 1] = 1.0
+            rand_rows = np.random.choice(range(self.tex_height), 10)
+            rand_cols = np.random.choice(range(self.tex_width), 10)
+            uv_grid[rand_rows, rand_cols, 1] = 1.0
         self.uv_texture = create_texture_from_array(uv_grid)
         
-        # Bind the two textures.
+        # Bind the (one or two) texture(s).
         gl.glActiveTexture(gl.GL_TEXTURE0)
         gl.glBindTexture(self.uv_texture.target, self.uv_texture.id)
         if self.feed_texture is not None:
             gl.glActiveTexture(gl.GL_TEXTURE1)
             gl.glBindTexture(self.feed_texture.target, self.feed_texture.id)
             
-        # use an invisible buffer to do the computation.
+        # Use an invisible buffer to do the computation.
         with FrameBuffer() as self.fbo:
             self.fbo.attach_texture(self.uv_texture)
-            
+
         self.mouse_down = False
         self._species_names = list(SPECIES.keys())
+
+        # The next four attributes are used for saving frames.
         self.frame_count = 0
         self.video_on = video
         self.skip = 100
         self.max_frames = 100000
-        
+
+        # Finally initialize the two shaders.
         self.init_reaction_shader()
         self.init_render_shader()
 
@@ -225,7 +227,7 @@ class GrayScott(pyglet.window.Window):
         gl.glClearColor(0, 0, 0, 0)
         self.clear()
 
-        # since we are rendering to the invisible framebuffer,
+        # Since we are rendering to the invisible framebuffer,
         # the size is the texture's size.
         self.set_viewport(self.tex_width, self.tex_height)
 
@@ -233,7 +235,7 @@ class GrayScott(pyglet.window.Window):
             with self.reaction_shader:
                 gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
 
-        # now we render to the actual window, hence the size is window's size.
+        # Now we render to the actual window, hence the size is window's size.
         self.set_viewport(self.width, self.height)
         with self.render_shader:
             gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
@@ -326,7 +328,7 @@ class GrayScott(pyglet.window.Window):
         """Use a random palette."""
         alphas = sorted(np.random.random(5))
         palette = np.random.random((5, 4))
-        # the first row is set to 0 to make the background black.
+        # The first row is set to 0 to make the background black.
         palette[0] = 0.0
         palette[:, -1] = alphas
         palette = palette.round(3)

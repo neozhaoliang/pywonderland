@@ -1,7 +1,19 @@
+# -*- coding: utf-8 -*_
+
 from PIL import Image, ImageFont, ImageDraw
 
 
 def generate_text_mask(width, height, text, font_file, fontsize):
+    """
+    This function helps you generate an black-white image with text
+    in it so that can be used as the mask in the main program.
+
+    params: 
+        width, height: size of the image.
+        text: a string to be embedded in the image.
+        font_file: path to your .ttf font file.
+        fontsize: size of the font.
+    """
     img = Image.new('L', (width, height), 'black')
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype(font_file, fontsize)
@@ -11,4 +23,5 @@ def generate_text_mask(width, height, text, font_file, fontsize):
     img.save(text + '.png')
 
 
-generate_text_mask(480, 320, 'PYTHON', 'ubuntu.ttf', 150)
+if __name__ == '__main__':
+    generate_text_mask(480, 320, 'PYTHON', 'ubuntu.ttf', 150)
