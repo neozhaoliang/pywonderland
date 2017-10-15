@@ -68,7 +68,7 @@ class GrayScott(pyglet.window.Window):
     | patterns and colors. At any time you may click or drag |
     | your mouse to draw on the screen.                      |
     |                                                        |
-    | Keyboad control:                                       |
+    | Keyboard control:                                       |
     |   1. press 'space' to clear the window to blank.       |
     |   2. press 'p' to change to a random palette.          |
     |   3. press 's' to change to another pattern.           |
@@ -91,7 +91,7 @@ class GrayScott(pyglet.window.Window):
         filp: choose whether the black pixels or the white pixels in the mask image are shown.
         """
         pyglet.window.Window.__init__(self, width, height, caption='GrayScott Simulation',
-                                      visible=False, vsync=False)
+                                      resizable=True, visible=False, vsync=False)
         self.tex_width, self.tex_height = width // scale, height // scale
         self.load_config(config)
         
@@ -367,5 +367,7 @@ class GrayScott(pyglet.window.Window):
       
 
 if __name__ == '__main__':
-    app = GrayScott(width=500, height=500, scale=1, config=1, video=False, mask='lena.jpg', flip=True)
+    app = GrayScott(width=500, height=500, scale=1, config=1,
+                    video=False, mask='lena.jpg', flip=True)
+    print(app.__doc__)
     app.run(fps=None)  # use max fps.

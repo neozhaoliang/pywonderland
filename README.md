@@ -30,7 +30,7 @@
 
 ---
 ### Mandelbrot Set
-Mandelbrot 集 [[View Code](./src/misc/mandelbrot.py)]
+Mandelbrot 集 [[Code](./src/misc/mandelbrot.py)]
 
 <br>
 
@@ -44,7 +44,7 @@ Mandelbrot 集 [[View Code](./src/misc/mandelbrot.py)]
 
 ---
 ### Julia Set
-Julia 集 [[View Code](./src/misc/julia.py)]
+Julia 集 [[Code](./src/misc/julia.py)]
 
 <br>
 
@@ -73,7 +73,7 @@ Julia 集 [[View Code](./src/misc/julia.py)]
 ---
 ### Icosahedral Kaleidoscope
 
-正二十面体万花筒 [[View Code](./src/misc/kaleidoscope.py)] [[View Webm Animation](./img/kaleidoscope.webm)]
+正二十面体万花筒 [[Code](./src/misc/kaleidoscope.py)] [[Video](./img/kaleidoscope.webm)]
 
 <br>
 
@@ -87,7 +87,7 @@ Julia 集 [[View Code](./src/misc/julia.py)]
 
 ---
 ### Newton Fractal
-Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikipedia.org/wiki/Newton_fractal)]
+Newton 迭代分形 [[Code](./src/misc/newton.py)] [[Wiki](https://en.wikipedia.org/wiki/Newton_fractal)]
 
 <br>
 
@@ -101,7 +101,7 @@ Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikip
 
 ---
 ### The E8 Pattern
-李代数 E8 的根系 [[View Code](./src/misc/e8.py)] [<a href="https://en.wikipedia.org/wiki/E8_(mathematics)">Wiki</a>]
+李代数 E8 的根系 [[Code](./src/misc/e8.py)] [<a href="https://en.wikipedia.org/wiki/E8_(mathematics)">Wiki</a>]
 
 <br>
 
@@ -115,7 +115,7 @@ Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikip
 
 ---
 ### The Modular Group
-模群的基本域 [[View Code](./src/misc/modulargroup.py)] [[Wiki](https://en.wikipedia.org/wiki/Modular_group)]
+模群的基本域 [[Code](./src/misc/modulargroup.py)] [[Wiki](https://en.wikipedia.org/wiki/Modular_group)]
 
 <br>
 
@@ -129,7 +129,7 @@ Newton 迭代分形 [[View Code](./src/misc/newton.py)] [[Wiki](https://en.wikip
 
 ---
 ### Generalized Penrose Tilings
-彭罗斯铺砌 [[View Code](./src/misc/penrose.py)] [[Doc](https://github.com/neozhaoliang/pywonderland/wiki/Generalized-Penrose-Tilings)]
+彭罗斯铺砌 [[Code](./src/misc/penrose.py)] [[Doc](https://github.com/neozhaoliang/pywonderland/wiki/Generalized-Penrose-Tilings)]
 
 <br>
 
@@ -170,7 +170,7 @@ Wilson 一致生成树算法 [[Code](./src/wilson/)] [[Doc](https://github.com/n
 
 ---
 ### The 120-cell
-120 胞腔 [[View Code](./src/120cell/)][[Wiki](https://en.wikipedia.org/wiki/120-cell)]
+120 胞腔 [[Code](./src/120cell/)][[Wiki](https://en.wikipedia.org/wiki/120-cell)]
 
 <br>
 
@@ -184,7 +184,7 @@ Wilson 一致生成树算法 [[Code](./src/wilson/)] [[Doc](https://github.com/n
 
 ---
 ### Lorenz Attractor Animation
-洛伦兹吸引子动画 [[View Code](./src/misc/lorenz.py)][[View Webm Animation](./img/lorenz.webm)]
+洛伦兹吸引子动画 [[Code](./src/misc/lorenz.py)][[Video](./img/lorenz.webm)]
 
 <br>
 
@@ -198,7 +198,7 @@ Wilson 一致生成树算法 [[Code](./src/wilson/)] [[Doc](https://github.com/n
 
 ---
 ### 2D Hyperbolic Tilings
-Poincare 双曲铺砌 [[View Code](./src/poincare/)]
+Poincare 双曲铺砌 [[Code](./src/poincare/)]
 
 <br>
 
@@ -212,7 +212,7 @@ Poincare 双曲铺砌 [[View Code](./src/poincare/)]
 
 ---
 ### 3D Hyperbolic Honeycombs
-双曲蜂巢 [[View Code](./src/honeycomb)]
+双曲蜂巢 [[Code](./src/honeycomb)]
 
 <br>
 
