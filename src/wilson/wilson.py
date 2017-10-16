@@ -252,7 +252,7 @@ class WilsonAlgoAnimation(object):
             x, y = cell
             neighbors = []
             if x >= 2 + margin and img.getpixel((x-2, y)) == 255:
-                    neighbors.append((x-2, y))
+                neighbors.append((x-2, y))
             if y >= 2 + margin and img.getpixel((x, y-2)) == 255:
                 neighbors.append((x, y-2))
             if x <= width - 3 - margin and img.getpixel((x+2, y)) == 255:
