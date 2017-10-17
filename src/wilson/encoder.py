@@ -70,7 +70,7 @@ class GIFWriter(object):
 
         packed_byte = 1  # the packed byte in the logical screen descriptor.
         packed_byte = packed_byte << 3 | (self._palette_bits - 1)  # color resolution.
-        packed_byte = packed_byte << 1 | 0                   # sorted flag.
+        packed_byte = packed_byte << 1 | 0                         # sorted flag.
         packed_byte = packed_byte << 3 | (self._palette_bits - 1)  # size of the global color table.
         self.logical_screen_descriptor = pack('<6s2H3B', b'GIF89a', width, height, packed_byte, 0, 0)
 

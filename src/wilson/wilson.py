@@ -46,7 +46,7 @@ FILL = 3
 
 PALETTE = [0, 0, 0,         # wall color
            100, 100, 100,   # tree color
-           255, 0, 255]   # fill color
+           255, 0, 255]     # path color
 
 # GIF files allows at most 256 colors in the global color table,
 # redundant colors will be discarded when we initializing GIF encoders.
@@ -58,12 +58,7 @@ for i in range(256):
 def generate_text_mask(width, height, text, font_file, fontsize):
     """
     This function helps you generate a black-white image with text
-    in it so that it can be used as the mask image in the main program.
-    params: 
-        width, height: size of the image.
-        text: a string to be embedded in the image.
-        font_file: path to your .ttf font file.
-        fontsize: size of the font.
+    in it so that it can be used as the mask image in a maze.
     """
     from PIL import Image, ImageFont, ImageDraw
     img = Image.new('L', (width, height), 'white')
@@ -76,8 +71,10 @@ def generate_text_mask(width, height, text, font_file, fontsize):
 
 
 class WilsonAlgoAnimation(object):
-    """The main class for making the animation. Basically it contains two parts:
-    run the algorithms, and write to the GIF file."""
+    """
+    The main class for making the animation. Basically it contains two parts:
+    run the algorithms, and write to the GIF file.
+    """
 
     def __init__(self, width, height, margin, scale,
                  min_bits, palette, loop=0, mask=None):
@@ -349,7 +346,7 @@ class WilsonAlgoAnimation(object):
         descriptor = GIFWriter.image_descriptor(left * self.scale, top * self.scale,
                                                 width * self.scale, height * self.scale)
         
-        def gen_frame_pixels():
+        def get_frame_pixels():
             for i in range(width * height * self.scale * self.scale):
                 y = i // (width * self.scale * self.scale)
                 x = (i % (width * self.scale)) // self.scale
@@ -357,7 +354,7 @@ class WilsonAlgoAnimation(object):
                 c = self.colormap[val]
                 yield c
 
-        frame = self.writer.LZW_encode(gen_frame_pixels())
+        frame = self.writer.LZW_encode(get_frame_pixels())
         self.num_changes = 0
         self.frame_box = None
         return descriptor + frame
@@ -442,6 +439,8 @@ def main():
     # pad three seconds delay to help to see the resulting maze clearly.
     anim.pad_delay_frame(300)
 
+    # in the dfs/bfs algorithm animation the walls are unchanged throughout,
+    # hence it's safe to use color 0 as the transparent color.
     if args.algo == 'bfs':
         anim.run_bfs_algorithm(speed=50, delay=5, trans_index=0,
                                wc=0, tc=0, pc=2, fc=3)
