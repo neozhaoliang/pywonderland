@@ -51,7 +51,7 @@ PALETTE = [0, 0, 0,         # wall color
 # GIF files allows at most 256 colors in the global color table,
 # redundant colors will be discarded when we initializing GIF encoders.
 for i in range(256):
-    r, g, b = hls_to_rgb((i / 360.0) % 1, 0.5, 1.0)
+    r, g, b = hls_to_rgb(((i + 90) / 360.0) % 1, 0.5, 1.0)
     PALETTE += [int(round(255*r)), int(round(255*g)), int(round(255*b))]
 
 
