@@ -35,7 +35,7 @@ Copyright (c) 2016 by Zhao Liang.
 import argparse
 import random
 from colorsys import hls_to_rgb
-from encoder import GIFWriter
+from canvas import Canvas
 
 
 # four possible states of a cell.
@@ -51,26 +51,11 @@ PALETTE = [0, 0, 0,         # wall color
 # GIF files allows at most 256 colors in the global color table,
 # redundant colors will be discarded when we initializing GIF encoders.
 for i in range(256):
-    r, g, b = hls_to_rgb(((i + 90) / 360.0) % 1, 0.5, 1.0)
+    r, g, b = hls_to_rgb(((90 - i) / 360.0) % 1, 0.5, 1.0)
     PALETTE += [int(round(255*r)), int(round(255*g)), int(round(255*b))]
 
 
-def generate_text_mask(width, height, text, font_file, fontsize):
-    """
-    This function helps you generate a black-white image with text
-    in it so that it can be used as the mask image in a maze.
-    """
-    from PIL import Image, ImageFont, ImageDraw
-    img = Image.new('L', (width, height), 'white')
-    draw = ImageDraw.Draw(img)
-    font = ImageFont.truetype(font_file, fontsize)
-    size_w, size_h = font.getsize(text)
-    xy = (width - size_w) // 2, height // 2 - 5 * size_h // 8
-    draw.text(xy, text, 'black', font)
-    return img
-
-
-class WilsonAlgoAnimation(object):
+class WilsonAlgoAnimation(Canvas):
     """
     The main class for making the animation. Basically it contains two parts:
     run the algorithms, and write to the GIF file.
@@ -96,14 +81,7 @@ class WilsonAlgoAnimation(object):
               This mask image must preserve the connectivity of the graph,
               otherwise the program will not terminate.
         """
-        self.width = width
-        self.height = height
-        self.grid = [[0]*height for _ in range(width)]
-        self.scale = scale
-        self.num_changes = 0   # a counter holds how many cells are changed.
-        self.frame_box = None  # maintains the region that to be updated.
-        self.writer = GIFWriter(width * scale, height * scale, min_bits, palette, loop)
-        self.colormap = {i: i for i in range(1 << min_bits)}
+        Canvas.__init__(self, width, height, scale, min_bits, palette, loop)
 
         def get_mask_pixel(cell):
             if mask is None:
@@ -135,29 +113,11 @@ class WilsonAlgoAnimation(object):
         self.start = (margin, margin)
         self.end = (width - margin - 1, height - margin - 1)
         self.path = []  # a list holds the path in the loop erased random walk.
-
-        self.speed = 10        # output the frame once this number of cells are changed.
-        self.trans_index = 3   # the index of the transparent color in the global color table.
-        self.delay = 5         # delay between successive frames.
         # map distance to color indices.
         self.dist_to_color = lambda d: max(d % (1 << min_bits), 3)
 
     def get_neighbors(self, cell):
         return self.graph[cell]
-
-    def mark_cell(self, cell, index):
-        """Mark a cell and update `frame_box` and `num_changes`."""
-        x, y = cell
-        self.grid[x][y] = index
-
-        if self.frame_box is not None:
-            left, top, right, bottom = self.frame_box
-            self.frame_box = (min(x, left), min(y, top),
-                              max(x, right), max(y, bottom))
-        else:
-            self.frame_box = (x, y, x, y)
-
-        self.num_changes += 1
 
     def mark_wall(self, cell_a, cell_b, index):
         """Mark the space between two adjacent cells."""
@@ -335,63 +295,6 @@ class WilsonAlgoAnimation(object):
         # show the path
         self.clear_remaining_changes()
 
-    def encode_frame(self):
-        if self.frame_box is not None:
-            left, top, right, bottom = self.frame_box
-        else:
-            left, top, right, bottom = 0, 0, self.width - 1, self.height - 1
-
-        width = right - left + 1
-        height = bottom - top + 1
-        descriptor = GIFWriter.image_descriptor(left * self.scale, top * self.scale,
-                                                width * self.scale, height * self.scale)
-        
-        def get_frame_pixels():
-            for i in range(width * height * self.scale * self.scale):
-                y = i // (width * self.scale * self.scale)
-                x = (i % (width * self.scale)) // self.scale
-                val = self.grid[x + left][y + top]
-                c = self.colormap[val]
-                yield c
-
-        frame = self.writer.LZW_encode(get_frame_pixels())
-        self.num_changes = 0
-        self.frame_box = None
-        return descriptor + frame
-
-    def paint_background(self, **kwargs):
-        """Insert current frame at the beginning to use it as the background.
-        This does not require the graphics control block."""
-        if kwargs:
-            self.set_colors(**kwargs)
-        self.writer.data = self.encode_frame() + self.writer.data
-
-    def output_frame(self):
-        """Output current frame to the data stream. This method will not be directly called:
-        it's called by `refresh_frame()` and `clear_remaining_changes()`."""
-        control = self.writer.graphics_control_block(self.delay, self.trans_index)
-        self.writer.data += control + self.encode_frame()
-
-    def refresh_frame(self):
-        if self.num_changes >= self.speed:
-            self.output_frame()
-
-    def clear_remaining_changes(self):
-        if self.num_changes > 0:
-            self.output_frame()
-
-    def set_colors(self, **kwargs):
-        """`wc` is short for wall color, `tc` is short for tree color, etc."""
-        color_dict = {'wc': 0, 'tc': 1, 'pc': 2, 'fc': 3}
-        for key, val in kwargs.items():
-            self.colormap[color_dict[key]] = val
-
-    def pad_delay_frame(self, delay):
-        self.writer.data += self.writer.pad_delay_frame(delay, self.trans_index)
-
-    def write_to_gif(self, filename):
-        self.writer.save_gif(filename)
-
 
 def main():
     parser = argparse.ArgumentParser()
@@ -418,6 +321,8 @@ def main():
     if (args.width * args.height % 2 == 0):
         raise ValueError('The width and height of the maze must both be odd integers!')
 
+    # comment out the following two lines if you don't want to show text.
+    from gentext import generate_text_mask
     mask = generate_text_mask(args.width, args.height, 'UST', 'ubuntu.ttf', 60)
 
     anim = WilsonAlgoAnimation(args.width, args.height, args.margin, args.scale,

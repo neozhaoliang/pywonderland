@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+~~~~~~~~~~~~~~~~~~~~
+A simple GIF encoder
+~~~~~~~~~~~~~~~~~~~~
+"""
 from struct import pack
 
 
