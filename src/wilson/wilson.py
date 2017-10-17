@@ -46,7 +46,7 @@ FILL = 3
 
 PALETTE = [0, 0, 0,         # wall color
            200, 200, 200,   # tree color
-           0, 255, 0]     # path color
+           255, 0, 255]     # path color
 
 # GIF files allows at most 256 colors in the global color table,
 # redundant colors will be discarded when we initializing GIF encoders.
