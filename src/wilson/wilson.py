@@ -45,13 +45,13 @@ PATH = 2
 FILL = 3
 
 PALETTE = [0, 0, 0,         # wall color
-           100, 100, 100,   # tree color
-           255, 0, 255]     # path color
+           200, 200, 200,   # tree color
+           0, 255, 0]     # path color
 
 # GIF files allows at most 256 colors in the global color table,
 # redundant colors will be discarded when we initializing GIF encoders.
 for i in range(256):
-    r, g, b = hls_to_rgb(((i + 60) / 360.0) % 1, 0.5, 1.0)
+    r, g, b = hls_to_rgb((i / 360.0) % 1, 0.5, 1.0)
     PALETTE += [int(round(255*r)), int(round(255*g)), int(round(255*b))]
 
 
