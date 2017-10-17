@@ -6,19 +6,19 @@
 Make GIF animations of Wilson's uniform spanning tree algorithm
 and the depth/breadth-first search algorithm.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Usage:
-       1. set `MODE` to 'bfs' or 'dfs'.
-       2. run
-          python wilson.py [-width] [-height] [-scale]
-                           [-margin] [-loop] [-filename]
-
+      python wilson.py [-width] [-height] [-scale]
+                       [-margin] [-bits] [-algo]
+                       [-loop] [-filename]
 Optional arguments:
     width, height: size of the maze (not the image), should both be odd integers.
     scale: the size of the image will be (width * scale) * (height * scale).
            In other words, each cell in the maze will occupy a square of
            (scale * scale) pixels in the image.
     margin: size of the border of the image.
+    bits: number of bits needed to represent all colors.
+          Its value determines the number of colors used in the image.
+    algo: which maze-solving algorithm to run.
     loop: number of loops of the image, default to 0 (loop infinitely).
     filename: the output file.
 
@@ -34,35 +34,9 @@ Copyright (c) 2016 by Zhao Liang.
 """
 import argparse
 import random
-from struct import pack
+from colorsys import hls_to_rgb
+from encoder import GIFWriter
 
-
-MODE = 'bfs'
-
-PALETTE = [0, 0, 0,         # wall color
-           100, 100, 100,   # tree color
-           255, 0, 255,     # path color
-           150, 200, 100]   # fill color
-
-# I just used the two algorithms `dfs` and `bfs` to demonstrate
-# how to set `PALETTE_BITS` and `global_color_table` in a GIF file.
-# The smaller `PALETTE_BITS`, the fewer colors and the smaller image size.
-if MODE == 'dfs':
-    PALETTE_BITS = 2
-
-if MODE == 'bfs':
-    PALETTE_BITS = 8
-
-    from colorsys import hls_to_rgb
-
-    for i in range(2**PALETTE_BITS - 4):
-        r, g, b = hls_to_rgb((i / 360.0) % 1, 0.5, 1.0)
-        PALETTE += [int(round(255*r)), int(round(255*g)), int(round(255*b))]
-
-# constants for LZW encoding.
-CLEAR_CODE = 2**PALETTE_BITS
-END_CODE = CLEAR_CODE + 1
-MAX_CODES = 4096
 
 # four possible states of a cell.
 WALL = 0
@@ -70,117 +44,43 @@ TREE = 1
 PATH = 2
 FILL = 3
 
+PALETTE = [0, 0, 0,         # wall color
+           100, 100, 100,   # tree color
+           255, 0, 255]   # fill color
 
-class DataBlock(object):
-    """Write bits into a bytearray and then pack this bytearray into data blocks.
-    This class is used in the LZW algorithm when encoding maze into frames."""
-
-    def __init__(self):
-        self._bitstream = bytearray()  # write bits into this array.
-        self._nbits = 0  # a counter holds how many bits have been written.
-
-    def encode_bits(self, num, size):
-        """Given a number `num`, encode it as a binary string of length `size`,
-        and pack it at the end of bitstream.
-        Example: num = 3, size = 5. The binary string for 3 is '00011',
-        here we padded extra zeros at the left to make its length to be 5.
-        The tricky part is that in a gif file, the encoded binary data stream
-        increase from lower (least significant) bits to higher
-        (most significant) bits, so we have to reverse it as '11000' and pack
-        this string at the end of bitstream!
-        """
-        string = bin(num)[2:].zfill(size)
-        for digit in reversed(string):
-            if len(self._bitstream) * 8 == self._nbits:
-                self._bitstream.append(0)
-            if digit == '1':
-                self._bitstream[-1] |= 1 << self._nbits % 8
-            self._nbits += 1
-
-    def dump_bytes(self):
-        """Pack the LZW encoded image data into blocks.
-        Each block is of length <= 255 and is preceded by a byte
-        in 0-255 that indicates the length of this block.
-        """
-        bytestream = bytearray()
-        while len(self._bitstream) > 255:
-            bytestream += bytearray([255]) + self._bitstream[:255]
-            self._bitstream = self._bitstream[255:]
-        if len(self._bitstream) > 0:
-            bytestream += bytearray([len(self._bitstream)]) + self._bitstream
-        return bytestream
+# GIF files allows at most 256 colors in the global color table,
+# redundant colors will be discarded when we initializing GIF encoders.
+for i in range(256):
+    r, g, b = hls_to_rgb(((i + 60) / 360.0) % 1, 0.5, 1.0)
+    PALETTE += [int(round(255*r)), int(round(255*g)), int(round(255*b))]
 
 
-class GIFWriter(object):
+def generate_text_mask(width, height, text, font_file, fontsize):
     """
-    Structure of a GIF file: (in the order they appear)
-    1. always begins with the logical screen descriptor.
-    2. then follows the global color table.
-    3. then follows the loop control block (specify the number of loops)
-    4. then follows the image data of the frames, each frame is further divided into:
-       (i) a graphics control block that specify the delay and transparent color of this frame.
-       (ii) the image descriptor.
-       (iii) the LZW enconded data.
-    5. finally the trailor '0x3B'.
+    This function helps you generate a black-white image with text
+    in it so that it can be used as the mask image in the main program.
+    params: 
+        width, height: size of the image.
+        text: a string to be embedded in the image.
+        font_file: path to your .ttf font file.
+        fontsize: size of the font.
     """
-
-    def __init__(self, width, height, loop):
-        """Attributes are listed in the order they appear in the GIF file."""
-        BYTE = 1  # the packed byte in the logical screen descriptor.
-        BYTE = BYTE << 3 | (PALETTE_BITS - 1)  # color resolution.
-        BYTE = BYTE << 1 | 0                   # sorted flag.
-        BYTE = BYTE << 3 | (PALETTE_BITS - 1)  # size of the global color table.
-        self.logical_screen_descriptor = pack('<6s2H3B', b'GIF89a', width, height, BYTE, 0, 0)
-
-        self.global_color_table = bytearray(PALETTE)
-        self.loop_control = pack('<3B8s3s2BHB', 0x21, 0xFF, 11, b'NETSCAPE', b'2.0', 3, 1, loop, 0)
-        self.data = bytearray()
-        self.trailor = bytearray([0x3B])
-
-    @staticmethod
-    def graphics_control_block(delay, trans_index):
-        """This block specifies the delay and transparent color of a frame."""
-        return pack("<4BH2B", 0x21, 0xF9, 4, 0b00000101, delay, trans_index, 0)
-
-    @staticmethod
-    def image_descriptor(left, top, width, height):
-        """This block specifies the position of a frame (relative to the window).
-        The ending packed byte field is 0 since we do not need a local color table."""
-        return pack('<B4HB', 0x2C, left, top, width, height, 0)
-
-    @staticmethod
-    def pad_delay_frame(delay, trans_index):
-        """Pad a 1x1 pixel frame for delay. The image data could be written as
-        `bytearray([PALETTE_BITS, 1, trans_index, 0])`, this works fine for decoders
-        like firefox and chrome but fails for some decoders like eye of gnome
-        when `PALETTE_BITS` is 7 or 8. Using the LZW encoding is a bit tedious but it's
-        safe for all possible values of `PALETTE_BITS` (1-8) and all decoders.
-        """
-        control = GIFWriter.graphics_control_block(delay, trans_index)
-        descriptor = GIFWriter.image_descriptor(0, 0, 1, 1)
-        stream = DataBlock()
-        code_length = PALETTE_BITS + 1
-        stream.encode_bits(CLEAR_CODE, code_length)
-        stream.encode_bits(trans_index, code_length)
-        stream.encode_bits(END_CODE, code_length)
-        data = bytearray([PALETTE_BITS]) + stream.dump_bytes() + bytearray([0])
-        return control + descriptor + data
-
-    def save_gif(self, filename):
-        """Note the 'wb' mode here!"""
-        with open(filename, 'wb') as f:
-            f.write(self.logical_screen_descriptor +
-                    self.global_color_table +
-                    self.loop_control +
-                    self.data +
-                    self.trailor)
+    from PIL import Image, ImageFont, ImageDraw
+    img = Image.new('L', (width, height), 'white')
+    draw = ImageDraw.Draw(img)
+    font = ImageFont.truetype(font_file, fontsize)
+    size_w, size_h = font.getsize(text)
+    xy = (width - size_w) // 2, height // 2 - 5 * size_h // 8
+    draw.text(xy, text, 'black', font)
+    return img
 
 
 class WilsonAlgoAnimation(object):
     """The main class for making the animation. Basically it contains two parts:
     run the algorithms, and write to the GIF file."""
 
-    def __init__(self, width, height, margin, scale, loop):
+    def __init__(self, width, height, margin, scale,
+                 min_bits, palette, loop=0, mask=None):
         """
         width, height: size of the maze, should both be odd numbers.
         margin: size of the border of the maze.
@@ -194,74 +94,44 @@ class WilsonAlgoAnimation(object):
         3: it's filled (this will not be used until the depth-first search animation)
 
         Initially all cells are walls. Adjacent cells in the maze are spaced out by one cell.
+
+        mask: must be None or a white/black image instance of PIL's Image class.
+              This mask image must preserve the connectivity of the graph,
+              otherwise the program will not terminate.
         """
         self.width = width
         self.height = height
         self.grid = [[0]*height for _ in range(width)]
+        self.scale = scale
         self.num_changes = 0   # a counter holds how many cells are changed.
         self.frame_box = None  # maintains the region that to be updated.
-        """
-        # -----------------------------------------
-        # shrink the maze a little to pad some margin at the border of the window.
-        self.cells = []
-        for y in range(margin, height - margin, 2):
-            for x in range(margin, width - margin, 2):
-                self.cells.append((x, y))
+        self.writer = GIFWriter(width * scale, height * scale, min_bits, palette, loop)
+        self.colormap = {i: i for i in range(1 << min_bits)}
 
-        def neighborhood(cell):
-            x, y = cell
-            neighbors = []
-            if x >= 2 + margin:
-                neighbors.append((x-2, y))
-            if y >= 2 + margin:
-                neighbors.append((x, y-2))
-            if x <= width - 3 - margin:
-                neighbors.append((x+2, y))
-            if y <= height - 3 - margin:
-                neighbors.append((x, y+2))
-            return neighbors
-
-        # ----------------------------------------
-        # This is how I generated the GIF with the self-defined text 'UST'.
-        # It firstly use PIL to generate a 2d mask image (black and white)
-        # that contains the text, then use this mask to determine the
-        # structure of the graph. Note the crucial point here: the word
-        # 'UST' does not destroy the connectivity of the graph!
-        # This trick does not apply to characters like 'O', 'A', 'P', etc.
-        # You may also use a pixel image as the mask (must also preserve
-        # the connectivity of the graph). To use the code, uncomment the
-        # following lines and also comment out the section above. 
-        """
-        from PIL import Image, ImageFont, ImageDraw
-
-        img = Image.new('L', (width, height), 'white')
-        text = 'UST'
-        draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype('ubuntu.ttf', 60)
-        size_w, size_h = font.getsize(text)
-        xy = (width - size_w) // 2, height // 2 - size_h * 5 // 8
-        draw.text(xy, text, 'black', font)
+        def get_mask_pixel(cell):
+            if mask is None:
+                return True
+            else:
+                return mask.getpixel(cell) == 255
 
         self.cells = []
         for y in range(margin, height - margin, 2):
             for x in range(margin, width - margin, 2):
-                if img.getpixel((x, y)) == 255:
+                if get_mask_pixel((x, y)):
                     self.cells.append((x, y))
-        
+
         def neighborhood(cell):
             x, y = cell
             neighbors = []
-            if x >= 2 + margin and img.getpixel((x-2, y)) == 255:
+            if x >= 2 + margin and get_mask_pixel((x-2, y)):
                 neighbors.append((x-2, y))
-            if y >= 2 + margin and img.getpixel((x, y-2)) == 255:
+            if y >= 2 + margin and get_mask_pixel((x, y-2)):
                 neighbors.append((x, y-2))
-            if x <= width - 3 - margin and img.getpixel((x+2, y)) == 255:
+            if x <= width - 3 - margin and get_mask_pixel((x+2, y)):
                 neighbors.append((x+2, y))
-            if y <= height - 3 - margin and img.getpixel((x, y+2)) == 255:
+            if y <= height - 3 - margin and get_mask_pixel((x, y+2)):
                 neighbors.append((x, y+2))
             return neighbors
-        
-        # --------------------------------------------
 
         self.graph = {v: neighborhood(v) for v in self.cells}
         # we will look for a path between this start and end.
@@ -269,15 +139,11 @@ class WilsonAlgoAnimation(object):
         self.end = (width - margin - 1, height - margin - 1)
         self.path = []  # a list holds the path in the loop erased random walk.
 
-        self.scale = scale     # each cell will occupy (scale * scale) pixels in the GIF image.
         self.speed = 10        # output the frame once this number of cells are changed.
         self.trans_index = 3   # the index of the transparent color in the global color table.
         self.delay = 5         # delay between successive frames.
-
-        # a dict that maps the state of the cells to the colors.
-        # the keys are the states of the cells and the values are the index of the colors.
-        self.colormap = {i: i for i in range(2**PALETTE_BITS)}
-        self.writer = GIFWriter(width * scale, height * scale, loop)  # size of the image is scaled.
+        # map distance to color indices.
+        self.dist_to_color = lambda d: max(d % (1 << min_bits), 3)
 
     def get_neighbors(self, cell):
         return self.graph[cell]
@@ -287,8 +153,6 @@ class WilsonAlgoAnimation(object):
         x, y = cell
         self.grid[x][y] = index
 
-        self.num_changes += 1
-
         if self.frame_box is not None:
             left, top, right, bottom = self.frame_box
             self.frame_box = (min(x, left), min(y, top),
@@ -296,21 +160,23 @@ class WilsonAlgoAnimation(object):
         else:
             self.frame_box = (x, y, x, y)
 
+        self.num_changes += 1
+
     def mark_wall(self, cell_a, cell_b, index):
         """Mark the space between two adjacent cells."""
         wall = ((cell_a[0] + cell_b[0]) // 2,
                 (cell_a[1] + cell_b[1]) // 2)
         self.mark_cell(wall, index)
 
-    def barrier(self, cell_a, cell_b):
-        """Check if two adjacent cells are connected."""
-        x = (cell_a[0] + cell_b[0]) // 2
-        y = (cell_a[1] + cell_b[1]) // 2
-        return self.grid[x][y] == WALL
-
     def is_wall(self, cell):
         """Check if a cell is wall."""
         x, y = cell
+        return self.grid[x][y] == WALL
+
+    def connected(self, cell_a, cell_b):
+        """Check if two adjacent cells are connected."""
+        x = (cell_a[0] + cell_b[0]) // 2
+        y = (cell_a[1] + cell_b[1]) // 2
         return self.grid[x][y] == WALL
 
     def in_tree(self, cell):
@@ -415,7 +281,7 @@ class WilsonAlgoAnimation(object):
             self.mark_cell(child, FILL)
             self.mark_wall(parent, child, FILL)
             for next_cell in self.get_neighbors(child):
-                if (next_cell not in visited) and (not self.barrier(child, next_cell)):
+                if (next_cell not in visited) and (not self.connected(child, next_cell)):
                     stack.append((child, next_cell))
                     visited.add(next_cell)
 
@@ -442,24 +308,20 @@ class WilsonAlgoAnimation(object):
         self.trans_index = trans_index
         self.set_colors(**kwargs)
 
-        def dist_to_color(d):
-            """map a distance to a color index."""
-            return max(d % 256, 4)
-
         dist = 0
         from_to = dict()  # a dict to remember each step.
         queue = deque([(self.start, self.start, dist)])
-        self.mark_cell(self.start, dist_to_color(dist))
+        self.mark_cell(self.start, self.dist_to_color(dist))
         visited = set([self.start])
 
         while len(queue) > 0:
             parent, child, dist = queue.popleft()
             from_to[child] = parent
-            self.mark_cell(child, dist_to_color(dist))
-            self.mark_wall(parent, child, dist_to_color(dist))
+            self.mark_cell(child, self.dist_to_color(dist))
+            self.mark_wall(parent, child, self.dist_to_color(dist))
 
             for next_cell in self.get_neighbors(child):
-                if (next_cell not in visited) and (not self.barrier(child, next_cell)):
+                if (next_cell not in visited) and (not self.connected(child, next_cell)):
                     queue.append((child, next_cell, dist + 1))
                     visited.add(next_cell)
 
@@ -477,8 +339,6 @@ class WilsonAlgoAnimation(object):
         self.clear_remaining_changes()
 
     def encode_frame(self):
-        """Use LZW algorithm to encode the region bounded by `frame_box`
-        into one frame of the image."""
         if self.frame_box is not None:
             left, top, right, bottom = self.frame_box
         else:
@@ -488,40 +348,19 @@ class WilsonAlgoAnimation(object):
         height = bottom - top + 1
         descriptor = GIFWriter.image_descriptor(left * self.scale, top * self.scale,
                                                 width * self.scale, height * self.scale)
+        
+        def gen_frame_pixels():
+            for i in range(width * height * self.scale * self.scale):
+                y = i // (width * self.scale * self.scale)
+                x = (i % (width * self.scale)) // self.scale
+                val = self.grid[x + left][y + top]
+                c = self.colormap[val]
+                yield c
 
-        stream = DataBlock()
-        code_length = PALETTE_BITS + 1
-        next_code = END_CODE + 1
-        code_table = {(i,): i for i in range(2**PALETTE_BITS)}
-        stream.encode_bits(CLEAR_CODE, code_length)  # always start with the clear code.
-
-        pattern = tuple()
-        for i in range(width * height * self.scale * self.scale):
-            y = i // (width * self.scale * self.scale)
-            x = (i % (width * self.scale)) // self.scale
-            val = self.grid[x + left][y + top]
-            c = self.colormap[val]
-            pattern += (c,)
-            if pattern not in code_table:
-                code_table[pattern] = next_code  # add new code in the table.
-                stream.encode_bits(code_table[pattern[:-1]], code_length)  # output the prefix.
-                pattern = (c,)  # suffix becomes the current pattern.
-
-                next_code += 1
-                if next_code == 2**code_length + 1:
-                    code_length += 1
-                if next_code == MAX_CODES:
-                    next_code = END_CODE + 1
-                    stream.encode_bits(CLEAR_CODE, code_length)
-                    code_length = PALETTE_BITS + 1
-                    code_table = {(i,): i for i in range(2**PALETTE_BITS)}
-
-        stream.encode_bits(code_table[pattern], code_length)
-        stream.encode_bits(END_CODE, code_length)
-
+        frame = self.writer.LZW_encode(gen_frame_pixels())
         self.num_changes = 0
         self.frame_box = None
-        return descriptor + bytearray([PALETTE_BITS]) + stream.dump_bytes() + bytearray([0])
+        return descriptor + frame
 
     def paint_background(self, **kwargs):
         """Insert current frame at the beginning to use it as the background.
@@ -551,7 +390,7 @@ class WilsonAlgoAnimation(object):
             self.colormap[color_dict[key]] = val
 
     def pad_delay_frame(self, delay):
-        self.writer.data += GIFWriter.pad_delay_frame(delay, self.trans_index)
+        self.writer.data += self.writer.pad_delay_frame(delay, self.trans_index)
 
     def write_to_gif(self, filename):
         self.writer.save_gif(filename)
@@ -569,6 +408,11 @@ def main():
                         help='size of a cell in pixels')
     parser.add_argument('-loop', type=int, default=0,
                         help='number of loops of the animation, default to 0 (loop infinitely)')
+    parser.add_argument('-bits', metavar='b', type=int, default=8,
+                        help='an interger beteween 2-8 represents the minimal number of bits needed to\
+                        represent the colors, this parameter determines the size of the global color table.')
+    parser.add_argument('-algo', metavar='a', type=str, default='bfs',
+                        help='choose which maze-solving algorithm to run.')
     parser.add_argument('-filename', type=str, default='wilson.gif',
                         help='output file name')
 
@@ -577,7 +421,10 @@ def main():
     if (args.width * args.height % 2 == 0):
         raise ValueError('The width and height of the maze must both be odd integers!')
 
-    anim = WilsonAlgoAnimation(args.width, args.height, args.margin, args.scale, args.loop)
+    mask = generate_text_mask(args.width, args.height, 'UST', 'ubuntu.ttf', 60)
+
+    anim = WilsonAlgoAnimation(args.width, args.height, args.margin, args.scale,
+                               args.bits, PALETTE, args.loop, mask=mask)
 
     # here we need to paint the blank background because the region that has not been
     # covered by any frame will be set to transparent by decoders.
@@ -595,16 +442,18 @@ def main():
     # pad three seconds delay to help to see the resulting maze clearly.
     anim.pad_delay_frame(300)
 
-    if MODE == 'dfs':
-        # in the DFS algorithm animation the walls are unchanged throughout,
-        # hence it's safe to use color 0 as the transparent color.
+    if args.algo == 'bfs':
+        anim.run_bfs_algorithm(speed=50, delay=5, trans_index=0,
+                               wc=0, tc=0, pc=2, fc=3)
+
+    elif args.algo == 'dfs':
         anim.run_dfs_algorithm(speed=10, delay=5, trans_index=0,
                                wc=0, tc=0, pc=2, fc=3)
 
-    if MODE == 'bfs':
-        anim.run_bfs_algorithm(speed=30, delay=5, trans_index=0,
-                               wc=0, tc=0, pc=2, fc=3)
-
+    # more elif for algorithms implemented by the user ...
+    else:
+        pass
+    
     # pad five seconds delay to help to see the resulting path clearly.
     anim.pad_delay_frame(500)
 
