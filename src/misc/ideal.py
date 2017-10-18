@@ -7,7 +7,15 @@ Draw the (inf, inf, inf) Hyperbolic Tiling in Poincaré's disk
 """
 import numpy as np
 import cairocffi as cairo
+from collections import deque
 from colorsys import hls_to_rgb
+
+
+# the automaton that generate all words in the group
+#  G = <A, B, C | A^2=B^2=C^2=1>.
+automaton = {1: {"B": 2, "C": 3},
+             2: {"A": 1, "C": 3},
+             3: {"A": 1, "B": 2}}
 
 
 def hue(x):
@@ -59,36 +67,29 @@ def orthogonal_circle(alpha, beta):
     return circle_to_matrix(center, radius)
 
 
-def compute_all_circles(alpha, beta, gamma, depth):
+def traverse(alpha, beta, gamma, depth):
     """
     Given three points on the unit circle (by their angles alpha, beta and gamma),
-    reflect the circles about the three mirrors up to a given depth and return
-    all resulting circles.    
+    generate all words in the group and all the circles corresponding to them by 
+    traversing over the automaton.
     """
     mA = orthogonal_circle(alpha, beta)
     mB = orthogonal_circle(beta, gamma)
     mC = orthogonal_circle(gamma, alpha)
-    circles = [["A", mA], ["B", mB], ["C", mC]]
-    result = [circles]
+    
+    def transfrom(circle, symbol):
+        mirror = {"A": mA, "B": mB, "C": mC}[symbol]
+        return reflect(circle, mirror)
+    
+    queue = deque([["A", 1, mA], ["B", 2, mB], ["C", 3, mC]])
+    while queue:
+        word, state, circle = queue.popleft()
+        yield word, state, circle
 
-    for i in range(depth):
-        next_circles = []
-        for last_mirror, circle in circles:
-            if last_mirror == "A":
-                next_circles += [["B", reflect(circle, mB)],
-                                 ["C", reflect(circle, mC)]]
-            if last_mirror == "B":
-                next_circles += [["C", reflect(circle, mC)],
-                                 ["A", reflect(circle, mA)]]
-            if last_mirror == "C":
-                next_circles += [["A", reflect(circle, mA)],
-                                 ["B", reflect(circle, mB)]]
+        if len(word) < depth:
+            for symbol, to in automaton[state].items():
+                queue.append((word + symbol, to, transfrom(circle, symbol)))
 
-        circles = next_circles
-        result.append(circles)
-
-    return result
-            
 
 def main(verts, depth, size):
     size = 600
@@ -112,16 +113,15 @@ def main(verts, depth, size):
     ctx.clip()
 
     alpha, beta, gamma = verts
-    circles = compute_all_circles(alpha, beta, gamma, depth)
-    for i in range(depth + 1):
-        for _, circ in circles[i]:
-            z, r = matrix_to_circle(circ)
-            ctx.arc(z.real, z.imag, r, 0, 2*np.pi)
-            ctx.set_source_rgb(*hue(float(i) / (depth + 1)))
-            ctx.fill_preserve()
-            ctx.set_source_rgb(*arc_color)
-            ctx.set_line_width((i + 2) * 0.005 / (i + 1))
-            ctx.stroke()
+    for word, state, circle in traverse(alpha, beta, gamma, depth):
+        d = len(word) - 1.0
+        z, r =  matrix_to_circle(circle)
+        ctx.arc(z.real, z.imag, r, 0, 2*np.pi)
+        ctx.set_source_rgb(*hue(d / depth))
+        ctx.fill_preserve()
+        ctx.set_source_rgb(*arc_color)
+        ctx.set_line_width((d + 2) * 0.005 / (d + 1))
+        ctx.stroke()
 
     surface.write_to_png("ideal_tiling.png")
 
