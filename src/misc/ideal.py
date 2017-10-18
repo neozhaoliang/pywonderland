@@ -127,7 +127,7 @@ def main(verts, depth, size):
         ctx.set_line_width((d + 2) * 0.005 / (d + 1))
         ctx.stroke()
 
-    surface.write_to_png("ideal_tiling.png")
+    surface.write_to_png("infx3_tiling.png")
 
 
 if __name__ == "__main__":
