@@ -11,8 +11,9 @@ from collections import deque
 from colorsys import hls_to_rgb
 
 
-# the automaton that generate all words in the group
+# The automaton that generates all words in the group
 #  G = <A, B, C | A^2=B^2=C^2=1>.
+# The starting state is omitted here.
 automaton = {1: {"B": 2, "C": 3},
              2: {"A": 1, "C": 3},
              3: {"A": 1, "B": 2}}
@@ -26,13 +27,16 @@ def hue(x):
 
 
 def degree_to_angle(*args):
+    """Angle in degree --> angle in radian."""
     return [x * np.pi / 180 for x in args]
     
 
 def circle_to_matrix(z, r):
     """
-    Inversion about a circle can be represented as a 2x2 complex matrix.
-    This matrix is normalized to have determinat 1 to avoid floating errors.
+    Inversion about a circle can be viewed as the composition of the
+    complex conjugation and a Mobius transformation, hence can be represented
+    by a 2x2 complex matrix. This matrix is normalized to have determinat 1
+    to avoid floating errors.
     """
     return np.array([[z, r**2 - abs(z)**2],
                      [1, -z.conjugate()]], dtype=np.complex) / r
@@ -48,7 +52,7 @@ def matrix_to_circle(matrix):
 def reflect(circle, mirror):
     """
     The inversion of a circle about another circle (called the mirror) is also
-    a circle. This function returns the matrix representing the resulting circle.
+    a circle. This function returns the matrix that represents the resulting circle.
     """
     return np.dot(mirror, np.dot(circle.conjugate(), mirror))
 
@@ -56,7 +60,7 @@ def reflect(circle, mirror):
 def orthogonal_circle(alpha, beta):
     """
     alpha, beta: angles of two distinct points on the unit circle.
-                 0 <= alpha, beta <= 2pi.
+
     return the matrix of the circle that passes through these 
     two points and is orthogonal to the unit circle.
     """
@@ -77,7 +81,7 @@ def traverse(alpha, beta, gamma, depth):
     mB = orthogonal_circle(beta, gamma)
     mC = orthogonal_circle(gamma, alpha)
     
-    def transfrom(circle, symbol):
+    def transform(circle, symbol):
         mirror = {"A": mA, "B": mB, "C": mC}[symbol]
         return reflect(circle, mirror)
     
@@ -88,7 +92,7 @@ def traverse(alpha, beta, gamma, depth):
 
         if len(word) < depth:
             for symbol, to in automaton[state].items():
-                queue.append((word + symbol, to, transfrom(circle, symbol)))
+                queue.append((word + symbol, to, transform(circle, symbol)))
 
 
 def main(verts, depth, size):
