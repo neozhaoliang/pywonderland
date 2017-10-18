@@ -132,6 +132,6 @@ def main(verts, depth, size):
 
 if __name__ == "__main__":
     main(# use three random points: verts=np.random.random(3) * 2 * np.pi,
-         verts=degree_to_angle(90, 210, 330),
+         verts=degree_to_radian(90, 210, 330),
          depth=8,
          size=600)
