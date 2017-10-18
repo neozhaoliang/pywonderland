@@ -12,7 +12,7 @@ from colorsys import hls_to_rgb
 
 
 # The automaton that generates all words in the group
-#  G = <A, B, C | A^2=B^2=C^2=1>.
+#  G = <A, B, C | A^2 = B^2 = C^2=1>.
 # The starting state is omitted here.
 automaton = {1: {"B": 2, "C": 3},
              2: {"A": 1, "C": 3},
@@ -26,7 +26,7 @@ def hue(x):
     return hls_to_rgb(x, 0.7, 0.9)
 
 
-def degree_to_angle(*args):
+def degree_to_radian(*args):
     """Angle in degree --> angle in radian."""
     return [x * np.pi / 180 for x in args]
     
@@ -71,12 +71,13 @@ def orthogonal_circle(alpha, beta):
     return circle_to_matrix(center, radius)
 
 
-def traverse(alpha, beta, gamma, depth):
+def traverse(verts, depth):
     """
     Given three points on the unit circle (by their angles alpha, beta and gamma),
     generate all words in the group and all the circles corresponding to them by 
     traversing over the automaton.
     """
+    alpha, beta, gamma = verts
     mA = orthogonal_circle(alpha, beta)
     mB = orthogonal_circle(beta, gamma)
     mC = orthogonal_circle(gamma, alpha)
@@ -115,9 +116,8 @@ def main(verts, depth, size):
     ctx.set_source_rgb(0.5, 0.5, 0.5)
     ctx.fill_preserve()
     ctx.clip()
-
-    alpha, beta, gamma = verts
-    for word, state, circle in traverse(alpha, beta, gamma, depth):
+    
+    for word, state, circle in traverse(verts, depth):
         d = len(word) - 1.0
         z, r =  matrix_to_circle(circle)
         ctx.arc(z.real, z.imag, r, 0, 2*np.pi)
