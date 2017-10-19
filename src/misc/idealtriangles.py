@@ -11,7 +11,7 @@ from collections import deque
 from colorsys import hls_to_rgb
 
 
-eps = 1e-12  # accuracy for comparison.
+eps = 1e-9  # accuracy for comparison.
 
 # The automaton that generates all words in the group
 #  G = <A, B, C | A^2 = B^2 = C^2 = 1>.
@@ -49,7 +49,9 @@ def matrix_to_circle(matrix):
     Return the circle corresponding to this matrix. We deal with the two cases
     that whether the matrix represents a circle or a line.
     """
-    if abs(matrix[1, 0]) < eps:  # so this is the matrix of a line.
+    if abs(matrix[1, 0]) < eps:
+        # so this is the matrix of a line passing through the origin.
+        # return one of its intersections with the unit circle.
         return matrix[0, 0] / abs(matrix[1, 1])
     else:
         center = matrix[0, 0] / matrix[1, 0]
