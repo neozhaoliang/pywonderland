@@ -89,6 +89,6 @@ anim = FuncAnimation(fig, animate, init_func=init, interval=5,
 # Note: this `dpi` has nothing to do with the dpi settings in `plt.figure()`,
 # this dpi determines the size of the video together with `figsize`.
 # The range of `crf` is 0~51, the lower crf the better quality and the larger
-# size of the video.
+# size of the video. crf=20 already gives nice results.
 anim.save('lorenz.mp4', writer='ffmpeg', fps=30, dpi=200,
-          codec='libx264', extra_args=['-crf', '5'])
+          codec='libx264', extra_args=['-crf', '20'])
