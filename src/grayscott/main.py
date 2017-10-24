@@ -98,7 +98,7 @@ class GrayScott(pyglet.window.Window):
         # Choose which reaction shader to use according to whether there is a mask image.
         if mask is None:
             self.reaction_shader = Shader('./glsl/default.vert', './glsl/reaction.frag')       
-            self.feed_texture = None
+            self.mask_texture = None
         else:
             self.reaction_shader = Shader('./glsl/default.vert', './glsl/reaction_with_mask.frag')
             img = Image.open(mask).convert('L').resize((self.tex_width, self.tex_height))
