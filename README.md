@@ -4,7 +4,7 @@
 
 > A collection of python scripts for drawing beautiful figures or animating interesting algorithms in mathematics.
 
-[Homepage](www.pywonderland.com)
+[Homepage](http://www.pywonderland.com)
 
 I'm building the docs so that there will be more usage & math explanations for each program.
 
