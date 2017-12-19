@@ -248,6 +248,6 @@ class Maze(object):
         return self.grid[x][y] == Maze.PATH
 
     def add_canvas(self, *args, **kwargs):
-        """Mimicking matplotlib's `fig.add_axes` syntax."""
+        """Mimicking matplotlib's `fig.add_axes` method."""
         self.canvas = Canvas(self, *args, **kwargs)
         return self.canvas

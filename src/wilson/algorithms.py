@@ -95,9 +95,9 @@ def wilson(maze, root):
 
     Given a finite, connected and undirected graph G:
     
-    1. Choose any vertex as the root, maintain a tree T. Initially T={v}.
+    1. Choose any vertex v as the root and maintain a tree T. Initially T={v}.
     
-    2. For any vertex v that not in T, start a loop erased random walk from
+    2. For any vertex v that is not in T, start a loop erased random walk from
        v until the walk hits T, then add the resulting path to T.
 
     3. Repeat step 2 until all vertices of G are in T.

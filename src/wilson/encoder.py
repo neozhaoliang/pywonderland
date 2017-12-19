@@ -150,7 +150,14 @@ class GIFWriter(object):
         return control + descriptor + data
 
     def LZW_encode(self, input_data):
-        """Implement the LZW-encoding algorithm for GIF specification."""
+        """
+        Implement the LZW-encoding algorithm for GIF specification.
+
+        INPUT:
+
+            - `input_data`: a 1-d list consists of the indices of the colors of the pixels
+                            in the global color table.
+        """
         code_length = self._palette_bits + 1
         next_code = self._end_code + 1
         code_table = {(i,): i for i in range(self.num_colors)}

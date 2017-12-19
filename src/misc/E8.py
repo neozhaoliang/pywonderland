@@ -10,7 +10,6 @@ For a detailed discussion of the math see Humphreys's book
 
     "Reflection Groups and Coxeter Groups", section 17, chapter 3.
 """
-
 from itertools import product, combinations
 import cairocffi as cairo
 import numpy as np
@@ -141,4 +140,4 @@ for i in range(len(roots)):
     ctx.arc(x, y, markersize, 0, 2*np.pi)
     ctx.fill()
 
-surface.write_to_png('e8_pattern.png')
+surface.write_to_png('E8.png')

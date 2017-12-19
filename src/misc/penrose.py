@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Draw generalized Penrose tilings using de Bruijn's pentagrid method
@@ -21,15 +20,16 @@ import numpy as np
 import cairocffi as cairo
 
 
-palette = ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3', '#FF7F00', '#FFFF33',
-           '#A65628', '#F781BF', '#66C2A5', '#FC8D62', '#8DA0CB', '#E78AC3',
+palette = ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3',
+           '#FF7F00', '#FFFF33', '#A65628', '#F781BF',
+           '#66C2A5', '#FC8D62', '#8DA0CB', '#E78AC3',
            '#A6D854', '#FFD92F', '#E5C494', '#B3B3B3']
 
 WIDTH = 1200
 HEIGHT = 720
 NUM_LINES = 25
 THIN_COLOR, FAT_COLOR, EDGE_COLOR = random.sample(palette, 3)
-GRIDS = [np.exp(2j*np.pi*i/5) for i in range(5)]
+GRIDS = [np.exp(2j * np.pi * i / 5) for i in range(5)]
 SHIFTS = np.random.random(5)
 BACKGROUND_COLOR = '#000000'
 LINE_WIDTH = 0.1
@@ -38,7 +38,7 @@ LINE_WIDTH = 0.1
 def htmlcolor_to_rgb(s):
     if not (s.startswith('#') and len(s) == 7):
         raise ValueError("Bad html color format. Expected: '#RRGGBB' ")
-    return [1.0 * int(n, 16) / 255 for n in (s[1:3], s[3:5], s[5:])]
+    return [int(n, 16) / 255.0 for n in (s[1:3], s[3:5], s[5:])]
 
 
 def compute_rhombus(r, s, kr, ks):
@@ -104,7 +104,7 @@ def main():
 
     print('shifts in the five directions:\n{}'.format(SHIFTS))
     print('thin color: {} fat color: {} edge color: {}'.format(THIN_COLOR, FAT_COLOR, EDGE_COLOR))
-    surface.write_to_png('aperiodic_tiling.png')
+    surface.write_to_png('penrose.png')
 
 
 if __name__ == '__main__':

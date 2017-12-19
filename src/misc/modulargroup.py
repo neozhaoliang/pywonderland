@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Draw the hyperbolic tiling of the Poincare upper plane
@@ -34,7 +33,6 @@ the elements of the group under the shortest-lex-order representation,
 thus finding all elements in this group amounts to traversing a finite
 directed graph, which is a much easier job. (we will use breadth-first search here)
 """
-
 import collections
 import cmath
 import cairocffi as cairo

@@ -57,11 +57,11 @@ class AztecDiamond(object):
         """
         return (i + j + self.order) % 2 == 1
 
-    def check_block(self, i, j, dominoes):
+    def check(self, i, j, dominoes):
         """Check whether a block is filled with dominoes of given orientations."""
         return all(self.tile[cell] == fill for cell, fill in zip(self.block(i, j), dominoes))
 
-    def fill_block(self, i, j, dominoes):
+    def fill(self, i, j, dominoes):
         """Fill a block with two parallel dominoes of given orientations."""
         for cell, fill in zip(self.block(i, j), dominoes):
             self.tile[cell] = fill
@@ -74,9 +74,9 @@ class AztecDiamond(object):
         """
         for i, j in self.cells:
             try:
-                if (self.check_block(i, j, ['n', 'n', 's', 's'])
-                        or self.check_block(i, j, ['e', 'w', 'e', 'w'])):
-                    self.fill_block(i, j, [None]*4)
+                if (self.check(i, j, ['n', 'n', 's', 's'])
+                        or self.check(i, j, ['e', 'w', 'e', 'w'])):
+                    self.fill(i, j, [None]*4)
             except KeyError:
                 pass
         return self
@@ -104,11 +104,11 @@ class AztecDiamond(object):
         """
         for i, j in self.cells:
             try:
-                if self.check_block(i, j, [None]*4):
+                if self.check(i, j, [None]*4):
                     if random.random() > 0.5:
-                        self.fill_block(i, j, ['s', 's', 'n', 'n'])
+                        self.fill(i, j, ['s', 's', 'n', 'n'])
                     else:
-                        self.fill_block(i, j, ['w', 'e', 'w', 'e'])
+                        self.fill(i, j, ['w', 'e', 'w', 'e'])
             except KeyError:
                 pass
         return self
