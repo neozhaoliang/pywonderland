@@ -31,7 +31,6 @@ from shader import Shader
 from framebuffer import FrameBuffer
 
 
-
 # windows users need to change this to the path of your ffmpeg executable file.
 ffmpeg_exe = 'ffmpeg'
 
@@ -177,8 +176,8 @@ class GrayScott(pyglet.window.Window):
         # create the uv_texture
         uv_grid = np.zeros((self.tex_height, self.tex_width, 4), dtype=np.float32)
         uv_grid[:, :, 0] = 1.0
-        rand_rows = np.random.chioce(range(self.tex_height), 5)
-        rand_cols = np.random.chioce(range(self.tex_width), 5)
+        rand_rows = np.random.choice(range(self.tex_height), 5)
+        rand_cols = np.random.choice(range(self.tex_width), 5)
         uv_grid[rand_rows, rand_cols, 1] = 1.0
         self.uv_texture = create_texture_from_ndarray(uv_grid)
         
@@ -389,11 +388,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-size', type=str, default='800x640',
                         help='width and height of the window')
-    parser.add_argument('-frate', type=int, default=None,
+    parser.add_argument('-frate', type=int, default=24,
                         help='number of frames per second to render to the video')
     parser.add_argument('-fps', type=int, default=None,
                         help='number of frames per second to render to the window')
-    parser.add_argument('-srate', type=int, default=None,
+    parser.add_argument('-srate', type=int, default=16,
                         help='sample a frame from the animation every these frames')
     parser.add_argument('-scale', type=float, default=1.5,
                         help='level of scaling of the texture')
@@ -409,8 +408,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     width, height = [int(i) for i in args.size.split('x')]
-    sample_rate = args.srate if args.srate is not None else 16
-    frame_rate = args.frate if args.frate is not None else 24
 
     app = GrayScott(width,
                     height,
@@ -419,7 +416,7 @@ if __name__ == '__main__':
                     mask=args.mask,
                     flip=args.flip,
                     video=args.video,
-                    sample_rate=sample_rate,
-                    frame_rate=frame_rate)
+                    sample_rate=args.srate,
+                    frame_rate=args.frate)
     print(app.__doc__)
     app.run(args.fps)
