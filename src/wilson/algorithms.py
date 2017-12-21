@@ -9,7 +9,7 @@ import heapq
 import random
 from collections import deque
 from operator import itemgetter
-from maze import Maze 
+from maze import Maze
 
 
 # ---------------------------
@@ -94,9 +94,9 @@ def wilson(maze, root):
     The algorithm runs as follows:
 
     Given a finite, connected and undirected graph G:
-    
+
     1. Choose any vertex v as the root and maintain a tree T. Initially T={v}.
-    
+
     2. For any vertex v that is not in T, start a loop erased random walk from
        v until the walk hits T, then add the resulting path to T.
 
@@ -151,7 +151,7 @@ def wilson(maze, root):
 
             # once the walk hits the tree then add its path to the tree.
             maze.mark_path(maze.walkPath, Maze.TREE)
-            
+
     maze.canvas.clear_remaining_changes()
 
 
@@ -172,11 +172,11 @@ def retrieve_path(cameFrom, start, end):
 
 def bfs(maze, start, end):
     """Solve the maze by breadth-first search."""
-    
+
     # a helper function
     def dist_to_color(distance):
         """
-        Map the distance of a cell to the start to a color index. 
+        Map the distance of a cell to the start to a color index.
         This is because we must make sure that the assigned number of each cell
         lies between 0 and the total number of colors in the image,
         otherwise the initial dict of the encoder cannot recognize it.
@@ -222,10 +222,10 @@ def dfs(maze, start, end):
     stack = [(start, dist)]
     maze.mark_cell(start, dist_to_color(dist))
     visited = set([start])
-    
+
     while len(stack) > 0:
         child, dist = stack.pop()
-        parent = cameFrom[child] 
+        parent = cameFrom[child]
         maze.mark_cell(child, dist_to_color(dist))
         maze.mark_wall(parent, child, dist_to_color(dist))
         for nextCell in maze.get_neighbors(child):

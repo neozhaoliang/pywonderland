@@ -26,13 +26,13 @@ def render_with_cairo(az, imgsize, extent, filename):
     to a png image with cairo.
 
     INPUT:
- 
+
         - `az`: an instance of the AztecDiamond class.
 
         - `imgsize`: image size in pixels, e.g. size = 600 means 600x600.
-    
+
         - `extent`: range of the axis: [-extent, extent] x [-extent, extent]
-    
+
         - `filename`: output filename, must be a .png image.
     """
     import cairocffi as cairo
@@ -58,7 +58,7 @@ def render_with_cairo(az, imgsize, extent, filename):
                 ctx.rectangle(i + margin, j + margin,
                               2 - 2 * margin, 1 - 2 * margin)
                 ctx.set_source_rgb(*S_COLOR)
-                    
+
             if az.tile[(i, j)] == 'w':
                 ctx.rectangle(i + margin, j + margin,
                               1 - 2 * margin, 2 - 2 * margin)

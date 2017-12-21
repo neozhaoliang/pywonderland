@@ -48,12 +48,12 @@ def main():
     args = parser.parse_args()
 
     # define your favorite global color table here.
-    mypalette = [0, 0, 0, 200, 200, 200, 255, 0, 255]    
+    mypalette = [0, 0, 0, 200, 200, 200, 255, 0, 255]
     # GIF files allows at most 256 colors in the global color table,
     # redundant colors will be discarded when the encoder is initialized.
     for i in range(256):
         rgb = hls_to_rgb((i / 360.0) % 1, 0.5, 1.0)
-        mypalette += map(lambda x: int(round(255 * x)), rgb)
+        mypalette += [int(round(255 * x)) for x in rgb]
 
     # you may use a binary image instance of PIL's Image class here as the mask image,
     # this image must preserve the connectivity of the grid graph.

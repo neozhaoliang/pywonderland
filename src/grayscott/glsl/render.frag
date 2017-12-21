@@ -18,28 +18,15 @@ void main()
         col = palette[0].rgb;
     }
 
-    if (value > palette[0].a && value <= palette[1].a)
+    for(int i=0; i<=3; ++i)
+ 
     {
-        a = (value - palette[0].a) / (palette[1].a - palette[0].a);
-        col = mix(palette[0].rgb, palette[1].rgb, a);
-    }
+        if (value > palette[i].a && value <= palette[i+1].a)
+        {
+            a = (value - palette[i].a) / (palette[i+1].a - palette[i].a);
+            col = mix(palette[i].rgb, palette[i+1].rgb, a);
+        }
 
-    if (value > palette[1].a && value <= palette[2].a)
-    {
-        a = (value - palette[1].a) / (palette[2].a - palette[1].a);
-        col = mix(palette[1].rgb, palette[2].rgb, a);
-    }
-
-    if (value > palette[2].a && value <= palette[3].a)
-    {
-        a = (value - palette[2].a) / (palette[3].a - palette[2].a);
-        col = mix(palette[2].rgb, palette[3].rgb, a);
-    }
-
-    if (value > palette[3].a && value <= palette[4].a)
-    {
-        a = (value - palette[3].a) / (palette[4].a - palette[3].a);
-        col = mix(palette[3].rgb, palette[4].rgb, a);
     }
 
     if (value > palette[4].a)

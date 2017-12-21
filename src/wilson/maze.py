@@ -42,7 +42,7 @@ class Canvas(object):
         self.target_file.write(self.writer.logical_screen_descriptor
                                + self.writer.global_color_table
                                + self.writer.loop_control)
-        
+
     def encode_frame(self, static=False):
         """
         Encode current maze into one frame.
@@ -63,7 +63,7 @@ class Canvas(object):
 
         # A generator that yields the pixels of this frame. This may look a bit unintuitive
         # because encoding frames will be called thousands of times in an animation
-        # and I don't want to create and destroy a new list each time it's called. 
+        # and I don't want to create and destroy a new list each time it's called.
         def get_frame_pixels():
             for i in range(width * height * self.scale * self.scale):
                 y = i // (width * self.scale * self.scale)
@@ -81,9 +81,9 @@ class Canvas(object):
 
         if static:
             return descriptor + frame
-        else:
-            control = GIFWriter.graphics_control_block(self.delay, self.trans_index)
-            return control + descriptor + frame
+
+        control = GIFWriter.graphics_control_block(self.delay, self.trans_index)
+        return control + descriptor + frame
 
     def paint_background(self, **kwargs):
         """
@@ -112,7 +112,7 @@ class Canvas(object):
 
     def pad_delay_frame(self, delay):
         self.target_file.write(self.writer.pad_delay_frame(delay, self.trans_index))
-        
+
     def set_control_params(self, speed=30, delay=3, trans_index=5, **kwargs):
         self.speed = speed
         self.delay = delay
@@ -123,7 +123,7 @@ class Canvas(object):
         self.target_file.write(bytearray([0x3B]))
         self.target_file.close()
 
-  
+
 
 class Maze(object):
     """
@@ -139,7 +139,7 @@ class Maze(object):
         INPUTS:
 
             - `width`, `height`: size of the maze, must both be odd integers.
-        
+
             - `margin`: size of the border of the maze.
 
             - `mask`: must be None or a white/black image instance of PIL's Image class.
@@ -164,7 +164,7 @@ class Maze(object):
         self.grid = [[0]*height for _ in range(width)]
         self.num_changes = 0   # a counter holds how many cells are changed.
         self.frame_box = None  # a 4-tuple maintains the region that to be updated.
-        
+
         def get_mask_pixel(cell):
             """
             For a binary mask image, the white pixels are considered to be cells

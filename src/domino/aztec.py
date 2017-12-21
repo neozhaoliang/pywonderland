@@ -2,7 +2,7 @@
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Domino Shuffling Algorithm on Aztec Diamond Graphs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 REFERENCES:
 
@@ -14,7 +14,7 @@ REFERENCES:
               In Theoretical Computer Science, Volume 303, Issues 2–3, 2003, Pages 267-301
 
     [JPS98] Jockusch, William & Propp, James & Shor, Peter. (1998).
-            "Random Domino Tilings and the Arctic Circle Theorem". 
+            "Random Domino Tilings and the Arctic Circle Theorem".
 """
 import random
 

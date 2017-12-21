@@ -33,7 +33,7 @@ def make_animation(order, size, filename):
     INPUT:
 
         - `order`: max steps to run the algorithm.
-         
+
         - `size`: size of the GIF image.
 
         - `filename`: the output .gif filename.

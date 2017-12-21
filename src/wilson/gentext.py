@@ -11,9 +11,9 @@ def generate_text_mask(width, height, text, font_file, fontsize):
     Important:
         1. this mask image must preserve the connectivity of the grid,
            so characters like 'A', 'O', 'P', etc. are all forbidden!
-        2. the background color should be white and the text color should be black. 
- 
-    params: 
+        2. the background color should be white and the text color should be black.
+
+    params:
         - `width`, `height`: size of the image.
         - `text`: a string to be embedded in the image.
         - `font_file`: path to your .ttf font file.

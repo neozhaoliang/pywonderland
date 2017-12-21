@@ -81,11 +81,11 @@ class GIFWriter(object):
         INPUTS:
 
             - `width`, `height`: size of the image in pixels.
-        
+
             - `min_bits`: color depth (minimal number of bits needed to represent the colors).
-        
+
             - `palette`: a 1-d list of colors used by the image.
-        
+
             - `loop`: number of loops of the image. 0 means loop infinitely (and this is the default).
         """
         self.num_colors = 1 << min_bits  # number of colors in the global color table.
@@ -115,7 +115,7 @@ class GIFWriter(object):
         # ---------- the loop control block ----------
         self.loop_control = pack('<3B8s3s2BHB', 0x21, 0xFF, 11, b'NETSCAPE', b'2.0', 3, 1, loop, 0)
         # --------------------------------------------
-        
+
         self.data = bytearray()  # data of the frames.
         self.trailor = bytearray([0x3B])  # the trailing byte indicates the end of the file.
 

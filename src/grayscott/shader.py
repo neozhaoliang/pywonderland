@@ -110,18 +110,18 @@ class Shader(object):
 
     def uniformi(self, name, *data):
         location = gl.glGetUniformLocation(self.program, name.encode('ascii'))
-        { 1: gl.glUniform1i,
-          2: gl.glUniform2i,
-          3: gl.glUniform3i,
-          4: gl.glUniform4i
+        {1: gl.glUniform1i,
+         2: gl.glUniform2i,
+         3: gl.glUniform3i,
+         4: gl.glUniform4i
         }[len(data)](location, *data)
 
     def uniformf(self, name, *data):
         location = gl.glGetUniformLocation(self.program, name.encode('ascii'))
-        { 1: gl.glUniform1f,
-            2: gl.glUniform2f,
-            3: gl.glUniform3f,
-            4: gl.glUniform4f
+        {1: gl.glUniform1f,
+         2: gl.glUniform2f,
+         3: gl.glUniform3f,
+         4: gl.glUniform4f
         }[len(data)](location, *data)
 
     def uniformfv(self, name, size, data):
@@ -139,11 +139,11 @@ class Shader(object):
         setting several attributes in one vertex buffer.
 
         INPUTS:
-            
+
             - `name`: the attribute name in the shader.
-        
+
             - `data`: a list of vertex attributes (positions, colors, ...)
-        
+
         Example: name = 'positions', data = [0, 0, 0, 1, 1, 0, 1, 1].
         """
         data_ctype = (gl.GLfloat * len(data))(*data)
