@@ -35,6 +35,21 @@ from framebuffer import FrameBuffer
 FFMPEG_EXE = 'ffmpeg'
 
 
+# species: [Du, Dv, feed, kill]
+ALL_SPECIES = {'unstable':             [0.210, 0.105, 0.018, 0.051],
+               'coral':                [0.160, 0.080, 0.060, 0.062],
+               'fingerprint':          [0.190, 0.050, 0.060, 0.062],
+               'bacteria':             [0.140, 0.060, 0.035, 0.065],
+               'worms':                [0.160, 0.080, 0.050, 0.065],
+               'zebrafish':            [0.160, 0.080, 0.035, 0.060],
+               'net':                  [0.210, 0.105, 0.039, 0.058],
+               'worms and loops':      [0.210, 0.105, 0.082, 0.060],
+               'waves':                [0.210, 0.105, 0.014, 0.045],
+               'moving spots':         [0.210, 0.105, 0.014, 0.054],
+               'pulsating solitons':   [0.210, 0.105, 0.025, 0.060],
+              }
+
+
 def htmlcolors_to_rgb(colors):
     """
     `colors`: a 1d list of 5 html colors of the format '#RRGGBBAA'.
@@ -83,22 +98,6 @@ def create_texture_from_ndarray(array):
 
 
 
-# species: [Du, Dv, feed, kill]
-all_species = {'unstable':             [0.210, 0.105, 0.018, 0.051],
-               'coral':                [0.160, 0.080, 0.060, 0.062],
-               'fingerprint':          [0.190, 0.050, 0.060, 0.062],
-               'bacteria':             [0.140, 0.060, 0.035, 0.065],
-               'worms':                [0.160, 0.080, 0.050, 0.065],
-               'zebrafish':            [0.160, 0.080, 0.035, 0.060],
-               'net':                  [0.210, 0.105, 0.039, 0.058],
-               'worms and loops':      [0.210, 0.105, 0.082, 0.060],
-               'waves':                [0.210, 0.105, 0.014, 0.045],
-               'moving spots':         [0.210, 0.105, 0.014, 0.054],
-               'pulsating solitons':   [0.210, 0.105, 0.025, 0.060],
-              }
-
-
-
 class GrayScott(pyglet.window.Window):
     """
     ----------------------------------------------------------
@@ -141,7 +140,7 @@ class GrayScott(pyglet.window.Window):
                       the growth of the pattern.
 
             - `flip`: flip the white/black pixels in the mask image,
-                      only meaningful is there is a mask image.
+                      only meaningful if there is a mask image.
 
             - `video`: whether the video is turned on or off.
 
@@ -172,7 +171,7 @@ class GrayScott(pyglet.window.Window):
             self.species, self.palette = parse(conf)
             print('> Failed to load the config, using the default one.\n')
 
-        self.species_list = list(all_species.keys())
+        self.species_list = list(ALL_SPECIES.keys())
 
         # create the uv_texture
         uv_grid = np.zeros((self.tex_height, self.tex_width, 4), dtype=np.float32)
@@ -213,7 +212,7 @@ class GrayScott(pyglet.window.Window):
             self.reaction_shader.uniformi('mask_texture', 1)
             self.reaction_shader.uniformf('u_resolution', self.tex_width, self.tex_height)
             self.reaction_shader.uniformf('u_mouse', -1, -1)
-            self.reaction_shader.uniformf('params', *all_species[self.species])
+            self.reaction_shader.uniformf('params', *ALL_SPECIES[self.species])
 
         with self.render_shader:
             self.render_shader.vertex_attrib('position', [-1, -1, 1, -1, -1, 1, 1, 1])
@@ -280,7 +279,7 @@ class GrayScott(pyglet.window.Window):
     def update_species(self, species):
         self.species = species
         with self.reaction_shader:
-            self.reaction_shader.uniformf('params', *all_species[species])
+            self.reaction_shader.uniformf('params', *ALL_SPECIES[species])
 
     def update_palette(self, palette):
         self.palette = palette

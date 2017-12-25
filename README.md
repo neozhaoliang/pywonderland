@@ -2,9 +2,15 @@
 
 <p align="center"><img src="./alice.png"></p>
 
+
 > A collection of python scripts for drawing beautiful figures or animating interesting algorithms in mathematics.
 
-[Homepage](http://www.pywonderland.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT) [![PyPI](https://img.shields.io/pypi/pyversions/Django.svg)]()
+
+
+## About this repo
+
+Please visit [the website for this repository](www.pywonderland.com) to see how to use these scripts and get more information of the math behind them.
 
 I'm building the docs so that there will be more usage & math explanations for each program.
 
@@ -12,17 +18,15 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 **This repository will be always under construction since there are too many interesting things in math that can be shown by code.** Pull requests, issues, questions, and suggestions are all welcomed!
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT) [![PyPI](https://img.shields.io/pypi/pyversions/Django.svg)]()
 
 
 ## Programs completed:
 
-- [Domino Shuffling Algorithm Animation](#domino-shuffling-algorithm-animation)
-- [The E8 Pattern](#the-e8-pattern)
-- [The Modular Group](#the-modular-group)
-- [Generalized Penrose Tilings](#generalized-penrose-tilings)
-- [Wilson's Uniform Spanning Tree Algorithm Animation](#wilsons-uniform-spanning-tree-algorithm-animation)
-- [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
+- [Domino Shuffling Algorithm Animation](http://www.pywonderland.com/domino/)
+- [The Modular Group](http://www.pywonderland.com/modulargroup/)
+- [Generalized Penrose Tilings](http://www.pywonderland.com/penrose/)
+- [Wilson's Uniform Spanning Tree Algorithm Animation](http://www.pywonderland.com/wilson/)
+- [Reaction-Diffusion Simulation](http://www.pywonderland.com/grayscott/)
 
 ## Programs to come:
 
@@ -37,8 +41,15 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 Python libs:
 
-`numpy`, `matplotlib`, `scipy`, `cairo`, [`palettable`](https://github.com/jiffyclub/palettable), [`tqdm`](https://github.com/tqdm/tqdm), [`numba`](https://github.com/numba/numba), `pyglet`, [`vapory`](https://github.com/Zulko/vapory)
++ `numpy`
++ `matplotlib`
++ `cairo`
++ [`palettable`](https://github.com/jiffyclub/palettable)
++ [`numba`](https://github.com/numba/numba)
++ `pyglet`
 
 Softwares:
 
-`ImageMagick`, `FFmpeg`, `POV-Ray`
++ `ImageMagick`
++ `FFmpeg`
++ `POV-Ray`
