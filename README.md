@@ -10,7 +10,7 @@
 
 ## About this repo
 
-Please visit [the website for this repository](www.pywonderland.com) to see how to use these scripts and get more information of the math behind them.
+Please visit [the website for this repository](http://www.pywonderland.com) to see how to use these scripts and get more information of the math behind them.
 
 I'm building the docs so that there will be more usage & math explanations for each program.
 
