@@ -22,10 +22,17 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 #### Generalized Penrose Tilings
 
-<img style="margin:0px auto;display:block" src="http://www.pywonderland.com/img/penrose_small.png"/>
+<p align="center">
+<img src="http://www.pywonderland.com/img/penrose_small.png"/>
+</p>
+
 
 #### Wilson's Uniform Spanning Tree Algorithm Animation
-<img style="margin:0px auto;display:block" src="http://www.pywonderland.com/img/wilson.gif"/>
+
+<p align="center">
+<img src="http://www.pywonderland.com/img/wilson.gif"/>
+</p>
+
 
 ## Programs completed:
 
