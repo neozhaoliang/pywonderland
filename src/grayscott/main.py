@@ -249,6 +249,7 @@ class GrayScott(pyglet.window.Window):
 
         if self.video_on and (self.frame_count % self.sample_rate == 0):
             self.write_video_frame()
+
         self.frame_count += 1
 
     def on_key_press(self, symbol, modifiers):

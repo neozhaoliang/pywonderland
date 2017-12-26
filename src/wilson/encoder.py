@@ -76,21 +76,21 @@ class GIFWriter(object):
     # use a singleton instance of DataBlock to avoid creating and deleting objects many times.
     _stream = DataBlock()
 
-    def __init__(self, width, height, min_bits, palette, loop):
+    def __init__(self, width, height, depth, palette, loop):
         """
         INPUTS:
 
             - `width`, `height`: size of the image in pixels.
 
-            - `min_bits`: color depth (minimal number of bits needed to represent the colors).
+            - `depth`: color depth (minimal number of bits needed to represent the colors).
 
             - `palette`: a 1-d list of colors used by the image.
 
             - `loop`: number of loops of the image. 0 means loop infinitely (and this is the default).
         """
-        self.num_colors = 1 << min_bits  # number of colors in the global color table.
+        self.num_colors = 1 << depth  # number of colors in the global color table.
         # constants for LZW encoding.
-        self._palette_bits = min_bits
+        self._palette_bits = depth
         self._clear_code = self.num_colors
         self._end_code = self.num_colors + 1
         self._max_codes = 4096

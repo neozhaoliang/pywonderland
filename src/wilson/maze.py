@@ -18,7 +18,7 @@ class Canvas(object):
     parameters of the animation.
     """
 
-    def __init__(self, maze, scale, min_bits, palette, loop, filename):
+    def __init__(self, maze, scale, depth, palette, loop, filename):
         """
         INPUTS:
 
@@ -28,13 +28,13 @@ class Canvas(object):
 
             - `filename`: the output file.
 
-            - `min_bits`, `palette`, `loop`: the same as they are in the GIFWriter class.
+            - `depth`, `palette`, `loop`: the same as they are in the GIFWriter class.
         """
         self.maze = maze
         self.scale = scale
-        self.writer = GIFWriter(maze.width * scale, maze.height * scale, min_bits, palette, loop)
+        self.writer = GIFWriter(maze.width * scale, maze.height * scale, depth, palette, loop)
         # use a dict to map the cells to the color indices.
-        self.colormap = {i: i for i in range(1 << min_bits)}
+        self.colormap = {i: i for i in range(1 << depth)}
         self.speed = 10        # output the frame once this number of cells are changed.
         self.trans_index = 3   # the index of the transparent color in the global color table.
         self.delay = 5         # delay between successive frames.

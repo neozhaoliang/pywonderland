@@ -6,17 +6,18 @@ and maze solving algorithms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Usage:
-      python main.py [-width] [-height] [-scale]
-                     [-margin] [-bits]
+      python main.py [-size] [-scale]
+                     [-margin] [-depth]
                      [-loop] [-filename]
 Optional arguments:
-    width, height: size of the maze (not the image), should both be odd integers.
+    size: width and height of the maze (not the image), e.g. 101x81.
+          should both be odd intergers.
     scale: the size of the image will be (width * scale) * (height * scale).
            In other words, each cell in the maze will occupy a square of
            (scale * scale) pixels in the image.
     margin: size of the border of the image.
-    bits: number of bits needed to represent all colors.
-          This value determines the number of colors used in the image.
+    depth: color depth of the image (number of bits needed to represent all colors).
+           This value determines the number of colors available in the image.
     loop: number of loops of the image, default to 0 (loop infinitely).
     filename: the output file.
 
@@ -30,25 +31,26 @@ from algorithms import (prim, random_dfs, kruskal, wilson, bfs, dfs, astar)
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-width', type=int, default=121,
-                        help='width of the maze')
-    parser.add_argument('-height', type=int, default=97,
-                        help='height of the maze')
+    parser.add_argument('-size', type=str, default='121x97',
+                        help='size of the maze, e.g. 101x81.')
     parser.add_argument('-margin', type=int, default=2,
                         help='border of the maze')
     parser.add_argument('-scale', type=int, default=5,
                         help='size of a cell in pixels')
     parser.add_argument('-loop', type=int, default=0,
                         help='number of loops of the animation, default to 0 (loop infinitely)')
-    parser.add_argument('-bits', metavar='b', type=int, default=8,
+    parser.add_argument('-depth', type=int, default=8,
                         help='an interger beteween 2-8 represents the color depth of the image,\
                         this parameter determines the size of the global color table.')
     parser.add_argument('-filename', type=str, default='wilson.gif',
                         help='output file name')
     args = parser.parse_args()
 
+    width, height = [int(i) for i in args.size.split('x')]
+
     # define your favorite global color table here.
     mypalette = [0, 0, 0, 200, 200, 200, 255, 0, 255]
+
     # GIF files allows at most 256 colors in the global color table,
     # redundant colors will be discarded when the encoder is initialized.
     for i in range(256):
@@ -58,9 +60,9 @@ def main():
     # you may use a binary image instance of PIL's Image class here as the mask image,
     # this image must preserve the connectivity of the grid graph.
     from gentext import generate_text_mask
-    mask = generate_text_mask(args.width, args.height, 'UST', '../../resources/ubuntu.ttf', 60)
-    maze = Maze(args.width, args.height, args.margin, mask=mask)
-    canvas = maze.add_canvas(scale=args.scale, min_bits=args.bits, palette=mypalette,
+    mask = generate_text_mask(width, height, 'UST', '../../resources/ubuntu.ttf', 60)
+    maze = Maze(width, height, args.margin, mask=mask)
+    canvas = maze.add_canvas(scale=args.scale, depth=args.depth, palette=mypalette,
                              loop=args.loop, filename=args.filename)
 
     # here we need to paint the blank background because the region that has not been
@@ -76,7 +78,7 @@ def main():
                               wall_color=0, tree_color=1, path_color=2)
 
     start = (args.margin, args.margin)
-    end = (args.width - args.margin - 1, args.height - args.margin - 1)
+    end = (width - args.margin - 1, height - args.margin - 1)
 
     # the maze generation animation.
     # try prim(maze, start) or kruskal(maze) or random_dfs(maze) here!

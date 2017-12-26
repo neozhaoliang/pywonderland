@@ -18,7 +18,14 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 **This repository will be always under construction since there are too many interesting things in math that can be shown by code.** Pull requests, issues, questions, and suggestions are all welcomed!
 
+## What's cool
 
+#### Generalized Penrose Tilings
+
+<img style="margin:0px auto;display:block" src="http://www.pywonderland.com/img/penrose_small.png"/>
+
+#### Wilson's Uniform Spanning Tree Algorithm Animation
+<img style="margin:0px auto;display:block" src="http://www.pywonderland.com/img/wilson.gif"/>
 
 ## Programs completed:
 
