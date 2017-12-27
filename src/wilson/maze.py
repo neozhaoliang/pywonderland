@@ -18,7 +18,7 @@ class Canvas(object):
     parameters of the animation.
     """
 
-    def __init__(self, maze, scale, depth, palette, loop, filename):
+    def __init__(self, maze, scale, offsets, depth, palette, loop, filename):
         """
         INPUTS:
 
@@ -26,13 +26,22 @@ class Canvas(object):
 
             - `scale`: each cell in the maze occupies scale*scale pixels in the image.
 
+            - `offsets`: only useful if this canvas is embedded into another gif image.
+                         It's a tuple of 4 integers that specify the (left, right, top, bottom)
+                         offsets of this canvas relative to that image.
+
             - `filename`: the output file.
 
             - `depth`, `palette`, `loop`: the same as they are in the GIFWriter class.
         """
         self.maze = maze
         self.scale = scale
-        self.writer = GIFWriter(maze.width * scale, maze.height * scale, depth, palette, loop)
+        self.writer = GIFWriter(maze.width * scale + offsets[0] + offsets[1],
+                                maze.height * scale + offsets[2] + offsets[3],
+                                depth,
+                                palette,
+                                loop)
+        self.offsets = offsets
         # use a dict to map the cells to the color indices.
         self.colormap = {i: i for i in range(1 << depth)}
         self.speed = 10        # output the frame once this number of cells are changed.
@@ -58,8 +67,10 @@ class Canvas(object):
         # then get the image descriptor of this frame.
         width = right - left + 1
         height = bottom - top + 1
-        descriptor = GIFWriter.image_descriptor(left * self.scale, top * self.scale,
-                                                width * self.scale, height * self.scale)
+        descriptor = self.writer.image_descriptor(left * self.scale + self.offsets[0],
+                                                  top * self.scale + self.offsets[2],
+                                                  width * self.scale,
+                                                  height * self.scale)
 
         # A generator that yields the pixels of this frame. This may look a bit unintuitive
         # because encoding frames will be called thousands of times in an animation
@@ -93,6 +104,37 @@ class Canvas(object):
         if kwargs:
             self.set_colors(**kwargs)
         self.target_file.write(self.encode_frame(static=True))
+
+    def insert_background_image(self, image_file):
+        """
+        This function allows you insert another image as the background.
+        """
+        from PIL import Image
+        img = Image.open(image_file).convert('RGB').resize(self.writer.size)
+        data = list(img.getdata())
+        colors = []
+        indices = []
+        n = 0
+        for c in data:
+            if c not in colors:
+                colors.append(c)
+                indices.append(n)
+                n += 1
+            else:
+                ind = colors.index(c)
+                indices.append(ind)
+
+        palette = []
+        for c in colors:
+            palette += c
+
+        if len(palette) < 3 * 256:
+            palette += [0] * (3 * 256 - len(palette))
+
+        descriptor = self.writer.image_descriptor(0, 0, self.writer.size[0], self.writer.size[1],
+                                                  local_table=True)
+        frame = self.writer.LZW_encode(indices)
+        self.target_file.write(descriptor + bytearray(palette) + frame)
 
     def refresh_frame(self):
         """Update a frame in the animation and write it into the file."""
@@ -172,8 +214,8 @@ class Maze(object):
             """
             if mask is None:
                 return True
-            else:
-                return mask.getpixel(cell) == 255
+
+            return mask.getpixel(cell) == 255
 
         self.cells = []
         for y in range(margin, height - margin, 2):

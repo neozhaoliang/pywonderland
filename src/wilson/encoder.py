@@ -88,6 +88,7 @@ class GIFWriter(object):
 
             - `loop`: number of loops of the image. 0 means loop infinitely (and this is the default).
         """
+        self.size = (width, height)
         self.num_colors = 1 << depth  # number of colors in the global color table.
         # constants for LZW encoding.
         self._palette_bits = depth
@@ -124,13 +125,18 @@ class GIFWriter(object):
         """This block specifies the delay and transparent color of a frame."""
         return pack("<4BH2B", 0x21, 0xF9, 4, 0b00000101, delay, trans_index, 0)
 
-    @staticmethod
-    def image_descriptor(left, top, width, height):
+    def image_descriptor(self, left, top, width, height, local_table=False):
         """
         This block specifies the position of a frame (relative to the window).
-        The ending packed byte field is 0 since we do not need a local color table.
+        If `local_table` is True then a local color table is used.
         """
-        return pack('<B4HB', 0x2C, left, top, width, height, 0)
+        if local_table:
+            packed_byte = self._palette_bits
+            packed_byte = 1 << 7 | (self._palette_bits - 1)
+        else:
+            packed_byte = 0
+
+        return pack('<B4HB', 0x2C, left, top, width, height, packed_byte)
 
     def pad_delay_frame(self, delay, trans_index):
         """

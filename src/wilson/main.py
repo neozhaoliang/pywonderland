@@ -13,7 +13,7 @@ Optional arguments:
     size: width and height of the maze (not the image), e.g. 101x81.
           should both be odd intergers.
     scale: the size of the image will be (width * scale) * (height * scale).
-           In other words, each cell in the maze will occupy a square of
+           In other words, each cell in the maze occupies a square of
            (scale * scale) pixels in the image.
     margin: size of the border of the image.
     depth: color depth of the image (number of bits needed to represent all colors).
@@ -57,17 +57,36 @@ def main():
         rgb = hls_to_rgb((i / 360.0) % 1, 0.5, 1.0)
         mypalette += [int(round(255 * x)) for x in rgb]
 
+    # ---------- enable mask image here ----------
     # you may use a binary image instance of PIL's Image class here as the mask image,
     # this image must preserve the connectivity of the grid graph.
-    from gentext import generate_text_mask
-    mask = generate_text_mask(width, height, 'UST', '../../resources/ubuntu.ttf', 60)
-    maze = Maze(width, height, args.margin, mask=mask)
-    canvas = maze.add_canvas(scale=args.scale, depth=args.depth, palette=mypalette,
-                             loop=args.loop, filename=args.filename)
+    # uncommnt the following two lines and use this mask in the `init` functon of `maze` below.
+    #from gentext import generate_text_mask
+    #mask = generate_text_mask(width, height, 'UST', '../../resources/ubuntu.ttf', 60)
+    # --------------------------------------------
 
-    # here we need to paint the blank background because the region that has not been
-    # covered by any frame will be set to transparent by decoders.
-    # Comment out this line and watch the result if you don't understand this.
+    maze = Maze(width, height, args.margin, mask=None)
+    canvas = maze.add_canvas(scale=args.scale,
+                             #offsets=(65, 112, 45, 107),
+                             offsets=(0, 0, 0, 0),
+                             depth=args.depth,
+                             palette=mypalette,
+                             loop=args.loop,
+                             filename=args.filename)
+
+    # ---- insert a specified background image here ----
+    # How to insert the gif animation into another image:
+    # 1. uncommnt the following two lines.
+    # 2. in calling `maze.add_canvas` above, set the offsets
+    #    to put the animation at a suitable place.
+    #canvas.insert_background_image('teacher.png')
+    #canvas.pad_delay_frame(delay=100)
+    # --------------------------------------------------
+
+    # If there is no background image then we need to paint the blank background
+    # because the region that has not been covered by any frame will be set to
+    # transparent by decoders. Comment out this line and watch the result if you
+    # don't understand this.
     canvas.paint_background(wall_color=0)
 
     # pad one second delay, get ready!
