@@ -74,8 +74,8 @@ class AztecDiamond(object):
         """
         for i, j in self.cells:
             try:
-                if (self.check(i, j, ['n', 'n', 's', 's'])
-                        or self.check(i, j, ['e', 'w', 'e', 'w'])):
+                if (self.check(i, j, ['n', 'n', 's', 's']) \
+                    or self.check(i, j, ['e', 'w', 'e', 'w'])):
                     self.fill(i, j, [None]*4)
             except KeyError:
                 pass

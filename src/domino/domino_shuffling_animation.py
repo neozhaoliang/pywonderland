@@ -30,13 +30,14 @@ def make_animation(order, size, filename):
     Render one frame for each operation and then use ImageMagick to
     convert the images to a gif.
 
-    INPUT:
+    Parameters
+    ----------
 
-        - `order`: max steps to run the algorithm.
+    order: max steps to run the algorithm.
 
-        - `size`: size of the GIF image.
+    size: size of the GIF image.
 
-        - `filename`: the output .gif filename.
+    filename: the output .gif filename.
     """
     az = aztec.AztecDiamond(0)
     for i in range(order):

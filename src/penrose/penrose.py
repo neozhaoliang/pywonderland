@@ -27,7 +27,7 @@ palette = ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3',
 
 WIDTH = 1200
 HEIGHT = 720
-NUM_LINES = 25
+NUM_LINES = 40
 THIN_COLOR, FAT_COLOR, EDGE_COLOR = random.sample(palette, 3)
 GRIDS = [np.exp(2j * np.pi * i / 5) for i in range(5)]
 SHIFTS = np.random.random(5)
@@ -82,29 +82,34 @@ def main():
     ctx.set_source_rgb(*htmlcolor_to_rgb(BACKGROUND_COLOR))
     ctx.paint()
 
-    for r, s in itertools.combinations(range(5), 2):
-        for kr, ks in itertools.product(range(-NUM_LINES, NUM_LINES + 1), repeat=2):
-            # if s-r = 1 or 4 then this is a thin rhombus, otherwise it's fat.
-            if (s-r == 1 or s-r == 4):
-                color = htmlcolor_to_rgb(THIN_COLOR)
-            else:
-                color = htmlcolor_to_rgb(FAT_COLOR)
+    with open('rhombus.pov', 'w') as f:
+        for r, s in itertools.combinations(range(5), 2):
+            for kr, ks in itertools.product(range(-NUM_LINES, NUM_LINES + 1), repeat=2):
+                # if s-r = 1 or 4 then this is a thin rhombus, otherwise it's fat.
+                if (s-r == 1 or s-r == 4):
+                    color = htmlcolor_to_rgb(THIN_COLOR)
+                    shape = 0
+                else:
+                    color = htmlcolor_to_rgb(FAT_COLOR)
+                    shape = 1
 
-            ctx.set_source_rgb(*color)
-            A, B, C, D = compute_rhombus(r, s, kr, ks)
-            ctx.move_to(A.real, A.imag)
-            ctx.line_to(B.real, B.imag)
-            ctx.line_to(C.real, C.imag)
-            ctx.line_to(D.real, D.imag)
-            ctx.close_path()
-            ctx.fill_preserve()
+                ctx.set_source_rgb(*color)
+                A, B, C, D = compute_rhombus(r, s, kr, ks)
+                ctx.move_to(A.real, A.imag)
+                ctx.line_to(B.real, B.imag)
+                ctx.line_to(C.real, C.imag)
+                ctx.line_to(D.real, D.imag)
+                ctx.close_path()
+                ctx.fill_preserve()
 
-            ctx.set_source_rgb(*htmlcolor_to_rgb(EDGE_COLOR))
-            ctx.stroke()
+                ctx.set_source_rgb(*htmlcolor_to_rgb(EDGE_COLOR))
+                ctx.stroke()
 
-    print('shifts in the five directions:\n{}'.format(SHIFTS))
-    print('thin color: {} fat color: {} edge color: {}'.format(THIN_COLOR, FAT_COLOR, EDGE_COLOR))
-    surface.write_to_png('penrose.png')
+                                
+                f.write("Rhombus(<%f, %f>, <%f, %f>, <%f, %f>, <%f, %f>, %d)\n" \
+                        % (A.real, A.imag, B.real, B.imag, C.real, C.imag, D.real, D.imag, shape))
+
+    surface.write_to_png('penrose_cairo.png')
 
 
 if __name__ == '__main__':

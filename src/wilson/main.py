@@ -1,126 +1,56 @@
 # -*- coding: utf-8 -*-
-"""
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Making GIF animations of various maze generation
-and maze solving algorithms
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Usage:
-      python main.py [-size] [-scale]
-                     [-margin] [-depth]
-                     [-loop] [-filename]
-Optional arguments:
-    size: width and height of the maze (not the image), e.g. 101x81.
-          should both be odd intergers.
-    scale: the size of the image will be (width * scale) * (height * scale).
-           In other words, each cell in the maze occupies a square of
-           (scale * scale) pixels in the image.
-    margin: size of the border of the image.
-    depth: color depth of the image (number of bits needed to represent all colors).
-           This value determines the number of colors available in the image.
-    loop: number of loops of the image, default to 0 (loop infinitely).
-    filename: the output file.
-
-Copyright (c) 2016 by Zhao Liang.
-"""
-import argparse
 from colorsys import hls_to_rgb
-from maze import Maze
-from algorithms import (prim, random_dfs, kruskal, wilson, bfs, dfs, astar)
+import gifmaze as gm
+from gentext import generate_text_mask
+from algorithms import wilson, bfs
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-size', type=str, default='121x97',
-                        help='size of the maze, e.g. 101x81.')
-    parser.add_argument('-margin', type=int, default=2,
-                        help='border of the maze')
-    parser.add_argument('-scale', type=int, default=5,
-                        help='size of a cell in pixels')
-    parser.add_argument('-loop', type=int, default=0,
-                        help='number of loops of the animation, default to 0 (loop infinitely)')
-    parser.add_argument('-depth', type=int, default=8,
-                        help='an interger beteween 2-8 represents the color depth of the image,\
-                        this parameter determines the size of the global color table.')
-    parser.add_argument('-filename', type=str, default='wilson.gif',
-                        help='output file name')
-    args = parser.parse_args()
+surface = gm.GIFSurface.from_image('teacher.png')
 
-    width, height = [int(i) for i in args.size.split('x')]
+# set the 0-th color to be the same with the blackboard's.
+palette = [52, 51, 50, 200, 200, 200, 255, 0, 255]
+for i in range(256):
+    rgb = hls_to_rgb((i / 360.0) % 1, 0.5, 1.0)
+    palette += [int(round(255 * x)) for x in rgb]
 
-    # define your favorite global color table here.
-    mypalette = [0, 0, 0, 200, 200, 200, 255, 0, 255]
+surface.set_palette(palette)
+anim = gm.Animation(surface)
 
-    # GIF files allows at most 256 colors in the global color table,
-    # redundant colors will be discarded when the encoder is initialized.
-    for i in range(256):
-        rgb = hls_to_rgb((i / 360.0) % 1, 0.5, 1.0)
-        mypalette += [int(round(255 * x)) for x in rgb]
+size = (surface.width, surface.height)
+mask = generate_text_mask(size, 'UST', 'ubuntu.ttf', 350)
 
-    # ---------- enable mask image here ----------
-    # you may use a binary image instance of PIL's Image class here as the mask image,
-    # this image must preserve the connectivity of the grid graph.
-    # uncommnt the following two lines and use this mask in the `init` functon of `maze` below.
-    #from gentext import generate_text_mask
-    #mask = generate_text_mask(width, height, 'UST', '../../resources/ubuntu.ttf', 60)
-    # --------------------------------------------
+# define the region that to put the maze into.
+left, top, width, height = 66, 47, 475, 297
+maze = gm.Maze(117, 73, mask=mask).scale(4).translate((69, 49))
 
-    maze = Maze(width, height, args.margin, mask=None)
-    canvas = maze.add_canvas(scale=args.scale,
-                             #offsets=(65, 112, 45, 107),
-                             offsets=(0, 0, 0, 0),
-                             depth=args.depth,
-                             palette=mypalette,
-                             loop=args.loop,
-                             filename=args.filename)
+# here `trans_index=1` is for compatible with eye of chrome under linux.
+# you may always use the default 0 for chrome and firefox.
+anim.pause(100, trans_index=1)
+anim.paint(left, top, width, height, 0)
+anim.pause(100)
 
-    # ---- insert a specified background image here ----
-    # How to insert the gif animation into another image:
-    # 1. uncommnt the following two lines.
-    # 2. in calling `maze.add_canvas` above, set the offsets
-    #    to put the animation at a suitable place.
-    #canvas.insert_background_image('teacher.png')
-    #canvas.pad_delay_frame(delay=100)
-    # --------------------------------------------------
+# run the maze generation algorithm.
+# only three colors are used in this animation hence the minimal
+# code length can be set to 2.
+anim.run(wilson, maze, speed=50, delay=2, mcl=2,
+         cmap={0: 0, 1: 1, 2: 2}, trans_index=None, root=(0, 0))
 
-    # If there is no background image then we need to paint the blank background
-    # because the region that has not been covered by any frame will be set to
-    # transparent by decoders. Comment out this line and watch the result if you
-    # don't understand this.
-    canvas.paint_background(wall_color=0)
+anim.pause(300)
 
-    # pad one second delay, get ready!
-    canvas.pad_delay_frame(delay=100)
+# in the bfs animation we want to color the cells according to their
+# distance to the starting cell. the walls, tree and path are colored
+# by the 0th, 0th and 2th color respectively, hence the flooded cells
+# are colored by colors >=3.
+cmap = {i: max(i % 256, 3) for i in range(len(maze.cells))}
+cmap.update({0: 0, 1: 0, 2: 2})
 
-    # you may adjust the `speed` parameter for different algorithms.
-    canvas.set_control_params(delay=2, speed=50, trans_index=3,
-                              wall_color=0, tree_color=1, path_color=2)
+# run the maze solving algorithm.
+# the full 256 colors are used hence the minimal code length is 8.
+anim.run(bfs, maze, speed=30, delay=5, mcl=8, cmap=cmap,
+         trans_index=0, start=(0, 0), end=(maze.width - 1, maze.height - 1))
 
-    start = (args.margin, args.margin)
-    end = (width - args.margin - 1, height - args.margin - 1)
+anim.pause(500)
 
-    # the maze generation animation.
-    # try prim(maze, start) or kruskal(maze) or random_dfs(maze) here!
-    wilson(maze, start)
-
-    # pad three seconds delay to help to see the resulting maze clearly.
-    canvas.pad_delay_frame(delay=300)
-
-    # in the path finding animation the walls are unchanged throughout,
-    # hence it's safe to use color 0 as the transparent color.
-    canvas.set_control_params(delay=5, speed=30, trans_index=0, wall_color=0,
-                              tree_color=0, path_color=2, fill_color=3)
-
-    # the maze solving animation.
-    # try dfs(maze, start, end) or astar(maze, start, end) here!
-    bfs(maze, start, end)
-
-    # pad five seconds delay to help to see the resulting path clearly.
-    canvas.pad_delay_frame(delay=500)
-
-    # finally finish the animation and close the file.
-    canvas.save()
-
-
-if __name__ == '__main__':
-    main()
+surface.save('wilson-bfs.gif')
+surface.close()

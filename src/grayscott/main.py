@@ -50,7 +50,7 @@ ALL_SPECIES = {'unstable':             [0.210, 0.105, 0.018, 0.051],
               }
 
 
-def htmlcolors_to_rgb(colors):
+def htmlcolors_to_rgba(colors):
     """
     `colors`: a 1d list of 5 html colors of the format '#RRGGBBAA'.
     return a 1d list of 20 floats in range [0, 1].
@@ -59,7 +59,7 @@ def htmlcolors_to_rgb(colors):
             for x in (s[1:3], s[3:5], s[5:7], s[7:])]
 
 
-def rgb_to_htmlcolors(colors):
+def rgba_to_htmlcolors(colors):
     """
     `colors`: a 1d list of length 20 floats in range [0, 1].
     return a 1d list of 5 html colors of the format '#RRGGBBAA'.
@@ -77,7 +77,7 @@ def parse(params):
     """
     species = (params.split(':')[0]).strip()
     colors = re.findall('#[0-9|A-Z]{8}', params)
-    return species, htmlcolors_to_rgb(colors)
+    return species, htmlcolors_to_rgba(colors)
 
 
 def timestamp():
@@ -128,28 +128,27 @@ class GrayScott(pyglet.window.Window):
                  sample_rate=None,
                  frame_rate=None):
         """
-        INPUTS:
+        Parameters
+        ----------
 
-            - `width`, `height`: size of the window in pixels.
+        width, height: size of the window in pixels.
 
-            - `scale`: level of scaling of the texture.
+        scale: level of scaling of the texture.
 
-            - `conf`: line number of the config in the file (`config.txt`).
+        conf: line number of the config in the file (`config.txt`).
 
-            - `mask`: a user-specified image that is used to control
-                      the growth of the pattern.
+        mask: a user-specified image that is used to control
+            the growth of the pattern.
 
-            - `flip`: flip the white/black pixels in the mask image,
-                      only meaningful if there is a mask image.
+        flip: flip the white/black pixels in the mask image,
+            only meaningful if there is a mask image.
 
-            - `video`: whether the video is turned on or off.
+        video: whether the video is turned on or off.
 
-            - `sample_rate`: sample a frame from the animation every
-                             these frames.
+        sample_rate: sample a frame from the animation every these frames.
 
-            - `frame_rate`: number of frames per second to render to the video.
+        frame_rate: number of frames per second to render to the video.
         """
-
         pyglet.window.Window.__init__(self,
                                       width,
                                       height,
@@ -297,7 +296,7 @@ class GrayScott(pyglet.window.Window):
 
     def save_config(self):
         with open('config.txt', 'a+') as f:
-            f.write(self.species + ': ' + ' '.join(rgb_to_htmlcolors(self.palette)) + '\n')
+            f.write(self.species + ': ' + ' '.join(rgba_to_htmlcolors(self.palette)) + '\n')
             print('> Config saved.\n')
 
     def load_config(self, k):
@@ -342,7 +341,9 @@ class GrayScott(pyglet.window.Window):
         self.update_mouse(-10, -10)
 
     def use_random_palette(self):
-        new_palette = [0.0] * 3 + [np.random.random() for _ in range(17)]
+        new_palette = np.random.random(20)
+        new_palette[[3, 7, 11, 15, 19]] = sorted(np.random.random(5))
+        new_palette[:3] = 0
         self.update_palette(new_palette)
 
     def use_next_species(self):
