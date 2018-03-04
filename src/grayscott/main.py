@@ -126,7 +126,7 @@ class GrayScott(pyglet.window.Window):
                  flip=False,
                  video=False,
                  sample_rate=None,
-                 frame_rate=None):
+                 video_rate=None):
         """
         Parameters
         ----------
@@ -147,7 +147,7 @@ class GrayScott(pyglet.window.Window):
 
         sample_rate: sample a frame from the animation every these frames.
 
-        frame_rate: number of frames per second to render to the video.
+        video_rate: frames per second of the video.
         """
         pyglet.window.Window.__init__(self,
                                       width,
@@ -223,7 +223,7 @@ class GrayScott(pyglet.window.Window):
         self.buffer = pyglet.image.get_buffer_manager().get_color_buffer()
 
         self.sample_rate = sample_rate
-        self.frame_rate = frame_rate
+        self.video_rate = video_rate
 
         self.frame_count = 0
 
@@ -365,7 +365,7 @@ class GrayScott(pyglet.window.Window):
         ffmpeg = subprocess.Popen((FFMPEG_EXE,
                                    '-threads', '0',
                                    '-loglevel', 'panic',
-                                   '-r', '%d' % self.frame_rate,
+                                   '-r', '%d' % self.video_rate,
                                    '-f', 'rawvideo',
                                    '-pix_fmt', 'rgba',
                                    '-s', '%dx%d' % (self.width, self.height),
@@ -390,11 +390,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-size', type=str, default='800x640',
                         help='width and height of the window')
-    parser.add_argument('-frate', type=int, default=24,
-                        help='number of frames per second to render to the video')
+    parser.add_argument('-videorate', type=int, default=24,
+                        help='frames per second of the video')
     parser.add_argument('-fps', type=int, default=None,
-                        help='number of frames per second to render to the window')
-    parser.add_argument('-srate', type=int, default=16,
+                        help='frames per second of the animation')
+    parser.add_argument('-samplerate', type=int, default=16,
                         help='sample a frame from the animation every these frames')
     parser.add_argument('-scale', type=float, default=1.5,
                         help='level of scaling of the texture')
@@ -418,8 +418,8 @@ if __name__ == '__main__':
                     mask=args.mask,
                     flip=args.flip,
                     video=args.video,
-                    sample_rate=args.srate,
-                    frame_rate=args.frate)
+                    sample_rate=args.samplerate,
+                    video_rate=args.videorate)
 
     print(app.__doc__)
     app.run(args.fps)

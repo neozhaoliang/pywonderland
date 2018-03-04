@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import heapq
 import random
 from collections import deque
 from tqdm import tqdm
@@ -114,5 +114,100 @@ def bfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
     maze.mark_path(path, Maze.PATH)
     # show the path
     yield render(maze)
+
+    bar.close()
+
+
+def random_dfs(maze, render, speed=10, start=(0, 0)):
+    """Maze generation by random depth-first search."""
+    bar = tqdm(total=len(maze.cells) - 1, desc="Running random depth first search")
+    stack = [(start, v) for v in maze.get_neighbors(start)]
+    maze.mark_cell(start, Maze.TREE)
+
+    while len(stack) > 0:
+        parent, child = stack.pop()
+        if maze.in_tree(child):
+            continue
+
+        maze.mark_cell(child, Maze.TREE)
+        maze.mark_space(parent, child, Maze.TREE)
+        bar.update(1)
+
+        neighbors = maze.get_neighbors(child)
+        random.shuffle(neighbors)
+        for v in neighbors:
+            stack.append((child, v))
+
+        if maze.num_changes >= speed:
+            yield render(maze)
+
+    if maze.num_changes > 0:
+        yield render(maze)
+
+    bar.close()
+
+
+def dfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
+    """Solve a maze by dfs."""
+    came_from = {start: start}  # a dict to remember each step.
+    stack = [start]
+    maze.mark_cell(start, Maze.FILL)
+    visited = set([start])
+
+    while len(stack) > 0:
+        child = stack.pop()
+        if child == end:
+            break
+        parent = came_from[child]
+        maze.mark_cell(child, Maze.FILL)
+        maze.mark_space(parent, child, Maze.FILL)
+        for next_cell in maze.get_neighbors(child):
+            if (next_cell not in visited) and (not maze.barrier(child, next_cell)):
+                came_from[next_cell] = child
+                stack.append(next_cell)
+                visited.add(next_cell)
+
+        if maze.num_changes >= speed:
+            yield render(maze)
+
+    if maze.num_changes > 0:
+        yield render(maze)
+
+    path = [end]
+    v = end
+    while v != start:
+        v = came_from[v]
+        path.append(v)
+
+    maze.mark_path(path, Maze.PATH)
+    yield render(maze)
+
+
+def prim(maze, render, speed=30, start=(0, 0)):
+    """Maze by Prim's algorithm."""
+    bar = tqdm(total=len(maze.cells) - 1, desc="Running Prim's algorithm")
+
+    queue = [(random.random(), start, v) for v in maze.get_neighbors(start)]
+    maze.mark_cell(start, Maze.TREE)
+
+    while len(queue) > 0:
+        _, parent, child = heapq.heappop(queue)
+        if maze.in_tree(child):
+            continue
+
+        maze.mark_cell(child, Maze.TREE)
+        maze.mark_space(parent, child, Maze.TREE)
+        bar.update(1)
+
+        for v in maze.get_neighbors(child):
+            # assign a weight to this edge only when it's needed.
+            weight = random.random()
+            heapq.heappush(queue, (weight, child, v))
+
+        if maze.num_changes >= speed:
+            yield render(maze)
+
+    if maze.num_changes > 0:
+        yield render(maze)
 
     bar.close()

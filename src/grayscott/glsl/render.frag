@@ -28,11 +28,6 @@ void main()
         }
 
     }
-
-    if (value > palette[4].a)
-    {
-        col = palette[4].rgb;
-    }
-
+    
     finalColor = vec4(col.rgb, 1.0);
 }

@@ -18,37 +18,103 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 **This repository will be always under construction since there are too many interesting things in math that can be shown by code.** Pull requests, issues, questions, and suggestions are all welcomed!
 
-## What's cool
+## Contents
 
-#### Generalized Penrose Tilings
+- [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
+- [The E8 Pattern](#the-e8-pattern)
+- [Icosahedral Kaleidoscope](#icosahedral-kaleidoscope)
+- [Domino Shuffling Algorithm Animation](#domino-shuffling-algorithm-animation)
+- [Wilson's Uniform Spanning Tree Algorithm Animation](#wilsons-uniform-spanning-tree-algorithm-animation)
+- [Coupling From The Past and Lozenge Tilings](#coupling-from-the-past-and-lozenge-tilings)
+
+---
+### Icosahedral Kaleidoscope
+[[View Code](./src/misc/kaleidoscope.py)]
+
+<br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/penrose_small.png"/>
+<img src="http://www.pywonderland.com/img/kaleidoscope.png"br/>
 </p>
 
+<br>
 
-#### Wilson's Uniform Spanning Tree Algorithm Animation
+[[Back to Top](#contents)]
+
+---
+### Reaction-Diffusion Simulation
+[[View Code](./src/grayscott/)] [[Pmneila's Javascript Animation](http://pmneila.github.io/jsexp/grayscott/)]
+
+<br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/wilson.gif"/>
+<img src="http://www.pywonderland.com/img/grayscott/unstable.png"/>
 </p>
 
+<br>
 
-## Programs completed:
+[[Back to Top](#contents)]
 
-- [Domino Shuffling Algorithm Animation](http://www.pywonderland.com/domino/)
-- [The Modular Group](http://www.pywonderland.com/modulargroup/)
-- [Generalized Penrose Tilings](http://www.pywonderland.com/penrose/)
-- [Wilson's Uniform Spanning Tree Algorithm Animation](http://www.pywonderland.com/wilson/)
-- [Reaction-Diffusion Simulation](http://www.pywonderland.com/grayscott/)
+---
+### The E8 Pattern
+[[View Code](./src/misc/e8.py)] [<a href="https://en.wikipedia.org/wiki/E8_(mathematics)">Wiki</a>]
+
+<br>
+
+<p align="center">
+<img src="http://www.pywonderland.com/img/E8.png"br/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
+
+---
+### Domino Shuffling Algorithm Animation
+[[View Code](./src/domino/)]
+<br>
+
+<p align="center">
+<img src="http://www.pywonderland.com/img/aztec/domino_shuffling.gif">
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
+
+---
+### Wilson's Uniform Spanning Tree Algorithm Animation
+[[View Code](./src/wilson/)] [[Mike Bostock's Javascript Animation](https://bl.ocks.org/mbostock/11357811)]
+<br>
+
+<p align="center">
+<img src="http://www.pywonderland.com/img/wilson/wilson-bfs.gif"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
+
+---
+### Coupling from the past and lozenge tilings
+[[View Code](./src/cftp/)]
+<br>
+
+<p align="center">
+<img src="http://www.pywonderland.com/img/cftp/lozenge_tiling.png"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
+
 
 ## Programs to come:
 
 - Fractals with orbit trap
-- Coupling from the past
-- 4D regular polytopes
 - 2D hyperbolic tilings (Escher's circle limit)
 - 3D hyperbolic honeycombs
+- 4D regular polytopes
 - Hopcroft's minimization algorithm
 
 ## Dependencies
