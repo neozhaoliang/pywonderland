@@ -128,6 +128,8 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 [[Back to Top](#contents)]
+
+---
 ### Domino Shuffling Algorithm Animation
 [[Code](./src/domino/)][[Doc](http://www.pywonderland.com/aztec/)]
 <br>
