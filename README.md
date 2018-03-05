@@ -117,7 +117,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### The Modular Group
-[[Code](./src/misc/modulargroup.py)] [[Doc](http://www.pywonderland.com/modular/)] [[Wiki](https://en.wikipedia.org/wiki/Modular_group)]
+[[Code](./src/misc/modulargroup.py)] [[Doc](http://www.pywonderland.com/img/modular/modulargroup.png)] [[Wiki](https://en.wikipedia.org/wiki/Modular_group)]
 
 <br>
 
