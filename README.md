@@ -20,12 +20,12 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ## Contents
 
+- [Icosahedral Kaleidoscope](#icosahedral-kaleidoscope)
 - [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
 - [The E8 Pattern](#the-e8-pattern)
-- [Icosahedral Kaleidoscope](#icosahedral-kaleidoscope)
 - [Domino Shuffling Algorithm Animation](#domino-shuffling-algorithm-animation)
 - [Wilson's Uniform Spanning Tree Algorithm Animation](#wilsons-uniform-spanning-tree-algorithm-animation)
-- [Coupling From The Past and Lozenge Tilings](#coupling-from-the-past-and-lozenge-tilings)
+- [Coupling From The Past And Lozenge Tilings](#coupling-from-the-past-and-lozenge-tilings)
 
 ---
 ### Icosahedral Kaleidoscope
@@ -34,7 +34,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/kaleidoscope.png"br/>
+<img src="http://www.pywonderland.com/img/icosa/kaleidoscope.png"br/>
 </p>
 
 <br>
@@ -96,7 +96,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 [[Back to Top](#contents)]
 
 ---
-### Coupling from the past and lozenge tilings
+### Coupling From The Past And Lozenge Tilings
 [[View Code](./src/cftp/)]
 <br>
 
@@ -108,7 +108,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 [[Back to Top](#contents)]
 
-
+---
 ## Programs to come:
 
 - Fractals with orbit trap
