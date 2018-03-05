@@ -20,16 +20,62 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ## Contents
 
+- [Mandelbrot Set](#mandelbrot-set)
+- [Julia Set](#julia-set)
+- [Newton Fractal](#newton-fractal)
 - [Icosahedral Kaleidoscope](#icosahedral-kaleidoscope)
 - [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
 - [The E8 Pattern](#the-e8-pattern)
+- [The Modular Group](#the-modular-group)
 - [Domino Shuffling Algorithm Animation](#domino-shuffling-algorithm-animation)
 - [Wilson's Uniform Spanning Tree Algorithm Animation](#wilsons-uniform-spanning-tree-algorithm-animation)
 - [Coupling From The Past And Lozenge Tilings](#coupling-from-the-past-and-lozenge-tilings)
 
 ---
+### Mandelbrot Set
+[[Code](./src/misc/mandelbrot.py)] [[Doc](http://www.pywonderland.com/fractals-numpy/)]
+
+<br>
+
+<p align="center">
+<img src="http://www.pywonderland.com/img/fractals/mandelbrot.png" width="600"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
+
+---
+### Julia Set
+[[Code](./src/misc/julia.py)] [[Doc](http://www.pywonderland.com/fractals-numpy/)]
+
+<br>
+
+<p align="center">
+<img src="http://www.pywonderland.com/img/fractals/julia.png" width="600"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
+
+---
+### Newton Fractal
+[[Code](./src/misc/newton.py)] [[Doc](http://www.pywonderland.com/fractals-numpy/)]
+
+<br>
+
+<p align="center">
+<img src="http://www.pywonderland.com/img/fractals/newton.png" width="500"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
+
+---
 ### Icosahedral Kaleidoscope
-[[View Code](./src/misc/kaleidoscope.py)]
+[[Code](./src/misc/kaleidoscope.py)] [[Doc](http://www.pywonderland.com/kaleidoscope/)]
 
 <br>
 
@@ -43,7 +89,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### Reaction-Diffusion Simulation
-[[View Code](./src/grayscott/)] [[Pmneila's Javascript Animation](http://pmneila.github.io/jsexp/grayscott/)]
+[[Code](./src/grayscott/)] [[Doc](http://www.pywonderland.com/grayscott/)] [[Pmneila's Javascript Animation](http://pmneila.github.io/jsexp/grayscott/)]
 
 <br>
 
@@ -57,7 +103,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### The E8 Pattern
-[[View Code](./src/misc/e8.py)] [<a href="https://en.wikipedia.org/wiki/E8_(mathematics)">Wiki</a>]
+[[Code](./src/misc/e8.py)] [[Doc](http://www.pywonderland.com/e8/)] [<a href="https://en.wikipedia.org/wiki/E8_(mathematics)">Wiki</a>]
 
 <br>
 
@@ -70,8 +116,20 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 [[Back to Top](#contents)]
 
 ---
+### The Modular Group
+[[Code](./src/misc/modulargroup.py)] [[Doc](http://www.pywonderland.com/modular/)] [[Wiki](https://en.wikipedia.org/wiki/Modular_group)]
+
+<br>
+
+<p align="center">
+<img src="./img/modulargroup.png"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
 ### Domino Shuffling Algorithm Animation
-[[View Code](./src/domino/)]
+[[Code](./src/domino/)][[Doc](http://www.pywonderland.com/aztec/)]
 <br>
 
 <p align="center">
@@ -84,7 +142,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### Wilson's Uniform Spanning Tree Algorithm Animation
-[[View Code](./src/wilson/)] [[Mike Bostock's Javascript Animation](https://bl.ocks.org/mbostock/11357811)]
+[[Code](./src/wilson/)] [[Doc](http://www.pywonderland.com/wilson/)] [[Mike Bostock's Javascript Animation](https://bl.ocks.org/mbostock/11357811)]
 <br>
 
 <p align="center">
@@ -97,7 +155,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### Coupling From The Past And Lozenge Tilings
-[[View Code](./src/cftp/)]
+[[Code](./src/cftp/)] [[Doc](http://www.pywonderland.com/cftp/)]
 <br>
 
 <p align="center">
