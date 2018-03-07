@@ -63,7 +63,7 @@ class LozengeTiling(object):
 
     def random_update(self):
         """
-        Return a random position (to be updated) and a 
+        Return a random position (to be updated) and a
         random operation (push up or push down).
         """
         a, b, c = self.size
@@ -123,12 +123,12 @@ class LozengeTiling(object):
             result.append(pp)
         return result[::-1]
 
-      
+
 def main(size):
     mc = LozengeTiling(size)
     T = coupling_from_the_past(mc)
     draw_tiling(T)
-    
-    
+
+
 if __name__ == "__main__":
     main((20, 20, 20))

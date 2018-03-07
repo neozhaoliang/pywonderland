@@ -40,26 +40,26 @@ def draw_tiling(T):
     a, b, c = T.size
     ax.axis([-b-0.5, a+0.5, -a-0.5, c+2])
     ax.axis("off")
-    
+
     # floor
     for i in range(a):
         for j in range(b):
             floor = topface(ax)
             shift = i * Y + j * X
             floor.set_xy(TOP + (shift.real, shift.imag))
-    
+
     # left wall
     for i in range(b):
         for j in range(c):
             left_wall = rightface(ax)
             shift = i * X + j * Z - Y + Z
             left_wall.set_xy(RIGHT + (shift.real, shift.imag))
-    
+
     # right wall
     for i in range(a):
         for j in range(c):
             right_wall = leftface(ax)
-            shift = i * Y + j * Z - X + Z 
+            shift = i * Y + j * Z - X + Z
             right_wall.set_xy(LEFT + (shift.real, shift.imag))
 
     # cubes

@@ -27,6 +27,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 - [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
 - [The E8 Pattern](#the-e8-pattern)
 - [The Modular Group](#the-modular-group)
+- [Generalized Penrose Tilings](#generalized-penrose-tilings)
 - [Domino Shuffling Algorithm Animation](#domino-shuffling-algorithm-animation)
 - [Wilson's Uniform Spanning Tree Algorithm Animation](#wilsons-uniform-spanning-tree-algorithm-animation)
 - [Coupling From The Past And Lozenge Tilings](#coupling-from-the-past-and-lozenge-tilings)
@@ -123,6 +124,20 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 <p align="center">
 <img src="http://www.pywonderland.com/img/modular/modulargroup.png"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
+
+---
+### Generalized Penrose Tilings
+[[Code](./src/penrose/)] [[Doc](http://www.pywonderland.com/penrose/)]
+
+<br>
+
+<p align="center">
+<img src="http://pywonderland.com/img/penrose/penrose_star.png" width="400"/><img src="http://pywonderland.com/img/penrose/penrose_net.png" width="400"/>
 </p>
 
 <br>

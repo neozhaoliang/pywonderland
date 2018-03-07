@@ -12,7 +12,7 @@ from matplotlib.colors import hsv_to_rgb
 
 
 def Klein(z):
-    """Klein's j-function."""
+    """Klein's icosahedral invariants."""
     return 1728 * (z * (z**10 + 11 * z**5 - 1))**5 / \
         (-(z**20 + 1) + 228 * (z**15 - z**5) - 494 * z**10)**3
 
@@ -50,4 +50,4 @@ def main(imgsize):
 
 
 if __name__ == '__main__':
-    main(imgsize=600)
+    main(imgsize=500)

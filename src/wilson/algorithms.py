@@ -72,7 +72,7 @@ def wilson(maze, render, speed=50, root=(0, 0)):
 
     bar.close()
 
-    
+
 def bfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
     """
     Solve a maze by breadth first search.
