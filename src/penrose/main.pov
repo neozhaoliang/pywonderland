@@ -49,7 +49,7 @@ Rot("T", tTmp, Tran, iTran, 0.4)                    // Twist a slice just a litt
 object {
     Rubik(Cubes, tTmp)
     scale 0.8
-    translate <1, 1.2, -1>
+    translate <1, 0.9, -1>
 }
 
 /*=== the icosahedron ===*/
