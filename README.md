@@ -137,7 +137,8 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://pywonderland.com/img/penrose/penrose_star.png" width="400"/><img src="http://pywonderland.com/img/penrose/penrose_net.png" width="400"/>
+<img src="http://pywonderland.com/img/penrose/penrose_star.png" width="350"/><img src="http://pywonderland.com/img/penrose/penrose_net.png" width="350"/>
+<img src="http://pywonderland.com/img/penrose/penrose_scene.png" width="350"/>
 </p>
 
 <br>
