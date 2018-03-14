@@ -73,7 +73,7 @@ if __name__ == '__main__':
                         help='html colors for thin, fat rhombus and edges')
     parser.add_argument('-shifts', nargs=5, default=np.random.random(5), type=float,
                         help='five floating numbers specify the shifts of the grids')
-    parser.add_argument('-output', metavar='o', type=str, default='penrose_cairo.png',
+    parser.add_argument('-output', metavar='o', type=str, default='penrose_rhombus.png',
                         help='output filenname')
     
     args = parser.parse_args()

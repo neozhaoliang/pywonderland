@@ -17,15 +17,18 @@ global_settings {
     }
 }
 
-/*=== tiles ===*/
+/*=========================================================*/
+/* Tiling                                                  */
 
 #include "penrose.inc"
 #include "rhombus.inc"
 
-/*=== floor ===*/
+/*=========================================================*/
+/* Floor                                                   */
 
+// tile_rad is defined in penrose.inc
 plane {
-    y (-rad*0.4)
+    y (-tile_rad*0.4)
     texture {
         pigment { rgb 1 }
         finish { diffuse 0.7 specular 0.6 roughness 0.15} 
@@ -33,73 +36,32 @@ plane {
     }
 }
 
-/*=== the rubik's cube ===*/
-
-#include "rubik.inc"
-
-#declare tTmp = array[3][3][3]          // Temporary translation array
-#declare MvStr = "FARATrlRarlFRtAtrtLB" // Move string to scramble the cube
-#declare SStrX = "TBTBTFlbtlbtbFbffbFBfbFBABaRbrBRbrBbbABaBLbllBLBFbfbrbRbfBFBBabA"
-#declare SStrY = "bRBrRbfBFrAAttRRTFFLLFFLLFFLLtRRttAAlTLtlTLtblTLtlTLtblTLtlTLtbb"
-#declare SStr  = concat(SStrX, SStrY)   // Move string to solve the cube
-#declare MStr  = concat(MvStr, SStr)    // Complete move string
-
-Manip(Tran, iTran, SStr)                            // Twist the cube
-Rot("T", tTmp, Tran, iTran, 0.4)                    // Twist a slice just a little
-object {
-    Rubik(Cubes, tTmp)
-    scale 0.8
-    translate <1, 0.9, -1>
-}
-
-/*=== the icosahedron ===*/
+/*=========================================================*/
+/* Icosahedron                                             */
 
 #include "icosa.inc"
 
-#declare REdge = 0.03;
-#declare RVert = 0.06;
-#declare icosa = object {
-    Platonic_icosahedron_faces(yes)
-    finish { FinFace }
-    normal { NorFace }
+object {
+    Icosahedron
+    scale 0.6 rotate -30*y translate <-2, 0, 1>
 }
 
+/*=========================================================*/
+/* Rubik's cube                                            */
 
-#declare TexIcosaEdge = texture {
-    pigment { color rgb <0.05, 0.05, 0.05> }
-    finish { FinFace }
+#include "rubik.inc"
+
+// moves that scrambel the cube
+#declare MovStr = "FARATrlRarlFRtAtrtLB";
+
+object {
+    RubikCube(MovStr, "T", 0.4)
+    scale 0.8
+    translate <1, 0, -1>
 }
 
-#declare TexIcosaVert = TexIcosaEdge
-    
-#declare edges = object {
-    Platonic_icosahedron_edges(REdge, RVert, TexIcosaEdge, TexIcosaVert, yes)
-}
- 
-union {
-    object { 
-        icosa 
-        texture { 
-            finish { FinFace } 
-            normal { NorFace }
-        } 
-        translate <0, RVert, 0>
-    }
-    object { 
-        edges 
-        texture {
-            finish {
-                specular 0.05
-                diffuse 0.7
-                reflection 0.1
-            }
-        }
-    }
-    rotate <0, 30, 0>
-    translate <-2, 0, 1>
-}
-
-/*=== camera and lights ===*/
+/*=========================================================*/
+/* Camera and Lights                                       */
 
 camera {
     location <-2, 7, -12>
@@ -118,9 +80,9 @@ light_source {
 }
 
 light_source {
-    <0, 1, 0>*100
+    <0, 1, -1>*100
     color rgb <1, 1, 1>
-    fade_distance 35
+    fade_distance 60
     fade_power 2
-    area_light x*4, z*4, 16, 16 jitter adaptive 2 circular orient
+    area_light x*32, y*32, 16, 16 jitter adaptive 2 circular orient
 }

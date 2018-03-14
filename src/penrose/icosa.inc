@@ -1,25 +1,62 @@
-#include "transforms.inc"
-#include "colors.inc"
+// Persistence of Vision Ray Tracer Scene Include File
+// File: icosa.inc
+// Vers: 3.7
+// Date: 2018/02/08
+// Auth: Zhao Liang mathzhaoliang@gmail.com
 
+#ifndef (Reorient_Trans)
+    #include "transforms.inc"
+#end
 
-#declare Platonic_icosahedron_verts = array[12] {
-    <0, 0, 1.175571>,
-    <1.051462, 0, 0.5257311>,
-    <0.3249197, 1., 0.5257311>,
-    <-0.8506508, 0.618034, 0.5257311>,
-    <-0.8506508, -0.618034, 0.5257311>,
-    <0.3249197, -1., 0.5257311>,
-    <0.8506508, 0.618034, -0.5257311>,
-    <0.8506508, -0.618034, -0.5257311>,
-    <-0.3249197, 1., -0.5257311>,
-    <-1.051462, 0, -0.5257311>,
-    <-0.3249197, -1., -0.5257311>,
-    <0, 0, -1.175571>,
+/*======================================================================*/
+/* Settings for the edges, vertices and faces                           */
+
+#declare icosa_edge_rad = 0.03;
+#declare icosa_vert_rad = 0.06;
+#declare phi = (1 + sqrt(5)) / 2;
+
+#declare IcosaFaceFinish = finish {
+    specular 1
+    roughness 0.003
+    phong 0.9 phong_size 100
+    diffuse 0.7
+    reflection 0.1
 }
 
-#local P0 = Platonic_icosahedron_verts[1];
-#local P1 = Platonic_icosahedron_verts[2];
-#local P2 = Platonic_icosahedron_verts[3];
+#declare IcosaFaceNormal = normal { bozo 0.005 scale 0.001 }
+
+#declare IcosaEdgeTexture = texture {
+    pigment { color rgb 0.05 }
+    finish { IcosaFaceFinish }
+}
+
+/*======================================================================*/
+/* Vertices of the icosahedron                                          */
+
+#declare Icosa_Vertices = array[12] {
+    <  0,  1,  phi>, <  1, phi,  0 >, < phi, 0,   1 >,
+    <  0, -1,  phi>, < -1, phi,  0 >, < phi, 0,  -1 >,
+    <  0,  1, -phi>, <  1,-phi,  0 >, <-phi, 0,   1 >,
+    <  0, -1, -phi>, < -1,-phi,  0 >, <-phi, 0,  -1 >,
+}
+
+/*======================================================================*/
+/* Edges of the icosahedron                                             */
+
+#declare Icosa_Edges = array[30] {
+    < 0,  1>, < 0,  2>, < 0,  3>, < 0,  4>, < 0,  8>,
+    < 1,  2>, < 1,  4>, < 1,  5>, < 1,  6>, < 2,  3>,
+    < 2,  5>, < 2,  7>, < 3,  7>, < 3,  8>, < 3, 10>,
+    < 4,  6>, < 4,  8>, < 4, 11>, < 5,  6>, < 5,  7>,
+    < 5,  9>, < 6,  9>, < 6, 11>, < 7,  9>, < 7, 10>,
+    < 8, 10>, < 8, 11>, < 9, 10>, < 9, 11>, <10, 11>
+}
+/*======================================================================*/
+/* Transform the vertices so that the bottom face lies horizontally     */
+
+#local P0 = Icosa_Vertices[0];
+#local P1 = Icosa_Vertices[1];
+#local P2 = Icosa_Vertices[2];
 #local V1 = P1 - P0;
 #local V2 = P2 - P0;
 #local Axis = vcross(V2, V1);
@@ -27,139 +64,94 @@
 #local TV1 = vtransform(V1, Tran1);
 #local The_Tran = transform {
     Reorient_Trans(Axis, y)
-    Reorient_Trans(TV1, x) }
-#local Num = 0;
-#while (Num < 12)
-    #declare Platonic_icosahedron_verts[Num] = vtransform(Platonic_icosahedron_verts[Num], The_Tran);
-    #local Num = Num + 1;
+    Reorient_Trans(TV1, x)
+}
+#local ind = 0;
+#while (ind<12)
+    #declare Icosa_Vertices[ind] = vtransform(Icosa_Vertices[ind], The_Tran);
+    #local ind = ind + 1;
 #end
 
-#macro Platonic_icosahedron_faces(OnPlane)
-    #local Platonic_icosahedron_obj = mesh2 {
+/*======================================================================*/
+/* Icosahedron object                                                   */
+
+// some prelimnary computations to make the bottom face lie on the xz plane
+#local P0 = Icosa_Vertices[9];
+#local P1 = Icosa_Vertices[10];
+#local P2 = Icosa_Vertices[11];
+#local V1 = P1 - P0;
+#local V2 = P2 - P0;
+#local Axis = vcross(V2, V1);
+
+#declare Icosahedron = union {
+    // edges and vertices
+    union {
+        #local i=0;
+        #while (i<12)
+            sphere { Icosa_Vertices[i], icosa_vert_rad }
+            #local i = i+1;
+        #end
+        
+        #local i=0;
+        #while (i<30)
+            cylinder { Icosa_Vertices[Icosa_Edges[i].x], Icosa_Vertices[Icosa_Edges[i].y], icosa_edge_rad }
+            #local i=i+1;
+        #end
+        
+        texture { IcosaEdgeTexture }
+    }
+    // faces
+    mesh2 {
         vertex_vectors {
             12,
-            Platonic_icosahedron_verts[0],
-            Platonic_icosahedron_verts[1],
-            Platonic_icosahedron_verts[2],
-            Platonic_icosahedron_verts[3],
-            Platonic_icosahedron_verts[4],
-            Platonic_icosahedron_verts[5],
-            Platonic_icosahedron_verts[6],
-            Platonic_icosahedron_verts[7],
-            Platonic_icosahedron_verts[8],
-            Platonic_icosahedron_verts[9],
-            Platonic_icosahedron_verts[10],
-            Platonic_icosahedron_verts[11]
-        }
+            Icosa_Vertices[0],
+            Icosa_Vertices[1],
+            Icosa_Vertices[2],
+            Icosa_Vertices[3],
+            Icosa_Vertices[4],
+            Icosa_Vertices[5],
+            Icosa_Vertices[6],
+            Icosa_Vertices[7],
+            Icosa_Vertices[8],
+            Icosa_Vertices[9],
+            Icosa_Vertices[10],
+            Icosa_Vertices[11],
+            }
         texture_list {
             5,
-            texture{pigment{color Red}},
-            texture{pigment{color Green}},
-            texture{pigment{color Blue}},
-            texture{pigment{color Yellow}},
-            texture{pigment{color Cyan}}
-        }
+            texture { pigment { rgb <.8,  0,  0> } finish { IcosaFaceFinish } normal { IcosaFaceNormal } }
+            texture { pigment { rgb < 1,  1,  1> } finish { IcosaFaceFinish } normal { IcosaFaceNormal } }
+            texture { pigment { rgb < 1,  1,  0> } finish { IcosaFaceFinish } normal { IcosaFaceNormal } }
+            texture { pigment { rgb < 0,  0, .8> } finish { IcosaFaceFinish } normal { IcosaFaceNormal } }
+            texture { pigment { rgb < 0, .8,  0> } finish { IcosaFaceFinish } normal { IcosaFaceNormal } }
+            }
         face_indices {
             20,
-            <0, 1, 2>, 0,
-            <0, 2, 3>, 1,
-            <0, 3, 4>, 2,
-            <0, 4, 5>, 3,
-            <0, 5, 1>, 4,
-            <1, 5, 7>, 1,
-            <1, 7, 6>, 2,
-            <1, 6, 2>, 3,
-            <2, 6, 8>, 2,
-            <2, 8, 3>, 4,
-            <3, 8, 9>, 3,
-            <3, 9, 4>, 0,
-            <4, 9, 10>, 1,
-            <4, 10, 5>, 4,
-            <5, 10, 7>, 0,
-            <6, 7, 11>, 2,
-            <6, 11, 8>, 0,
-            <7, 10, 11>, 3,
-            <8, 11, 9>, 1,
-            <9, 11, 10>, 4
-        }
+            <0,  1,  2>, 0,
+            <0,  1,  4>, 1,
+            <0,  2,  3>, 2,
+            <0,  3,  8>, 3,
+            <0,  4,  8>, 4,
+            <1,  2,  5>, 4,
+            <1,  4,  6>, 3,
+            <1,  5,  6>, 2,
+            <2,  3,  7>, 1,
+            <2,  5,  7>, 3,
+            <3,  7, 10>, 0
+            <3,  8, 10>, 4,
+            <4,  6, 11>, 0,
+            <4,  8, 11>, 2,
+            <5,  6,  9>, 1,
+            <5,  7,  9>, 0,
+            <6,  9, 11>, 4,
+            <7,  9, 10>, 2,
+            <8, 10, 11>, 1,
+            <9, 10, 11>, 3 
+            }
         inside_vector y
         hollow 
     }
-    #if (OnPlane)
-        #local P0 = Platonic_icosahedron_verts[9];
-        #local P1 = Platonic_icosahedron_verts[11];
-        #local P2 = Platonic_icosahedron_verts[10];
-        #local V1 = P1 - P0;
-        #local V2 = P2 - P0;
-        #local Axis = vcross(V2, V1);
-        object {
-            Platonic_icosahedron_obj
-            translate -(P0+P1+P2)/3
-            Reorient_Trans(Axis, y)
-        }
-    #else
-        object { Platonic_icosahedron_obj }
-    #end
-#end
-
-#macro Platonic_icosahedron_edges(RadEdg, RadVer, TexEdg, TexVer, OnPlane)
-    union {
-        union {
-            sphere { Platonic_icosahedron_verts[0], RadVer }
-            sphere { Platonic_icosahedron_verts[1], RadVer }
-            sphere { Platonic_icosahedron_verts[2], RadVer }
-            sphere { Platonic_icosahedron_verts[3], RadVer }
-            sphere { Platonic_icosahedron_verts[4], RadVer }
-            sphere { Platonic_icosahedron_verts[5], RadVer }
-            sphere { Platonic_icosahedron_verts[6], RadVer }
-            sphere { Platonic_icosahedron_verts[7], RadVer }
-            sphere { Platonic_icosahedron_verts[8], RadVer }
-            sphere { Platonic_icosahedron_verts[9], RadVer }
-            sphere { Platonic_icosahedron_verts[10], RadVer }
-            sphere { Platonic_icosahedron_verts[11], RadVer }
-            texture { TexVer } }
-        union {
-            cylinder { Platonic_icosahedron_verts[0], Platonic_icosahedron_verts[1], RadEdg }
-            cylinder { Platonic_icosahedron_verts[1], Platonic_icosahedron_verts[2], RadEdg }
-            cylinder { Platonic_icosahedron_verts[2], Platonic_icosahedron_verts[0], RadEdg }
-            cylinder { Platonic_icosahedron_verts[2], Platonic_icosahedron_verts[3], RadEdg }
-            cylinder { Platonic_icosahedron_verts[3], Platonic_icosahedron_verts[0], RadEdg }
-            cylinder { Platonic_icosahedron_verts[3], Platonic_icosahedron_verts[4], RadEdg }
-            cylinder { Platonic_icosahedron_verts[4], Platonic_icosahedron_verts[0], RadEdg }
-            cylinder { Platonic_icosahedron_verts[4], Platonic_icosahedron_verts[5], RadEdg }
-            cylinder { Platonic_icosahedron_verts[5], Platonic_icosahedron_verts[0], RadEdg }
-            cylinder { Platonic_icosahedron_verts[5], Platonic_icosahedron_verts[1], RadEdg }
-            cylinder { Platonic_icosahedron_verts[5], Platonic_icosahedron_verts[7], RadEdg }
-            cylinder { Platonic_icosahedron_verts[7], Platonic_icosahedron_verts[1], RadEdg }
-            cylinder { Platonic_icosahedron_verts[7], Platonic_icosahedron_verts[6], RadEdg }
-            cylinder { Platonic_icosahedron_verts[6], Platonic_icosahedron_verts[1], RadEdg }
-            cylinder { Platonic_icosahedron_verts[6], Platonic_icosahedron_verts[2], RadEdg }
-            cylinder { Platonic_icosahedron_verts[6], Platonic_icosahedron_verts[8], RadEdg }
-            cylinder { Platonic_icosahedron_verts[8], Platonic_icosahedron_verts[2], RadEdg }
-            cylinder { Platonic_icosahedron_verts[8], Platonic_icosahedron_verts[3], RadEdg }
-            cylinder { Platonic_icosahedron_verts[8], Platonic_icosahedron_verts[9], RadEdg }
-            cylinder { Platonic_icosahedron_verts[9], Platonic_icosahedron_verts[3], RadEdg }
-            cylinder { Platonic_icosahedron_verts[9], Platonic_icosahedron_verts[4], RadEdg }
-            cylinder { Platonic_icosahedron_verts[9], Platonic_icosahedron_verts[10], RadEdg }
-            cylinder { Platonic_icosahedron_verts[10], Platonic_icosahedron_verts[4], RadEdg }
-            cylinder { Platonic_icosahedron_verts[10], Platonic_icosahedron_verts[5], RadEdg }
-            cylinder { Platonic_icosahedron_verts[10], Platonic_icosahedron_verts[7], RadEdg }
-            cylinder { Platonic_icosahedron_verts[7], Platonic_icosahedron_verts[11], RadEdg }
-            cylinder { Platonic_icosahedron_verts[11], Platonic_icosahedron_verts[6], RadEdg }
-            cylinder { Platonic_icosahedron_verts[11], Platonic_icosahedron_verts[8], RadEdg }
-            cylinder { Platonic_icosahedron_verts[10], Platonic_icosahedron_verts[11], RadEdg }
-            cylinder { Platonic_icosahedron_verts[11], Platonic_icosahedron_verts[9], RadEdg }
-            texture { TexEdg } }
-        #if (OnPlane)
-            #local P0 = Platonic_icosahedron_verts[9];
-            #local P1 = Platonic_icosahedron_verts[11];
-            #local P2 = Platonic_icosahedron_verts[10];
-            #local V1 = P1 - P0;
-            #local V2 = P2 - P0;
-            #local Axis = vcross(V2, V1);
-            translate -(P0+P1+P2)/3
-            Reorient_Trans(Axis, y)
-            translate y*max(RadEdg, RadVer)
-        #end
-    }
-#end
+    translate -(P0+P1+P2)/3
+    Reorient_Trans(Axis, y)
+    translate y*max(icosa_edge_rad, icosa_vert_rad)
+}
