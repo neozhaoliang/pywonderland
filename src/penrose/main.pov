@@ -31,7 +31,7 @@ plane {
     y (-tile_rad*0.4)
     texture {
         pigment { rgb 1 }
-        finish { diffuse 0.7 specular 0.6 roughness 0.15} 
+        finish { diffuse 0.7 specular 0.6 roughness 0.15}
         normal { granite 0.15 scale 0.25 bump_size 0.15 }
     }
 }
@@ -52,13 +52,37 @@ object {
 #include "rubik.inc"
 
 // moves that scrambel the cube
-#declare MovStr = "FARATrlRarlFRtAtrtLB";
+#declare MovStr = "FARATrlRarlFRtAtrtLBTKjRFLtaRRfK";
 
 object {
     RubikCube(MovStr, "T", 0.4)
     scale 0.8
     translate <1, 0, -1>
 }
+
+/*=========================================================*/
+/* The Lego-style Kites and Darts                          */
+
+#include "kitedart.inc"
+
+union {
+    #local K1 = object { Kite translate -phi*z rotate 216*y translate phi*z }
+    #local K2 = object { Kite translate -phi*z rotate 144*y translate phi*z }
+    #local num=0;
+    #while (num<5)
+        object { Kite translate -phi*z rotate (72*num+180)*y }
+        object { Dart translate  phi*z rotate (72*num+36)*y  }
+        object { K1 rotate (72*num)*y }
+        object { K2 rotate (72*num)*y }
+        object { Dart translate 2*phi*z rotate (72*num)*y }
+        #local num=num+1;
+    #end
+    scale 0.4
+    translate <-2, 0, -2>
+}
+
+object { Kite scale .4 rotate    90*y translate <-.5, 0, -3> }
+object { Dart scale .4 rotate (-90)*y translate <-.5, 0, -4> }
 
 /*=========================================================*/
 /* Camera and Lights                                       */
@@ -80,9 +104,9 @@ light_source {
 }
 
 light_source {
-    <0, 1, -1>*100
+    <0, 1, -1>*50
     color rgb <1, 1, 1>
-    fade_distance 60
+    fade_distance 40
     fade_power 2
     area_light x*32, y*32, 16, 16 jitter adaptive 2 circular orient
 }

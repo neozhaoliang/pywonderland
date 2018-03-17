@@ -11,8 +11,8 @@
 /*======================================================================*/
 /* Settings for the edges, vertices and faces                           */
 
-#declare icosa_edge_rad = 0.03;
-#declare icosa_vert_rad = 0.06;
+#declare icosa_edge_rad = 0.05;
+#declare icosa_vert_rad = 0.1;
 #declare phi = (1 + sqrt(5)) / 2;
 
 #declare IcosaFaceFinish = finish {
@@ -91,13 +91,13 @@
             sphere { Icosa_Vertices[i], icosa_vert_rad }
             #local i = i+1;
         #end
-        
+
         #local i=0;
         #while (i<30)
             cylinder { Icosa_Vertices[Icosa_Edges[i].x], Icosa_Vertices[Icosa_Edges[i].y], icosa_edge_rad }
             #local i=i+1;
         #end
-        
+
         texture { IcosaEdgeTexture }
     }
     // faces
@@ -146,10 +146,10 @@
             <6,  9, 11>, 4,
             <7,  9, 10>, 2,
             <8, 10, 11>, 1,
-            <9, 10, 11>, 3 
+            <9, 10, 11>, 3
             }
         inside_vector y
-        hollow 
+        hollow
     }
     translate -(P0+P1+P2)/3
     Reorient_Trans(Axis, y)

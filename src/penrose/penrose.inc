@@ -34,14 +34,14 @@
 
 // Texture of thin rhmobus
 #declare ThinRhombusTex = texture {
-    pigment { color rgb <0, 0.27, 0.63> } 
+    pigment { color rgb <0, 0.27, 0.63> }
     normal{ RhombusNormal }
     finish{ RhombusFinish }
 }
 
 // Texture of fat rhmobus
 #declare FatRhombusTex = texture {
-    pigment { color rgb <1, 0.4, 0.8> } 
+    pigment { color rgb <1, 0.4, 0.8> }
     normal { RhombusNormal }
     finish { RhombusFinish }
 }
@@ -53,12 +53,12 @@
     #local ang2 = VAngle(p1-p2, p3-p2)/2;
     #local d1 = tile_margin/sin(ang1);
     #local d2 = tile_margin/sin(ang2);
-    
+
     #local w1 = p1-d1*(p1-p3)/vlength(p1-p3);
     #local w3 = p3-d1*(p3-p1)/vlength(p3-p1);
     #local w2 = p2-d2*(p2-p4)/vlength(p2-p4);
     #local w4 = p4-d2*(p4-p2)/vlength(p4-p2);
-    
+
     union {
         prism {
             linear_sweep
@@ -74,7 +74,7 @@
         cylinder { <w2.x, -tile_rad, w2.y>, <w3.x, -tile_rad, w3.y>, tile_rad }
         cylinder { <w3.x, -tile_rad, w3.y>, <w4.x, -tile_rad, w4.y>, tile_rad }
         cylinder { <w4.x, -tile_rad, w4.y>, <w1.x, -tile_rad, w1.y>, tile_rad }
-    
+
         #if (shape=0)
             texture{ FatRhombusTex }
         #else

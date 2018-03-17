@@ -8,10 +8,9 @@ import cairocffi as cairo
 import numpy as np
 
 
-num_divides = 6
-radius = 10
+num_divides = 7  # number of iterations
 phi = (np.sqrt(5) - 1) / 2
-
+radius = 1  # the initial "wheel" radius
 
 def htmlcolor_to_rgb(s):
     if len(s) != 6:
@@ -75,6 +74,7 @@ for color, A, B, C in triangles:
 ctx.set_source_rgb(*htmlcolor_to_rgb("FF7F00"))
 ctx.fill()
 
+# draw edges
 color, A, B, C = triangles[0]
 ctx.set_line_width(abs(B - A)/10.0)
 ctx.set_line_join(cairo.LINE_JOIN_ROUND)
