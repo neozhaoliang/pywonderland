@@ -19,7 +19,7 @@ TRUNK_LEN = 200  # initial length of a trunk
 SCALE = 0.8  # contraction factor between successive trunks
 THETA = math.pi / 2  # initial angle of the branch
 DTHETA = math.pi / 4.5  # angle between branches in the same level
-ORIGIN = (IMAGE_WIDTH/2.0, IMAGE_HEIGHT+50)  # pixel of the root
+ROOT = (IMAGE_WIDTH/2.0, IMAGE_HEIGHT+50)  # pixel of the root
 PERTURB = 6.0  # perturb the angle a little to make the tree look random
 # ----------------------------------------------------------
 
@@ -70,7 +70,7 @@ def main():
     ctx.set_line_join(cairo.LINE_JOIN_ROUND)
     ctx.set_source_rgb(1, 1, 1)
     ctx.paint()   
-    fractal_tree(ctx, ITERATIONS, ORIGIN, TRUNK_LEN, SCALE,
+    fractal_tree(ctx, ITERATIONS, ROOT, TRUNK_LEN, SCALE,
                  THETA, DTHETA, PERTURB, ROOT_COLOR, TIP_COLOR)
     surface.write_to_png("random_fractal_tree.png")
 
