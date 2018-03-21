@@ -10,7 +10,7 @@ Reference:
                                                      N.G. de Bruijn.
 
 Usage: python penrose.py -size 800x800
-                         -lines 15 
+                         -lines 15
                          -colors c1 c2 c3
                          -shifts s1 s2 s3 s4 s5
                          -output your-filename.png
@@ -69,19 +69,19 @@ if __name__ == '__main__':
     parser.add_argument('-lines', metavar='l', type=int, default=8,
                         help='half the number of lines in each grid')
     parser.add_argument('-colors', metavar='c', nargs=3, type=str,
-                        default=['E41A1C', 'FF7F00', '377EB8'], 
+                        default=['E41A1C', 'FF7F00', '377EB8'],
                         help='html colors for thin, fat rhombus and edges')
     parser.add_argument('-shifts', nargs=5, default=np.random.random(5), type=float,
                         help='five floating numbers specify the shifts of the grids')
     parser.add_argument('-output', metavar='o', type=str, default='penrose_rhombus.png',
                         help='output filenname')
-    
+
     args = parser.parse_args()
     nlines = args.lines
     shifts = args.shifts
     width, height = [int(x) for x in args.size.split('x')]
     thin_color, fat_color, edge_color = args.colors
-    
+
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
     ctx = cairo.Context(surface)
     ctx.set_line_cap(cairo.LINE_CAP_ROUND)
@@ -110,7 +110,7 @@ if __name__ == '__main__':
                 ctx.line_to(D.real, D.imag)
                 ctx.close_path()
                 ctx.fill_preserve()
-                    
+
                 ctx.set_source_rgb(*htmlcolor_to_rgb(edge_color))
                 ctx.stroke()
 

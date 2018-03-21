@@ -24,19 +24,6 @@ global_settings {
 #include "rhombus.inc"
 
 /*=========================================================*/
-/* Floor                                                   */
-
-// tile_rad is defined in penrose.inc
-plane {
-    y (-tile_rad*0.4)
-    texture {
-        pigment { rgb 1 }
-        finish { diffuse 0.7 specular 0.6 roughness 0.15}
-        normal { granite 0.15 scale 0.25 bump_size 0.15 }
-    }
-}
-
-/*=========================================================*/
 /* Icosahedron                                             */
 
 #include "icosa.inc"
@@ -80,9 +67,24 @@ union {
     scale 0.4
     translate <-2, 0, -2>
 }
-
-object { Kite scale .4 rotate    90*y translate <-.5, 0, -3> }
+object { Kite scale .4 rotate   90*y  translate <-.5, 0, -3> }
 object { Dart scale .4 rotate (-90)*y translate <-.5, 0, -4> }
+
+/*=========================================================*/
+/* Floor                                                   */
+
+// tile_rad is defined in penrose.inc
+plane {
+    y (-0.001)
+    texture {
+        pigment { rgb .8 }
+        finish {
+            specular 0.2
+            roughness 0.5
+            diffuse 0.8
+        }
+    }
+}
 
 /*=========================================================*/
 /* Camera and Lights                                       */

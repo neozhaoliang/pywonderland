@@ -4,9 +4,7 @@
 // Date: 2018/03/15
 // Auth: Zhao Liang mathzhaoliang@gmail.com
 
-#ifndef (VAngle)
-    #include "math.inc"
-#end
+#include "math.inc"
 #include "colors.inc"
 
 /*==========================================================*/
@@ -50,35 +48,25 @@
 /* Vertices for the tiles                                   */
 
 #declare vKite = array[4] {
-    <0, 0>,
-    <cos(pi/10), sin(pi/10)>,
-    <0, phi>,
-    <-cos(pi/10), sin(pi/10)>
+    <0, 0, 0>, <cos(pi/10), 0, sin(pi/10)>, <0, 0, phi>, <-cos(pi/10), 0, sin(pi/10)>
 }
 
 #declare vDart = array[4] {
-    <0, 0>,
-    <cos(pi/10), -sin(pi/10)>,
-    <0, 1>,
-    <-cos(pi/10), -sin(pi/10)>
+    <0, 0, 0>, <cos(pi/10), 0, -sin(pi/10)>, <0, 0, 1>, <-cos(pi/10), 0, -sin(pi/10)>
 }
 
 // a smaller tile with some gap between the original tile
 #macro smallKite(gap)
     array[4] {
-        <0,   gap/sin(2*pi/5)>,
-        vKite[1]+gap/sin(pi/5)*<-cos(pi/10), sin(pi/10)>,
-        <0, phi-gap/sin(pi/5)>,
-        vKite[3]+gap/sin(pi/5)*<cos(pi/10), sin(pi/10)>
+        <0, 0,   gap/sin(2*pi/5)>,   vKite[1]+gap/sin(pi/5)*<-cos(pi/10), 0, sin(pi/10)>,
+        <0, 0, phi-gap/sin(pi/5)>,   vKite[3]+gap/sin(pi/5)*< cos(pi/10), 0, sin(pi/10)>
     }
 #end
 
 #macro smallDart(gap)
     array[4] {
-        <0, gap/sin(2*pi/5)>,
-        vDart[1]+gap/sin(pi/10)*<-cos(pi/5), sin(pi/5)>,
-        <0, 1-gap/sin(pi/5)>,
-        vDart[3]+gap/sin(pi/10)*< cos(pi/5), sin(pi/5)>
+        <0, 0, gap/sin(2*pi/5)>, vDart[1]+gap/sin(pi/10)*<-cos(pi/5), 0, sin(pi/5)>,
+        <0, 0, 1-gap/sin(pi/5)>, vDart[3]+gap/sin(pi/10)*< cos(pi/5), 0, sin(pi/5)>
     }
 #end
 
@@ -91,7 +79,12 @@
     linear_sweep
     linear_spline
     0, tile_height, 5
-    verts[0] verts[1] verts[2] verts[3] verts[0]
+    <verts[0].x, verts[0].z>
+    <verts[1].x, verts[1].z>
+    <verts[2].x, verts[2].z>
+    <verts[3].x, verts[3].z>
+    <verts[0].x, verts[0].z>
+
     texture { TileEdgeTexture }
 }
 
@@ -101,7 +94,12 @@
     linear_sweep
     linear_spline
     0, tile_height, 5
-    verts[0] verts[1] verts[2] verts[3] verts[0]
+    <verts[0].x, verts[0].z>
+    <verts[1].x, verts[1].z>
+    <verts[2].x, verts[2].z>
+    <verts[3].x, verts[3].z>
+    <verts[0].x, verts[0].z>
+
     texture { TileEdgeTexture }
 }
 
@@ -113,7 +111,12 @@
         linear_sweep
         linear_spline
         0.001, tile_height+0.001, 5
-        verts[0] verts[1] verts[2] verts[3] verts[0]
+        <verts[0].x, verts[0].z>
+        <verts[1].x, verts[1].z>
+        <verts[2].x, verts[2].z>
+        <verts[3].x, verts[3].z>
+        <verts[0].x, verts[0].z>
+        
         texture { KiteTexture }
     }
 }
@@ -126,7 +129,12 @@
         linear_sweep
         linear_spline
         0.001, tile_height+0.001, 5
-        verts[0] verts[1] verts[2] verts[3] verts[0]
+        <verts[0].x, verts[0].z>
+        <verts[1].x, verts[1].z>
+        <verts[2].x, verts[2].z>
+        <verts[3].x, verts[3].z>
+        <verts[0].x, verts[0].z>
+        
         texture { DartTexture }
     }
 }

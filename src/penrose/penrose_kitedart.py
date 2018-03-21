@@ -8,7 +8,7 @@ import cairocffi as cairo
 import numpy as np
 
 
-num_divides = 7  # number of iterations
+num_divides = 6  # number of iterations
 phi = (np.sqrt(5) - 1) / 2
 radius = 1  # the initial "wheel" radius
 
@@ -18,20 +18,20 @@ def htmlcolor_to_rgb(s):
     return [int(n, 16) / 255.0 for n in (s[0:2], s[2:4], s[4:])]
 
 
-def subdivide_kite_dart(triangles): 
-    result = [] 
-    for color, A, B, C in triangles: 
-        if color == 0: 
-            # subdivide red (sharp isosceles) (half kite) triangle 
+def subdivide_kite_dart(triangles):
+    result = []
+    for color, A, B, C in triangles:
+        if color == 0:
+            # subdivide red (sharp isosceles) (half kite) triangle
             Q = A + (B - A) * phi
             R = B + (C - B) * phi
-            result += [(1, R, Q, B), (0, Q, A, R), (0, C, A, R)] 
-        else: 
-            # subdivide blue (fat isosceles) (half dart) triangle 
+            result += [(1, R, Q, B), (0, Q, A, R), (0, C, A, R)]
+        else:
+            # subdivide blue (fat isosceles) (half dart) triangle
             P = C + (A - C) * phi
-            result += [(1, B, P, A), (0, P, C, B)] 
-        
-    return result 
+            result += [(1, B, P, A), (0, P, C, B)]
+
+    return result
 
 triangles = []
 for i in range(10):
@@ -40,12 +40,12 @@ for i in range(10):
     if i % 2 == 0:
         B, C = C, B
     triangles.append((0, B, 0j, C))  # note the order of the vertices here!
-    
+
 # perform subdivisions
 for i in range(num_divides):
     triangles = subdivide_kite_dart(triangles)
 
-size = (800, 600)
+size = (800, 640)
 surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, size[0], size[1])
 ctx = cairo.Context(surface)
 ctx.translate(size[0] / 2.0, size[1] / 2.0)
@@ -85,5 +85,5 @@ for color, A, B, C in triangles:
     ctx.line_to(A.real, A.imag)
     ctx.line_to(C.real, C.imag)
     ctx.stroke()
-    
+
 surface.write_to_png("penrose_kitedart.png")
