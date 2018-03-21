@@ -12,10 +12,11 @@ import cairocffi as cairo
 IMAGE_WIDTH = 600
 IMAGE_HEIGHT = 600
 # ------ params control the apperance of the tree ----------
-ITERATIONS = 15  # total number of iterations
+ITERATIONS = 17  # total number of iterations
 ROOT_COLOR = (0, 0, 0)  # root branch color
 LEAF_COLOR = (1.0, 1.0, 0.2)  # leaf color
-TRUNK_LEN = 200  # initial length of a trunk
+TRUNK_LEN = 200  # initial length of the trunk
+TRUNK_RAD = 3  # initial radius of the trunk
 SCALE = 0.8  # contraction factor between successive trunks
 THETA = math.pi / 2  # initial angle of the branch
 ANGLE = math.pi / 4.5  # angle between branches in the same level
@@ -32,13 +33,17 @@ def get_color(level, root_color, tip_color):
             (level*1.0/ITERATIONS)*(root_color[2]-tip_color[2])+tip_color[2])
 
 
+def get_line_width(level):
+    return max(1, TRUNK_RAD*level/ITERATIONS)
+
+
 def fractal_tree(ctx,         # a cairo context to draw on
                  iterations,  # number of iterations
                  start,       # x,y coordinates of the start of this branch
                  t,           # current trunk length
                  r,           # factor to contract the trunk each iteration
                  theta,       # starting orientation
-                 angle,      # angle between branches in the same iteration
+                 angle,       # angle between branches in the same iteration
                  perturb,     # perturb the angle
                  root_color,  # root color
                  tip_color):  # leave color
@@ -54,7 +59,7 @@ def fractal_tree(ctx,         # a cairo context to draw on
     # draw the branch
     ctx.move_to(x0, y0)
     ctx.line_to(x, y)
-    ctx.set_line_width(1.0)
+    ctx.set_line_width(get_line_width(iterations))
     ctx.set_source_rgb(*color)
     ctx.stroke()
     # recursive draw next branches
@@ -66,17 +71,18 @@ def fractal_tree(ctx,         # a cairo context to draw on
                  angle, perturb, root_color, tip_color)
 
 
-def main():
+def main(i):
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, IMAGE_WIDTH, IMAGE_HEIGHT)
     ctx = cairo.Context(surface)
     ctx.set_line_cap(cairo.LINE_CAP_ROUND)
     ctx.set_line_join(cairo.LINE_JOIN_ROUND)
     ctx.set_source_rgb(1, 1, 1)
-    ctx.paint()   
+    ctx.paint()
     fractal_tree(ctx, ITERATIONS, ROOT, TRUNK_LEN, SCALE,
                  THETA, ANGLE, PERTURB, ROOT_COLOR, LEAF_COLOR)
-    surface.write_to_png("random_fractal_tree.png")
+    surface.write_to_png("random_fractal_tree%03d.png")
 
 
 if __name__ == "__main__":
-    main()
+    for i in range(100):
+        main(i)
