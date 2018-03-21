@@ -71,7 +71,7 @@ def fractal_tree(ctx,         # a cairo context to draw on
                  angle, perturb, root_color, tip_color)
 
 
-def main(i):
+def main():
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, IMAGE_WIDTH, IMAGE_HEIGHT)
     ctx = cairo.Context(surface)
     ctx.set_line_cap(cairo.LINE_CAP_ROUND)
@@ -80,9 +80,8 @@ def main(i):
     ctx.paint()
     fractal_tree(ctx, ITERATIONS, ROOT, TRUNK_LEN, SCALE,
                  THETA, ANGLE, PERTURB, ROOT_COLOR, LEAF_COLOR)
-    surface.write_to_png("random_fractal_tree%03d.png")
+    surface.write_to_png("random_fractal_tree.png")
 
 
 if __name__ == "__main__":
-    for i in range(100):
-        main(i)
+    main()
