@@ -35,10 +35,10 @@ def fractal_tree(ctx,         # a cairo context to draw on
                  t,           # current trunk length
                  r,           # factor to contract the trunk each iteration
                  theta,       # starting orientation
-                 dtheta,
-                 perturb,
-                 root_color,
-                 tip_color):
+                 dtheta,      # angle between branches in the same iteration
+                 perturb,     # perturb the angle
+                 root_color,  # root color
+                 tip_color):  # tip color
     if iterations == 0:
         return
 
@@ -69,11 +69,9 @@ def main():
     ctx.set_line_cap(cairo.LINE_CAP_ROUND)
     ctx.set_line_join(cairo.LINE_JOIN_ROUND)
     ctx.set_source_rgb(1, 1, 1)
-    ctx.paint()
-    
+    ctx.paint()   
     fractal_tree(ctx, ITERATIONS, ORIGIN, TRUNK_LEN, SCALE,
                  THETA, DTHETA, PERTURB, ROOT_COLOR, TIP_COLOR)
-
     surface.write_to_png("random_fractal_tree.png")
 
 
