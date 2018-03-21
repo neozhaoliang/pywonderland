@@ -12,7 +12,7 @@ import cairocffi as cairo
 IMAGE_WIDTH = 600
 IMAGE_HEIGHT = 600
 # ------ params control the apperance of the tree ----------
-ITERATIONS = 17  # total number of iterations
+ITERATIONS = 16  # total number of iterations
 ROOT_COLOR = (0, 0, 0)  # root branch color
 LEAF_COLOR = (1.0, 1.0, 0.2)  # leaf color
 TRUNK_LEN = 200  # initial length of the trunk
@@ -34,6 +34,7 @@ def get_color(level, root_color, tip_color):
 
 
 def get_line_width(level):
+    """Return the line width of a given level."""
     return max(1, TRUNK_RAD*level/ITERATIONS)
 
 
