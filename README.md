@@ -24,6 +24,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 - [Julia Set](#julia-set)
 - [Newton Fractal](#newton-fractal)
 - [Icosahedral Kaleidoscope](#icosahedral-kaleidoscope)
+- [Fractal Tree](#fractal-tree)
 - [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
 - [The E8 Pattern](#the-e8-pattern)
 - [The Modular Group](#the-modular-group)
@@ -89,6 +90,20 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 [[Back to Top](#contents)]
 
 ---
+### Fractal Tree
+[[Code](./src/misc/fractaltree.py)]
+
+<br>
+
+<p align="center">
+<img src="http://www.pywonderland.com/img/fractaltree.png" width="400"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
+
+---
 ### Reaction-Diffusion Simulation
 [[Code](./src/grayscott/)] [[Doc](http://www.pywonderland.com/grayscott/)] [[Pmneila's Javascript Animation](http://pmneila.github.io/jsexp/grayscott/)]
 
@@ -109,7 +124,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/E8.png"br/>
+<img src="http://www.pywonderland.com/img/e8.png"br/>
 </p>
 
 <br>
@@ -137,8 +152,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://pywonderland.com/img/penrose/penrose_star.png" width="350"/><img src="http://pywonderland.com/img/penrose/penrose_net.png" width="350"/>
-<img src="http://pywonderland.com/img/penrose/penrose_kitedart.png" width="350"/><img src="http://pywonderland.com/img/penrose/penrose_scene.png" width="350"/>
+<img src="http://pywonderland.com/img/penrose/penrose_rhombus.png" width="350"/><img src="http://pywonderland.com/img/penrose/penrose_kitedart.png" width="350"/>
 </p>
 
 <br>
