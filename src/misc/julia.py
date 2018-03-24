@@ -29,7 +29,7 @@ def main(xmin, xmax, ymin, ymax, width, height):
     z = x + y*1j
     img = np.asarray(np.frompyfunc(escape, 1, 1)(z)).astype(np.float)
     img /= np.max(img)
-    img = np.sin(img**2 * np.pi) # a simple way to smooth the coloring.
+    img = np.sin(img**2 * np.pi)**0.8  # a simple way to smooth the coloring.
     fig = plt.figure(figsize=(width/100.0, height/100.0), dpi=100)
     ax = fig.add_axes([0, 0, 1, 1], aspect=1)
     ax.axis('off')

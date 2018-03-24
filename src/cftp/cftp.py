@@ -39,7 +39,7 @@ def coupling_from_the_past(mc, desc):
     bar.close()
     return upper
 
-  
+
 class LozengeTiling(object):
     """
     A lozenge tiling of a hexagon of size (a x b x c) can be
@@ -110,13 +110,13 @@ class LozengeTiling(object):
                 if k > 0:
                     if self.paths[k][j] == self.paths[k][j-1]:  # down
                         verts[0].append([(j+dx, self.paths[k][j]+dy) for dx, dy in
-                                         ((0, 0), (-1, 0), (-1, -1), (0, -1))])                        
+                                         ((0, 0), (-1, 0), (-1, -1), (0, -1))])
                     else:  # up
-                        verts[1].append([(j+dx, self.paths[k][j]+dy) for dx, dy in 
-                                         ((0, 0), (-1, -1), (-1, -2), (0, -1))])                
+                        verts[1].append([(j+dx, self.paths[k][j]+dy) for dx, dy in
+                                         ((0, 0), (-1, -1), (-1, -2), (0, -1))])
                 for l in range(self.paths[k][j]+1, self.paths[k+1][j]):
                     verts[2].append([(j+dx, l+dy) for dx, dy in
-                                     ((0, 0), (-1, -1), (0, -1), (1, 0))])                    
+                                     ((0, 0), (-1, -1), (0, -1), (1, 0))])
         return verts
 
     def run_cftp(self):

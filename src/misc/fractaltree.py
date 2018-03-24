@@ -63,7 +63,7 @@ def fractal_tree(ctx,         # a cairo context to draw on
     ctx.set_source_rgb(*color)
     ctx.stroke()
     # recursive draw next branches
-    fractal_tree(ctx, iterations-1, (x, y),  t*r, r, 
+    fractal_tree(ctx, iterations-1, (x, y),  t*r, r,
                  theta + (random.random())*(perturb/(iterations+1))*angle,
                  angle, perturb, root_color, tip_color)
     fractal_tree(ctx, iterations-1, (x, y),  t*r, r,

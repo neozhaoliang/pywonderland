@@ -41,11 +41,11 @@ def draw(ctx, T):
             ctx.close_path()
             ctx.set_source_rgb(*colors[i])
             ctx.fill_preserve()
-            ctx.set_line_width(LINE_WIDTH)    
+            ctx.set_line_width(LINE_WIDTH)
             ctx.set_source_rgb(*EDGE_COLOR)
             ctx.stroke()
-            
-            
+
+
 def main(hexagonsize, imgsize):
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, imgsize, imgsize)
     ctx = cairo.Context(surface)
@@ -60,11 +60,11 @@ def main(hexagonsize, imgsize):
     # paint background
     ctx.set_source_rgb(1, 1, 1)
     ctx.paint()
-    
+
     T = LozengeTiling(hexagonsize).run_cftp()
     draw(ctx, T)
     surface.write_to_png("random_lozenge_tiling.png")
-    
-    
+
+
 if __name__ == "__main__":
     main((20, 20, 20), 600)

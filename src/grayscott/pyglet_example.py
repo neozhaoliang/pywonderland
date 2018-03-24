@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-A Manderbrot Set Example with Pyglet and GLSL 
+A Manderbrot Set Example with Pyglet and GLSL
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :copyright (c) 2017 by Zhao Liang.
@@ -24,14 +24,14 @@ class Mandelbrot(pyglet.window.Window):
         with self.shader:
             self.shader.vertex_attrib('position', [-1, -1, 1, -1, -1, 1, 1, 1])
             self.shader.vertex_attrib('texcoord', [0, 0, 1, 0, 0, 1, 1, 1])
-            
+
     def on_draw(self):
         gl.glClearColor(0, 0, 0, 0)
         self.clear()
         gl.glViewport(0, 0, self.width, self.height)
         with self.shader:
             gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
-            
+
     def run(self, fps=None):
         self.set_visible(True)
         pyglet.app.run()
