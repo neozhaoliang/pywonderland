@@ -11,7 +11,7 @@ import cairocffi as cairo
 
 IMAGE_WIDTH = 600
 IMAGE_HEIGHT = 600
-# ------ params control the apperance of the tree ----------
+# ------ params control the appearance of the tree ----------
 ITERATIONS = 16  # total number of iterations
 ROOT_COLOR = (0, 0, 0)  # root branch color
 LEAF_COLOR = (1.0, 1.0, 0.2)  # leaf color
@@ -25,8 +25,7 @@ PERTURB = 6.0  # perturb the angle a little to make the tree look random
 # ----------------------------------------------------------
 
 def get_color(level, root_color, tip_color):
-    """
-    Return an interpolation of the two colors `root_color` and `tip_color`.
+    """Return an interpolation of the two colors `root_color` and `tip_color`.
     """
     return ((level*1.0/ITERATIONS)*(root_color[0]-tip_color[0])+tip_color[0],
             (level*1.0/ITERATIONS)*(root_color[1]-tip_color[1])+tip_color[1],

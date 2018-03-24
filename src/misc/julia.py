@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 """
 ~~~~~~~~~~~~~~~~~~~
 A Julia Set Fractal
 ~~~~~~~~~~~~~~~~~~~
 """
-
 import numpy as np
 import matplotlib.pyplot as plt
 from numba import jit

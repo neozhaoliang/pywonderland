@@ -5,7 +5,7 @@ Reaction-Diffusion Simulation with Pyglet and GLSL
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Usage: python main.py
 
-To make videos of the animations you must have `ffmpeg` installed
+To make video of the animation you must have `ffmpeg` installed
 and can be found on your system path.
 
 For how to use mouse and keyboard to play with the simulation see the doc below.

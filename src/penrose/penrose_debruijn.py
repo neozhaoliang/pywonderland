@@ -13,7 +13,7 @@ Usage: python penrose.py -size 800x800
                          -lines 15
                          -colors c1 c2 c3
                          -shifts s1 s2 s3 s4 s5
-                         -output your-filename.png
+                         -output yourfilename.png
 
 Each time you run this script it outputs a different pattern,
 these patterns are almost surely not isomorphic with each other.

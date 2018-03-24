@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 ~~~~~~~~~~~~~~
 The E8 picture

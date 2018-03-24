@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 A fast Mandelbrot set wallpaper renderer
@@ -9,7 +8,6 @@ A fast Mandelbrot set wallpaper renderer
 reddit discussion:
     https://www.reddit.com/r/math/comments/2abwyt/smooth_colour_mandelbrot
 """
-
 import numpy as np
 from PIL import Image
 from numba import jit

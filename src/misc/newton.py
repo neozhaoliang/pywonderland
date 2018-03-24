@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-
 """
 ~~~~~~~~~~~~~~~~~~
 The Newton Fractal
 ~~~~~~~~~~~~~~~~~~
 """
-
 import numpy as np
 import matplotlib.pyplot as plt
 from numba import jit
@@ -17,7 +15,6 @@ def f(z):
     # z*z*z is faster than z**3
     return z*z*z - 1
     #return z**5 + 0.25*z*z + 1.17
-
 
 
 @jit('complex64(complex64)', nopython=True)
