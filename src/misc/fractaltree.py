@@ -46,7 +46,7 @@ def fractal_tree(ctx,         # a cairo context to draw on
                  angle,       # angle between branches in the same iteration
                  perturb,     # perturb the angle
                  root_color,  # root color
-                 tip_color):  # leave color
+                 tip_color):  # leaf color
     if iterations == 0:
         return
 
