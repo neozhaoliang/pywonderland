@@ -6,11 +6,10 @@ A Manderbrot Set Example with Pyglet and GLSL
 
 :copyright (c) 2017 by Zhao Liang.
 """
-import numpy as np
-
 import pyglet
 pyglet.options['debug_gl'] = False
 import pyglet.gl as gl
+
 from shader import Shader
 
 
