@@ -1,12 +1,8 @@
 # A Tour in the Wonderland of Math with Python
 
-<p align="center"><img src="./alice.png"></p>
-
-
-> A collection of python scripts for drawing beautiful figures or animating interesting algorithms in mathematics.
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT) [![PyPI](https://img.shields.io/pypi/pyversions/Django.svg)]()
 
+> A collection of python scripts for drawing beautiful figures or animating interesting algorithms in mathematics.
 
 ## About this repo
 
@@ -40,7 +36,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/fractals/mandelbrot.png" width="600"/>
+<img src="http://www.pywonderland.com/img/fractals/mandelbrot.png" width="500"/>
 </p>
 
 <br>
@@ -54,7 +50,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/fractals/julia.png" width="600"/>
+<img src="http://www.pywonderland.com/img/fractals/julia.png" width="500"/>
 </p>
 
 <br>
@@ -68,7 +64,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/fractals/newton.png" width="500"/>
+<img src="http://www.pywonderland.com/img/fractals/newton.png" width="400"/>
 </p>
 
 <br>
@@ -82,7 +78,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/icosa/kaleidoscope.png"br/>
+<img src="http://www.pywonderland.com/img/icosa/kaleidoscope.png" width="400"/>
 </p>
 
 <br>
@@ -110,7 +106,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/grayscott/unstable.png"/>
+<img src="http://www.pywonderland.com/img/grayscott/coral.png" width="500"/>
 </p>
 
 <br>
@@ -124,7 +120,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/e8.png"br/>
+<img src="http://www.pywonderland.com/img/e8.png" width="500"/>
 </p>
 
 <br>
@@ -152,7 +148,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://pywonderland.com/img/penrose/penrose_rhombus.png" width="350"/><img src="http://pywonderland.com/img/penrose/penrose_kitedart.png" width="350"/>
+<img src="http://pywonderland.com/img/penrose/penrose_scene.png" width="600"/>
 </p>
 
 <br>
