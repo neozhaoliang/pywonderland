@@ -10,6 +10,7 @@ with uniform probability.
 """
 import argparse
 import aztec
+from tqdm import trange
 
 
 # Four colors for the Four types of dominoes
@@ -131,7 +132,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     az = aztec.AztecDiamond(0)
-    for _ in range(args.order):
+    for _ in trange(args.order):
         az = az.delete().slide().create()
 
     render(args.prog, az, args.size, az.order+1, args.filename)

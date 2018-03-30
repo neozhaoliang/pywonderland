@@ -17,6 +17,7 @@ import glob
 import subprocess
 import argparse
 import aztec
+from tqdm import trange
 from random_tiling import render_with_cairo as render
 
 
@@ -40,7 +41,7 @@ def make_animation(order, size, filename):
     filename: the output .gif filename.
     """
     az = aztec.AztecDiamond(0)
-    for i in range(order):
+    for i in trange(order):
         az.delete()
         render(az, size, order + 1, '_tmp{:03d}.png'.format(3 * i))
 
