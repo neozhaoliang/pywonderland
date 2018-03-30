@@ -1,0 +1,7 @@
+cairocffi
+matplotlib
+numpy
+numba
+palettable
+pyglet
+tqdm

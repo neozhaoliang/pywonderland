@@ -207,14 +207,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ## Dependencies
 
-Python libs:
-
-+ `numpy`
-+ `matplotlib`
-+ `cairo`
-+ [`palettable`](https://github.com/jiffyclub/palettable)
-+ [`numba`](https://github.com/numba/numba)
-+ `pyglet`
+Python libs: `pip install -r requirements.txt`.
 
 Softwares:
 
