@@ -1,7 +1,8 @@
 cairocffi
 matplotlib
-numpy
 numba
+numpy
 palettable
 pyglet
+PyYaml
 tqdm
