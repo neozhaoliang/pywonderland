@@ -1,0 +1,11 @@
+# Symmetry group of the cube
+# 48 cosets
+name: Cube
+relators:
+  - aa
+  - bb
+  - cc
+  - abababab
+  - bcbcbc
+  - acac
+subgroup-generators:

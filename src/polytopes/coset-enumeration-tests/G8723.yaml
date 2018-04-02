@@ -1,0 +1,10 @@
+# 448 cosets
+name: G8723
+relators:
+  - aaaaaaaa
+  - bbbbbbb
+  - abab
+  - AbAbAb
+subgroup-generators:
+  - aa
+  - Ab
