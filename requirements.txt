@@ -5,4 +5,5 @@ numpy
 palettable
 pyglet
 PyYaml
+scipy
 tqdm

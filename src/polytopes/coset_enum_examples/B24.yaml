@@ -1,5 +1,5 @@
 # The 2-generator Burnside group of exponent 4.
-# 4096 cosets
+# 1024 cosets
 name: B24
 relators:
   - aaaa
@@ -12,3 +12,4 @@ relators:
   - AbabAbabAbabAbab
   - aBabaBabaBabaBab
 subgroup-generators:
+  - a

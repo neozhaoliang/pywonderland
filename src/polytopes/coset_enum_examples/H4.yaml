@@ -1,0 +1,20 @@
+# Symmetry group of the 120-cell with Coxeter diagram 5 - 3 - 3.
+# we are computing the number of vertices of the 120-cell here,
+# which is also the index of the stabilizing subgroup of a vertex.
+# 600 cosets
+name: H4
+relators:
+  - aa
+  - bb
+  - cc
+  - dd
+  - ababababab
+  - bcbcbc
+  - cdcdcd
+  - acac
+  - adad
+  - bdbd
+subgroup-generators:
+  - b
+  - c
+  - d
