@@ -400,7 +400,7 @@ if __name__ == '__main__':
                         help='level of scaling of the texture')
     parser.add_argument('-conf', type=int, default=0,
                         help='the line number of a config in the configuration file')
-    parser.add_argument('-video', type=int, default=0,
+    parser.add_argument('-video', action="store_true",
                         help='turn on saving to the video')
     parser.add_argument('-mask', type=str, default=None,
                         help='a mask image to control the growth of the pattern')

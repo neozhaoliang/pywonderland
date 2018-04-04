@@ -19,17 +19,18 @@ from fpgroup import FpGroup
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("f", type=str, help="Input file name")
-    parser.add_argument("-std", action="store_true", help="Standardize the coset table or not")
+    parser.add_argument("filename", type=str, help="Input file name")
+    parser.add_argument("-std", type=int, default=True, help="Standardize the coset table or not")
+    parser.add_argument("-out", metavar="-o", type=str, default=None, help="output file name")
     args = parser.parse_args()
-    with open(args.f, "r") as f:
+    with open(args.filename, "r") as f:
         data = yaml.load(f)
         rels = data["relators"]
         subg = data["subgroup-generators"]
         name = data["name"]
         G = FpGroup(rels, subg, name)
-        G.compute(standard=args.std)
-        G.print_table()
+        G.compute(args.std)
+        G.print_table(args.out)
 
 
 if __name__ == "__main__":
