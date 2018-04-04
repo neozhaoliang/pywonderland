@@ -20,7 +20,7 @@ from fpgroup import FpGroup
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", type=str, help="Input file name")
-    parser.add_argument("-std", type=int, default=True, help="Standardize the coset table or not")
+    parser.add_argument("-std", type=bool, default=True, help="Standardize the coset table or not")
     parser.add_argument("-out", metavar="-o", type=str, default=None, help="output file name")
     args = parser.parse_args()
     with open(args.filename, "r") as f:
