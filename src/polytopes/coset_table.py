@@ -28,16 +28,16 @@ class CosetTable(object):
     yet we set it to `None`. When the algorithm terminates all entries in the table are
     assigned a non-negative integer, all rows scan correctly under all words in R,
     and the 0-th row scan correctly under all generators of H.
-    
-    Example: G = <a, b | a^2 = b^3 = (ab)^3 = 1>, H = <ab>, and 
+
+    Example: G = <a, b | a^2 = b^3 = (ab)^3 = 1>, H = <ab>, and
               a  A  b  B
           -------------
           0:  1  1  2  1
     T  =  1:  0  0  0  2
           2:  3  3  1  0
           3:  2  2  3  3
-    
-    where aA = Aa = 1, bB = Bb = 1.  
+
+    where aA = Aa = 1, bB = Bb = 1.
     """
     def __init__(self, gens, rels, subgens):
         """
@@ -47,14 +47,14 @@ class CosetTable(object):
               e.g. [[0, 0], [2, 2, 2], [0, 2]*3] for a^2 = b^3 = (ab)^3 = 1
         subgens: a 2D list of integers that represents the subgroup generators,
               e.g. [[0, 2]] for <ab>.
-              
+
         we use a list `p` to hold the equivalence classes of the cosets,
         p[k] = l means k and l really represent the same coset. It's always
         true that p[k] <= k, if p[k] = k then we call k "alive" else we call k "dead".
         All cosets are created "alive" but as the algorithm runs some of them may be
         declared to "dead" and their rows are deleted from the table (we do not explicitly
         free the memory of these row but keep in mind that they do not belong to our table).
-        
+
         A "dead" coset arise when an `coincidence` is found, and while handling this
         coincidence more coincidences may also be found, so we use a queue `q` to hold them.
         """
@@ -66,7 +66,7 @@ class CosetTable(object):
         self.table = [[None] * len(self.A)]
         self.bar = tqdm(desc="Defining new cosets", unit=" cosets")
         self.bar.update(1)
-        
+
     def __getitem__(self, item):
         return self.table.__getitem__(item)
 
@@ -83,7 +83,7 @@ class CosetTable(object):
 
     def undefine(self, coset, x):
         self[coset][x] = None
-        
+
     def define(self, coset, x):
         """
         To define a new coset we need to:
@@ -106,11 +106,11 @@ class CosetTable(object):
         m = coset
         while m != self.p[m]:
             m = self.p[m]
-        
+
         l = coset
         while l != self.p[l]:
             l, self.p[l] = self.p[l], m
-        
+
         return m
 
     def merge(self, coset1, coset2):
@@ -124,7 +124,7 @@ class CosetTable(object):
             s, t = min(s, t), max(s, t)
             self.p[t] = s
             self.q.append(t)
-        
+
     def scan_and_fill(self, coset, word):
         """
         Scan the row of a coset under a given word.
@@ -155,13 +155,13 @@ class CosetTable(object):
                     self.coincidence(f, b)
                 # else the scan yields no information
                 return
-            
+
             # if scan forward is not completed then scan backward as far as possible.
             # until it meets the forward scan.
             while j >= i and self.is_defined(b, inv(word[j])):
                 b = self[b][inv(word[j])]
                 j -= 1
-            
+
             # if f and b overlap then a coincidence is found.
             if j < i:
                 self.coincidence(f, b)
@@ -174,7 +174,7 @@ class CosetTable(object):
             # else they do not meet, define a new coset and continue scanning forward.
             else:
                 self.define(f, word[i])
-    
+
     def coincidence(self, coset1, coset2):
         """
         Process a coincidence. When two cosets are found to be equivalent the larger one
@@ -218,14 +218,14 @@ class CosetTable(object):
         """
         for word in self.H:
             self.scan_and_fill(0, word)
-            
+
         current = 0
         while current < len(self.table):
             for rel in self.R:
                 if not self.is_alive(current):
                     break
                 self.scan_and_fill(current, rel)
- 
+
             if self.is_alive(current):
                 for x in self.A:
                     if not self.is_defined(current, x):
@@ -233,7 +233,7 @@ class CosetTable(object):
             current += 1
 
         self.bar.close()
-            
+
     def compress(self):
         """
         Delete all dead cosets in the table.
@@ -253,12 +253,12 @@ class CosetTable(object):
                             self[y][inv(x)] = ind
 
         self.p = list(range(ind + 1))
-        self.table = self.table[:len(self.p)]       
-            
+        self.table = self.table[:len(self.p)]
+
     def swap(self, k, l):
         """
         Swap two *live* cosets in the table. It's called in the `standardize()` method
-        after the table is compressed, but it also works for non-compressed table. 
+        after the table is compressed, but it also works for non-compressed table.
         """
         for x in self.A:
             # swap the two rows k and l.
@@ -271,7 +271,7 @@ class CosetTable(object):
                         self[coset][x] = l
                     elif self[coset][x] == l:
                         self[coset][x] = k
-        
+
     def standardize(self):
         """
         Rearrange the cosets in the table to a standard form.

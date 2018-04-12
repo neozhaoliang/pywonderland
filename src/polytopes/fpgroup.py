@@ -37,7 +37,7 @@ class FpGroup(object):
         subgens:  generators of the subgroup as a 1D list of
                   strings, e.g. ["ab", "Ab"]
         name: decriptive name of the group, e.g. "S3", "D8", ..., etc.
-        """        
+        """
         if not name:
             name = self.__class__.__name__
         self.name = name
@@ -76,7 +76,7 @@ class FpGroup(object):
             f.write("{:>5s}".format(x))
             f.write("{:>5s}".format(x.upper()))
         f.write("\n" + (2 * len(self.generators) + 2) * 5 * "-" + "\n")
-            
+
         for i, row in enumerate(self.coset_table, start=1):
             f.write("{:>5d}: ".format(i))
             for x in row:

@@ -51,7 +51,7 @@ def fractal_tree(ctx,         # a cairo context to draw on
     # randomize the length
     randt = np.random.random() * t
     x, y = x0 + randt * np.cos(theta), y0 - randt * np.sin(theta)
-    
+
     color = get_color(level)
     ctx.move_to(x0, y0)
     ctx.line_to(x, y)
@@ -60,7 +60,7 @@ def fractal_tree(ctx,         # a cairo context to draw on
     ctx.stroke()
 
     theta1 = theta + np.random.random() * (perturb / level) * angle
-    theta2 = theta - np.random.random() * (perturb / level) * angle  
+    theta2 = theta - np.random.random() * (perturb / level) * angle
     # recursively draw the next branches
     fractal_tree(ctx, level - 1, (x, y), t * r,
                  r, theta1, angle, perturb)
