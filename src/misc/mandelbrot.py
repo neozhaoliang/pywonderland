@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -6,7 +5,9 @@ A fast Mandelbrot set wallpaper renderer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 reddit discussion:
-    https://www.reddit.com/r/math/comments/2abwyt/smooth_colour_mandelbrot
+
+    "https://www.reddit.com/r/math/comments/2abwyt/smooth_colour_mandelbrot"
+
 """
 import numpy as np
 from PIL import Image
@@ -41,7 +42,7 @@ def main(xmin, xmax, ymin, ymax, width, height):
     y, x = np.ogrid[ymax: ymin: height*1j, xmin: xmax: width*1j]
     z = x + y*1j
     red, green, blue = np.asarray(np.frompyfunc(iterate, 1, 3)(z)).astype(np.float)
-    img = np.dstack((red, green, blue))
+    img = np.stack((red, green, blue), axis=2)
     Image.fromarray(np.uint8(img*255)).save('mandelbrot.png')
 
 

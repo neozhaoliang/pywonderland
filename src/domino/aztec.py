@@ -6,15 +6,17 @@ Domino Shuffling Algorithm on Aztec Diamond Graphs
 
 REFERENCES:
 
-    [EKLP91] Elkies, N & Kuperberg, G & Larsen, M & Propp, J.
-             "Alternating-Sign Matrices and Domino Tilings."
+    [EKLP91] N. Elkies, G. Kuperberg, M. Larsen and J. Propp,
+             "Alternating-sign matrices and domino tilings."
              J. of Alg. Comb. 1, 111-132, 1992.
 
     [Propp03] James Propp, "Generalized domino-shuffling",
               In Theoretical Computer Science, Volume 303, Issues 2–3, 2003, Pages 267-301
 
-    [JPS98] Jockusch, William & Propp, James & Shor, Peter. (1998).
-            "Random Domino Tilings and the Arctic Circle Theorem".
+    [JPS98] W. Jockusch, J. Propp and P.Shor,
+            "Random domino tilings and the arctic circle theorem".
+
+:copyright (c) 2015 by Zhao Liang.
 """
 import random
 
@@ -23,7 +25,7 @@ class AztecDiamond(object):
     """
     Use a dict to represent a tiling of an Aztec diamond graph.
     Items in the dict are of the form {cell: type} where a cell is a
-    1x1 unit square and is specified by the coordinate of its left bottom
+    1x1 unit square and is specified by the coordinates of its left bottom
     corner. Each cell has five possible types: 'n', 's', 'w', 'e', None,
     here None means it's an empty cell.
 

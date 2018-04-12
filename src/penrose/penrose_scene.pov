@@ -20,7 +20,7 @@ global_settings {
 /*=========================================================*/
 /* Tiling                                                  */
 
-#include "penrose.inc"
+#include "tiles.inc"
 #include "rhombus.inc"
 
 /*=========================================================*/
@@ -73,7 +73,6 @@ object { Dart scale .4 rotate (-90)*y translate <-.5, 0, -4> }
 /*=========================================================*/
 /* Floor                                                   */
 
-// tile_rad is defined in penrose.inc
 plane {
     y (-0.001)
     texture {

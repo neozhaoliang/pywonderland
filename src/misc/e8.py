@@ -8,6 +8,7 @@ This script draws the picture of E8 projected to its Coxeter plane.
 For a detailed discussion of the math see Humphreys's book
 
     "Reflection Groups and Coxeter Groups", section 17, chapter 3.
+
 """
 from itertools import product, combinations
 import cairocffi as cairo
@@ -17,11 +18,11 @@ from palettable.colorbrewer.qualitative import Set1_8
 
 # --- step one: compute all roots and edges ---
 
-# there are 240 roots in the root system,
+# There are 240 roots in the root system,
 # mutiply them by a factor 2 to be handy for computations.
 roots = []
 
-# roots of the form (+-1, +-1, 0, 0, 0, 0, 0, 0),
+# Roots of the form (+-1, +-1, 0, 0, 0, 0, 0, 0),
 # signs can be chosen independently and the two non-zeros can be anywhere.
 for i, j in combinations(range(8), 2):
     for x, y in product([-2, 2], repeat=2):
@@ -30,7 +31,7 @@ for i, j in combinations(range(8), 2):
         v[j] = y
         roots.append(v)
 
-# roots of the form 1/2 * (+-1, +-1, ..., +-1).
+# Roots of the form 1/2 * (+-1, +-1, ..., +-1),
 # signs can be chosen indenpendently except that there must be an even numer of -1s.
 for v in product([-1, 1], repeat=8):
     if sum(v) % 4 == 0:
@@ -38,7 +39,7 @@ for v in product([-1, 1], repeat=8):
 roots = np.array(roots).astype(np.int)
 
 
-# connect a root to its nearest neighbors,
+# Connect a root to its nearest neighbors,
 # two roots are connected if and only if they form an angle of pi/3.
 edges = []
 for i, r in enumerate(roots):
@@ -49,7 +50,7 @@ for i, r in enumerate(roots):
 
 # --- Step two: compute a basis of the Coxeter plane ---
 
-# a set of simple roots listed by rows of 'delta'
+# A set of simple roots listed by rows of 'delta'
 delta = np.array([[1, -1, 0, 0, 0, 0, 0, 0],
                   [0, 1, -1, 0, 0, 0, 0, 0],
                   [0, 0, 1, -1, 0, 0, 0, 0],
@@ -58,23 +59,24 @@ delta = np.array([[1, -1, 0, 0, 0, 0, 0, 0],
                   [0, 0, 0, 0, 0, 1, 1, 0],
                   [-.5, -.5, -.5, -.5, -.5, -.5, -.5, -.5],
                   [0, 0, 0, 0, 0, 1, -1, 0]])
-# the Dynkin diagram:
+
+# Dynkin diagram of E8:
 # 1---2---3---4---5---6---7
 #                 |
 #                 8
 # where vertex i is the i-th simple root.
 
-# the cartan matrix:
+# The cartan matrix:
 cartan = np.dot(delta, delta.transpose())
 
-# now we split the simple roots into two disjoint sets I and J
+# Now we split the simple roots into two disjoint sets I and J
 # such that the simple roots in each set are pairwise orthogonal.
-# It's obvious to see how to find such a splitting given the Dynkin graph above:
-# I = [1, 3, 5, 7] and J = [2, 4, 6, 8]
+# It's obvious to see how to find such a partition given the
+# Dynkin graph above: I = [1, 3, 5, 7] and J = [2, 4, 6, 8],
 # since roots are not connected by an edge if and only if they are orthogonal.
 # Then a basis of the Coxeter plane is given by
-# u = sum (c[i] * delta[i]) for i in I
-# v = sum (c[j] * delta[j]) for j in J
+# u = sum (c[i] * delta[i]) for i in I,
+# v = sum (c[j] * delta[j]) for j in J,
 # where c is an eigenvector for the minimal
 # eigenvalue of the Cartan matrix.
 eigenvals, eigenvecs = np.linalg.eigh(cartan)
@@ -94,8 +96,8 @@ v /= np.linalg.norm(v)
 # --- step three: project to the Coxeter plane ---
 roots_2d = [(np.dot(u, x), np.dot(v, x)) for x in roots]
 
-# sort these projected vertices by their modulus in the coxter plane,
-# each successive 30 vertices form one ring in the resulting pattern,
+# Sort these projected vertices by their modulus in the coxter plane,
+# every successive 30 vertices form one ring in the resulting pattern,
 # assign these 30 vertices a same color.
 colorlist = Set1_8.mpl_colors
 vertex_colors = np.zeros((len(roots), 3))
@@ -108,7 +110,7 @@ for i in range(8):
 
 # --- step four: render to png image ---
 image_size = 600
-# the axis lie between [-extent, extent] x [-extent, extent]
+# The axis lie between [-extent, extent] x [-extent, extent]
 extent = 2.4
 linewidth = 0.0018
 markersize = 0.05

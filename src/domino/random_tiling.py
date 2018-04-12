@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Sample a random domino tiling of an Aztec diamond
@@ -13,7 +12,7 @@ import aztec
 from tqdm import trange
 
 
-# Four colors for the Four types of dominoes
+# Four colors for the four types of dominoes
 N_COLOR = (1, 0, 0)
 S_COLOR = (0.75, 0.75, 0)
 W_COLOR = (0, 0.5, 0)

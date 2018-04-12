@@ -32,18 +32,49 @@ there exists a DFA such that the words accepted by the DFA are exactly
 the elements of the group under the shortest-lex-order representation,
 thus finding all elements in this group amounts to traversing a finite
 directed graph, which is a much easier job. (we will use breadth-first search here)
+
+reference: see the essay by Bill Casselman
+
+    "https://www.math.ubc.ca/~cass/research/pdf/Automata.pdf"
+
 """
 import collections
 import cmath
 import cairocffi as cairo
 
 
+# A fundamental domain for the action of the modular group
+# on the upper plane.
+FUND_DOMAIN = [cmath.exp(cmath.pi*1j/3), cmath.exp(cmath.pi*2j/3), None]
+
+# The automaton that generates all words in the modular group,
+# 0 is the starting state, each element g correspondes to a unique
+# path starts from 0.　For example the path
+# 0 --> 1 --> 3 -- > 4 --> 8
+# correspondes to the element "ACAA" because the first step takes 0 to 1 is
+# labelled by "A", the second step takes 1 to 3 is labelled by "C",
+# the third step takes 3 to 4 is labelled by "A", ...
+AUTOMATON = {0: {'A': 1, 'B': 2, 'C': 3},
+             1: {'A': 1, 'C': 3},
+             2: {'B': 2, 'C': 3},
+             3: {'A': 4, 'B': 5},
+             4: {'A': 8},
+             5: {'B': 6},
+             6: {'B': 2, 'C': 7},
+             7: {'A': 4},
+             8: {'A': 1, 'C': 9},
+             9: {'B': 5}
+            }
+
+
 # None means 'infinity'
 def A(z):
     return None if z is None else z+1
 
+
 def B(z):
     return None if z is None else z-1
+
 
 def C(z):
     if z is None:
@@ -60,27 +91,6 @@ def transform(symbol, domain):
     return [func(z) for z in domain]
 
 
-# The automaton that generates all words in the modular group,
-# 0 is the starting state.
-# Each element g correspondes to a unique path starts from 0.
-# for example the path
-# 0 --> 1 --> 3 -- > 4 --> 8
-# correspondes to the element "ACAA" because the first step takes 0 to 1 is
-# labelled by "A", the second step takes 1 to 3 is labelled by "C",
-# the third step takes 3 to 4 is labelled by "A", ...
-automaton = {0: {'A': 1, 'B': 2, 'C': 3},
-             1: {'A': 1, 'C': 3},
-             2: {'B': 2, 'C': 3},
-             3: {'A': 4, 'B': 5},
-             4: {'A': 8},
-             5: {'B': 6},
-             6: {'B': 2, 'C': 7},
-             7: {'A': 4},
-             8: {'A': 1, 'C': 9},
-             9: {'B': 5}
-            }
-
-
 def traverse(length, start_domain):
     queue = collections.deque([('', 0, start_domain)])
     while queue:
@@ -88,7 +98,7 @@ def traverse(length, start_domain):
         yield word, state, domain
 
         if len(word) < length:
-            for symbol, to in automaton[state].items():
+            for symbol, to in AUTOMATON[state].items():
                 queue.append((word + symbol, to, transform(symbol, domain)))
 
 
@@ -135,7 +145,7 @@ class HyperbolicDrawing(cairo.Context):
 
     def render_domain(self, domain, facecolor=None,
                       edgecolor=(0, 0, 0), linewidth=0.01):
-        # the points defining the domain may contain the infinity (None).
+        # The points defining the domain may contain the infinity (None).
         # In this program the infinity always appear at the end,
         # we use 10000 as infinity when drawing lines.
         x0, y0 = domain[0].real, domain[0].imag
@@ -157,32 +167,31 @@ class HyperbolicDrawing(cairo.Context):
         self.stroke()
 
 
-width = 800
-height = 400
+def main(width, height, depth, xlim=[-2, 2], ylim=[0, 2]):
+    surface = cairo.ImageSurface(cairo.FORMAT_RGB24, width, height)
+    ctx = HyperbolicDrawing(surface)
+    ctx.set_axis(xlim=xlim, ylim=ylim, background_color=(1, 1, 1))
+    ctx.set_line_join(2)
+    # draw the x-axis
+    ctx.move_to(xlim[0], 0)
+    ctx.line_to(xlim[1], 0)
+    ctx.set_source_rgb(0, 0, 0)
+    ctx.set_line_width(0.03)
+    ctx.stroke()
 
-length = 15
-fund_domain = [cmath.exp(cmath.pi*1j/3), cmath.exp(cmath.pi*2j/3), None]
-
-surface = cairo.ImageSurface(cairo.FORMAT_RGB24, width, height)
-ctx = HyperbolicDrawing(surface)
-ctx.set_axis(xlim=[-2, 2], ylim=[0, 2], background_color=(1, 1, 1))
-ctx.set_line_join(2)
-# draw the x-axis
-ctx.move_to(-2, 0)
-ctx.line_to(2, 0)
-ctx.set_source_rgb(0, 0, 0)
-ctx.set_line_width(0.03)
-ctx.stroke()
-
-for word, state, triangle in traverse(length, fund_domain):
-    if word:
-        if word[0] == 'C':
-            fc_color = (1, 0.5, 0.75)
+    for word, _, triangle in traverse(depth, FUND_DOMAIN):
+        if word:
+            if word[0] == 'C':
+                fc_color = (1, 0.5, 0.75)
+            else:
+                fc_color = None
         else:
-            fc_color = None
-    else:
-        fc_color = (0.5, 0.5, 0.5)
+            fc_color = (0.5, 0.5, 0.5)
 
-    ctx.render_domain(triangle, facecolor=fc_color, linewidth=0.04/(len(word)+1))
+        ctx.render_domain(triangle, facecolor=fc_color, linewidth=0.04/(len(word)+1))
 
-surface.write_to_png('modulargroup.png')
+    surface.write_to_png('modulargroup.png')
+
+
+if __name__ == '__main__':
+    main(width=800, height=400, depth=15)

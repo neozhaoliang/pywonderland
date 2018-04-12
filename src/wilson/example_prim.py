@@ -20,7 +20,7 @@ maze = gm.Maze(147, 97, mask=None).scale(4).translate((6, 6))
 anim = gm.Animation(surface)
 anim.pause(200)
 # run the algorithm
-anim.run(prim, maze, start=(0, 0), speed=30, delay=5)
+anim.run(prim, maze, speed=30, delay=5)
 anim.pause(500)
 
 # save the result

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Make GIF Animations of the Domino Shuffling Algorithm
@@ -11,7 +10,6 @@ to be the path to your `convert.exe`.
 
 :copyright (c) 2015 by Zhao Liang.
 """
-
 import os
 import glob
 import subprocess
@@ -29,14 +27,14 @@ def make_animation(order, size, filename):
     Begin with the Aztec diamond of order zero, repeat the operations
     `delete`, `slide` and `create` until its order reaches `order`.
     Render one frame for each operation and then use ImageMagick to
-    convert the images to a gif.
+    convert the images to a gif file.
 
     Parameters
     ----------
 
-    order: max steps to run the algorithm.
+    order: total steps to run the algorithm.
 
-    size: size of the GIF image.
+    size: size of the gif image.
 
     filename: the output .gif filename.
     """

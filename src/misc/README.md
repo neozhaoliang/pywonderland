@@ -1,1 +1,1 @@
-Each script in this directory is a single file and is independent of other files in this repository. Just run `python scriptname` to see the output image.
+Each script in this directory is a single file and is independent of other files in this repository. Just run `python filename` to see the output image.
