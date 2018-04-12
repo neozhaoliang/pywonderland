@@ -106,6 +106,7 @@ def bfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
     if maze.num_changes > 0:
         yield render(maze)
 
+    # retrieve the path
     path = [end]
     v = end
     while v != start:
@@ -174,6 +175,7 @@ def dfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
     if maze.num_changes > 0:
         yield render(maze)
 
+    # retrieve the path
     path = [end]
     v = end
     while v != start:
