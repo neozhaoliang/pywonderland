@@ -10,7 +10,6 @@ Reference:
     [3] GAP doc at "https://www.gap-system.org/Manuals/doc/ref/chap47.html".
     [4] Ken Brown's code at "http://www.math.cornell.edu/~kbrown/toddcox/".
 """
-from tqdm import tqdm, trange
 
 
 def inv(x):
@@ -64,8 +63,7 @@ class CosetTable(object):
         self.p = [0]      # initially we only have the 0-th coset `H`
         self.q = []       # a queue holds all dead cosets to be processed.
         self.table = [[None] * len(self.A)]
-        self.bar = tqdm(desc="Defining new cosets", unit=" cosets")
-        self.bar.update(1)
+        self.finished = False
 
     def __getitem__(self, item):
         return self.table.__getitem__(item)
@@ -96,7 +94,6 @@ class CosetTable(object):
         self[coset][x] = n
         self[n][inv(x)] = coset
         self.p.append(n)
-        self.bar.update(1)
 
     def rep(self, coset):
         """
@@ -232,15 +229,13 @@ class CosetTable(object):
                         self.define(current, x)
             current += 1
 
-        self.bar.close()
-
     def compress(self):
         """
         Delete all dead cosets in the table.
         The live cosets are renumbered and their entries are also updated.
         """
         ind = -1
-        for coset in trange(len(self), desc="Compressing the table"):
+        for coset in range(len(self)):
             if self.is_alive(coset):
                 ind += 1
                 if ind != coset:
@@ -278,7 +273,7 @@ class CosetTable(object):
         """
         # the next coset we want to encounter in the table.
         next_coset = 1
-        for coset in trange(len(self), desc="Standardizing the table"):
+        for coset in range(len(self)):
             for x in self.A:
                 y = self[coset][x]
                 if y >= next_coset:
@@ -287,3 +282,26 @@ class CosetTable(object):
                     next_coset += 1
                     if next_coset == len(self) - 1:
                         return
+
+    def run(self, standard=True):
+        self.hlt()
+        self.compress()
+        if standard:
+            self.standardize()
+        self.finished = True
+        return self
+
+    def get_words(self):
+        if not self.finished:
+            self.run()
+        result = [None] * len(self)
+        result[0] = tuple()
+        q = [0]
+        while q:
+            coset = q.pop()
+            for x in self.A[::2]:
+                new_coset = self[coset][x]
+                if result[new_coset] is None:
+                    result[new_coset] = result[coset] + (x,)
+                    q.append(new_coset)
+        return result

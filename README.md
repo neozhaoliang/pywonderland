@@ -30,6 +30,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 - [Domino Shuffling Algorithm Animation](#domino-shuffling-algorithm-animation)
 - [Wilson's Uniform Spanning Tree Algorithm Animation](#wilsons-uniform-spanning-tree-algorithm-animation)
 - [Coupling From The Past And Lozenge Tilings](#coupling-from-the-past-and-lozenge-tilings)
+- [Todd-Coxeter Algorithm And 4D Polytopes](#todd-coxeter-algorithm-and-4d-polytopes)
 
 ---
 ### Mandelbrot Set
@@ -190,6 +191,19 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 <p align="center">
 <img src="http://www.pywonderland.com/img/cftp/lozenge_tiling.png"/>
+</p>
+
+<br>
+
+[[Back to Top](#contents)]
+
+---
+### Todd-Coxeter Algorithm And 4D Polytopes
+[[Code](./src/polytopes)] [[Doc](http://pywonderland.com/polytope/)]
+<br>
+
+<p align="center">
+<img src="http://www.pywonderland.com/img/polytopes/120-cell.png"/>
 </p>
 
 <br>
