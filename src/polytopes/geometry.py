@@ -29,9 +29,3 @@ def get_mirrors(p, q, r):
     M[3, 2] = np.cos(np.pi / r) / M[2, 2]
     M[3, 3] = np.sqrt(1 - M[3, 2] * M[3, 2])
     return M
-
-
-def proj4d(v):
-    v = np.asarray(v, dtype=np.float)
-    v /= np.linalg.norm(v)
-    return v[:-1] / (1 - v[-1])
