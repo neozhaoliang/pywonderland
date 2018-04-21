@@ -203,7 +203,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/polytopes/120-cell.png"/>
+<img src="http://www.pywonderland.com/img/polytopes/120-cell.png" width="500"/>
 </p>
 
 <br>
