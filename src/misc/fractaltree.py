@@ -39,7 +39,7 @@ def fractal_tree(ctx,         # a cairo context to draw on
                  level,       # current level in the iterations
                  start,       # (x, y) coordinates of the start of this trunk
                  t,           # current trunk length
-                 r,           # factor to contract the trunk after each iteration
+                 r,           # factor to contract the trunk in each iteration
                  theta,       # orientation of current trunk
                  angle,       # angle between branches in the same level
                  perturb,     # perturb the angle

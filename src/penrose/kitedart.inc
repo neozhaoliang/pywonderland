@@ -116,7 +116,7 @@
         <verts[2].x, verts[2].z>
         <verts[3].x, verts[3].z>
         <verts[0].x, verts[0].z>
-        
+
         texture { KiteTexture }
     }
 }
@@ -134,7 +134,7 @@
         <verts[2].x, verts[2].z>
         <verts[3].x, verts[3].z>
         <verts[0].x, verts[0].z>
-        
+
         texture { DartTexture }
     }
 }

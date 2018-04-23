@@ -131,7 +131,7 @@ class LozengeTiling(object):
 
     def run_cftp(self):
         """
-        Return a state sampled from stationary distribution using monotone CFTP.
+        Sample a random state from stationary distribution using monotone CFTP.
         """
         bar = tqdm(desc="Running cftp", unit=" steps")
         updates = [(random.getstate(), 1)]
@@ -166,7 +166,7 @@ class LozengeTiling(object):
                 if k > 0:
                     if s[k][j] == s[k][j - 1]:
                         verts["L"].append([(j + dx, s[k][j] + dy) for dx, dy in
-                                           [(0, 0), (-1, 0), (-1, -1), (0, -1)]])
+                                          [(0, 0), (-1, 0), (-1, -1), (0, -1)]])
                     else:
                         verts["R"].append([(j + dx, s[k][j] + dy) for dx, dy in
                                            [(0, 0), (-1, -1), (-1, -2), (0, -1)]])

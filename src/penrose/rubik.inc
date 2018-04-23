@@ -19,7 +19,7 @@
 
 #declare tFace = 0.001;       // Thickness of faces
 #declare rFace = 0.040;       // Radius of a label corner, this defines the roundness of
-                              // the faces of the labels 
+                              // the faces of the labels
 #declare hFace = hCube-0.010; // Half-width of label with corner radius, here a little gap
                               // is added between the label and the edges of subcube
 #declare dFace = hFace-rFace; // Half-width of label without corner radius
@@ -83,7 +83,7 @@
     box { <-hCube, hCube,-hCube>, < hCube, lCube, hCube> }
     box { <-hCube,-hCube,-lCube>, < hCube, hCube,-hCube> }
     box { <-hCube,-hCube, hCube>, < hCube, hCube, lCube> }
-    
+
     texture { EdgeTexture }
 }
 
@@ -338,12 +338,12 @@
         { object { CubeLF  }, object { CubeL   }, object { CubeLA  } },
         { object { CubeTLF }, object { CubeTL  }, object { CubeTLA } }
     },
-    { 
+    {
         { object { CubeBF  }, object { CubeB   }, object { CubeBA  } },
         { object { CubeF   }, object { Cube    }, object { CubeA   } },
         { object { CubeTF  }, object { CubeT   }, object { CubeTA  } }
     },
-    { 
+    {
         { object { CubeBRF }, object { CubeBR  }, object { CubeBRA } },
         { object { CubeRF  }, object { CubeR   }, object { CubeRA  } },
         { object { CubeTRF }, object { CubeTR  }, object { CubeTRA } }
@@ -1069,4 +1069,4 @@
         Rubik(Cubes, Ttmp)
         translate <0, 1.5*wCube+3*tFace, 0>
     }
-#end 
+#end

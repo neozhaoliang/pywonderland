@@ -39,7 +39,7 @@ def compute_rhombus(r, s, kr, ks):
     # Re(z/GRIDS[r]) + shifts[r] = kr
     # Re(z/GRIDS[s]) + shifts[s] = ks
     intersect_point = (GRIDS[r] * (ks - SHIFTS[s])
-                     - GRIDS[s] * (kr - SHIFTS[r])) *1j / GRIDS[s-r].imag
+                       - GRIDS[s] * (kr - SHIFTS[r])) * 1j / GRIDS[s-r].imag
 
     # 5 integers that indicate the position of the intersection point.
     # the i-th integer n_i indicates that this point lies in the n_i-th strip
@@ -87,7 +87,7 @@ with open('rhombus.inc', 'w') as f:
             ctx.set_source_rgb(*EDGE_COLOR)
             ctx.stroke()
 
-            f.write("Rhombus(<%f, %f>, <%f, %f>, <%f, %f>, <%f, %f>, %d)\n" \
+            f.write("Rhombus(<%f, %f>, <%f, %f>, <%f, %f>, <%f, %f>, %d)\n"
                     % (A.real, A.imag, B.real, B.imag, C.real, C.imag, D.real, D.imag, shape))
 
 surface.write_to_png("penrose_debruijn.png")

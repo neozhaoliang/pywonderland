@@ -11,7 +11,8 @@ REFERENCES:
              J. of Alg. Comb. 1, 111-132, 1992.
 
     [Propp03] James Propp, "Generalized domino-shuffling",
-              In Theoretical Computer Science, Volume 303, Issues 2–3, 2003, Pages 267-301
+              In Theoretical Computer Science, Volume 303,
+              Issues 2–3, 2003, Pages 267-301
 
     [JPS98] W. Jockusch, J. Propp and P.Shor,
             "Random domino tilings and the arctic circle theorem".
@@ -60,7 +61,8 @@ class AztecDiamond(object):
         return (i + j + self.order) % 2 == 1
 
     def check(self, i, j, dominoes):
-        """Check whether a block is filled with dominoes of given orientations."""
+        """Check whether a block is filled by dominoes of given orientations.
+        """
         return all(self.tile[cell] == fill for cell, fill in zip(self.block(i, j), dominoes))
 
     def fill(self, i, j, dominoes):
@@ -76,8 +78,8 @@ class AztecDiamond(object):
         """
         for i, j in self.cells:
             try:
-                if (self.check(i, j, ['n', 'n', 's', 's']) \
-                    or self.check(i, j, ['e', 'w', 'e', 'w'])):
+                if (self.check(i, j, ['n', 'n', 's', 's'])
+                        or self.check(i, j, ['e', 'w', 'e', 'w'])):
                     self.fill(i, j, [None]*4)
             except KeyError:
                 pass

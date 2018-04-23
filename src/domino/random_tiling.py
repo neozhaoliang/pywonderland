@@ -19,7 +19,6 @@ W_COLOR = (0, 0.5, 0)
 E_COLOR = (0, 0, 1)
 
 
-
 def render_with_cairo(az, imgsize, extent, filename):
     """
     Draw current tiling of `az` (possibly have holes)

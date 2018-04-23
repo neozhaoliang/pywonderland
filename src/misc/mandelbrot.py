@@ -35,14 +35,14 @@ def iterate(c):
         if z.real*z.real + z.imag*z.imag > RADIUS:
             return color(z, i)
         z = z*z + c
-    return 0, 0 ,0
+    return 0, 0, 0
 
 
 def main(xmin, xmax, ymin, ymax, width, height):
     y, x = np.ogrid[ymax: ymin: height*1j, xmin: xmax: width*1j]
     z = x + y*1j
-    red, green, blue = np.asarray(np.frompyfunc(iterate, 1, 3)(z)).astype(np.float)
-    img = np.stack((red, green, blue), axis=2)
+    R, G, B = np.asarray(np.frompyfunc(iterate, 1, 3)(z)).astype(np.float)
+    img = np.stack((R, G, B), axis=2)
     Image.fromarray(np.uint8(img*255)).save('mandelbrot.png')
 
 

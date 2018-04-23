@@ -17,24 +17,24 @@
 //====================================================================
 // Textures of the rhombus
 
-#declare RhombusNormal = normal { 
-    average 
-    normal_map { 
+#declare RhombusNormal = normal {
+    average
+    normal_map {
         [ .5 wrinkles .3 scale 20 ]
         [ .5 bumps .01 scale .3 ]
         [ .5 agate .13 turbulence .18 scale 6 ]
     }
-    scale <3,1,1> 
-}  
+    scale <3,1,1>
+}
 
 #declare RhombusFinish = finish {
-    ambient 0 
-    diffuse .9 
+    ambient 0
+    diffuse .9
     reflection 0.1
-    specular .1 
-    roughness .6 
+    specular .1
+    roughness .6
 }
- 
+
 #declare RhombusTex1 = texture {
     pigment { rgb <0.9, 0.87, 0.8> }
     finish { RhombusFinish }
@@ -72,18 +72,18 @@
     #local ang2 = VAngle(p1-p2, p3-p2)/2;
     #local d1 = tile_gap/sin(ang1);
     #local d2 = tile_gap/sin(ang2);
-    
+
     #local w1 = p1-d1*(p1-p3)/vlength(p1-p3);
     #local w3 = p3-d1*(p3-p1)/vlength(p3-p1);
     #local w2 = p2-d2*(p2-p4)/vlength(p2-p4);
     #local w4 = p4-d2*(p4-p2)/vlength(p4-p2);
-    
+
     prism {
         linear_sweep
         linear_spline
         -tile_height, 0, 5
         w1 w2 w3 w4 w1
-    
+
         #if (shape=0)
             texture{ FatRhombusTex }
         #else

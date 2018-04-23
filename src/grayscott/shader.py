@@ -11,8 +11,8 @@ class Shader(object):
     def __init__(self, vert_files, frag_files):
         """
         INPUTS:
-            - `vert_files`: a list of files that contain the vertex shader code.
-            - `frag_files`: a list of files that contain the fragment shader code.
+            - `vert_files`: a list of files that contain the vertex shader.
+            - `frag_files`: a list of files that contain the fragment shader.
         """
         self.program = gl.glCreateProgram()
         self.compile_and_attach_shader(vert_files, gl.GL_VERTEX_SHADER)
@@ -25,7 +25,7 @@ class Shader(object):
 
             - `shader_files`: a list of the shader files.
 
-            - `shader_type`: must be `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`.
+            - `shader_type`: `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`.
 
         Main steps to compile and attach a shader:
         1. glCreateShader:
@@ -113,16 +113,14 @@ class Shader(object):
         {1: gl.glUniform1i,
          2: gl.glUniform2i,
          3: gl.glUniform3i,
-         4: gl.glUniform4i
-        }[len(data)](location, *data)
+         4: gl.glUniform4i}[len(data)](location, *data)
 
     def uniformf(self, name, *data):
         location = gl.glGetUniformLocation(self.program, name.encode('ascii'))
         {1: gl.glUniform1f,
          2: gl.glUniform2f,
          3: gl.glUniform3f,
-         4: gl.glUniform4f
-        }[len(data)](location, *data)
+         4: gl.glUniform4f}[len(data)](location, *data)
 
     def uniformfv(self, name, size, data):
         data_ctype = (gl.GLfloat * len(data))(*data)
@@ -130,8 +128,7 @@ class Shader(object):
         {1: gl.glUniform1fv,
          2: gl.glUniform2fv,
          3: gl.glUniform3fv,
-         4: gl.glUniform4fv
-        }[len(data) // size](location, size, data_ctype)
+         4: gl.glUniform4fv}[len(data) // size](location, size, data_ctype)
 
     def vertex_attrib(self, name, data, size=2, stride=0, offset=0):
         """

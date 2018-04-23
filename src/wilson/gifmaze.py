@@ -289,13 +289,13 @@ class Render(object):
         width = right - left + 1
         height = bottom - top + 1
         descriptor = encoder.image_descriptor(maze.scaling * left + maze.translation[0],
-                                              maze.scaling * top  + maze.translation[1],
+                                              maze.scaling * top + maze.translation[1],
                                               maze.scaling * width,
                                               maze.scaling * height)
 
         pixels = [self.colormap[maze.get_cell((x // maze.scaling + left,
-                                               y // maze.scaling + top))] \
-                  for y in range(height * maze.scaling) \
+                                               y // maze.scaling + top))]
+                  for y in range(height * maze.scaling)
                   for x in range(width * maze.scaling)]
 
         # the compressed image data of this frame

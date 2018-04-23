@@ -31,8 +31,8 @@ for i, j in combinations(range(8), 2):
         v[j] = y
         roots.append(v)
 
-# Roots of the form 1/2 * (+-1, +-1, ..., +-1),
-# signs can be chosen indenpendently except that there must be an even numer of -1s.
+# Roots of the form 1/2 * (+-1, +-1, ..., +-1), signs can be chosen
+# indenpendently except that there must be an even numer of -1s.
 for v in product([-1, 1], repeat=8):
     if sum(v) % 4 == 0:
         roots.append(v)
@@ -104,7 +104,7 @@ vertex_colors = np.zeros((len(roots), 3))
 modulus = np.linalg.norm(roots_2d, axis=1)
 ind_array = modulus.argsort()
 for i in range(8):
-    for j in ind_array[30*i : 30*(i+1)]:
+    for j in ind_array[30*i: 30*(i+1)]:
         vertex_colors[j] = colorlist[i]
 
 

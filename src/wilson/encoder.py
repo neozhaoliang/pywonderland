@@ -26,8 +26,7 @@ from struct import pack
 
 
 __all__ = ['screen_descriptor', 'loop_control_block', 'graphics_control_block',
-           'image_descriptor', 'rectangle', 'pause', 'parse_image', 'lzw_compress'
-          ]
+           'image_descriptor', 'rectangle', 'pause', 'parse_image', 'lzw_compress']
 
 
 def screen_descriptor(width, height, color_depth):
@@ -115,7 +114,6 @@ def parse_image(img):
     descriptor = image_descriptor(0, 0, img.size[0], img.size[1], 0b10000111)
     compressed_data = lzw_compress(indices, mcl=8)
     return descriptor + bytearray(palette) + compressed_data
-
 
 
 class DataBlock(object):

@@ -17,7 +17,7 @@ void main()
         result = vec4(1.0, 0.0, 0.0, 1.0);
         return;
     }
-    
+
     vec2 texel = 1.0 / u_resolution;
     vec2 uv  = texture(uv_texture, uv_texcoord).rg;
     vec2 uv0 = texture(uv_texture, uv_texcoord + vec2(texel.x, 0.0)).rg;
@@ -29,7 +29,7 @@ void main()
     float Dv   = params.y;
     float feed = params.z * texture(mask_texture, uv_texcoord).r;
     float kill = params.w;
-    
+
     vec2 lapl = uv0 + uv1 + uv2 + uv3 - 4.0 * uv;
     float du = Du * lapl.r - uv.r * uv.g * uv.g + feed * (1.0 - uv.r);
     float dv = Dv * lapl.g + uv.r * uv.g * uv.g - (feed + kill) * uv.g;

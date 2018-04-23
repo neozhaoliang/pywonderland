@@ -6,7 +6,7 @@ global_settings {
 
 background { rgb <0.2, 0.4, 0.9> }
 
-include "metals.inc"
+#include "metals.inc"
 
 #declare vRad = 0.07;
 #declare eRad = 0.03;

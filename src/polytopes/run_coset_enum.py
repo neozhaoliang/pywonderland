@@ -6,11 +6,13 @@ a .yaml file and computes its coset table.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Example usage:
 
-    python coset_enum_example.py filename [-std]
+    python run_coset_enum.py filename [-std] [-o]
 
     filename: required, the .yaml file to be parsed.
-       - std: optional, needs no value, if added then
+         std: optional, needs no value, if added then
               the output table is standardized.
+           o: optional, output filename, the default
+              one is sys.stdout.
 """
 import sys
 import argparse
@@ -39,7 +41,7 @@ def char2int(symbols, c):
 
 
 def word2int(symbols, wordslist):
-    return tuple(tuple(char2int(symbols, c) for c in word) \
+    return tuple(tuple(char2int(symbols, c) for c in word)
                  for word in wordslist)
 
 

@@ -14,13 +14,13 @@ from numba import jit
 def f(z):
     # z*z*z is faster than z**3
     return z*z*z - 1
-    #return z**5 + 0.25*z*z + 1.17
+    # return z**5 + 0.25*z*z + 1.17
 
 
 @jit('complex64(complex64)', nopython=True)
 def df(z):
     return 3*z*z
-    #return 5*z**4 + 0.5*z
+    # return 5*z**4 + 0.5*z
 
 
 @jit('float64(complex64)', nopython=True)
@@ -35,7 +35,7 @@ def iterate(z):
 
 def render(imgsize):
     y, x = np.ogrid[1: -1: imgsize*2j, -1: 1: imgsize*2j]
-    z = x +y*1j
+    z = x + y * 1j
     img = np.frompyfunc(iterate, 1, 1)(z).astype(np.float)
     fig = plt.figure(figsize=(imgsize/100.0, imgsize/100.0), dpi=100)
     ax = fig.add_axes([0, 0, 1, 1], aspect=1)

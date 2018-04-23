@@ -19,7 +19,7 @@ void main()
     }
 
     for(int i=0; i<=3; ++i)
- 
+
     {
         if (value > palette[i].a && value <= palette[i+1].a)
         {
@@ -28,6 +28,6 @@ void main()
         }
 
     }
-    
+
     finalColor = vec4(col.rgb, 1.0);
 }

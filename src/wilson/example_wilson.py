@@ -52,7 +52,7 @@ anim.pause(300)
 # and 2th color respectively, the flooded cells are colored by colors >=3.
 # Note since full 256 colors are used the minimal code length must be >=8.
 cmap = {i: max(i % 256, 3) for i in range(len(maze.cells))}
-# In the maze solving animation the walls and the tree are unchanges throughout,
+# In the maze solving animation the wall and tree are unchanged throughout,
 # so we use transparent color for them.
 cmap.update({0: 0, 1: 0, 2: 2})
 anim.run(bfs, maze, speed=30, delay=5, mcl=8, cmap=cmap,

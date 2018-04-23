@@ -4,6 +4,21 @@ from geometry import gram_schimdt, reflection_matrix, get_mirrors
 from todd_coxeter import CosetTable
 
 
+polytopes = {
+    "tetrahedron": (3, 3, 2),
+    "cube": (4, 3, 2),
+    "octahedron": (3, 4, 2),
+    "dodecahedron": (5, 3, 2),
+    "icosahedron": (3, 5, 2),
+    "5-cell": (3, 3, 3),
+    "8-cell": (4, 3, 3),
+    "16-cell": (3, 3, 4),
+    "24-cell": (3, 4, 3),
+    "120-cell": (5, 3, 3),
+    "600-cell": (3, 3, 5)
+    }
+
+
 class Polytope4d(object):
 
     def __init__(self, p, q, r):
@@ -67,5 +82,6 @@ class Polytope4d(object):
 
 
 if __name__ == "__main__":
-    P = Polytope4d(4, 3, 3)
+    p, q, r = polytopes["5-cell"]
+    P = Polytope4d(p, q, r)
     P.write_to_pov()

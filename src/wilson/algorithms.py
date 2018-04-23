@@ -221,7 +221,7 @@ def kruskal(maze, render, speed=30):
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Kruskal's algorithm")
     parent = {v: v for v in maze.cells}
     rank = {v: 0 for v in maze.cells}
-    edges = [(random.random(), u, v) for u in maze.cells \
+    edges = [(random.random(), u, v) for u in maze.cells
              for v in maze.get_neighbors(u) if u < v]
 
     def find(v):
