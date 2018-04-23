@@ -35,7 +35,7 @@ background { rgb <0.2, 0.4, 0.9> }
 
 #macro Proj(p)
     #local q = p / sqrt(p.x*p.x + p.y*p.y + p.z*p.z + p.t*p.t);
-    <q.x, q.y, q.z> / (1 - q.t)
+    <q.x, q.y, q.z> / (1.0 + q.t)
 #end
 
 #macro Vertex(p)

@@ -21,10 +21,11 @@ polytopes = {
 
 class Polytope4d(object):
 
-    def __init__(self, p, q, r):
+    def __init__(self, p, q, r, truncated=True):
         self.pqr = (p, q, r)
         self.build_group()
         self.build_geometry()
+        self.truncated = truncated
 
     def build_group(self):
         p, q, r = self.pqr
@@ -82,6 +83,6 @@ class Polytope4d(object):
 
 
 if __name__ == "__main__":
-    p, q, r = polytopes["5-cell"]
+    p, q, r = polytopes["8-cell"]
     P = Polytope4d(p, q, r)
     P.write_to_pov()
