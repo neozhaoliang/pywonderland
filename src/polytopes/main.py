@@ -21,11 +21,10 @@ polytopes = {
 
 class Polytope4d(object):
 
-    def __init__(self, p, q, r, truncated=True):
+    def __init__(self, p, q, r):
         self.pqr = (p, q, r)
         self.build_group()
         self.build_geometry()
-        self.truncated = truncated
 
     def build_group(self):
         p, q, r = self.pqr
