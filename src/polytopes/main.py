@@ -116,7 +116,7 @@ class Polytope(object):
         return result
 
     def export_graph(self):
-        """Export the structure of the graph."""
+        """Export the graph of this polytope."""
         with open("polytope-graph.txt", "w") as f:
             f.write("Vertices: {}\n".format(len(self.Vtable)))
             f.write("Edges: {}\n".format(len(self.Etable)))
