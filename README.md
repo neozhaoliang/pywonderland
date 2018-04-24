@@ -216,7 +216,6 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 - Fractals with orbit trap
 - 2D hyperbolic tilings (Escher's circle limit)
 - 3D hyperbolic honeycombs
-- 4D regular polytopes
 - Hopcroft's minimization algorithm
 
 ## Dependencies
