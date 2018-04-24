@@ -6,12 +6,12 @@ a .yaml file and computes its coset table.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Example usage:
 
-    python run_coset_enum.py filename [-std] [-o]
+    python run_coset_enum.py filename [-std] [-o][filename]
 
     filename: required, the .yaml file to be parsed.
-         std: optional, needs no value, if added then
+        -std: optional, needs no value, if added then
               the output table is standardized.
-           o: optional, output filename, the default
+          -o: optional, output filename, the default
               one is sys.stdout.
 """
 import sys
@@ -29,7 +29,7 @@ def get_symbols(wordslist):
         for x in word:
             x = x.lower()
             if not x.isalpha():
-                raise ValueError("Only letters between a-z and A-Z are allowed.")
+                raise ValueError("Only a-z and A-Z are allowed.")
             if x not in symbols:
                 symbols.append(x)
     return sorted(symbols)
@@ -102,8 +102,10 @@ class FpGroup(object):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", type=str, help="Input file name")
-    parser.add_argument("-std", type=bool, default=True, help="Standardize the coset table or not")
-    parser.add_argument("-out", metavar="-o", type=str, default=None, help="output file name")
+    parser.add_argument("-std", type=bool, default=True,
+                        help="Standardize the coset table or not")
+    parser.add_argument("-out", metavar="-o", type=str,
+                        default=None, help="output file name")
     args = parser.parse_args()
     with open(args.filename, "r") as f:
         data = yaml.load(f)

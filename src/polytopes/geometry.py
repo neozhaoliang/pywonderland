@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*
+"""
+Some helper functions for building the geometry.
+"""
 import numpy as np
 
 
@@ -19,7 +22,7 @@ def gram_schimdt(M):
 
 def reflection_matrix(v):
     """
-    The reflection defined by a hyperplane with normal vector `v`.
+    The reflection transformation about a plane with normal vector `v`.
     """
     n = len(v)
     v = np.array(v)[np.newaxis]
@@ -29,7 +32,7 @@ def reflection_matrix(v):
 def get_mirrors(p, q, r):
     """
     Return the normal vectors of the 4 mirrors.
-    Coxeter diagram: *-- p --*-- q --*-- r --*.
+    Coxeter diagram: * -- p -- * -- q -- * -- r -- *.
     """
     M = np.zeros((4, 4), dtype=np.float)
     M[0, 0] = 1.0

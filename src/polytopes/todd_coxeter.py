@@ -66,7 +66,6 @@ class CosetTable(object):
         self.p = [0]      # initially we only have the 0-th coset `H`
         self.q = []       # a queue holds all dead cosets to be processed.
         self.table = [[None] * len(self.A)]
-        self.finished = False
 
     def __getitem__(self, item):
         return self.table.__getitem__(item)
@@ -296,25 +295,8 @@ class CosetTable(object):
                     if next_coset == len(self) - 1:
                         return
 
-    def run(self, standard=True):
+    def run(self, standard=False):
         self.hlt()
         self.compress()
         if standard:
             self.standardize()
-        self.finished = True
-        return self
-
-    def get_words(self):
-        if not self.finished:
-            self.run()
-        result = [None] * len(self)
-        result[0] = tuple()
-        q = [0]
-        while q:
-            coset = q.pop()
-            for x in self.A[::2]:
-                new_coset = self[coset][x]
-                if result[new_coset] is None:
-                    result[new_coset] = result[coset] + (x,)
-                    q.append(new_coset)
-        return result

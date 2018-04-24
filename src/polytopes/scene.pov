@@ -1,3 +1,8 @@
+// Persistence of Vision Ray Tracer Scene Description File
+// Vers: 3.7
+// Date: 2018/04/22
+// Auth: Zhao Liang mathzhaoliang@gmail.com
+
 #version 3.7;
 
 global_settings {
@@ -8,9 +13,17 @@ background { rgb <0.2, 0.4, 0.9> }
 
 #include "metals.inc"
 
+// adjust the vertex and edge radius here
 #declare vRad = 0.07;
 #declare eRad = 0.03;
 #declare numSegments = 30;
+
+// adjust the camera position for rendering different polytopes
+camera {
+    location <0, 2.5, -1.5>*12  //*35 for 120-cell
+    look_at <0, 0, 0>
+    right x*image_width/image_height
+}
 
 #declare Metal = texture {
     pigment { P_Chrome2 }
@@ -68,14 +81,8 @@ background { rgb <0.2, 0.4, 0.9> }
 #end
 
 union {
-    #include "polytope_data.inc"
+    #include "polytope-data.inc"
     scale 8
-}
-
-camera {
-    location <0, 12.5, -22>*1.4
-    look_at <0, -1, 0>
-    right x*image_width/image_height
 }
 
 light_source
