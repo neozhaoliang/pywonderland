@@ -10,7 +10,7 @@ out vec4 result;
 void main()
 {
     int count = 0;
-    vec2 p = vec2(-2.1+ 2.9 * Texcoord.x, -1.16 + 2.32 * Texcoord.y);
+    vec2 p = vec2(-2.1 + 2.9 * Texcoord.x, -1.16 + 2.32 * Texcoord.y);
     vec2 z = vec2(0.0);
 
     for(int i=0; i< max_iter; i++)
