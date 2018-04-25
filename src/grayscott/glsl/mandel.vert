@@ -2,6 +2,7 @@
 
 in vec2 texcoord;
 in vec2 position;
+
 out vec2 Texcoord;
 
 void main()

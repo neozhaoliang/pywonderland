@@ -4,7 +4,7 @@
 Mobius Transformations of the Hyperbolic 3-Space
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Exported from Roice Nelson's code at
+Adapted from Roice Nelson's code at
 
     "https://www.shadertoy.com/view/MstcWr"
 
