@@ -241,7 +241,7 @@ void main()
     parabolic = !(iElliptic || iHyperbolic);
     loxodromic = iElliptic && iHyperbolic;
 
-    vec2 pixelSize = fragCoord / iResolution.xy;
+    vec2 pixelSize = vec2(1.0);
     pixelSize.y *= iResolution.y / iResolution.x;
     for(int ii=0; ii < AA; ++ii)
     {
