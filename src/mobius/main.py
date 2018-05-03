@@ -31,9 +31,9 @@ FFMPEG_EXE = "ffmpeg"
 class Mobius(pyglet.window.Window):
     """
     Keyboard control:
-    1. Press M to toggle on/off applying the transformation.
-    2. Press H to toggle on/off applying the hyperbolic scaling.
-    3. Press E to toggle on/off applying the elliptic rotation.
+    1. Press 1 to toggle on/off applying the transformation.
+    2. Press 2 to toggle on/off applying the hyperbolic scaling.
+    3. Press 3 to toggle on/off applying the elliptic rotation.
     4. Press Ctrl + v to toggle on/off saving the video.
     5. Press Enter to save screenshot.
     """
@@ -84,20 +84,20 @@ class Mobius(pyglet.window.Window):
         self.frame_count += 1
 
     def on_key_press(self, symbol, modifiers):
-        if symbol == key.E:
-            self.elliptic = not self.elliptic
+        if symbol == key._1:
+            self.apply = not self.apply
             with self.shader:
-                self.shader.uniformi("iElliptic", self.elliptic)
+                self.shader.uniformi("iApply", self.apply)
 
-        if symbol == key.H:
+        if symbol == key._2:
             self.hyperbolic = not self.hyperbolic
             with self.shader:
                 self.shader.uniformi("iHyperbolic", self.hyperbolic)
 
-        if symbol == key.M:
-            self.apply = not self.apply
+        if symbol == key._3:
+            self.elliptic = not self.elliptic
             with self.shader:
-                self.shader.uniformi("iApply", self.apply)
+                self.shader.uniformi("iElliptic", self.elliptic)
 
         if symbol == key.V and (modifiers & key.LCTRL):
             self.switch_video()
