@@ -31,7 +31,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 - [Wilson's Uniform Spanning Tree Algorithm Animation](#wilsons-uniform-spanning-tree-algorithm-animation)
 - [Coupling From The Past And Lozenge Tilings](#coupling-from-the-past-and-lozenge-tilings)
 - [Todd-Coxeter Algorithm And 4D Polytopes](#todd-coxeter-algorithm-and-4d-polytopes)
-- [Mobius Transformations In Hyperbolic 3-Space](#mobius-transformations-in-hyperbolic-3-space)
+- [Möbius Transformations In Hyperbolic 3-Space](#möbius-transformations-in-hyperbolic-3-space)
 
 ---
 ### Mandelbrot Set
@@ -212,7 +212,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 [[Back to Top](#contents)]
 
 ---
-### Mobius Transformations In Hyperbolic 3-Space
+### Möbius Transformations In Hyperbolic 3-Space
 [[Code](./src/mobius)] [[Doc](http://pywonderland.com/mobius)]
 <br>
 
