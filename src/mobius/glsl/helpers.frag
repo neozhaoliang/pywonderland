@@ -244,3 +244,16 @@ float planeSdf(vec3 p, float planeOffset)
 {
     return length(p.z) - planeOffset;
 }
+
+
+// ACES tone mapping
+// https://knarkowicz.wordpress.com/2016/01/06/aces-filmic-tone-mapping-curve/
+vec3 tonemap(vec3 color)
+{
+   const float A = 2.51;
+   const float B = 0.03;
+   const float C = 2.43;
+   const float D = 0.59;
+   const float E = 0.14;
+   return (color * (A * color + B)) / (color * (C * color + D) + E);
+}

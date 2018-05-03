@@ -118,8 +118,8 @@ const float center_saturation = 0.18;
 // Shape constants
 const float strong_factor = 0.25;
 const float weak_factor = 0.19;
-const vec2 star_hv_factor = vec2(9.0, 0.32);
-const vec2 star_diag_factor = vec2(12.0, 0.61);
+const vec2 star_hv_factor = vec2(9.0, 0.3);
+const vec2 star_diag_factor = vec2(12.0, 0.6);
 
 // Raymarching constants
 const int   MAX_TRACE_STEPS = 255;
@@ -185,7 +185,8 @@ vec3 getColor(vec2 p, float pint)
                   hue_time_unit * iTime - length(p.y) / 5.0 :
     	          hue_time_unit * iTime - UHStoH(length(p)) / 7.0;
     float hue = center_hue + time2;
-    return hsv2rgb(vec3(hue, saturation, pint));
+    // Really a hack of magic code to make the star shine correctly
+    return hsv2rgb(vec3(hue, saturation, pint)) + pint / 3.0;
 }
 
 
@@ -247,7 +248,7 @@ void main()
     vec3 lookat = vec3(0.0, 0.0, 0.6);
     vec3 up = vec3(0.0, 0.0, 1.0);
     mat3 viewToWorld = viewMatrix(eye, lookat, up);
-    vec3 color = vec3(0.0);
+    vec3 color = vec3(0.1);
     for(int ii=0; ii < AA; ++ii)
     {
         for(int jj=0; jj < AA; ++jj)
@@ -259,8 +260,8 @@ void main()
             float pint;
             float dist = trace(eye, worldDir, MIN_DIST, MAX_DIST, p, pint);
             if(dist >= 0.0)
-                color += getColor(p, pint);
+                color += tonemap(2.0 * getColor(p, pint));
         }
     }
-    gl_FragColor = vec4(10.0 * color/ (AA * AA), 1.0);
+    gl_FragColor = vec4(color / (AA * AA), 1.0);
 }
