@@ -249,7 +249,7 @@ void main()
         {
             vec2 sampleCoord = fragCoord + vec2(float(ii)/AA, float(jj)/AA) * pixelSize;
             vec3 viewDir = rayDirection(45.0, iResolution.xy, sampleCoord);
-            vec3 eye = vec3(-1.0, -1.0, 1.2) * 5;
+            vec3 eye = vec3(-0.8, -1.2, 0.8) * 5;
             vec3 lookat = vec3(0.0, 0.0, 0.6);
             vec3 up = vec3(0.0, 0.0, 1.0);
             mat3 viewToWorld = viewMatrix(eye, lookat, up);
