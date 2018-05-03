@@ -243,29 +243,24 @@ void main()
 
     vec2 pixelSize = vec2(1.0);
     pixelSize.y *= iResolution.y / iResolution.x;
+    vec3 eye = vec3(-0.8, -1.2, 0.8) * 5;
+    vec3 lookat = vec3(0.0, 0.0, 0.6);
+    vec3 up = vec3(0.0, 0.0, 1.0);
+    mat3 viewToWorld = viewMatrix(eye, lookat, up);
+    vec3 color = vec3(0.0);
     for(int ii=0; ii < AA; ++ii)
     {
         for(int jj=0; jj < AA; ++jj)
         {
             vec2 sampleCoord = fragCoord + vec2(float(ii)/AA, float(jj)/AA) * pixelSize;
             vec3 viewDir = rayDirection(45.0, iResolution.xy, sampleCoord);
-            vec3 eye = vec3(-0.8, -1.2, 0.8) * 5;
-            vec3 lookat = vec3(0.0, 0.0, 0.6);
-            vec3 up = vec3(0.0, 0.0, 1.0);
-            mat3 viewToWorld = viewMatrix(eye, lookat, up);
             vec3 worldDir = viewToWorld * viewDir;
-
             vec2 p;
             float pint;
             float dist = trace(eye, worldDir, MIN_DIST, MAX_DIST, p, pint);
-            vec3 color = vec3(0.0);
-            if(dist < 0.0)
-                gl_FragColor = vec4(color, 1.0);
-            else
-            {
-                color = getColor(p, pint);
-                gl_FragColor = vec4(color * 10.0, 1.0);
-            }
+            if(dist >= 0.0)
+                color += getColor(p, pint);
         }
     }
+    gl_FragColor = vec4(10.0 * color/ (AA * AA), 1.0);
 }
