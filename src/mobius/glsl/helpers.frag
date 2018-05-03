@@ -1,3 +1,5 @@
+#version 120
+
 /*
     Complex operations
 */
@@ -145,20 +147,100 @@ vec2 Rotate2d(vec2 p, float t)
     1d and 2d grid
 */
 
-float Mod(float x, float size)
+void Mod(inout float x, float size)
 {
-    return mod(x + 0.5 * size, size) - 0.5 * size;
+    x = mod(x + 0.5 * size, size) - 0.5 * size;
 }
 
-vec2 Grid2D(vec2 p, vec2 size)
+void Mod2d(inout vec2 p, vec2 size)
 {
-    return mod(p + 0.5 * size, size) - 0.5 * size;
+    p = mod(p + 0.5 * size, size) - 0.5 * size;
 }
+
 
 /*
     Spherical grid in two dimensions
 */
-vec2 PolarGrid2D(vec2 p, vec2 size)
+
+void Mod2dPolar(inout vec2 p, vec2 size)
 {
-    return Grid2D(vec2(atan(p.y, p.x), UHStoH(length(p))), size);
+    float phase = atan(p.y, p.x);
+    float modulus = UHStoH(length(p));
+    Mod(phase, size.y);
+    Mod(modulus, size.x);
+    p = vec2(modulus, phase);
+}
+
+
+#define PI 3.141592653
+#define TWOPI (2 * PI)
+
+/*
+  Convert hsv color to rgb color
+*/
+
+vec3 hsv2rgb(vec3 hsv)
+{
+    const vec3 p = vec3(0.0, 2.0/3.0, 1.0/3.0);
+    hsv.yz = clamp(hsv.yz, 0.0, 1.0);
+    return hsv.z * (0.63 * hsv.y * (cos(TWOPI *(hsv.x + p)) - 1.0) + 1.0);
+}
+
+
+/*
+  Transform objects in view space to model space
+*/
+
+mat3 viewMatrix(vec3 eye, vec3 lookat, vec3 up)
+{
+    vec3 f = normalize(lookat - eye);
+    vec3 r = normalize(cross(f, up));
+    vec3 u = normalize(cross(r, f));
+    return mat3(r, u, -f);
+}
+
+
+/*
+    Get ray directions
+*/
+
+vec3 rayDirection(float fov, vec2 size, vec2 fragCoord) {
+    vec2 xy = fragCoord - size / 2.0;
+    float z = size.y / tan(radians(fov) / 2.0);
+    return normalize(vec3(xy, -z));
+}
+
+
+/*
+    Constructive solid geometry union operation on SDF-calculated distances.
+*/
+
+float unionSDF(float distA, float distB) {
+    return min(distA, distB);
+}
+
+
+/*
+  Signed distance function for a sphere kissing the origin with radius r.
+*/
+
+float sphereSdf(vec3 p, float r)
+{
+    p.z -= r;
+    return length(p) - r;
+}
+
+
+/*
+  Signed distance functions for the z=0 and z=c planes
+*/
+
+float planeSdf(vec3 p)
+{
+    return length(p.z);
+}
+
+float planeSdf(vec3 p, float planeOffset)
+{
+    return length(p.z) - planeOffset;
 }
