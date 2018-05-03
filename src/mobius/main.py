@@ -35,10 +35,10 @@ class Mobius(pyglet.window.Window):
     2. Press H to toggle on/off applying the hyperbolic scaling.
     3. Press E to toggle on/off applying the elliptic rotation.
     4. Press Ctrl + v to toggle on/off saving the video.
+    5. Press Enter to save screenshot.
     """
-
     def __init__(self, width, height, sample_rate=16,
-                 video_rate=24, antialiasing=2):
+                 video_rate=24, antialiasing=1):
         pyglet.window.Window.__init__(self,
                                       width,
                                       height,
@@ -46,13 +46,11 @@ class Mobius(pyglet.window.Window):
                                       resizable=True,
                                       visible=False,
                                       vsync=False)
-
         self._start_time = time.clock()
-        self.shader = Shader(["./glsl/mobius.vert"],
-                             ["./glsl/helpers.frag", "./glsl/mobius.frag"])
+        self.shader = Shader(["./glsl/mobius.vert"], ["./glsl/helpers.frag", "./glsl/mobius.frag"])
+        self.apply = True
         self.elliptic = True
         self.hyperbolic = True
-        self.apply = True
         self.video_on = False
         self.buffer = pyglet.image.get_buffer_manager().get_color_buffer()
         self.sample_rate = sample_rate
