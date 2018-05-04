@@ -217,7 +217,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/mobius/mobius.png" width="500"/>
+<img src="http://www.pywonderland.com/img/mobius/sphere.png" width="500"/>
 </p>
 
 <br>
