@@ -185,7 +185,7 @@ vec3 getColor(vec2 p, float pint)
                   hue_time_unit * iTime - length(p.y) / 5.0 :
     	          hue_time_unit * iTime - UHStoH(length(p)) / 7.0;
     float hue = center_hue + time2;
-    // Really a hack of magic code to make the star shine correctly
+    // Really a hack of magic code to make the stars work well
     return hsv2rgb(vec3(hue, saturation, pint)) + pint / 3.0;
 }
 
@@ -244,7 +244,7 @@ void main()
 
     vec2 pixelSize = vec2(1.0);
     pixelSize.y *= iResolution.y / iResolution.x;
-    vec3 eye = vec3(-0.8, -1.2, 0.8) * 5;
+    vec3 eye = vec3(-4.0, -6.0, 4.0);
     vec3 lookat = vec3(0.0, 0.0, 0.6);
     vec3 up = vec3(0.0, 0.0, 1.0);
     mat3 viewToWorld = viewMatrix(eye, lookat, up);

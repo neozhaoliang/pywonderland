@@ -14,6 +14,7 @@ Reference:
 
 """
 import time
+import datetime
 import subprocess
 
 import pyglet
@@ -28,6 +29,10 @@ from shader import Shader
 FFMPEG_EXE = "ffmpeg"
 
 
+def timestamp():
+    return str(datetime.datetime.now()).split(".")[0]
+
+
 class Mobius(pyglet.window.Window):
     """
     Keyboard control:
@@ -37,7 +42,7 @@ class Mobius(pyglet.window.Window):
     4. Press Ctrl + v to toggle on/off saving the video.
     5. Press Enter to save screenshot.
     """
-    def __init__(self, width, height, sample_rate=16,
+    def __init__(self, width, height, sample_rate=8,
                  video_rate=24, antialiasing=1):
         pyglet.window.Window.__init__(self,
                                       width,
@@ -108,34 +113,60 @@ class Mobius(pyglet.window.Window):
         if symbol == key.ESCAPE:
             pyglet.app.exit()
 
+    def scene_info(self):
+        parabolic = not (self.elliptic or self.hyperbolic)
+        loxodromic = self.elliptic and self.hyperbolic
+        info = ""
+        if parabolic:
+            if self.apply:
+                info += "parabolic-translation-horosphere"
+            else:
+                info += "parabolic-translation-horoplane"
+        elif loxodromic:
+            if self.apply:
+                info += "loxodromic-Dupin-cyclide"
+            else:
+                info += "loxodromic-cone"
+        elif self.elliptic:
+            if self.apply:
+                info += "elliptic-roatation-Dupin-cyclide"
+            else:
+                info += "elliptic-rotation-cone"
+        else:
+            if self.apply:
+                info += "hyperbolic-scaling-Dupin-cyclide"
+            else:
+                info += "hyperbolic-scaling-cone"
+        return info + "-" + timestamp()
+
     def save_screenshot(self):
-        self.buffer.save("Mobius.png")
+        self.buffer.save(self.scene_info() + ".png")
 
     def switch_video(self):
         self.video_on = not self.video_on
         if self.video_on:
             self.ffmpeg_pipe = self.create_new_pipe()
-            print('> Writing to video...\n')
+            print("> Writing to video...\n")
         else:
             self.ffmpeg_pipe.close()
-            print('> The video is closed.\n')
+            print("> The video is closed.\n")
 
     def write_video_frame(self):
-        data = self.buffer.get_image_data().get_data('RGBA', -4 * self.width)
+        data = self.buffer.get_image_data().get_data("RGBA", -4 * self.width)
         self.ffmpeg_pipe.write(data)
 
     def create_new_pipe(self):
         ffmpeg = subprocess.Popen((FFMPEG_EXE,
-                                   '-threads', '0',
-                                   '-loglevel', 'panic',
-                                   '-r', '%d' % self.video_rate,
-                                   '-f', 'rawvideo',
-                                   '-pix_fmt', 'rgba',
-                                   '-s', '%dx%d' % (self.width, self.height),
-                                   '-i', '-',
-                                   '-c:v', 'libx264',
-                                   '-crf', '20',
-                                   '-y', 'Mobius.mp4'
+                                   "-threads", "0",
+                                   "-loglevel", "panic",
+                                   "-r", "%d" % self.video_rate,
+                                   "-f", "rawvideo",
+                                   "-pix_fmt", "rgba",
+                                   "-s", "%dx%d" % (self.width, self.height),
+                                   "-i", "-",
+                                   "-c:v", "libx264",
+                                   "-crf", "20",
+                                   "-y", self.scene_info() + ".mp4"
                                   ), stdin=subprocess.PIPE)
         return ffmpeg.stdin
 
@@ -149,6 +180,7 @@ class Mobius(pyglet.window.Window):
 
 
 if __name__ == "__main__":
-    app = Mobius(width=600, height=480, antialiasing=1)
+    app = Mobius(width=800, height=600, sample_rate=8,
+                 video_rate=24, antialiasing=1)
     print(app.__doc__)
     app.run(fps=None)
