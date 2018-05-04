@@ -105,7 +105,7 @@ float sceneSdf2(vec3 p)
 
 
 // Intensity constants
-const float intensity_divisor = 30000.0;
+const float intensity_divisor = 40000.0;
 const float intensity_factor_max = 7.2;
 const float center_intensity = 12.0;
 const float dist_factor = 3.0;
@@ -260,7 +260,7 @@ void main()
             float pint;
             float dist = trace(eye, worldDir, MIN_DIST, MAX_DIST, p, pint);
             if(dist >= 0.0)
-                color += tonemap(2.0 * getColor(p, pint));
+                color += tonemap(3.0 * getColor(p, pint));
         }
     }
     gl_FragColor = vec4(color / (AA * AA), 1.0);
