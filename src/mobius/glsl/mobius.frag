@@ -11,8 +11,8 @@ const float modPhase = 7.0;
 const float modModulus = 0.4;
 
 // Speed of the animation
-const float time_unit = 1.5;
-const float hue_time_unit = 0.3;
+const float time_unit = 2.5;
+const float hue_time_unit = 1.8;
 
 // Angle of the cone
 const vec2 coneAngle = normalize(vec2(1.5, 1.0));
