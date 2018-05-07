@@ -18,7 +18,6 @@ import argparse
 import subprocess
 import time
 import re
-import datetime
 from PIL import Image
 import numpy as np
 
@@ -31,7 +30,8 @@ from shader import Shader
 from framebuffer import FrameBuffer
 
 
-# windows users need to change this to the path of your ffmpeg executable file.
+# windows users need to add the directory that contains
+# your "ffmpeg.exe" to the environment variables.
 FFMPEG_EXE = 'ffmpeg'
 
 
@@ -78,10 +78,6 @@ def parse(params):
     species = (params.split(':')[0]).strip()
     colors = re.findall('#[0-9|A-Z]{8}', params)
     return species, htmlcolors_to_rgba(colors)
-
-
-def timestamp():
-    return str(datetime.datetime.now()).split('.')[0]
 
 
 def create_texture_from_ndarray(array):
@@ -292,7 +288,7 @@ class GrayScott(pyglet.window.Window):
                 self.reaction_shader.uniformf('u_mouse', x, y)
 
     def save_screenshot(self):
-        self.buffer.save('-'.join(['screenshot', timestamp(), self.species]) + '.png')
+        self.buffer.save('screenshot-' + self.species + '.png')
 
     def save_config(self):
         with open('config.txt', 'a+') as f:
@@ -372,7 +368,7 @@ class GrayScott(pyglet.window.Window):
                                    '-i', '-',
                                    '-c:v', 'libx264',
                                    '-crf', '20',
-                                   '-y', self.species + timestamp() + '.mp4'
+                                   '-y', self.species + '.mp4'
                                   ), stdin=subprocess.PIPE)
         return ffmpeg.stdin
 

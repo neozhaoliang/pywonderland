@@ -14,7 +14,6 @@ Reference:
 
 """
 import time
-import datetime
 import subprocess
 
 import pyglet
@@ -25,12 +24,9 @@ import pyglet.window.key as key
 from shader import Shader
 
 
-# windows users need to change this to the path of your ffmpeg executable file.
+# windows users need to add the directory that contains
+# your "ffmpeg.exe" to the environment variables.
 FFMPEG_EXE = "ffmpeg"
-
-
-def timestamp():
-    return str(datetime.datetime.now()).split(".")[0]
 
 
 class Mobius(pyglet.window.Window):
@@ -137,7 +133,7 @@ class Mobius(pyglet.window.Window):
                 info += "hyperbolic-scaling-Dupin-cyclide"
             else:
                 info += "hyperbolic-scaling-cone"
-        return info + "-" + timestamp()
+        return info
 
     def save_screenshot(self):
         self.buffer.save(self.scene_info() + ".png")
