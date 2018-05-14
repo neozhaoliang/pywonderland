@@ -127,7 +127,7 @@ class Polytope(object):
                 f.write("(" + ", ".join([str(i) for i in face]) + ")\n")
 
     def write_to_pov(self):
-        with open("polytope-data.inc", "w") as f:
+        with open("./povray/polytope-data.inc", "w") as f:
             for v in self.vertex_coords:
                 f.write("Vertex(<{}, {}, {}, {}>)\n".format(*v))
 

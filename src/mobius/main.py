@@ -176,7 +176,7 @@ class Mobius(pyglet.window.Window):
 
 
 if __name__ == "__main__":
-    app = Mobius(width=800, height=600, sample_rate=8,
+    app = Mobius(width=640, height=480, sample_rate=8,
                  video_rate=24, antialiasing=1)
     print(app.__doc__)
     app.run(fps=None)

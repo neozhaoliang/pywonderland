@@ -260,7 +260,7 @@ void main()
             float pint;
             float dist = trace(eye, worldDir, MIN_DIST, MAX_DIST, p, pint);
             if(dist >= 0.0)
-                color += tonemap(3.0 * getColor(p, pint));
+                color += tonemap(4.0 * getColor(p, pint));
         }
     }
     gl_FragColor = vec4(color / (AA * AA), 1.0);
