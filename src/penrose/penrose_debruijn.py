@@ -64,7 +64,7 @@ scale = max(WIDTH, HEIGHT) / (2.0 * NUM_LINES)
 ctx.scale(scale, scale)
 ctx.translate(NUM_LINES, NUM_LINES)
 
-with open('rhombus.inc', 'w') as f:
+with open('./povray/rhombus.inc', 'w') as f:
     for r, s in itertools.combinations(range(5), 2):
         for kr, ks in itertools.product(range(-NUM_LINES, NUM_LINES), repeat=2):
             # if s-r = 1 or 4 then this is a thin rhombus, otherwise it's fat.

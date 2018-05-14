@@ -3,7 +3,7 @@
 `Maze` is the top layer object on which we run the algorithms.
 
 `GIFSurface` is the bottom layer object that handles the information
-of the output GIF image.
+about the output GIF image.
 
 `Animation` is the middle layer object that controls how
 a `Maze` object is rendered to a `GIFSurface` object.

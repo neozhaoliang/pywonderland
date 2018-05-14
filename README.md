@@ -161,7 +161,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### Domino Shuffling Algorithm Animation
-[[Code](./src/domino/)][[Doc](http://www.pywonderland.com/aztec/)]
+[[Code](./src/aztec/)][[Doc](http://www.pywonderland.com/aztec/)]
 <br>
 
 <p align="center">
@@ -174,7 +174,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### Wilson's Uniform Spanning Tree Algorithm Animation
-[[Code](./src/wilson/)] [[Doc](http://www.pywonderland.com/wilson/)] [[Mike Bostock's Javascript Animation](https://bl.ocks.org/mbostock/11357811)]
+[[Code](./src/gifmaze/)] [[Doc](http://www.pywonderland.com/wilson/)] [[Mike Bostock's Javascript Animation](https://bl.ocks.org/mbostock/11357811)]
 <br>
 
 <p align="center">

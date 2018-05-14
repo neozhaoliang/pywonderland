@@ -8,7 +8,7 @@ Usage:
     python main.py
 """
 import cairocffi as cairo
-from cftp import LozengeTiling
+from cftp import LozengeTiling, run_cftp
 
 
 TOP_COLOR = (1, 0, 0)
@@ -41,9 +41,9 @@ def main(hexagon_size, imgsize):
     ctx.set_source_rgb(1, 1, 1)
     ctx.paint()
 
-    T = LozengeTiling(hexagon_size)
-    rnd_state = T.run_cftp()
-    for key, val in T.tiles(rnd_state).items():
+    T = LozengeTiling(a, b, c)
+    sample = run_cftp(T)
+    for key, val in T.get_tiles(sample).items():
         for verts in val:
             A, B, C, D = square_to_hex(verts)
             ctx.move_to(A[0], A[1])

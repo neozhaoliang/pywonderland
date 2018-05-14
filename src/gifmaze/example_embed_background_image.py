@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Make GIF animation of Wilson's Uniform Spanning Tree
-Algorithm and the Breadth-First Search Algorithm
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This example shows how to embed the animation into a background image.
 """
 from colorsys import hls_to_rgb
 import gifmaze as gm
@@ -12,7 +9,7 @@ from algorithms import wilson, bfs
 
 
 # create a GIFSurface instance and set the colors
-surface = gm.GIFSurface.from_image('teacher.png')
+surface = gm.GIFSurface.from_image('./resources/bg.png')
 palette = [52, 51, 50,     # wall color, the same with the blackboard's
            200, 200, 200,  # tree color
            255, 0, 255]    # path color
@@ -25,8 +22,8 @@ surface.set_palette(palette)
 
 # create a maze instance and set its position in the image
 size = (surface.width, surface.height)
-mask = generate_text_mask(size, 'UST', 'ubuntu.ttf', 350)
-maze = gm.Maze(117, 73, mask=mask).scale(4).translate((69, 49))
+mask = generate_text_mask(size, 'UST', './resources/ubuntu.ttf', 350)
+maze = gm.Maze(111, 67, mask=mask).scale(4).translate((75, 56))
 
 # create an animation environment
 anim = gm.Animation(surface)
@@ -36,7 +33,7 @@ anim = gm.Animation(surface)
 anim.pause(100, trans_index=1)
 
 # paint the background region that contains the maze
-left, top, width, height = 66, 47, 475, 297
+left, top, width, height = 70, 50, 450, 280
 anim.paint(left, top, width, height, 0)
 anim.pause(100)
 

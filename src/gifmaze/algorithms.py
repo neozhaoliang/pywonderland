@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+This file contains the maze generation and maze solving algorithms.
+
+Each algorithm is implemented as a generator function which runs on
+a `maze` instance and calls a `render` instance to yield the data.
+"""
 import heapq
 import random
 from collections import deque

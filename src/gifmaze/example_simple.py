@@ -1,8 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Make GIF Animation of Prim's Algorithm
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This example shows the basic usage of this program.
+
+To make a gif animation you need to:
+
+1. declare a surface object to drawn on (set the image size,
+   global color table, background color).
+
+2. declare a maze object to run the algorithms (set the size
+   of the maze, its position in the image, the mask pattern).
+
+3. declare an animation object to render the animation (set the
+   color map, delay between frames, speed, transparent channel).
 """
 import gifmaze as gm
 from algorithms import prim

@@ -10,9 +10,11 @@ class Shader(object):
 
     def __init__(self, vert_files, frag_files):
         """
-        INPUTS:
-            - `vert_files`: a list of files that contain the vertex shader.
-            - `frag_files`: a list of files that contain the fragment shader.
+        Parameters
+        ----------
+
+        vert_files: a list of files that contain the vertex shader.
+        frag_files: a list of files that contain the fragment shader.
         """
         self.program = gl.glCreateProgram()
         self.compile_and_attach_shader(vert_files, gl.GL_VERTEX_SHADER)
@@ -21,11 +23,11 @@ class Shader(object):
 
     def compile_and_attach_shader(self, shader_files, shader_type):
         """
-        INPUTS:
+        Parameters
+        ----------
 
-            - `shader_files`: a list of the shader files.
-
-            - `shader_type`: `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`.
+        shader_files: a list of the shader files.
+        shader_type: `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`.
 
         Main steps to compile and attach a shader:
         1. glCreateShader:
@@ -43,8 +45,8 @@ class Shader(object):
         """
         src = []
         for src_f in shader_files:
-            with open(src_f, 'r') as f:
-                src.append(f.read().encode('ascii'))
+            with open(src_f, "r") as f:
+                src.append(f.read().encode("ascii"))
 
         # 1. create a shader
         shader = gl.glCreateShader(shader_type)
@@ -109,14 +111,14 @@ class Shader(object):
         self.unbind()
 
     def uniformi(self, name, *data):
-        location = gl.glGetUniformLocation(self.program, name.encode('ascii'))
+        location = gl.glGetUniformLocation(self.program, name.encode("ascii"))
         {1: gl.glUniform1i,
          2: gl.glUniform2i,
          3: gl.glUniform3i,
          4: gl.glUniform4i}[len(data)](location, *data)
 
     def uniformf(self, name, *data):
-        location = gl.glGetUniformLocation(self.program, name.encode('ascii'))
+        location = gl.glGetUniformLocation(self.program, name.encode("ascii"))
         {1: gl.glUniform1f,
          2: gl.glUniform2f,
          3: gl.glUniform3f,
@@ -124,7 +126,7 @@ class Shader(object):
 
     def uniformfv(self, name, size, data):
         data_ctype = (gl.GLfloat * len(data))(*data)
-        location = gl.glGetUniformLocation(self.program, name.encode('ascii'))
+        location = gl.glGetUniformLocation(self.program, name.encode("ascii"))
         {1: gl.glUniform1fv,
          2: gl.glUniform2fv,
          3: gl.glUniform3fv,
@@ -135,13 +137,14 @@ class Shader(object):
         Set vertex attribute data in a shader, lacks the flexibility of
         setting several attributes in one vertex buffer.
 
-        INPUTS:
+        Parameters
+        ----------
 
-            - `name`: the attribute name in the shader.
+        name: the attribute name in the shader.
 
-            - `data`: a list of vertex attributes (positions, colors, ...)
+        data: a list of vertex attributes (positions, colors, ...)
 
-        Example: name = 'positions', data = [0, 0, 0, 1, 1, 0, 1, 1].
+        Example: name = "positions", data = [0, 0, 0, 1, 1, 0, 1, 1].
         """
         data_ctype = (gl.GLfloat * len(data))(*data)
 
@@ -150,7 +153,7 @@ class Shader(object):
         gl.glBindBuffer(gl.GL_ARRAY_BUFFER, vbo_id)
         gl.glBufferData(gl.GL_ARRAY_BUFFER, ct.sizeof(data_ctype), data_ctype, gl.GL_STATIC_DRAW)
 
-        location = gl.glGetAttribLocation(self.program, name.encode('ascii'))
+        location = gl.glGetAttribLocation(self.program, name.encode("ascii"))
         gl.glEnableVertexAttribArray(location)
         gl.glVertexAttribPointer(location, size, gl.GL_FLOAT, gl.GL_FALSE, stride, ct.c_void_p(offset))
         gl.glBindBuffer(gl.GL_ARRAY_BUFFER, 0)
