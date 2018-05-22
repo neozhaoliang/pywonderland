@@ -136,6 +136,6 @@ class Polytope(object):
 
 
 if __name__ == "__main__":
-    P = Polytope("8-cell")
+    P = Polytope("120-cell")
     P.build()
     P.write_to_pov()
