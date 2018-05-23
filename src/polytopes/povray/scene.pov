@@ -40,13 +40,7 @@ background { color SkyBlue }
 
 #macro getSize(q)
     #local len = vlength(q);
-    #if (len < 3.0)
-        #local len = len * len / 3;
-    #end
-    #if (len < 0.5)
-        #local len = 0.5;
-    #end
-    len
+    (1.0 + len * len) / 4
 #end
 
 
