@@ -43,6 +43,9 @@ background { color SkyBlue }
     #if (len < 3.0)
         #local len = len * len / 3;
     #end
+    #if (len < 0.5)
+        #local len = 0.5;
+    #end
     len
 #end
 
