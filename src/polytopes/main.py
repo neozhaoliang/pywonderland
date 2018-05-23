@@ -6,7 +6,8 @@ a .pov file for rendering.
 """
 import numpy as np
 from todd_coxeter import CosetTable
-from geometry import gram_schimdt, reflection_matrix, get_mirrors
+from geometry import (gram_schimdt, reflection_matrix, get_mirrors,
+                      get_sphere_info, pov_vec, pov_vectors)
 
 
 class Polytope(object):
@@ -129,10 +130,19 @@ class Polytope(object):
     def write_to_pov(self):
         with open("./povray/polytope-data.inc", "w") as f:
             for v in self.vertex_coords:
-                f.write("Vertex(<{}, {}, {}, {}>)\n".format(*v))
+                f.write("Vertex({})\n".format(pov_vec(v)))
 
-            for u, v in self.edge_coords:
-                f.write("Arc(<{}, {}, {}, {}>, <{}, {}, {}, {}>)\n".format(*np.concatenate((u, v))))
+            for edge in self.edge_coords:
+                f.write("Arc({})\n".format(pov_vectors(edge)))
+
+            for face in self.face_coords:
+                f.write("#declare vertices_list = array[{}] {{ {} }};\n".format(len(face), pov_vectors(face)))
+                isplane, center, radius, facesize = get_sphere_info(face)
+                facecolor = np.random.random(3)
+                if isplane:
+                    f.write("FlatFace({}, vertices_list, {}, {})\n".format(len(face), facesize, pov_vec(facecolor)))
+                else:
+                    f.write("BubbleFace({}, vertices_list, {}, {}, {}, {})\n".format(len(face), pov_vec(center), radius, facesize, pov_vec(facecolor)))
 
 
 if __name__ == "__main__":

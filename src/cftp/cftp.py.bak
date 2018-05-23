@@ -6,7 +6,7 @@ Propp-Wilson's "coupling from the past"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 REFERENCES:
-
+   
 [1]. Blog post at
      "https://possiblywrong.wordpress.com/2018/02/23/coupling-from-the-past/"
 
@@ -96,7 +96,7 @@ the rule is:
 It's easy to see this Markov chain is irreducible and aperiodic.
 
 Note: in the `ac`-plane, `a` is the x-axis and `c` is the y-axis. For a path p,
-each step in p either moves up (in the b-direction where b = a + c) or moves
+each step in p either moves up (in the b-direction where b = a + c) or moves 
 down (in the a-direction). If it moves up then the x and y coordinates are both
 increased by 1, if it moves down then only the x coordinate is increased by 1.
 For all path systems, their 0-th and (c+1)-th paths are the same and are used
@@ -129,7 +129,7 @@ def run_cftp(mc):
             break
         else:
             updates.insert(0, (rng_next, 2**len(updates)))
-
+    
     random.setstate(rng_next)
     bar.close()
     return s0
