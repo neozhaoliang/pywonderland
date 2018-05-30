@@ -10,9 +10,9 @@ from algorithms import wilson, bfs
 
 # create a GIFSurface instance and set the colors
 surface = gm.GIFSurface.from_image('./resources/bg.png')
-palette = [52, 51, 50,     # wall color, the same with the blackboard's
+palette = [38, 92, 66,     # wall color, the same with the blackboard's
            200, 200, 200,  # tree color
-           255, 0, 255]    # path color
+           244, 25, 220]   # path color
 
 for i in range(256):
     rgb = hls_to_rgb((i / 360.0) % 1, 0.5, 1.0)
@@ -22,8 +22,8 @@ surface.set_palette(palette)
 
 # create a maze instance and set its position in the image
 size = (surface.width, surface.height)
-mask = generate_text_mask(size, 'UST', './resources/ubuntu.ttf', 350)
-maze = gm.Maze(111, 67, mask=mask).scale(4).translate((75, 56))
+mask = generate_text_mask(size, 'UST', './resources/ubuntu.ttf', 300)
+maze = gm.Maze(119, 75, mask=mask).scale(3).translate((50, 35))
 
 # create an animation environment
 anim = gm.Animation(surface)
@@ -33,7 +33,7 @@ anim = gm.Animation(surface)
 anim.pause(100, trans_index=1)
 
 # paint the background region that contains the maze
-left, top, width, height = 70, 50, 450, 280
+left, top, width, height = 48, 33, 360, 230, 
 anim.paint(left, top, width, height, 0)
 anim.pause(100)
 

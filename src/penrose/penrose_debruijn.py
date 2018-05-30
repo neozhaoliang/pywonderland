@@ -9,6 +9,18 @@ Reference:
     "Algebraic theory of Penrose's non-periodic tilings of the plane".
                                                      N.G. de Bruijn.
 
+Usage:
+    Firstly run
+        
+        python penrose_debruijn.py
+
+    This will output a .png image of a generalized Penrose tiling
+    rendered by cairo and a POV-Ray include file "rhombus.inc" that
+    contains the data of the rhombus, then go to the folder "/povray"
+    and run the file "scene.pov" with POV-Ray, for example in command line:
+
+    povray scene.pov +W800 +H600 +Q11 +A0.001 +R5
+
 Each time you run this script it outputs a different pattern,
 these patterns are almost surely not isomorphic with each other.
 """
