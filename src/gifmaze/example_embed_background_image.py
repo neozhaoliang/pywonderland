@@ -33,7 +33,7 @@ anim = gm.Animation(surface)
 anim.pause(100, trans_index=1)
 
 # paint the background region that contains the maze
-left, top, width, height = 48, 33, 360, 230, 
+left, top, width, height = 48, 33, 360, 230,
 anim.paint(left, top, width, height, 0)
 anim.pause(100)
 

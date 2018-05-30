@@ -11,7 +11,7 @@ Reference:
 
 Usage:
     Firstly run
-        
+
         python penrose_debruijn.py
 
     This will output a .png image of a generalized Penrose tiling
