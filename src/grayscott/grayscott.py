@@ -390,7 +390,7 @@ if __name__ == "__main__":
                         help="frames per second of the video")
     parser.add_argument("-fps", type=int, default=None,
                         help="frames per second of the animation")
-    parser.add_argument("-samplerate", type=int, default=16,
+    parser.add_argument("-samplerate", type=int, default=24,
                         help="sample a frame from the animation every these frames")
     parser.add_argument("-scale", type=float, default=1.5,
                         help="level of scaling of the texture")
