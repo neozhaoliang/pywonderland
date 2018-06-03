@@ -8,6 +8,7 @@ Coloring scheme adapted from
 
     "https://mathematica.stackexchange.com/questions/7275/how-can-i-generate-this-domain-coloring-plot"
 
+One can easily verify the Argument Principle using this coloring.
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,21 +17,22 @@ from matplotlib.colors import hsv_to_rgb
 
 PI = np.pi
 TWOPI = 2 * PI
+CONTOUR = 1.0 / 0.25  # density of the white contour lines
+GRID = 1.0 / 0.5  # density of the black grid lines
 
 
 def domain_coloring(z):
     """
-    Hue represents the argument of f(z),
-    saturation represents the magnitude of the real and imag part of f(z),
-    bright white lines are the contour lines of |f(z)|.
+    Hue represents the argument, saturation represents the magnitude of the real and
+    imag part of f(z), and brightness represents the magnitude of |f(z)|.
     """
     # hue increases from 0 to 1 as z walks counterclockwise from the x-axis.
     h = np.angle(z) / TWOPI
     ind = np.where(h < 0)
     h[ind] += 1.0
 
-    s = np.abs(np.sin(np.abs(z) * PI))
-    b = np.sin(z.real * PI) * np.sin(z.imag * PI)
+    s = np.abs(np.sin(np.abs(z) * PI * CONTOUR))
+    b = np.sin(z.real * PI * GRID) * np.sin(z.imag * PI * GRID)
     b = np.sqrt(np.sqrt(np.abs(b)))
     b2 = 0.5 * (1 - s + b + np.sqrt(0.01 + (1 - s - b)**2))
     b2 = np.clip(b2, 0.0, 1.0)
