@@ -8,7 +8,7 @@ Coloring scheme adapted from
 
     "https://mathematica.stackexchange.com/questions/7275/how-can-i-generate-this-domain-coloring-plot"
 
-One can easily verify the Argument Principle using this coloring.
+One can easily verify the Argument Principle from the resulting image.
 """
 import numpy as np
 import matplotlib.pyplot as plt
