@@ -20,8 +20,9 @@ TWOPI = 2 * PI
 
 def domain_coloring(z):
     """
-    Hue represents the argument of f(z), saturation represents the magnitude
-    of the real and imag part of f(z), brightness represents the magnitude of |f(z)|.
+    Hue represents the argument of f(z),
+    saturation represents the magnitude of the real and imag part of f(z),
+    bright white lines are the contour lines of |f(z)|.
     """
     # hue increases from 0 to 1 as z walks counterclockwise from the x-axis.
     h = np.angle(z) / TWOPI
