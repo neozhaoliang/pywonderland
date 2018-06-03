@@ -24,7 +24,7 @@ GRID = 1.0 / 0.5  # density of the black grid lines
 def domain_coloring(z):
     """
     Hue represents the argument, saturation represents the magnitude of the real and
-    imag part of f(z), and brightness represents the magnitude of |f(z)|.
+    imag part of f(z), and bright white lines represent the magnitude of |f(z)|.
     """
     # hue increases from 0 to 1 as z walks counterclockwise from the x-axis.
     h = np.angle(z) / TWOPI
