@@ -1,12 +1,10 @@
 # A Tour in the Wonderland of Math with Python
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
-
 > A collection of python scripts for drawing beautiful figures or animating interesting algorithms in mathematics.
 
 ## About this repo
 
-Please visit [the website for this repository](http://www.pywonderland.com) to see how to use these scripts and get more information of the math behind them.
+Please visit the [website for this repository](http://www.pywonderland.com) to see how to use these scripts and get more information of the math behind them.
 
 I'm building the docs so that there will be more usage & math explanations for each program.
 
@@ -250,3 +248,7 @@ Softwares:
 + `ImageMagick`
 + `FFmpeg`
 + `POV-Ray`
+
+## License
+
+see the LICENSE file.

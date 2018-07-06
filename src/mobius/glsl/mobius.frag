@@ -244,7 +244,7 @@ void main()
 
     vec2 pixelSize = vec2(1.0);
     pixelSize.y *= iResolution.y / iResolution.x;
-    vec3 eye = vec3(-1.5,-2.,1.0)*2.5;
+    vec3 eye = vec3(-4.0, -6.0, 4.0);
     vec3 lookat = vec3(0.0, 0.0, 0.6);
     vec3 up = vec3(0.0, 0.0, 1.0);
     mat3 viewToWorld = viewMatrix(eye, lookat, up);

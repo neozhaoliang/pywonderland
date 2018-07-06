@@ -11,21 +11,21 @@ Reference:
 
 Usage:
     Firstly run
-    
+
         python debruijn.py
-        
+
     This will output a .png image of a rhombus tiling rendered by cairo
     and a POV-Ray include file "rhombus.inc" that contains the data of
     the rhombus, then go to the folder "/povray" and run the file
     "scene.pov" with POV-Ray, for example in command line:
-        
+
         povray scene.pov +W800 +H600 +Q11 +A0.001 +R5
 
     Each time you run this script it outputs a different pattern,
     these patterns are almost surely not isomorphic with each other.
 
 Some params you can tweak with:
-    
+
     1. 'DIMENSION'.
     2. 'SHIFTS' of the grids.
     3. Colors for the different rhombus.
@@ -49,7 +49,7 @@ if DIMENSION % 2 == 0:
     GRIDS = [np.exp(PI * 1j * i / DIMENSION) for i in range(DIMENSION)]
 else:
     GRIDS = [np.exp(PI * 2j * i / DIMENSION) for i in range(DIMENSION)]
-    
+
 SHIFTS = np.random.random(DIMENSION)
 
 FACE_COLOR_1 = (1.0, 0.5, 0.0)
