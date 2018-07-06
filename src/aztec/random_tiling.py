@@ -8,8 +8,8 @@ with uniform probability.
 :copyright (c) 2015 by Zhao Liang.
 """
 import argparse
-import aztec
 from tqdm import trange
+import aztec
 
 
 # Four colors for the four types of dominoes

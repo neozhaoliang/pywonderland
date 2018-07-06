@@ -2,7 +2,6 @@ cairocffi
 matplotlib
 numba
 numpy
-palettable
 pyglet
 PyYaml
 scipy

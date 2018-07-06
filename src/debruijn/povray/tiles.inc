@@ -24,7 +24,7 @@
         [ .5 bumps .01 scale .3 ]
         [ .5 agate .13 turbulence .18 scale 6 ]
     }
-    scale <3,1,1>
+    scale <3, 1, 1>
 }
 
 #declare RhombusFinish = finish {
@@ -35,35 +35,49 @@
     roughness .6
 }
 
-#declare RhombusTex1 = texture {
-    pigment { rgb <0.9, 0.87, 0.8> }
-    finish { RhombusFinish }
-    normal {  RhombusNormal }
-}
-
-#declare RhombusTex2 = texture {
-    pigment { rgb <0.1, 0.23, 0.3> }
-    finish { RhombusFinish }
-    normal {  RhombusNormal }
-}
-
-// Texture of thin rhmobus
-#declare ThinRhombusTex = texture {
-    average
-    texture_map {
-        [0.6 RhombusTex1]
-        [0.4 T_Stone1 scale 0.5]
+#macro BaseTexture(shape)
+    texture {
+        #if(shape=0)
+            pigment { rgb <0.9, 0.87, 0.8> }
+        #else #if(shape=1)
+            pigment { rgb <0.1, 0.23, 0.3> }
+        #else #if(shape=2)
+            pigment { rgb <0.3, 0.35, 0.47> }
+        #else
+            pigment { rgb <0.72, 0.75, 0.6> }
+        #end
+        #end
+        #end
+        finish { RhombusFinish }
+        normal {  RhombusNormal }
     }
-}
+#end
 
-// Texture of thin rhmobus
-#declare FatRhombusTex = texture {
-    average
-    texture_map {
-        [0.6 RhombusTex2]
-        [0.4 T_Stone19 scale 0.2]
+#macro StoneTexture(shape)
+    #if(shape=0)
+        texture { T_Stone1 scale 0.5 }
+    #else #if(shape=1)
+        texture { T_Stone19 scale 0.2 }
+    #else #if(shape=2)
+        texture { T_Stone1 scale 0.3 }
+    #else
+        texture { T_Stone19 scale 0.4 }
+    #end
+    #end
+    #end
+#end
+
+#macro RhombusTexture(shape)
+    #declare tex1 = BaseTexture(shape)
+    #declare tex2 = StoneTexture(shape)
+    texture {
+        average
+        texture_map {
+          [0.6 tex1]
+          [0.4 tex2]
+        }
     }
-}
+#end
 
 // ========================================================
 // The main macro for a tile
@@ -83,11 +97,6 @@
         linear_spline
         -tile_height, 0, 5
         w1 w2 w3 w4 w1
-
-        #if (shape=0)
-            texture{ FatRhombusTex }
-        #else
-            texture{ ThinRhombusTex }
-        #end
+        RhombusTexture(shape) 
     }
 #end

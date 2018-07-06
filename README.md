@@ -18,9 +18,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ## Contents
 
-- [Mandelbrot Set](#mandelbrot-set)
-- [Julia Set](#julia-set)
-- [Newton Fractal](#newton-fractal)
+- [Rendering Nice Fractals in One Second](#rendering-nice-fractals-in-one-second)
 - [Icosahedral Kaleidoscope](#icosahedral-kaleidoscope)
 - [Fractal Tree](#fractal-tree)
 - [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
@@ -34,37 +32,19 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 - [Möbius Transformations In Hyperbolic 3-Space](#möbius-transformations-in-hyperbolic-3-space)
 
 ---
-### Mandelbrot Set
-[[Code](./src/misc/mandelbrot.py)]
-<br>
+### Rendering Nice Fractals in One Second
 
+Mandelbrot Set
 <p align="center">
 <img src="http://www.pywonderland.com/misc/mandelbrot.png" width="500"/>
 </p>
 
-<br>
-
-[[Back to Top](#contents)]
-
----
-### Julia Set
-[[Code](./src/misc/julia.py)]
-<br>
-
+Julia Set
 <p align="center">
 <img src="http://www.pywonderland.com/misc/julia.png" width="500"/>
 </p>
 
-<br>
-
-[[Back to Top](#contents)]
-
----
-### Newton Fractal
-[[Code](./src/misc/newton.py)]
-
-<br>
-
+Newton Fractal
 <p align="center">
 <img src="http://www.pywonderland.com/misc/newton.png" width="400"/>
 </p>
@@ -205,7 +185,7 @@ Kruskal's algorithm:
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/cftp/cftp.png"/>
+<img src="http://www.pywonderland.com/cftp/cftp.png" width="400"/>
 </p>
 
 <br>

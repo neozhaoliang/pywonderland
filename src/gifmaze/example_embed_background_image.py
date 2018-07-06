@@ -57,5 +57,5 @@ anim.run(bfs, maze, speed=30, delay=5, mcl=8, cmap=cmap,
 
 # pause 5 seconds to help to see the result clearly
 anim.pause(500)
-surface.save('wilson-bfs.gif')
+surface.save('wilson_bfs.gif')
 surface.close()

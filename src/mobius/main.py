@@ -15,6 +15,7 @@ Reference:
 """
 import time
 import subprocess
+import argparse
 
 import pyglet
 pyglet.options["debug_gl"] = False
@@ -38,8 +39,8 @@ class Mobius(pyglet.window.Window):
     4. Press Ctrl + v to toggle on/off saving the video.
     5. Press Enter to save screenshot.
     """
-    def __init__(self, width, height, sample_rate=8,
-                 video_rate=24, antialiasing=1):
+    def __init__(self, width, height, scene, video,
+                 sample_rate, video_rate, antialiasing):
         pyglet.window.Window.__init__(self,
                                       width,
                                       height,
@@ -49,14 +50,14 @@ class Mobius(pyglet.window.Window):
                                       vsync=False)
         self._start_time = time.clock()
         self.shader = Shader(["./glsl/mobius.vert"], ["./glsl/helpers.frag", "./glsl/mobius.frag"])
-        self.apply = True
-        self.elliptic = True
-        self.hyperbolic = True
-        self.video_on = False
+        self.apply, self.elliptic, self.hyperbolic = [int(x) for x in bin(scene)[2:].zfill(3)]
+        self.video_on = video
         self.buffer = pyglet.image.get_buffer_manager().get_color_buffer()
         self.sample_rate = sample_rate
         self.video_rate = video_rate
         self.frame_count = 0
+        if self.video_on:
+            self.ffmpeg_pipe = self.create_new_pipe()
 
         with self.shader:
             self.shader.vertex_attrib("position", [-1, -1, 1, -1, -1, 1, 1, 1])
@@ -176,7 +177,32 @@ class Mobius(pyglet.window.Window):
 
 
 if __name__ == "__main__":
-    app = Mobius(width=640, height=480, sample_rate=8,
-                 video_rate=24, antialiasing=1)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-size", type=str, default="640x360",
+                        help="width and height of the window")
+    parser.add_argument("-videorate", type=int, default=24,
+                        help="frames per second of the video")
+    parser.add_argument("-fps", type=int, default=None,
+                        help="frames per second of the animation")
+    parser.add_argument("-samplerate", type=int, default=24,
+                        help="sample a frame from the animation every these frames")
+    parser.add_argument("-video", action="store_true",
+                        help="turn on saving to the video")
+    parser.add_argument("-scene", type=int, default=0,
+                        help="an integer between 0-7 that chooses the scene")
+    parser.add_argument("-aa", type=int, default=1,
+                        help="antialiasing level")
+
+    args = parser.parse_args()
+
+    width, height = [int(i) for i in args.size.split("x")]
+
+    app = Mobius(width=width,
+                 height=height,
+                 scene=args.scene,
+                 video=args.video,
+                 sample_rate=args.samplerate,
+                 video_rate=args.videorate,
+                 antialiasing=args.aa)
     print(app.__doc__)
-    app.run(fps=None)
+    app.run(fps=args.fps)

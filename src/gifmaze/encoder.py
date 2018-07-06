@@ -52,8 +52,7 @@ def graphics_control_block(delay, trans_index=None):
     """
     if trans_index is None:
         return pack("<4BH2B", 0x21, 0xF9, 4, 0b00000100, delay, 0, 0)
-    else:
-        return pack("<4BH2B", 0x21, 0xF9, 4, 0b00000101, delay, trans_index, 0)
+    return pack("<4BH2B", 0x21, 0xF9, 4, 0b00000101, delay, trans_index, 0)
 
 
 def image_descriptor(left, top, width, height, byte=0):

@@ -157,6 +157,7 @@ def random_dfs(maze, render, speed=10, start=(0, 0)):
 
 def dfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
     """Solve a maze by dfs."""
+    bar = tqdm(total=len(maze.cells) - 1, desc="Running dfs search.")
     came_from = {start: start}  # a dict to remember each step.
     stack = [start]
     maze.mark_cell(start, Maze.FILL)
@@ -169,6 +170,7 @@ def dfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
         parent = came_from[child]
         maze.mark_cell(child, Maze.FILL)
         maze.mark_space(parent, child, Maze.FILL)
+        bar.update(1)
         for next_cell in maze.get_neighbors(child):
             if (next_cell not in visited) and (not maze.barrier(child, next_cell)):
                 came_from[next_cell] = child
@@ -190,6 +192,8 @@ def dfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
 
     maze.mark_path(path, Maze.PATH)
     yield render(maze)
+
+    bar.close()
 
 
 def prim(maze, render, speed=30, start=(0, 0)):

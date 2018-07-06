@@ -13,7 +13,16 @@ For a detailed discussion of the math see Humphreys's book
 from itertools import product, combinations
 import cairocffi as cairo
 import numpy as np
-from palettable.colorbrewer.qualitative import Set1_8
+
+
+COLORS = [(0.894, 0.102, 0.11),
+          (0.216, 0.494, 0.72),
+          (0.302, 0.686, 0.29),
+          (0.596, 0.306, 0.639),
+          (1.0, 0.5, 0),
+          (1.0, 1.0, 0.2),
+          (0.65, 0.337, 0.157),
+          (0.97, 0.506, 0.75)]
 
 
 # --- step one: compute all roots and edges ---
@@ -99,13 +108,12 @@ roots_2d = [(np.dot(u, x), np.dot(v, x)) for x in roots]
 # Sort these projected vertices by their modulus in the coxter plane,
 # every successive 30 vertices form one ring in the resulting pattern,
 # assign these 30 vertices a same color.
-colorlist = Set1_8.mpl_colors
 vertex_colors = np.zeros((len(roots), 3))
 modulus = np.linalg.norm(roots_2d, axis=1)
 ind_array = modulus.argsort()
 for i in range(8):
     for j in ind_array[30*i: 30*(i+1)]:
-        vertex_colors[j] = colorlist[i]
+        vertex_colors[j] = COLORS[i]
 
 
 # --- step four: render to png image ---

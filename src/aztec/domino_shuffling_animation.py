@@ -14,8 +14,8 @@ import os
 import glob
 import subprocess
 import argparse
-import aztec
 from tqdm import trange
+import aztec
 from random_tiling import render_with_cairo as render
 
 
