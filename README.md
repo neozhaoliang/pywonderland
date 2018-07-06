@@ -193,7 +193,7 @@ The animation embedded into a background image:
 
 Kruskal's algorithm:
 <p align="center">
-<img src="http://www.pywonderland.com/gifmaze/kruskal.gif"/>
+<img src="http://www.pywonderland.com/gifmaze/kruskal.gif" width="500"/>
 </p>
 <br>
 
@@ -214,8 +214,8 @@ Kruskal's algorithm:
 
 ---
 ### Todd-Coxeter Algorithm And 4D Polytopes
-[[Code](./src/polytopes)] [[Doc](http://pywonderland.com/polytopes/)]
-<br> [[Dimensions](http://www.dimensions-math.org/)]
+[[Code](./src/polytopes)] [[Doc](http://pywonderland.com/polytopes/)] [[The Dimensions Movie](http://www.dimensions-math.org/)]
+<br>
 
 A reproduction of the 120-cell in the dimensions movie:
 <p align="center">
@@ -236,10 +236,20 @@ An omnitruncated dodecahedron:
 [[Code](./src/mobius)] [[Doc](http://pywonderland.com/mobius)]
 <br>
 
+Parabolic translation on a holosphere:
 <p align="center">
 <img src="http://www.pywonderland.com/mobius/sphere.png" width="500"/>
 </p>
 
+Hyperbolic scaling on a Dupin cyclide:
+<p align="center">
+<img src="http://www.pywonderland.com/mobius/cyclide.png" width="500"/>
+</p>
+
+Loxodromic transformation on a cone:
+<p align="center">
+<img src="http://www.pywonderland.com/mobius/cone.png" width="500"/>
+</p>
 <br>
 
 [[Back to Top](#contents)]
