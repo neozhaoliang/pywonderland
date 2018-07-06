@@ -26,7 +26,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 - [Reaction-Diffusion Simulation](#reaction-diffusion-simulation)
 - [The E8 Pattern](#the-e8-pattern)
 - [The Modular Group](#the-modular-group)
-- [Generalized Penrose Tilings](#generalized-penrose-tilings)
+- [Aperiodic Tilings](#aperiodic-tilings)
 - [Domino Shuffling Algorithm Animation](#domino-shuffling-algorithm-animation)
 - [Wilson's Uniform Spanning Tree Algorithm Animation](#wilsons-uniform-spanning-tree-algorithm-animation)
 - [Coupling From The Past And Lozenge Tilings](#coupling-from-the-past-and-lozenge-tilings)
@@ -35,12 +35,11 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### Mandelbrot Set
-[[Code](./src/misc/mandelbrot.py)] [[Doc](http://www.pywonderland.com/fractals-numpy/)]
-
+[[Code](./src/misc/mandelbrot.py)]
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/fractals/mandelbrot.png" width="500"/>
+<img src="http://www.pywonderland.com/misc/mandelbrot.png" width="500"/>
 </p>
 
 <br>
@@ -49,12 +48,11 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### Julia Set
-[[Code](./src/misc/julia.py)] [[Doc](http://www.pywonderland.com/fractals-numpy/)]
-
+[[Code](./src/misc/julia.py)]
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/fractals/julia.png" width="500"/>
+<img src="http://www.pywonderland.com/misc/julia.png" width="500"/>
 </p>
 
 <br>
@@ -63,12 +61,12 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### Newton Fractal
-[[Code](./src/misc/newton.py)] [[Doc](http://www.pywonderland.com/fractals-numpy/)]
+[[Code](./src/misc/newton.py)]
 
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/fractals/newton.png" width="400"/>
+<img src="http://www.pywonderland.com/misc/newton.png" width="400"/>
 </p>
 
 <br>
@@ -77,12 +75,12 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### Icosahedral Kaleidoscope
-[[Code](./src/misc/kaleidoscope.py)] [[Doc](http://www.pywonderland.com/kaleidoscope/)]
+[[Code](./src/misc/kaleidoscope.py)]
 
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/icosa/kaleidoscope.png" width="400"/>
+<img src="http://www.pywonderland.com/misc/kaleidoscope.png" width="400"/>
 </p>
 
 <br>
@@ -96,7 +94,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/fractaltree.png" width="400"/>
+<img src="http://www.pywonderland.com/misc/fractaltree.png" width="400"/>
 </p>
 
 <br>
@@ -110,7 +108,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/grayscott/coral.png" width="500"/>
+<img src="http://www.pywonderland.com/grayscott/coral.png" width="500"/>
 </p>
 
 <br>
@@ -119,12 +117,12 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### The E8 Pattern
-[[Code](./src/misc/e8.py)] [[Doc](http://www.pywonderland.com/e8/)] [<a href="https://en.wikipedia.org/wiki/E8_(mathematics)">Wiki</a>]
+[[Code](./src/misc/e8.py)][<a href="https://en.wikipedia.org/wiki/E8_(mathematics)">Wiki</a>]
 
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/e8.png" width="500"/>
+<img src="http://www.pywonderland.com/misc/e8.png" width="500"/>
 </p>
 
 <br>
@@ -133,12 +131,12 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### The Modular Group
-[[Code](./src/misc/modulargroup.py)] [[Doc](http://www.pywonderland.com/modular/)] [[Wiki](https://en.wikipedia.org/wiki/Modular_group)]
+[[Code](./src/misc/modulargroup.py)][[Wiki](https://en.wikipedia.org/wiki/Modular_group)]
 
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/modular/modulargroup.png"/>
+<img src="http://www.pywonderland.com/misc/modulargroup.png"/>
 </p>
 
 <br>
@@ -146,13 +144,24 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 [[Back to Top](#contents)]
 
 ---
-### Generalized Penrose Tilings
-[[Code](./src/penrose/)] [[Doc](http://www.pywonderland.com/penrose/)]
+### Aperiodic Tilings
+[[Code](./src/debruijn/)] [[Doc](http://www.pywonderland.com/debruijn/)]
 
 <br>
 
+A scene rendered with POV-Ray:
 <p align="center">
-<img src="http://pywonderland.com/img/penrose/penrose_scene.png" width="600"/>
+<img src="http://pywonderland.com/debruijn/penrose-scene.png" width="500"/>
+</p>
+
+The Ammann-Beenker Tiling:
+<p align="center">
+<img src="http://pywonderland.com/debruijn/ammann-beenker.png" width="500"/>
+</p>
+
+A random pattern on the pentagrid:
+<p align="center">
+<img src="http://pywonderland.com/debruijn/anti-penrose.png" width="500"/>
 </p>
 
 <br>
@@ -165,7 +174,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/aztec/domino_shuffling.gif">
+<img src="http://www.pywonderland.com/aztec/domino-shuffling.gif">
 </p>
 
 <br>
@@ -174,13 +183,18 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### Wilson's Uniform Spanning Tree Algorithm Animation
-[[Code](./src/gifmaze/)] [[Doc](http://www.pywonderland.com/wilson/)] [[Mike Bostock's Javascript Animation](https://bl.ocks.org/mbostock/11357811)]
+[[Code](./src/gifmaze/)] [[Doc](http://www.pywonderland.com/gifmaze/)] [[Mike Bostock's Javascript Animation](https://bl.ocks.org/mbostock/11357811)]
 <br>
 
+The animation embedded into a background image:
 <p align="center">
-<img src="http://www.pywonderland.com/img/wilson/wilson-bfs.gif"/>
+<img src="http://www.pywonderland.com/gifmaze/wilson-bfs.gif"/>
 </p>
 
+Kruskal's algorithm:
+<p align="center">
+<img src="http://www.pywonderland.com/gifmaze/kruskal.gif"/>
+</p>
 <br>
 
 [[Back to Top](#contents)]
@@ -191,7 +205,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/cftp/lozenge_tiling.png"/>
+<img src="http://www.pywonderland.com/cftp/cftp.png"/>
 </p>
 
 <br>
@@ -200,11 +214,17 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 ---
 ### Todd-Coxeter Algorithm And 4D Polytopes
-[[Code](./src/polytopes)] [[Doc](http://pywonderland.com/polytope/)]
-<br>
+[[Code](./src/polytopes)] [[Doc](http://pywonderland.com/polytopes/)]
+<br> [[Dimensions](http://www.dimensions-math.org/)]
 
+A reproduction of the 120-cell in the dimensions movie:
 <p align="center">
-<img src="http://www.pywonderland.com/img/polytopes/120-cell.png" width="500"/>
+<img src="http://www.pywonderland.com/polytopes/120-cell.png" width="500"/>
+</p>
+
+An omnitruncated dodecahedron:
+<p align="center">
+<img src="http://www.pywonderland.com/polytopes/omnitruncated-dodecahedron.png" width="500"/>
 </p>
 
 <br>
@@ -217,7 +237,7 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 <br>
 
 <p align="center">
-<img src="http://www.pywonderland.com/img/mobius/sphere.png" width="500"/>
+<img src="http://www.pywonderland.com/mobius/sphere.png" width="500"/>
 </p>
 
 <br>
@@ -230,7 +250,6 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 - Fractals with orbit trap
 - 2D hyperbolic tilings (Escher's circle limit)
 - 3D hyperbolic honeycombs
-- Hopcroft's minimization algorithm
 
 ## Dependencies
 
