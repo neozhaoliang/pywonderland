@@ -79,7 +79,7 @@ def proj3d(v):
     v = normalize(v)
     x, y, z, w = v
     return np.array([x, y, z]) / (1 - w)
-    
+
 
 def get_sphere_info(points):
     """Return the sphere pass through 4 4d-points."""
