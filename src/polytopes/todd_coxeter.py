@@ -11,44 +11,30 @@ Reference:
     [4] Ken Brown's code at "http://www.math.cornell.edu/~kbrown/toddcox/".
 """
 
-
-def inv(x):
-    """Switch between a generator and its inverse."""
-    return x + 1 if x % 2 == 0 else x - 1
-
-
 class CosetTable(object):
     """
     Let G = < X | R > be a finitely presented group and H be a subgroup of
-    G with |G:H| < inf. The coset table `T` of G/H is a 2D array with rows
+    G with |G:H| < inf. The coset table T of G/H is a 2D array with rows
     indexed by the right cosets of G/H and columns indexed by the generators
     of G and their inverses. The entry of T at row k and column x (x is a
-    generator of the inverse of a generator) records the right action of
+    generator or the inverse of a generator) records the right action of
     coset k by x: T[k][x] = kx. If T[k][x] is not defined yet we set it to
-    `None`. When the algorithm terminates all entries in the table are
+    None. When the algorithm terminates all entries in the table are
     assigned a non-negative integer, all rows scan correctly under all words
-    in R, and the 0-th row scan correctly under all generators of H.
-
-    Example: G = <a, b | a^2 = b^3 = (ab)^3 = 1>, H = <ab>, and
-              a  A  b  B
-          -------------
-          0:  1  1  2  1
-    T  =  1:  0  0  0  2
-          2:  3  3  1  0
-          3:  2  2  3  3
-
-    where aA = Aa = 1, bB = Bb = 1.
+    in R and the 0-th row scans correctly under all generators of H.
     """
-    def __init__(self, gens, rels, subgens):
+    def __init__(self, gens, rels, subgens=[], coxeter=True):
         """
         gens: a 1D list of integers that represents the generators,
-              e.g. [0, 1, 2, 3] for [a, A, b, B]
+              e.g. [0, 1, 2] for [a, b, c]
         rels: a 2D list of integers that represents the relators R,
-              e.g. [[0, 0], [2, 2, 2], [0, 2]*3] for a^2 = b^3 = (ab)^3 = 1
+              e.g. [[0, 0], [1, 1, 1], [0, 2]*3] for a^2 = b^3 = (ac)^3 = 1
         subgens: a 2D list of integers that represents the subgroup generators,
-              e.g. [[0, 2]] for <ab>.
+              e.g. [[0, 2]] for < ac >.
+        coxeter: if this is a Coxeter group. if it's not coxeter then the inverse
+              of the generators are also considered as generators, else they are not.
 
-        we use a list `p` to hold the equivalence classes of the cosets,
+        we use a list p to hold the equivalence classes of the cosets,
         p[k] = l means k and l really represent the same coset. It's always
         true that p[k] <= k, if p[k] = k then we call k "alive" else we call
         k "dead". All cosets are created "alive" but as the algorithm runs
@@ -58,12 +44,17 @@ class CosetTable(object):
 
         A "dead" coset arise when an `coincidence` is found, and while handling
         this coincidence more coincidences may also be found, so we use a queue
-        `q` to hold them.
+        q to hold them.
         """
-        self.A = gens     # generators of G
+        self.coxeter = coxeter
+        if coxeter:
+            self.inv = lambda x: x
+        else:
+            self.inv = lambda x: x - 1 if x % 2 else x + 1
+        self.A = gens
         self.R = rels     # relations R between the generators
         self.H = subgens  # generators of H
-        self.p = [0]      # initially we only have the 0-th coset `H`
+        self.p = [0]      # initially we only have the 0-th coset H
         self.q = []       # a queue holds all dead cosets to be processed.
         self.table = [[None] * len(self.A)]
 
@@ -78,7 +69,7 @@ class CosetTable(object):
         return self.p[coset] == coset
 
     def is_defined(self, coset, x):
-        """Check an entry is defined."""
+        """Check if an entry is defined."""
         return self[coset][x] is not None
 
     def undefine(self, coset, x):
@@ -94,7 +85,7 @@ class CosetTable(object):
         n = len(self.table)
         self.table.append([None] * len(self.A))
         self[coset][x] = n
-        self[n][inv(x)] = coset
+        self[n][self.inv(x)] = coset
         self.p.append(n)
 
     def rep(self, coset):
@@ -163,8 +154,8 @@ class CosetTable(object):
 
             # if scan forward is not completed then scan backward as
             # far as possible until it meets the forward scan.
-            while j >= i and self.is_defined(b, inv(word[j])):
-                b = self[b][inv(word[j])]
+            while j >= i and self.is_defined(b, self.inv(word[j])):
+                b = self[b][self.inv(word[j])]
                 j -= 1
 
             # if f and b overlap then a coincidence is found.
@@ -174,7 +165,7 @@ class CosetTable(object):
             # if f and b are about to meet a deduction is found.
             elif j == i:
                 self[f][word[i]] = b
-                self[b][inv(word[i])] = f
+                self[b][self.inv(word[i])] = f
                 return
             # else define a new coset and continue scanning forward.
             else:
@@ -198,7 +189,7 @@ class CosetTable(object):
             for x in self.A:
                 if self.is_defined(e, x):
                     f = self[e][x]
-                    y = inv(x)
+                    y = self.inv(x)
                     # the entry (f, y) in the row f is also deleted since we
                     # must make sure all entries in the table come in pairs.
                     self.undefine(f, y)
@@ -256,7 +247,7 @@ class CosetTable(object):
                             self[ind][x] = ind
                         else:
                             self[ind][x] = y
-                            self[y][inv(x)] = ind
+                            self[y][self.inv(x)] = ind
 
         self.p = list(range(ind + 1))
         self.table = self.table[:len(self.p)]
@@ -300,3 +291,18 @@ class CosetTable(object):
         self.compress()
         if standard:
             self.standardize()
+
+    def get_words(self):
+        """Return the list of all words in this table."""
+        gens = self.A if self.coxeter else self.A[::2]
+        result = [None] * len(self)
+        result[0] = tuple()
+        q = [0]
+        while len(q) > 0:
+            coset = q.pop()
+            for x in gens:
+                new_coset = self[coset][x]
+                if result[new_coset] is None:
+                    result[new_coset] = result[coset] + (x,)
+                    q.append(new_coset)
+        return result

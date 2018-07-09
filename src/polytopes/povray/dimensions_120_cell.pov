@@ -2,11 +2,7 @@
 // Vers: 3.7
 // Date: 2018/04/22
 // Auth: Zhao Liang mathzhaoliang@gmail.com
-// Some params you need to adjust when rendering different polytopes:
-// 1. the camera position
-// 2. the vertex and edge radius
-// 3. the face threshould (controls which faces are shown)
-// 4. the getSize function (controls the gradient change of the edge)
+// This scene file is used for recreating the scene in the dimensions movie
 
 #version 3.7;
 
@@ -19,41 +15,30 @@ global_settings {
 
 background { color SkyBlue }
 
-// adjust the vertex and edge radius here
-#declare vRad = 0.040;
-#declare eRad = 0.020;
+#declare vRad = 0.04;
+#declare eRad = 0.02;
 #declare numSegments = 30;
-#declare faceThreshould = 3.0;
+#declare faceThreshold = 3.0;
 
-#declare vertex_tex = texture {
-    pigment{ Yellow }
-    finish { ambient .5 diffuse .5 reflection .0 specular .5 roughness 0.1 }
-}
-
-#declare edge_tex = texture {
-    pigment{ Orange }
-    finish { ambient .5 diffuse .5 reflection .0 specular .5 roughness 0.1}
-}
-
-#declare face_fin = finish { diffuse 0.8 specular 0.3 reflection 0.2 roughness 0.1 }
-
+#declare edge_finish = finish { ambient .5 diffuse .5 reflection .0 specular .5 roughness 0.1 }
+#declare face_finish = finish { diffuse 0.8 specular 0.3 reflection 0.2 roughness 0.1 }
+#declare vert_tex = texture { pigment { Yellow } finish { edge_finish } }
+#declare edge_tex = texture { pigment { Orange } finish { edge_finish } }
 
 #macro getSize(q)
     #local len = vlength(q);
     (1.0 + len * len) / 4
 #end
 
-
 #macro Vertex(p)
     #local q = vProj4d(p);
     sphere {
         q, vRad*getSize(q)
-        texture{ vertex_tex }
+        texture{ vert_tex }
     }
 #end
 
-
-#macro Arc(p1, p2)
+#macro Edge(i, p1, p2)
     sphere_sweep {
         cubic_spline
         numSegments + 3,
@@ -70,32 +55,29 @@ background { color SkyBlue }
     }
 #end
 
-
-#macro FlatFace(num, pts, faceSize, faceColor)
-    #if (faceSize > faceThreshould)
+#macro FlatFace(i, num, pts, faceSize, faceColor)
+    #if (faceSize > faceThreshold)
         polygon {
             num+1,
-            #local i=0;
-            #while (i<num)
-                vProj4d(pts[i])
-                #local i=i+1;
+            #local ind=0;
+            #while (ind<num)
+                vProj4d(pts[ind])
+                #local ind=ind+1;
             #end
             vProj4d(pts[0])
-
-            pigment { rgbt <faceColor.x, faceColor.y, faceColor.z, 0.5> }
-            finish { face_fin }
+            pigment { rgb faceColor transmit 0.5 }
+            finish { face_finish }
         }
     #end
 #end
 
-
-#macro BubbleFace(num, pts, sphereCenter, sphereRadius, faceSize, faceColor)
-    #if (faceSize > faceThreshould)
+#macro BubbleFace(i, num, pts, sphereCenter, sphereRadius, faceSize, faceColor)
+    #if (faceSize > faceThreshold)
         #local rib = 0;
-        #local i = 0;
-        #while (i < num)
-            #local rib = rib + pts[i];
-            #local i = i+1;
+        #local ind = 0;
+        #while (ind < num)
+            #local rib = rib + pts[ind];
+            #local ind = ind+1;
         #end
         #local rib3d = vProj4d(rib);
 
@@ -122,35 +104,31 @@ background { color SkyBlue }
         #local col = vnormalize(rib3d);
         sphere {
             sphereCenter, sphereRadius
-            pigment { rgbt <faceColor.x, faceColor.y, faceColor.z, 0.5> }
-            finish { face_fin }
-            #local i = 0;
-            #while (i < num)
-                clipped_by { plane { -planes[i], dists[i] } }
-                #local i = i+1;
+            pigment { rgb faceColor transmit 0.5 }
+            finish { face_finish }
+            #local ind = 0;
+            #while (ind < num)
+                clipped_by { plane { -planes[ind], dists[ind] } }
+                #local ind = ind+1;
             #end
         }
     #end
 #end
 
-
 union {
-    #include "polytope-data.inc"
-    scale 8
+    #include "polychora-data.inc"
+    scale 1.0/extent
 }
 
-
-// adjust the camera position for rendering different polytopes
 camera {
-    location <0, 0, 1> * (-160)
-    look_at <0, 2, 0>
+    location <0, 0, 1> * 4
+    look_at <0, 0, 0>
     angle 40
     up y*image_height
     right x*image_width
 }
 
-
 light_source {
-    <-1, 1, -1> * 150
+    <0, 3, 1> * 100
     color rgb 1
 }

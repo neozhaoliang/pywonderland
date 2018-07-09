@@ -71,7 +71,7 @@ class FpGroup(object):
         relators += tuple(c + c.upper() for c in self.generators)
         rels = word2int(self.generators, relators)
         subgens = word2int(self.generators, self.subgens)
-        self.coset_table = CosetTable(gens, rels, subgens)
+        self.coset_table = CosetTable(gens, rels, subgens, coxeter=False)
 
     def __str__(self):
         s = "\nName: {}\n".format(self.name)
