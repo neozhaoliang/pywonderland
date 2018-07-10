@@ -23,7 +23,7 @@ class CosetTable(object):
     assigned a non-negative integer, all rows scan correctly under all words
     in R and the 0-th row scans correctly under all generators of H.
     """
-    def __init__(self, gens, rels, subgens=[], coxeter=True):
+    def __init__(self, gens, rels, subgens=(), coxeter=True):
         """
         gens: a 1D list of integers that represents the generators,
               e.g. [0, 1, 2] for [a, b, c]

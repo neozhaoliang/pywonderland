@@ -2,7 +2,6 @@
 // Vers: 3.7
 // Date: 2018/04/22
 // Auth: Zhao Liang mathzhaoliang@gmail.com
-// This scene file is used for rendering "flat" 4d polytopes
 
 #version 3.7;
 
@@ -13,31 +12,32 @@ global_settings {
     assumed_gamma 2.2
 }
 
-background { color White }
+background { color SkyBlue }
 
-#declare vRad = 0.02;
-#declare eRad = 0.01;
-#declare faceTransmit = 0.7;
-#declare faceThreshold = 0.3;
+#declare vRad = 0.06;
+#declare eRad = 0.03;
+#declare faceThreshold_0 = 1.0;
+#declare faceThreshold_1 = 0.5;
 
 #declare vert_finish = finish { specular 1 roughness 0.003 phong 0.9 phong_size 100 diffuse 0.7 reflection 0.1 }
-#declare edge_finish = vert_finish;
+#declare edge_finish = finish { specular 0.3 roughness 0.1 diffuse 0.6 reflection 0.2 }
 #declare face_finish = finish { specular 0.1 diffuse 0.6 roughness 0.01 reflection 0.1 }
-#declare vertex_tex = texture { pigment{ color rgb 0.05 } finish { vert_finish } }
-#declare edge_colors = array[4] { Orange, Green, Red, Blue };
-#declare face_colors = array[6] { Pink, Violet, Yellow, Maroon, Orchid, Brown }
+#declare vertex_tex  = texture { pigment{ color rgb 0.05 } finish { vert_finish } }
+#declare edge_colors = array[2] { Gold, Silver };
+#declare face_colors = array[6] { Green, Red, Orchid, Maroon, Violet, Yellow }
 
 #macro edge_tex(i)
     texture { pigment { edge_colors[i] } finish { edge_finish } }
 #end
 
 #macro face_tex(i)
-    texture { pigment { face_colors[i] transmit faceTransmit } finish { face_finish } }
+    texture { pigment { face_colors[i] } finish { face_finish } }
 #end
 
 #macro getSize(q)
     #local len = vlength(q);
-    (1.0 + len * len) / 4
+    #local len = (1.0 + len * len) / 4;
+    max(len, 1)
 #end
 
 #macro Vertex(p)
@@ -58,9 +58,9 @@ background { color White }
 #end
 
 #macro FlatFace(i, num, pts, faceSize, faceColor)
-    #if (faceSize > faceThreshold)
+    #if ((i=1 & faceSize < faceThreshold_1) | (i=0 & faceSize < faceThreshold_0))
         polygon {
-          num+1,
+            num+1,
             #local ind=0;
             #while (ind<num)
                 vProj4d(pts[ind])
@@ -79,17 +79,18 @@ background { color White }
 union {
     #include "polychora-data.inc"
     scale 1.0/extent
+    rotate x*90
 }
 
 camera {
-    location <0, 2, 1> * 1.5
-    look_at <0, 0, 0>
+    location <0, 1.25, 3>
+    look_at <0, -0.1, 0>
     angle 40
     up y*image_height
     right x*image_width
 }
 
 light_source {
-    <0, 3, 1> * 100
+    <0, 1, 1> * 50
     color rgb 1
 }

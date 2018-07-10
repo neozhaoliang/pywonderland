@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Some helper functions for calculating the geometry
-and writing to POV-Ray files.
+Some helper functions for calculating the geometry and exporting to POV-Ray.
 """
+import sys
 import numpy as np
 
 
@@ -49,27 +49,32 @@ def get_coxeter_matrix(upper_triangle):
 
 def get_mirrors(coxeter_matrix):
     """
-    Given a 3x3 or 4x4 Coxeter matrix, get the normal
-    vectors of the reflection planes.
+    Given a 3x3 or 4x4 Coxeter matrix, get the normal vectors of the reflection planes.
     """
+    # error handling function when the input coxeter matrix is invalid.
+    def err_handler(err_type, flag):
+        print("Invalid input Coxeter diagram.")
+        sys.exit(1)
+
+    np.seterrcall(err_handler)
+    np.seterr(all='call')
+
     coxeter_matrix = np.asarray(coxeter_matrix, dtype=np.float)
     C = -np.cos(np.pi / coxeter_matrix)
     M = np.zeros_like(C)
-    try:
-        M[0, 0] = 1
-        M[1, 0] = C[0, 1]
-        M[1, 1] = np.sqrt(1 - M[1, 0]*M[1, 0])
-        M[2, 0] = C[0, 2]
-        M[2, 1] = (C[1, 2] - M[1, 0]*M[2, 0]) / M[1, 1]
-        M[2, 2] = np.sqrt(1 - M[2, 0]*M[2, 0] - M[2, 1]*M[2, 1])
-        if len(coxeter_matrix) == 4:
-            M[3, 0] = C[0, 3]
-            M[3, 1] = (C[1, 3] - M[1, 0]*M[3, 0]) / M[1, 1]
-            M[3, 2] = (C[2, 3] - M[2, 0]*M[3, 0] - M[2, 1]*M[3, 1]) / M[2, 2]
-            M[3, 3] = np.sqrt(1 - M[3, 0]*M[3, 0] - M[3, 1]*M[3, 1] - M[3, 2]*M[3, 2])
-        return M
-    except:
-        raise ValueError("Cannot get mirrors for this input Coxeter matrix")
+
+    M[0, 0] = 1
+    M[1, 0] = C[0, 1]
+    M[1, 1] = np.sqrt(1 - M[1, 0]*M[1, 0])
+    M[2, 0] = C[0, 2]
+    M[2, 1] = (C[1, 2] - M[1, 0]*M[2, 0]) / M[1, 1]
+    M[2, 2] = np.sqrt(1 - M[2, 0]*M[2, 0] - M[2, 1]*M[2, 1])
+    if len(coxeter_matrix) == 4:
+        M[3, 0] = C[0, 3]
+        M[3, 1] = (C[1, 3] - M[1, 0]*M[3, 0]) / M[1, 1]
+        M[3, 2] = (C[2, 3] - M[2, 0]*M[3, 0] - M[2, 1]*M[3, 1]) / M[2, 2]
+        M[3, 3] = np.sqrt(1 - M[3, 0]*M[3, 0] - M[3, 1]*M[3, 1] - M[3, 2]*M[3, 2])
+    return M
 
 
 def proj3d(v):
@@ -78,7 +83,7 @@ def proj3d(v):
     """
     v = normalize(v)
     x, y, z, w = v
-    return np.array([x, y, z]) / (1 - w)
+    return np.array([x, y, z]) / (1 + 1e-8 - w)  # avoid divide by zero
 
 
 def get_sphere_info(points):
@@ -112,21 +117,3 @@ def pov_vector(v):
 def pov_vector_list(vectors):
     """Convert a list of vectors to POV-Ray format."""
     return ", ".join([pov_vector(v) for v in vectors])
-
-
-def export_pov_array(arr):
-    """Export the vertices of a face to povray array."""
-    declare = "#declare vertices_list = array[{}] {{ {} }};\n"
-    return declare.format(len(arr), pov_vector_list(arr))
-
-
-def export_polygon_face(ind, face, isplane, center,
-                        radius, facesize, facecolor):
-    """Export the information of a face to a povray macro."""
-    if isplane:
-        macro = "FlatFace({}, {}, vertices_list, {}, {})\n"
-        return macro.format(ind, len(face), facesize, pov_vector(facecolor))
-    else:
-        macro = "BubbleFace({}, {}, vertices_list, {}, {}, {}, {})\n"
-        return macro.format(ind, len(face), pov_vector(center), radius,
-                            facesize, pov_vector(facecolor))

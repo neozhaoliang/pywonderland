@@ -3,7 +3,6 @@
 # Groups of deficiency zero. In G.Baumslag et al., editors,
 # Geometric and Computational Perspectives on Infinite Groups,
 # volume 25 of Amer. Math. Soc. DIMACS Series, pages 53–67.
-
 # 6561 cosets
 name: HNO_1
 relators:

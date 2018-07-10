@@ -1,6 +1,6 @@
 # The Fibonacci group F(2, 7)
 # This is a cyclic group of order 29.
-# 1 cosets
+# 1 coset
 name: F27
 relators:
   - abC
