@@ -59,6 +59,11 @@ def make_snub(coxeter_diagram, init_dist, output):
     command = template.format("polyhedra.pov", output)
     call(command, shell=True)
 
+
+def make_antiprism(m, init_dist, output):
+    make_snub((m, 2, 2), init_dist, output)
+
+
 if __name__ == "__main__":
     make_polyhedra((5, 2, 3), (1, 1, 1), "omnitruncated-dodecahedron")
     make_snub((5, 2, 3), (1, 0.6, 0.4), "Snub-Dodecahedron")
