@@ -279,3 +279,63 @@ class Polychora(BasePolytope):
                     facecolor = get_color(i)
                     f.write(export_polygon_face(i, face, isplane, center,
                                                 radius, facesize, facecolor))
+
+
+class Snub(Polyhedra):
+
+    def __init__(self, upper_triangle, weights):
+        if not all([x > 0 for x in weights]):
+            raise ValueError("the weights must all be positive")
+        super().__init__(upper_triangle, weights)
+        self.symmetry_gens = (0, 1, 2, 3)
+        self.symmetry_rels = ((0,) * self.coxeter_matrix[0][1],
+                              (2,) * self.coxeter_matrix[1][2],
+                              (0, 2) * self.coxeter_matrix[0][2],
+                              (0, 1), (2, 3))
+        self.rotations = {(0,): self.coxeter_matrix[0][1],
+                          (2,): self.coxeter_matrix[1][2],
+                          (0, 2): self.coxeter_matrix[0][2]}
+
+    def get_vertices(self):
+        self._vtable = CosetTable(self.symmetry_gens, self.symmetry_rels, coxeter=False)
+        self._vtable.run()
+        self._vwords = self._vtable.get_words()
+        self.num_vertices = len(self._vwords)
+        self.vertex_coords = tuple(self._transform(self.init_v, w) for w in self._vwords)
+
+    def get_edges(self):
+        for rot in self.rotations:
+            elist = []
+            e0 = (0, self._move(0, rot))
+            for word in self._vwords:
+                e = tuple(self._move(v, word) for v in e0)
+                if e not in elist and e[::-1] not in elist:
+                    elist.append(e)
+            self.edge_indices.append(elist)
+            self.edge_coords.append([(self.vertex_coords[i], self.vertex_coords[j]) for i, j in elist])
+        self.num_edges = sum(len(elist) for elist in self.edge_indices)
+
+    def get_faces(self):
+        orbits = (tuple(self._move(0, (0,) * k) for k in range(self.rotations[(0,)])),
+                  tuple(self._move(0, (2,) * k) for k in range(self.rotations[(2,)])),
+                  (0, self._move(0, (2,)), self._move(0, (0, 2))))
+        for f0 in orbits:
+            flist = []
+            for word in self._vwords:
+                f = tuple(self._move(v, word) for v in f0)
+                if not check_face_in(f, flist):
+                    flist.append(f)
+            self.face_indices.append(flist)
+            self.face_coords.append([tuple(self.vertex_coords[v] for v in face) for face in flist])
+
+        self.num_faces = sum([len(flist) for flist in self.face_indices])
+
+    def _transform(self, vertex, word):
+        for g in word:
+            if g == 0:
+                vertex = np.dot(vertex, self._reflections[0])
+                vertex = np.dot(vertex, self._reflections[1])
+            else:
+                vertex = np.dot(vertex, self._reflections[1])
+                vertex = np.dot(vertex, self._reflections[2])
+        return vertex

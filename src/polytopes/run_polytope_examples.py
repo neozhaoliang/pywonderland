@@ -52,8 +52,16 @@ def make_prisms(pq, trunc_type):
     call(command, shell=True)
 
 
+def make_snub(coxeter_diagram, init_dist, output):
+    P = models.Snub(coxeter_diagram, init_dist)
+    P.build_geometry()
+    P.export_pov()
+    command = template.format("polyhedra.pov", output)
+    call(command, shell=True)
+
 if __name__ == "__main__":
     make_polyhedra((5, 2, 3), (1, 1, 1), "omnitruncated-dodecahedron")
+    make_snub((5, 2, 3), (1, 0.6, 0.4), "Snub-Dodecahedron")
     make_120_cell()
     make_duoprisms((6, 6), weights=(1.0, 0.8))
     make_prisms((5, 3), (1, 0, 1))
