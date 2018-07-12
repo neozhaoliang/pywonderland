@@ -59,10 +59,6 @@ background { White }
     }
 #end
 
-union {
-    #include "polyhedra-data.inc"
-}
-
 camera {
     location <0, 2, 1> * 1.5
     look_at <0, 0, 0>
@@ -74,4 +70,9 @@ camera {
 light_source {
     <0, 3, 1> * 100
     color rgb 1
+}
+
+union {
+    #include "polyhedra-data.inc"
+    rotate x*45
 }
