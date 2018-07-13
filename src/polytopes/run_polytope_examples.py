@@ -60,14 +60,16 @@ def make_snub(coxeter_diagram, init_dist, output):
     call(command, shell=True)
 
 
-def make_antiprism(m, init_dist, output):
-    make_snub((m, 2, 2), init_dist, output)
+def make_antiprism(m, init_dist):
+    make_snub((m, 2, 2), init_dist, "antiprism-{}".format(m))
 
 
 if __name__ == "__main__":
+    # run this script, then go to a pizza hut and come back one hour later.
+    make_polyhedra((3, 2, 5), (1, 0, 0), "icosahedron")
     make_polyhedra((5, 2, 3), (1, 1, 1), "omnitruncated-dodecahedron")
-    make_snub((5, 2, 3), (1, 0.6, 0.4), "Snub-Dodecahedron")
+    make_snub((5, 2, 3), (1, 0.6, 0.4), "snub-dodecahedron")
     make_120_cell()
-    make_duoprisms((6, 6), weights=(1.0, 0.8))
+    make_duoprisms((6, 8), weights=(1.0, 1.6))
     make_prisms((5, 3), (1, 0, 1))
-    make_polychora((5, 2, 2, 3, 2, 3), (1, 0, 1, 1), "120-cell-trunc", flat=False)
+    make_polychora((5, 2, 2, 3, 2, 3), (1, 0, 1, 1), "runcitruncated-120-cell", flat=False)

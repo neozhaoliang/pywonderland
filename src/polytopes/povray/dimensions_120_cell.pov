@@ -15,8 +15,8 @@ global_settings {
 
 background { color SkyBlue }
 
-#declare vRad = 0.04;
-#declare eRad = 0.02;
+#declare vRad = 0.05;
+#declare eRad = 0.025;
 #declare numSegments = 30;
 #declare faceThreshold = 3.0;
 
@@ -117,11 +117,11 @@ background { color SkyBlue }
 
 union {
     #include "polychora-data.inc"
-    scale 1.0/extent
+    scale 1.0/extent * 40
 }
 
 camera {
-    location <0, 0, 1> * 4
+    location <0, 0, 1> * 160
     look_at <0, 0, 0>
     angle 40
     up y*image_height

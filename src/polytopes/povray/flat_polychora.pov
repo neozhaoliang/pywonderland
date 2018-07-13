@@ -11,12 +11,13 @@
 
 global_settings {
     assumed_gamma 2.2
+    max_trace_level 10
 }
 
 background { color White }
 
-#declare vRad = 0.02;
-#declare eRad = 0.01;
+#declare vRad = 0.06;
+#declare eRad = 0.03;
 #declare faceTransmit = 0.7;
 #declare faceThreshold = 0.3;
 
@@ -37,7 +38,9 @@ background { color White }
 
 #macro getSize(q)
     #local len = vlength(q);
-    (1.0 + len * len) / 4
+    //#local len = (1.0 + len * len) / 4;
+    #local len = 2.0 * log(3.0 + len * len);
+    len
 #end
 
 #macro Vertex(p)
@@ -78,11 +81,11 @@ background { color White }
 
 union {
     #include "polychora-data.inc"
-    scale 1.0/extent
+    scale 1.0/extent * 40
 }
 
 camera {
-    location <0, 2, 1> * 1.5
+    location <0, 2, 1> * 60
     look_at <0, 0, 0>
     angle 40
     up y*image_height

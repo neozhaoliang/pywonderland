@@ -2,6 +2,14 @@
 // Vers: 3.7
 // Date: 2018/04/22
 // Auth: Zhao Liang mathzhaoliang@gmail.com
+/* ------------------------------------------
+    Some params which you may need to adjust
+
+1. vRad and eRad (control the vertex and radius size)
+2. faceThreshold_0 and faceThreshold_1 (control which face to appear)
+3. getSize fuction (you may use a self-defined one)
+4. faceTransmit (control transparent of the face)
+*/ 
 
 #version 3.7;
 
@@ -12,32 +20,33 @@ global_settings {
     assumed_gamma 2.2
 }
 
-background { color SkyBlue }
+background { color White }
 
 #declare vRad = 0.06;
 #declare eRad = 0.03;
+#declare faceTransmit = 0.35;
 #declare faceThreshold_0 = 1.0;
-#declare faceThreshold_1 = 0.5;
+#declare faceThreshold_1 = 0.6;
 
 #declare vert_finish = finish { specular 1 roughness 0.003 phong 0.9 phong_size 100 diffuse 0.7 reflection 0.1 }
-#declare edge_finish = finish { specular 0.3 roughness 0.1 diffuse 0.6 reflection 0.2 }
+#declare edge_finish = finish { specular 1 roughness 0.003 phong 0.9 phong_size 100 diffuse 0.7 reflection 0.1 }
 #declare face_finish = finish { specular 0.1 diffuse 0.6 roughness 0.01 reflection 0.1 }
 #declare vertex_tex  = texture { pigment{ color rgb 0.05 } finish { vert_finish } }
-#declare edge_colors = array[2] { Gold, Silver };
-#declare face_colors = array[6] { Green, Red, Orchid, Maroon, Violet, Yellow }
+#declare edge_colors = array[2] { Orange, Cyan };
+#declare face_colors = array[6] { Yellow, Maroon, Pink, Violet, Red, DustyRose }
 
 #macro edge_tex(i)
     texture { pigment { edge_colors[i] } finish { edge_finish } }
 #end
 
 #macro face_tex(i)
-    texture { pigment { face_colors[i] } finish { face_finish } }
+    texture { pigment { face_colors[i] transmit faceTransmit } finish { face_finish } }
 #end
 
 #macro getSize(q)
     #local len = vlength(q);
-    #local len = (1.0 + len * len) / 4;
-    max(len, 1)
+    #local len = 1.5 * log((4.0 + len * len));
+    len
 #end
 
 #macro Vertex(p)
@@ -52,13 +61,13 @@ background { color SkyBlue }
     #local q1 = vProj4d(p1);
     #local q2 = vProj4d(p2);
     cylinder {
-        q1, q2, eRad*getSize(vProj4d((p1+p2)/2))
+        q1, q2, eRad*(getSize(vProj4d((p1+p2)/2)))
         edge_tex(i)
     }
 #end
 
 #macro FlatFace(i, num, pts, faceSize, faceColor)
-    #if ((i=1 & faceSize < faceThreshold_1) | (i=0 & faceSize < faceThreshold_0))
+    #if ((i=1 & faceSize < faceThreshold_1) | (i=0 & faceSize > faceThreshold_0))
         polygon {
             num+1,
             #local ind=0;

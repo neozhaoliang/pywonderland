@@ -10,19 +10,19 @@
 
 global_settings {
     assumed_gamma 2.2
+    max_trace_level 10
 }
 
-background { color SkyBlue }
+background { color White }
 
 #declare vRad = 0.04;
 #declare eRad = 0.02;
-#declare faceTransmit = 0.7;
-#declare faceThreshold_0 = 1.0;
-#declare faceThreshold_1 = 0.5;
+#declare faceTransmit = 0.5;
+#declare faceThreshold = 1.0;
 
 #declare vert_finish = finish { specular 1 roughness 0.003 phong 0.9 phong_size 100 diffuse 0.7 reflection 0.1 }
 #declare edge_finish = finish { specular 0.3 roughness 0.1 diffuse 0.6 reflection 0.2 }
-#declare face_finish = finish { specular 0.1 diffuse 0.6 roughness 0.01 reflection 0.1 }
+#declare face_finish = finish { specular 0.3 diffuse 0.5 roughness 0.01 reflection 0.3 }
 #declare vertex_tex  = texture { pigment{ color rgb 0.05 } finish { vert_finish } }
 #declare edge_colors = array[4] { Gold, Silver, Orange, Cyan };
 #declare face_colors = array[6] { Pink, Violet, Yellow, Orchid, Maroon, Brown }
@@ -37,8 +37,8 @@ background { color SkyBlue }
 
 #macro getSize(q)
     #local len = vlength(q);
-    #local len = (1.0 + len * len) / 4;
-    max(len, 1)
+    #local len = 1.5 * log((4.0 + len * len));
+    len
 #end
 
 #macro Vertex(p)
@@ -59,7 +59,7 @@ background { color SkyBlue }
 #end
 
 #macro FlatFace(i, num, pts, faceSize, faceColor)
-    #if ((i=1 & faceSize < faceThreshold_1) | (i=0 & faceSize < faceThreshold_0))
+    #if (faceSize < faceThreshold)
         polygon {
             num+1,
             #local ind=0;

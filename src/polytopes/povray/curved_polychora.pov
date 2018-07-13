@@ -10,18 +10,20 @@
 
 global_settings {
     assumed_gamma 2.2
+    max_trace_level 10
 }
 
-background { color SkyBlue }
+background { color Black }
 
 #declare vRad = 0.02;
 #declare eRad = 0.01;
-#declare numSegments = 40;
+#declare numSegments = 30;
 #declare faceTransmit = 0.7;
-#declare faceThreshold = 3.0;
+#declare faceThreshold = 1.0;
 
 #declare vert_finish = finish { specular 1 roughness 0.003 phong 0.9 phong_size 100 diffuse 0.7 reflection 0.1 }
-#declare edge_finish = finish { ambient 0 diffuse 0.6 specular 0.3 reflection 0.2 roughness 0.01 }
+//#declare edge_finish = finish { ambient 0.2 diffuse 0.6 specular 0.3 reflection 0.2 roughness 0.01 }
+#declare edge_finish = finish { specular 1 roughness 0.003 phong 0.9 phong_size 100 diffuse 0.7 reflection 0.1 }
 #declare face_finish = finish { diffuse 0.8 specular 0.1 reflection 0.2 roughness 0.1 }
 #declare vertex_tex = texture { pigment{ rgb 0.05 } finish { vert_finish }}
 #declare edge_colors = array[4] { Orange, Green, Red, Blue };
@@ -37,7 +39,9 @@ background { color SkyBlue }
 
 #macro getSize(q)
     #local len = vlength(q);
-    (1.0 + len * len) / 4
+    #local len = (1.0 + len * len) / 4;
+    //#local len = 2.0 * log(4 + len * len);
+    len
 #end
 
 #macro Vertex(p)
@@ -125,11 +129,11 @@ background { color SkyBlue }
 
 union {
     #include "polychora-data.inc"
-    scale 1/extent
+    scale 1/extent * 40
 }
 
 camera {
-    location <0, 2, 1> * 1.5
+    location <0, 0, 1> * 150
     look_at <0, 0, 0>
     angle 40
     up y*image_height
@@ -137,6 +141,12 @@ camera {
 }
 
 light_source {
-    <0, 3, 1> * 100
+    <0, 1, 1> * 300
     color rgb 1
 }
+
+light_source {
+    <0, 1, 0> * 300
+    color rgb 1
+}
+

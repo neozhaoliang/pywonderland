@@ -274,9 +274,9 @@ class Polychora(BasePolytope):
 
             for i, face_list in enumerate(self.face_coords):
                 for face in face_list:
-                    f.write(export_pov_array(face))
                     isplane, center, radius, facesize = helpers.get_sphere_info(face)
                     facecolor = get_color(i)
+                    f.write(export_pov_array(face))
                     f.write(export_polygon_face(i, face, isplane, center,
                                                 radius, facesize, facecolor))
 
