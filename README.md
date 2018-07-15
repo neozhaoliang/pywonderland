@@ -23,11 +23,28 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 **Warning:** I'll not maintain support for `python<=2.7` any more, please run the code with `python>=3`.
 
 
-##Current highlight image
+## Featured images
 
-<p align="center">
-<img src="http://www.pywonderland.com/polytopes/cantitruncated-120-cell.png"/>
-</p>
+1. Reaction-Diffusion Simulation
+
+    <p align="center"><img src="http://www.pywonderland.com/grayscott/coral.png"/>
+    </p>
+
+2. Polytopes and Todd-Coxeter Algorithm
+
+    <p align="center"><img src="http://www.pywonderland.com/polytopes/cantitruncated-120-cell.png"/>
+    </p>
+
+3. Wilson's Uniform Spanning Tree Algorithm Animation
+
+    <p align="center"><img src="http://www.pywonderland.com/gifmaze/wilson.gif"/>
+    </p>
+
+4. Aperiodic Rhombus Tilings
+
+    <p align="center"><img src="http://www.pywonderland.com/debruijn/penrose-scene.png"/>
+    </p>
+
 
 ## Programs to come:
 
