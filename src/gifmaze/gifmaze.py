@@ -161,8 +161,8 @@ class GIFSurface(object):
     """
     A GIFSurface is an object on which the animations are drawn,
     and which can be saved as GIF images.
-    Each instance opens a BytesIO file in memory onces it's created.
-    The frames are temporarily written to this in-memoty file for speed.
+    Each instance opens a BytesIO file in memory once it's created.
+    The frames are temporarily written to this in-memory file for speed.
     When the animation is finished one should call the `close()` method
     to close the io.
     """
