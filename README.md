@@ -32,7 +32,13 @@ The history commits are deleted (sorry for this) but will not be deleted any mor
 
 2. Polytopes and Todd-Coxeter Algorithm
 
-    <p align="center"><img src="http://www.pywonderland.com/polytopes/cantitruncated-120-cell.png"/>
+    <p align="center"><img src="http://pywonderland.com/polytopes/uniform-solids.png"/>
+    </p>
+    <p align="center"><img src="http://pywonderland.com/polytopes/runcinated-16cell.png"/>
+    </p>
+    <p align="center"><img src="http://pywonderland.com/polytopes/runcitruncated-120cell.png"/>
+    </p>
+    <p align="center"><img src="http://pywonderland.com/polytopes/600cell.png"/>
     </p>
 
 3. Wilson's Uniform Spanning Tree Algorithm Animation

@@ -66,7 +66,6 @@ def render_polychora(coxeter_diagram,
     subprocess.call(command, shell=True)
 
 
-
 if __name__ == "__main__":
     # platonic solids
     """
