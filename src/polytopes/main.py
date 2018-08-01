@@ -56,6 +56,9 @@ def render_polychora(coxeter_diagram,
                      trunc_type,
                      render_file,
                      description=None):
+    if not description:
+        description = render_file[:-4]
+
     P = models.Polychora(coxeter_diagram, trunc_type)
     P.build_geometry()
     P.export_pov()
