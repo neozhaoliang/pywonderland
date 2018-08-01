@@ -31,8 +31,8 @@ class CosetTable(object):
               e.g. [[0, 0], [1, 1, 1], [0, 2]*3] for a^2 = b^3 = (ac)^3 = 1
         subgens: a 2D list of integers that represents the subgroup generators,
               e.g. [[0, 2]] for < ac >.
-        coxeter: if this is a Coxeter group. if it's not coxeter then the inverse
-              of the generators are also considered as generators, else they are not.
+        coxeter: whether this is a Coxeter group. If false then the inverse of
+              the generators are also included as generators, else they are not.
 
         we use a list p to hold the equivalence classes of the cosets,
         p[k] = l means k and l really represent the same coset. It's always
@@ -293,7 +293,10 @@ class CosetTable(object):
             self.standardize()
 
     def get_words(self):
-        """Return the list of all words in this table."""
+        """
+        Return the list of all words in this table.
+        This method must be called when the table is already compressed.
+        """
         gens = self.A if self.coxeter else self.A[::2]
         result = [None] * len(self)
         result[0] = tuple()

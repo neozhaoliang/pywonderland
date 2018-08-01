@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*_
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-This script reads information of a group from
-a .yaml file and computes its coset table.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Run coset enumeration examples using Todd-Coxeter algorithm.
+
+This script reads information of a group from a .yaml file
+and computes its coset table.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Example usage:
 
     python run_coset_enum.py filename [-std] [-o][filename]
@@ -46,6 +48,9 @@ def word2int(symbols, wordslist):
 
 
 class FpGroup(object):
+    """
+    Finitely presented group by defining relations between its generators.
+    """
 
     def __init__(self, relators, subgens=None, name=None):
         """
@@ -84,6 +89,7 @@ class FpGroup(object):
         self.coset_table.run(standard)
 
     def print_table(self, outfile):
+        """pretty print the table."""
         f = sys.stdout if outfile is None else open(outfile, "w")
         f.write("       ")
         for x in self.generators:

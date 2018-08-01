@@ -2,7 +2,7 @@
 // Vers: 3.7
 // Date: 2018/04/22
 // Auth: Zhao Liang mathzhaoliang@gmail.com
-// This scene file is used for rendering the 3d polyhedron
+// Note: this scene file is used for rendering 3d polyhedron
 
 #version 3.7;
 
@@ -14,34 +14,61 @@ global_settings {
 
 background { White }
 
-#declare vRad = 0.035;  // vertex size
-#declare eRad = 0.020;  // edge size
-#declare faceFilter = 0.5;  // face transparent
+#declare vertex_size = 0.035;
+#declare edge_size = 0.020;
+#declare face_transmit = 0.33;
 
-#declare edge_finish = finish { specular 1 roughness 0.003 phong 0.9 phong_size 100 diffuse 0.7 reflection 0.1 }
-#declare face_finish = finish { specular 0.4 diffuse 0.6 roughness 0.001 reflection 0.2 }
-#declare vertex_tex = texture { pigment{ color rgb 0.05 } finish { edge_finish } }
+#declare vertex_color = Black * 0.05;
 #declare edge_colors = array[3] { Orange, Green, Red };
-#declare face_colors = array[3] { Pink, Violet, Yellow };
+#declare face_colors = array[3] { Pink, Maroon, Yellow };
+
+#declare edge_finish = finish {
+    ambient 0.2
+    diffuse 0.5
+    reflection 0.1
+    specular 3
+    roughness 0.003
+}
+
+#declare face_finish = finish {
+    specular 0.3
+    diffuse 0.6
+    roughness 0.003
+    reflection 0.2
+}
+
+#declare vertex_tex = texture {
+    pigment { color vertex_color }
+    finish { edge_finish }
+}
 
 #macro edge_tex(i)
-    texture { pigment { edge_colors[i] } finish { edge_finish } }
+    texture {
+        pigment { edge_colors[i] }
+        finish { edge_finish }
+    }
 #end
 
 #macro face_tex(i)
-    texture { pigment { face_colors[i] filter faceFilter } finish { face_finish } }
+    texture {
+        pigment {
+            color face_colors[i]
+            transmit face_transmit
+        }
+        finish { face_finish }
+    }
 #end
 
 #macro Vertex(p)
     sphere {
-        p, vRad
+        p, vertex_size
         texture{ vertex_tex }
     }
 #end
 
 #macro Edge(i, p1, p2)
     cylinder {
-        p1, p2, eRad
+        p1, p2, edge_size
         edge_tex(i)
     }
 #end
@@ -74,5 +101,5 @@ light_source {
 
 union {
     #include "polyhedra-data.inc"
-    rotate x*45
+    rotate x*50
 }

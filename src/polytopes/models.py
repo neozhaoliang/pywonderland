@@ -3,38 +3,29 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 This file contains the models of various polytopes in 3D/4D
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 To build a polytope two inputs are required:
-
 1. A Coxeter-Dynkin diagram. This diagram completely determines
    the symmetry of the polytope.
-
    For a 3D polytope its Coxeter-Dynkin diagram is a tuple of three
    integers (p, q, r), e.g. (3, 2, 3) is the tetrahedral symmetry,
    (4, 2, 3) is the octahedral symmetry,
    (5, 2, 3) is the dodecahedral symmetry.
-
    For a 4D polytope its Coxeter-Dynkin diagram is represented by a
    tuple of six integers, e.g. (5, 2, 2, 3, 2, 3) is the H4 group,
    (4, 2, 2, 3, 2, 2) is the BC3xA1 group of the octahedral prism, etc.
-
    Given this Coxeter-Dynkin diagram the presentation of the symmetry
    group `G` is built and 3 or 4 reflecting planes are then computed.
-
 2. Position of an initial vertex on the unit sphere. This determines
    the "truncation" type of the polytope. This input is represented by
    a tuple of 3 (for a 3D polytope) or 4 (for a 4D polytope) floats which
    specifies the distance of the initial vertex to the reflecting planes.
    For example (1, 0.5, 0) means the initial vertex is on the 3rd plane
    and the ratio between its distance to the 1st and 2nd planes is 1: 0.5.
-
    Given these distances the coordinates of the initial vertex `v` is
    computed (it's also normalized so it lies on the unit sphere).
-
 Once we have the presentation of the symmetry group `G`, the reflecting
 planes (called mirrors) and coordinates of the initial vertex `v`, we then
 move on to compute the vertices, edges and faces of this polytope as follows:
-
 1. [Vertex]
    Find the generators of the stabilizing subgroup `H` which fixes `v`.
    Once this is done we can use Todd-Coxeter algorithm to compute the coset
@@ -42,13 +33,11 @@ move on to compute the vertices, edges and faces of this polytope as follows:
    are in one-to-one correspondence: gH -> gv. So for each gH in the coset
    table we just choose any word representaion of g (a compostions of the
    reflections about the mirrors) and act g on v to get gv.
-
 2. [Edge]
    Find the generators of the stabilizing subgroup `Hi` which fixes an
    initial edge of type `i`. Here an edge is of type `i` if and only if
    its two ends are mirror images of the i-th plane.
    Once this done we can get all edges of type `i` as in the vertex case.
-
 3. [Face]
    Find the generators of the stabilizing subgroup `Hij` which fixes an
    initial face of type `ij`. Here a face is of type `ij` if and only if
@@ -62,37 +51,6 @@ from todd_coxeter import CosetTable
 import helpers
 
 
-def check_face_in(f, l):
-    """check if a face `f` is already in the list `l`."""
-    for _ in range(len(f)):
-        if f in l or f[::-1] in l:
-            return True
-        f = f[-1:] + f[:-1]
-    return False
-
-
-def get_color(i):
-    """Modify this to assign color to the faces in the i-th list."""
-    return np.random.random(3)
-
-
-def export_pov_array(arr):
-    """Export the vertices of a face to povray array."""
-    declare = "#declare vertices_list = array[{}] {{ {} }};\n"
-    return declare.format(len(arr), helpers.pov_vector_list(arr))
-
-
-def export_polygon_face(ind, face, isplane, center,
-                        radius, facesize, facecolor):
-    """Export the information of a face to a povray macro."""
-    if isplane:
-        macro = "FlatFace({}, {}, vertices_list, {}, {})\n"
-        return macro.format(ind, len(face), facesize, helpers.pov_vector(facecolor))
-    else:
-        macro = "BubbleFace({}, {}, vertices_list, {}, {}, {}, {})\n"
-        return macro.format(ind, len(face), helpers.pov_vector(center), radius,
-                            facesize, helpers.pov_vector(facecolor))
-
 
 class BasePolytope(object):
 
@@ -101,7 +59,7 @@ class BasePolytope(object):
         self.coxeter_matrix = helpers.get_coxeter_matrix(upper_triangle)
 
         # the reflecting mirrors
-        self._mirrors = helpers.get_mirrors(self.coxeter_matrix)
+        self._mirrors = helpers.get_mirrors(upper_triangle)
 
         # reflection transformations about the mirrors
         self._reflections = tuple(helpers.reflection_matrix(v) for v in self._mirrors)
@@ -135,12 +93,10 @@ class BasePolytope(object):
         self.face_indices = []
         self.face_coords = []
 
-    def build_geometry(self, edge=True, face=True):
+    def build_geometry(self):
         self.get_vertices()
-        if edge:
-            self.get_edges()
-        if face:
-            self.get_faces()
+        self.get_edges()
+        self.get_faces()
 
     def get_vertices(self):
         # generators for the stabilizing subgroup of the initial vertex.
@@ -149,7 +105,7 @@ class BasePolytope(object):
         self._vtable.run()
         words = self._vtable.get_words()
         self.num_vertices = len(words)
-        self.vertex_coords = tuple(self._transform(self.init_v, w) for w in words)
+        self.vertex_coords = tuple(self._transform(self.init_v, word) for word in words)
 
     def get_edges(self):
         for i, active in enumerate(self.active):
@@ -194,9 +150,9 @@ class BasePolytope(object):
             ftable.run()
             words = ftable.get_words()
             flist = []
-            for w in words:
-                f = tuple(self._move(v, w) for v in f0)
-                if not check_face_in(f, flist):
+            for word in words:
+                f = tuple(self._move(v, word) for v in f0)
+                if not helpers.check_duplicate_face(f, flist):
                     flist.append(f)
             self.face_indices.append(flist)
             self.face_coords.append([tuple(self.vertex_coords[x] for x in face) for face in flist])
@@ -222,6 +178,7 @@ class BasePolytope(object):
         raise NotImplementedError
 
 
+
 class Polyhedra(BasePolytope):
 
     def __init__(self, upper_triangle, init_dist):
@@ -244,49 +201,16 @@ class Polyhedra(BasePolytope):
 
             for i, face_list in enumerate(self.face_coords):
                 for face in face_list:
-                    f.write(export_pov_array(face))
+                    f.write(helpers.pov_array(face))
                     f.write(fstr.format(i, len(face)))
 
-
-class Polychora(BasePolytope):
-
-    def __init__(self, upper_triangle, init_dist):
-        if not len(upper_triangle) == 6 and len(init_dist) == 4:
-            raise ValueError("Six integers and four floats are required")
-
-        super().__init__(upper_triangle, init_dist)
-
-    def export_pov(self, filename="./povray/polychora-data.inc"):
-        vstr = "Vertex({})\n"
-        estr = "Edge({}, {})\n"
-
-        extent = np.max([np.linalg.norm(helpers.proj3d(v)) for v in self.vertex_coords])
-
-        with open(filename, "w") as f:
-            f.write("#declare extent = {}\n;".format(extent))
-
-            for v in self.vertex_coords:
-                f.write(vstr.format(helpers.pov_vector(v)))
-
-            for i, edge_list in enumerate(self.edge_coords):
-                for edge in edge_list:
-                    f.write(estr.format(i, helpers.pov_vector_list(edge)))
-
-            for i, face_list in enumerate(self.face_coords):
-                for face in face_list:
-                    isplane, center, radius, facesize = helpers.get_sphere_info(face)
-                    facecolor = get_color(i)
-                    f.write(export_pov_array(face))
-                    f.write(export_polygon_face(i, face, isplane, center,
-                                                radius, facesize, facecolor))
 
 
 class Snub(Polyhedra):
 
-    def __init__(self, upper_triangle, weights):
-        if not all([x > 0 for x in weights]):
-            raise ValueError("the weights must all be positive")
-        super().__init__(upper_triangle, weights)
+    def __init__(self, upper_triangle, init_dist=(1.0, 1.0, 1.0)):
+        super().__init__(upper_triangle, init_dist)
+
         self.symmetry_gens = (0, 1, 2, 3)
         self.symmetry_rels = ((0,) * self.coxeter_matrix[0][1],
                               (2,) * self.coxeter_matrix[1][2],
@@ -323,7 +247,7 @@ class Snub(Polyhedra):
             flist = []
             for word in self._vwords:
                 f = tuple(self._move(v, word) for v in f0)
-                if not check_face_in(f, flist):
+                if not helpers.check_duplicate_face(f, flist):
                     flist.append(f)
             self.face_indices.append(flist)
             self.face_coords.append([tuple(self.vertex_coords[v] for v in face) for face in flist])
@@ -339,3 +263,36 @@ class Snub(Polyhedra):
                 vertex = np.dot(vertex, self._reflections[1])
                 vertex = np.dot(vertex, self._reflections[2])
         return vertex
+
+
+
+class Polychora(BasePolytope):
+
+    def __init__(self, upper_triangle, init_dist):
+        if not len(upper_triangle) == 6 and len(init_dist) == 4:
+            raise ValueError("Six integers and four floats are required")
+
+        super().__init__(upper_triangle, init_dist)
+
+    def export_pov(self, filename="./povray/polychora-data.inc"):
+        vstr = "Vertex({})\n"
+        estr = "Edge({}, {})\n"
+
+        extent = np.max([np.linalg.norm(helpers.proj3d(v)) for v in self.vertex_coords])
+
+        with open(filename, "w") as f:
+            f.write("#declare extent = {};\n".format(extent))
+
+            for v in self.vertex_coords:
+                f.write(vstr.format(helpers.pov_vector(v)))
+
+            for i, edge_list in enumerate(self.edge_coords):
+                for edge in edge_list:
+                    f.write(estr.format(i, helpers.pov_vector_list(edge)))
+
+            for i, face_list in enumerate(self.face_coords):
+                for face in face_list:
+                    isplane, center, radius, facesize = helpers.get_sphere_info(face)
+                    f.write(helpers.pov_array(face))
+                    f.write(helpers.export_face(i, face, isplane, center,
+                                                radius, facesize))

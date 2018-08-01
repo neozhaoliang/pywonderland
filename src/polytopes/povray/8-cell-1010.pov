@@ -7,14 +7,9 @@
 
 #include "default-settings.inc"
 
-#declare vertex_size = 0.03;
-#declare edge_size = 0.015;
-
-#declare face_transmit = 0.5;
-
 #macro choose_face(i, face_size)
     #local chosen = false;
-    #if ((i=0 & face_size > 0.6) | (i=2 & face_size > 0.2))
+    #if ((face_size < 0.4) | (i=1 & face_size < 1.0) | (i=3 & face_size > 0.8))
         #local chosen = true;
     #end
     chosen
@@ -29,7 +24,12 @@ camera {
 }
 
 light_source {
-    <1, 1, 1> * 100
+    <0, 1, 2> * 100
+    color rgb 1
+}
+
+light_source {
+    <-1, 1, 0> * 100
     color rgb 1
 }
 

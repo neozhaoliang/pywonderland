@@ -97,6 +97,6 @@
         linear_spline
         -tile_height, 0, 5
         w1 w2 w3 w4 w1
-        RhombusTexture(shape) 
+        RhombusTexture(shape)
     }
 #end
