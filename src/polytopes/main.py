@@ -19,8 +19,8 @@ import models
 POVRAY_EXE = "povray"
 IMAGE_SIZE = 600
 IMAGE_QUALITY_LEVEL = 11  # between 0-11
-SUPER_SAMPLING_LEVEL = 2  # between 1-9
-ANTIALIASING_LEVEL = 0.01
+SUPER_SAMPLING_LEVEL = 5  # between 1-9
+ANTIALIASING_LEVEL = 0.001
 
 TEMPLATE = "cd povray/ && " + \
            POVRAY_EXE + \
@@ -104,8 +104,8 @@ if __name__ == "__main__":
     render_polychora((3, 2, 2, 3, 2, 4), (1, 0, 0, 0), "16-cell-1000.pov", "16-cell")
     render_polychora((3, 2, 2, 4, 2, 3), (1, 0, 0, 0), "24-cell-1000.pov", "24-cell")
     render_polychora((5, 2, 2, 3, 2, 3), (1, 0, 0, 0), "120-cell-1000.pov", "120-cell")
-    render_polychora((3, 2, 2, 3, 2, 5), (1, 0, 0, 0), "600-cell-1000.pov", "600-cell")
     """
+    render_polychora((3, 2, 2, 3, 2, 5), (1, 0, 0, 0), "600-cell-1000.pov", "600-cell")
     # some truncated polychora
     # for more examples see the .pov files in the povray directory
     """

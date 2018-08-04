@@ -27,7 +27,7 @@
 #end
 
 camera {
-    location <0, 0, 1> * 150
+    location <0, 0, 1> * 200
     look_at <0, 3, 0>
     angle 40
     up y*image_height

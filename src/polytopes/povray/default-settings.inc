@@ -10,7 +10,7 @@
 
 global_settings {
     assumed_gamma 2.2
-    max_trace_level 5
+    max_trace_level 10
 }
 
 background { color White }
@@ -53,8 +53,8 @@ background { color White }
 #declare vertex_tex = texture {
     pigment { color Gold }
     finish {
-        ambient 0.2
-        diffuse 0.7
+        ambient 0.5
+        diffuse 0.5
         reflection 0.1
         roughness 0.03
         specular 0.5
