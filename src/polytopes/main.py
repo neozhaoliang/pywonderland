@@ -48,6 +48,7 @@ def render_polyhedra(coxeter_diagram,
 
     P.build_geometry()
     P.export_pov()
+    
     command = TEMPLATE.format(render_file, description)
     subprocess.call(command, shell=True)
 
@@ -62,6 +63,7 @@ def render_polychora(coxeter_diagram,
     P = models.Polychora(coxeter_diagram, trunc_type)
     P.build_geometry()
     P.export_pov()
+
     command = TEMPLATE.format(render_file, description)
     subprocess.call(command, shell=True)
 

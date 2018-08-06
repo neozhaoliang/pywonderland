@@ -111,9 +111,9 @@ class BasePolytope(object):
         vgens = [(i,) for i, active in enumerate(self.active) if not active]
         self._vtable = CosetTable(self.symmetry_gens, self.symmetry_rels, vgens)
         self._vtable.run()
-        words = self._vtable.get_words()
-        self.num_vertices = len(words)
-        self.vertex_coords = tuple(self._transform(self.init_v, word) for word in words)
+        self._vwords = self._vtable.get_words()
+        self.num_vertices = len(self._vwords)
+        self.vertex_coords = tuple(self._transform(self.init_v, word) for word in self._vwords)
 
     def get_edges(self):
         for i, active in enumerate(self.active):
@@ -184,6 +184,16 @@ class BasePolytope(object):
 
     def export_pov(self, filename):
         raise NotImplementedError
+
+    def get_word_representations(self, latex=False):
+        """
+        Return the words corresponding to the vertices in string format.
+        """
+        result = []
+        s = "s_{{}}" if latex else "s_{}"
+        for word in self._vwords:
+            result.append("".join(s.format(i+1) for i in word))
+        return result
 
 
 class Polyhedra(BasePolytope):
