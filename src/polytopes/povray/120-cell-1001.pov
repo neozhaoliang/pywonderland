@@ -7,8 +7,8 @@
 
 #include "default-settings.inc"
 
-#declare vertex_size = 0.025;
-#declare edge_size = 0.0125;
+#declare vertex_size = 0.028;
+#declare edge_size = 0.014;
 
 #declare face_transmit = 0.65;
 

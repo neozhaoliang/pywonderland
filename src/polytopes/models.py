@@ -4,6 +4,7 @@
 This file contains the models of various polytopes in 3D/4D
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 To build a polytope two inputs are required:
+
 1. A Coxeter-Dynkin diagram. This diagram completely determines
    the symmetry of the polytope.
    For a 3D polytope its Coxeter-Dynkin diagram is a tuple of three
@@ -15,6 +16,7 @@ To build a polytope two inputs are required:
    (4, 2, 2, 3, 2, 2) is the BC3xA1 group of the octahedral prism, etc.
    Given this Coxeter-Dynkin diagram the presentation of the symmetry
    group `G` is built and 3 or 4 reflecting planes are then computed.
+
 2. Position of an initial vertex on the unit sphere. This determines
    the "truncation" type of the polytope. This input is represented by
    a tuple of 3 (for a 3D polytope) or 4 (for a 4D polytope) floats which
@@ -23,9 +25,11 @@ To build a polytope two inputs are required:
    and the ratio between its distance to the 1st and 2nd planes is 1: 0.5.
    Given these distances the coordinates of the initial vertex `v` is
    computed (it's also normalized so it lies on the unit sphere).
+
 Once we have the presentation of the symmetry group `G`, the reflecting
 planes (called mirrors) and coordinates of the initial vertex `v`, we then
 move on to compute the vertices, edges and faces of this polytope as follows:
+
 1. [Vertex]
    Find the generators of the stabilizing subgroup `H` which fixes `v`.
    Once this is done we can use Todd-Coxeter algorithm to compute the coset
@@ -33,11 +37,13 @@ move on to compute the vertices, edges and faces of this polytope as follows:
    are in one-to-one correspondence: gH -> gv. So for each gH in the coset
    table we just choose any word representaion of g (a compostions of the
    reflections about the mirrors) and act g on v to get gv.
+
 2. [Edge]
    Find the generators of the stabilizing subgroup `Hi` which fixes an
    initial edge of type `i`. Here an edge is of type `i` if and only if
    its two ends are mirror images of the i-th plane.
    Once this done we can get all edges of type `i` as in the vertex case.
+
 3. [Face]
    Find the generators of the stabilizing subgroup `Hij` which fixes an
    initial face of type `ij`. Here a face is of type `ij` if and only if
@@ -51,8 +57,10 @@ from todd_coxeter import CosetTable
 import helpers
 
 
-
 class BasePolytope(object):
+    """
+    Base class for 3d polyhedra and 4d polychora using Wythoff's construction.
+    """
 
     def __init__(self, upper_triangle, init_dist):
         # the Coxeter matrix
@@ -178,7 +186,6 @@ class BasePolytope(object):
         raise NotImplementedError
 
 
-
 class Polyhedra(BasePolytope):
 
     def __init__(self, upper_triangle, init_dist):
@@ -203,7 +210,6 @@ class Polyhedra(BasePolytope):
                 for face in face_list:
                     f.write(helpers.pov_array(face))
                     f.write(fstr.format(i, len(face)))
-
 
 
 class Snub(Polyhedra):
@@ -263,7 +269,6 @@ class Snub(Polyhedra):
                 vertex = np.dot(vertex, self._reflections[1])
                 vertex = np.dot(vertex, self._reflections[2])
         return vertex
-
 
 
 class Polychora(BasePolytope):

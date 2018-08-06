@@ -297,12 +297,14 @@ class CosetTable(object):
         Return the list of all words in this table.
         This method must be called when the table is already compressed.
         """
+        from collections import deque
+
         gens = self.A if self.coxeter else self.A[::2]
         result = [None] * len(self)
         result[0] = tuple()
-        q = [0]
+        q = deque([0])
         while len(q) > 0:
-            coset = q.pop()
+            coset = q.popleft()
             for x in gens:
                 new_coset = self[coset][x]
                 if result[new_coset] is None:

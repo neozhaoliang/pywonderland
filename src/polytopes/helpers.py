@@ -104,7 +104,7 @@ def check_duplicate_face(f, l):
 
 def fill_matrix(upper_triangle):
     """
-    Given a tuple of 3 or 6 integers/rationals, fill them in the upper triangle
+    Given a tuple of three or six integers/rationals, fill them in the upper triangle
     part of a 3x3 (or 4x4) symmetric matrix."""
     if len(upper_triangle) == 3:
         a12, a13, a23 = upper_triangle
@@ -153,8 +153,4 @@ def get_mirrors(upper_triangle):
 
 
 def get_coxeter_matrix(upper_triangle):
-    new_list = []
-    for x in upper_triangle:
-        y = x if isinstance(x, int) else x.numerator
-        new_list.append(y)
-    return fill_matrix(new_list)
+    return fill_matrix(upper_triangle)
