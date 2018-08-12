@@ -16,7 +16,7 @@ background { White }
 
 #declare vertex_size = 0.035;
 #declare edge_size = 0.020;
-#declare face_transmit = 0.33;
+#declare face_filter = 0.5;
 
 #declare vertex_color = Black * 0.05;
 #declare edge_colors = array[3] { Orange, Green, Red };
@@ -53,7 +53,7 @@ background { White }
     texture {
         pigment {
             color face_colors[i]
-            transmit face_transmit
+            filter face_filter
         }
         finish { face_finish }
     }
