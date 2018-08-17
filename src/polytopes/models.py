@@ -187,7 +187,7 @@ class BasePolytope(object):
 
     def get_word_representations(self, symbol=r"\rho", cols=3, snub=False):
         """
-        Return the words corresponding to the vertices in latex string format.
+        Return the words corresponding to the vertices in latex format.
         `cols` is the number of columns in the array.
         """
         def to_latex(word):
