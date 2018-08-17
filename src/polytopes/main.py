@@ -48,7 +48,7 @@ def render_polyhedra(coxeter_diagram,
 
     P.build_geometry()
     P.export_pov()
-    
+
     command = TEMPLATE.format(render_file, description)
     subprocess.call(command, shell=True)
 
