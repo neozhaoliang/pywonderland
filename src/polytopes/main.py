@@ -14,8 +14,8 @@ import subprocess
 import models
 
 
-# use higher supersampling level (e.g. 5) and smaller antialiasing level
-# (e.g. 0.001) to get betweer images
+# use higher supersampling level and smaller
+# antialiasing level to get better images
 POVRAY_EXE = "povray"
 IMAGE_SIZE = 600
 IMAGE_QUALITY_LEVEL = 11  # between 0-11
@@ -34,6 +34,13 @@ POV_COMMAND = "cd povray && " + \
 
 
 def _render_model(P, input_file, output_file):
+    """
+    P: a polyhedra/polychora that has been initialized.    
+    
+    input_file: the POV-Ray scene decription file to render.
+    
+    output_file: output image file.
+    """
     P.build_geometry()
     P.export_pov()
     print("rendering {} with {} vertices, {} edges, {} faces".format(output_file,
@@ -58,6 +65,9 @@ def render_polyhedra(coxeter_diagram,
                      render_file="polyhedra.pov",
                      description=None,
                      snub=False):
+    """
+    The main entrance for rendering 3d polyhedra.
+    """
     if snub:
         P = models.Snub(coxeter_diagram, trunc_type)
     else:
@@ -73,6 +83,9 @@ def render_polychora(coxeter_diagram,
                      trunc_type,
                      render_file,
                      description=None):
+    """
+    The main entrance for rendering 4d polychora.
+    """
     if not description:
         description = render_file[:-4]
 
