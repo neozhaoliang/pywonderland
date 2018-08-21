@@ -13,6 +13,9 @@ For how to use mouse and keyboard to play with the simulation see the doc below.
 """
 from __future__ import division
 
+import sys
+sys.path.append("../glslhelpers")
+
 import argparse
 import subprocess
 import time

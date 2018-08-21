@@ -22,15 +22,35 @@ IMAGE_QUALITY_LEVEL = 11  # between 0-11
 SUPER_SAMPLING_LEVEL = 5  # between 1-9
 ANTIALIASING_LEVEL = 0.001
 
-TEMPLATE = "cd povray/ && " + \
-           POVRAY_EXE + \
-           " +I{}"+ \
-           " +W" + str(IMAGE_SIZE) + \
-           " +H" + str(IMAGE_SIZE) + \
-           " +Q" + str(IMAGE_QUALITY_LEVEL) + \
-           " +A" + str(ANTIALIASING_LEVEL) + \
-           " +R" + str(SUPER_SAMPLING_LEVEL) + \
-           " +O{}"
+POV_COMMAND = "cd povray && " + \
+              POVRAY_EXE + \
+              " +I{}" + \
+              " +W{}".format(IMAGE_SIZE) + \
+              " +H{}".format(IMAGE_SIZE) + \
+              " +Q{}".format(IMAGE_QUALITY_LEVEL) + \
+              " +A{}".format(ANTIALIASING_LEVEL) + \
+              " +R{}".format(SUPER_SAMPLING_LEVEL) + \
+              " +O{}"
+
+
+def _render_model(P, input_file, output_file):
+    P.build_geometry()
+    P.export_pov()
+    print("rendering {} with {} vertices, {} edges, {} faces".format(output_file,
+                                                                     P.num_vertices,
+                                                                     P.num_edges,
+                                                                     P.num_faces))
+    command = POV_COMMAND.format(input_file, output_file)
+    process = subprocess.Popen(command,
+                               shell=True,
+                               stderr=subprocess.PIPE,
+                               stdin=subprocess.PIPE,
+                               stdout=subprocess.PIPE)
+
+    out, err = process.communicate()
+    if process.returncode:
+        print(type(err), err)
+        raise IOError("POVRay rendering failed with the following error: " + err.decode("ascii"))
 
 
 def render_polyhedra(coxeter_diagram,
@@ -46,11 +66,7 @@ def render_polyhedra(coxeter_diagram,
     if not description:
         description = render_file[:-4]
 
-    P.build_geometry()
-    P.export_pov()
-
-    command = TEMPLATE.format(render_file, description)
-    subprocess.call(command, shell=True)
+    _render_model(P, render_file, description)
 
 
 def render_polychora(coxeter_diagram,
@@ -61,11 +77,7 @@ def render_polychora(coxeter_diagram,
         description = render_file[:-4]
 
     P = models.Polychora(coxeter_diagram, trunc_type)
-    P.build_geometry()
-    P.export_pov()
-
-    command = TEMPLATE.format(render_file, description)
-    subprocess.call(command, shell=True)
+    _render_model(P, render_file, description)
 
 
 if __name__ == "__main__":

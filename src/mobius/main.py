@@ -13,6 +13,9 @@ Reference:
     "Visual complex analysis" by Needham.
 
 """
+import sys
+sys.path.append("../glslhelpers")
+
 import time
 import subprocess
 import argparse
