@@ -1,5 +1,7 @@
 # A Tour in the Wonderland of Math with Python
 
+<p align="center"><img src="http://www.pywonderland.com/polytopes/logo.png"/></p>
+
 > A collection of python scripts for drawing beautiful figures or animating interesting algorithms in mathematics.
 
 ## About this repo
