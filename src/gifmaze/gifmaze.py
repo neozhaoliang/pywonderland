@@ -38,7 +38,7 @@ class Maze(object):
         ----------
         width, height: size of the maze, must both be odd integers.
 
-        mask: `None` or an file-like image or an instance of PIL's Image class.
+        mask: `None` or a file-like image or an instance of PIL's Image class.
               If not `None` then this mask image must be of binary type:
               the black pixels are considered as `walls` and are overlayed
               on top of the grid graph. Note the walls must preserve the
@@ -208,7 +208,7 @@ class GIFSurface(object):
     def set_palette(self, palette):
         """
         Set the global color table of the GIF image.
-        The user must specify at least one rgb color in it.
+        The user must specify at least one rgb color for it.
         `palette` must be a 1-d list of integers between 0-255.
         """
         try:

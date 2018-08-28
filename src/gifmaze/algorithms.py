@@ -83,7 +83,7 @@ def wilson(maze, render, speed=50, root=(0, 0)):
 def bfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
     """
     Solve a maze by breadth first search.
-    The cells are marked by their distance to the starting cell plus three.
+    The cells are marked by their distances to the starting cell plus three.
     This is because we must distinguish a 'flooded' cell from walls and tree.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Solving maze by bfs")

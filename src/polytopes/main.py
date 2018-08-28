@@ -35,10 +35,10 @@ POV_COMMAND = "cd povray && " + \
 
 def _render_model(P, input_file, output_file):
     """
-    P: a polyhedra/polychora that has been initialized.    
-    
+    P: a polyhedra/polychora that has been initialized.
+
     input_file: the POV-Ray scene decription file to render.
-    
+
     output_file: output image file.
     """
     P.build_geometry()

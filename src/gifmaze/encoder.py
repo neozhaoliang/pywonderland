@@ -8,12 +8,12 @@ Structure of a GIF file: (in the order they appear in the file)
     1. always begins with the logical screen descriptor.
     2. then follows the global color table.
     3. then follows the loop control block (specify the number of loops).
-       For static images this block is not necessary.
+       for a static image this block is not necessary.
     4. then follows the image data of the frames,
        each frame can be further divided into:
        (i) a graphics control block that specify the delay and
            transparent color of this frame.
-           Static frames don't have this block.
+           static frames don't have this block.
        (ii) the image descriptor.
        (iii) the LZW compressed data of the pixels.
     5. finally the trailor '0x3B'.

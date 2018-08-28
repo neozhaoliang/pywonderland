@@ -16,7 +16,7 @@ REFERENCES:
 A short introduction to the math and the code:
 
 Consider this problem: let `M` be a finite irreducible Markov chain, `M` has
-an unique stationary distribution `π`). How can one sample a random state in
+an unique stationary distribution `π`. How can one sample a random state in
 `M` from `π`? The traditional approach is to pick an arbitrary initial state
 `s0`, then run the chain for a sufficiently large number of times, with the
 final state as the sample.
