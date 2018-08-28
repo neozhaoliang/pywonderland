@@ -69,6 +69,7 @@ Softwares:
 + `ImageMagick`
 + `FFmpeg`
 + `POV-Ray`
++ `graphviz`
 
 ## License
 

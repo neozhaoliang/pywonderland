@@ -110,13 +110,13 @@ class BasePolytope(object):
         """
         This method computes the following data that will be needed later:
 
-        1. Coset table for the total symmetry group. (so for a vertex indexed by i
-           and a word w, we can get the index of the transformed vertex i·w)
+        1. Coset table for the total symmetry group. (so for a vertex indexed by `i`
+           and a word `w` we can get the index of the transformed vertex `i·w`)
 
         2. Word representaions for each element in the symmetry group. (for exporting
            the words to latex format)
 
-        3. Coordinates of the vertices. (of course we will need this)
+        3. Coordinates of the vertices. (obviously we will need this)
         """
         # generators for the stabilizing subgroup of the initial vertex.
         vgens = [(i,) for i, active in enumerate(self.active) if not active]
@@ -168,7 +168,7 @@ class BasePolytope(object):
         """
         Basically speaking, for a pair (i, j), the composition of the i-th and the j-th
         reflection is a rotation which fixes a base face `f0` of type `ij`. But there
-        are some cases need be considered:
+        are some cases need to be considered:
 
         1. The i-th and the j-th mirror are both active: in this case the rotation indeed
            generates a face `f0` and edges of type `i` and type `j` occur alternatively in it.
