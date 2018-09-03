@@ -1,4 +1,4 @@
-# Coxeter diagram: ·-- 7 --·-- 3 --·-- 5 --·
+# Coxeter diagram: *-- 7 --*-- 3 --*-- 5 --*
 # rank: 4
 1 7 2 2
 7 1 3 2
