@@ -10,12 +10,12 @@ from integers import prime_factors
 
 
 class IntPolynomial(object):
-    
+
     def __init__(self, coef=0):
         """
         An `IntPolynomial` can be initialized either by an integer, or by any iterable
         that can be converted to a list of integers.
-        The trailing zeros in the coefficients are also trimmed when its initialized. 
+        The trailing zeros in the coefficients are also trimmed when its initialized.
         Note all operations here also work for floating coefficients, but we restrict
         to integer case for easy debug when doing algebraic integer ring arithmetics.
         """
@@ -30,7 +30,7 @@ class IntPolynomial(object):
             raise ValueError("cannot initialize a polynomial by this input: {}".format(coef))
         # degree of this polynomial
         self.D = len(self.coef) - 1
-    
+
     @staticmethod
     def trim(arr):
         """Discard trailing zeros in an array."""
@@ -38,28 +38,28 @@ class IntPolynomial(object):
         while (i > 0 and arr[i]== 0):
             i -= 1
         return arr[:i + 1]
-    
+
     def __str__(self):
         return self.__class__.__name__ + str(self.coef)
-    
+
     __repr__ = __str__
-    
+
     def __getitem__(self, items):
         return self.coef.__getitem__(items)
-    
+
     def __len__(self):
         return len(self.coef)
-    
+
     def __bool__(self):  # if f
         """
         Check if this a zero polynomial, note a polynomial of degree 0 with a non-zero
         constant term is not a zero polynomial.
         """
         return self.D > 0 or self.coef[0] != 0
-    
+
     def __neg__(self):  # -f
         return self.__class__(-x for x in self.coef)
-    
+
     @classmethod
     def convert(cls, other):
         """
@@ -74,29 +74,29 @@ class IntPolynomial(object):
             except:
                 raise ValueError("This input is not supported for polynomial operations")
         return other
-    
+
     def __add__(self, other):  # f + g
         other = self.convert(other)
         return self.__class__(x + y for x, y in lzip(self, other, fillvalue=0))
 
     __iadd__ = __radd__ = __add__
-    
+
     def __sub__(self, other):  # f - g
         other = self.convert(other)
         return self.__class__(x - y for x, y in lzip(self, other, fillvalue=0))
-    
+
     __isub__ = __sub__
-    
+
     def __rsub__(self, other):  # g - f
         return -self + other
-    
+
     def __eq__(self, other):  # f == g
         """Only `int` and `IntPolynomial` are allowed for comparison."""
         if isinstance(other, (int, self.__class__)):
             return not bool(self - other)
         else:
             return False
-    
+
     def __mul__(self, other):  # f * g
         other = self.convert(other)
         d1, d2 = self.D, other.D
@@ -105,21 +105,21 @@ class IntPolynomial(object):
             for j in range(d2 + 1):
                 result[i + j] += self[i] * other[j]
         return self.__class__(result)
-    
+
     __imul__ = __rmul__ = __mul__
-    
+
     @classmethod
     def monomial(cls, n, a):
         """Return the monomial a*x^n."""
         coef = [0] * (n + 1)
         coef[n] = a
         return cls(coef)
-    
+
     def __divmod__(self, other):  # divmod(f, g)
         other = self.convert(other)
         if other[other.D] != 1:
             raise ValueError("The divisor must be a monic polynomial")
-        
+
         d1 = self.D
         d2 = other.D
         if d1 < d2:
@@ -134,12 +134,12 @@ class IntPolynomial(object):
             m = self.monomial(f.D - d2, f[f.D])
             q += m
             f -= m * other
-    
+
         return q, f
 
     def __mod__(self, other):  # f % g
         return divmod(self, other)[1]
-    
+
     def __floordiv__(self, other):  # f // g
         return divmod(self, other)[0]
 
@@ -147,14 +147,14 @@ class IntPolynomial(object):
     def cyclotomic(cls, n):
         r"""
         Return the cyclotomic polynomial \Phi_n(x) for the n-th primitive root of unity:
-            
+
             \Phi_n(x) = \prod (x^{n/d}-1)^{\mu(d)},
-        
+
         where \mu(d) is the Mobius function:
         \mu(d) = 0 iff d contains a square factor,
         \mu(d) = 1 iff d is a product of even number of different primes,
         \mu(d) = -1 iff d is a product of odd number of different primes.
-        
+
         Examples:
         >>> f = IntPolynomial.cyclotomic(8)
         >>> f
@@ -198,7 +198,7 @@ def test():
     print("f * g: {}".format(f * g))
     print("divmod(g, f): {}".format(divmod(g, f)))
     print("f == (1, 1): {}".format(f == (1, 1)))
-    print("f == IntPolynomial(1, 1): {}".format(f == IntPolynomial((1, 1))))
+    print("f == IntPolynomial((1, 1)): {}".format(f == IntPolynomial((1, 1))))
     for m in (8, 12, 14, 105):
         f = IntPolynomial.cyclotomic(m)
         print("{}-th cyclotomic polynomial: {}".format(m, f))

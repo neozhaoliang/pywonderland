@@ -40,5 +40,5 @@ def prime_factors(n):
     # if n is prime
     if n > 2:
         primes[n] += 1
-    
+
     return primes
