@@ -66,7 +66,7 @@ class BasePolytope(object):
         # the Coxeter matrix
         self.coxeter_matrix = helpers.get_coxeter_matrix(upper_triangle)
 
-        # the reflecting mirrors
+        # the reflection mirrors
         self._mirrors = helpers.get_mirrors(upper_triangle)
 
         # reflection transformations about the mirrors
@@ -156,7 +156,8 @@ class BasePolytope(object):
                     # two ends of this edge
                     v1 = self._move(0, word)
                     v2 = self._move(0, (i,) + word)
-                    # avoid duplicates
+                    # avoid duplicates, this is because though the reflection `i` fixes
+                    # this edge but it maps the ordered tupe (v1, v2) to (v2, v1)
                     if (v1, v2) not in elist and (v2, v1) not in elist:
                         elist.append((v1, v2))
                 self.edge_indices.append(elist)
@@ -204,6 +205,8 @@ class BasePolytope(object):
             flist = []
             for word in words:
                 f = tuple(self._move(v, word) for v in f0)
+                # the rotation fixes this face but it shifts the ordered tuple of vertices
+                # rotationally, so we need to remove the duplicates.
                 if not helpers.check_duplicate_face(f, flist):
                     flist.append(f)
             self.face_indices.append(flist)
