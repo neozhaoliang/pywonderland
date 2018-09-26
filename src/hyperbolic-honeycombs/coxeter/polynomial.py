@@ -1,9 +1,7 @@
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-This file contains a single `IntPolynomial` class for handling
-arithmetic of polynomials with integer coefficients
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A class for handling arithmetic of polynomials with integer coefficients
 """
+from array import array
 from itertools import zip_longest as lzip
 from copy import copy
 from integers import prime_factors
@@ -13,21 +11,16 @@ class IntPolynomial(object):
 
     def __init__(self, coef=0):
         """
-        An `IntPolynomial` can be initialized either by an integer, or by any iterable
-        that can be converted to a list of integers.
-        The trailing zeros in the coefficients are also trimmed when its initialized.
-        Note all operations here also work for floating coefficients, but we restrict
-        to integer case for easy debug when doing algebraic integer ring arithmetics.
+        An `IntPolynomial` can be initialized either by an integer or by an iterable
+        that yields integers.
+        The trailing zeros in the coefficients are trimmed when its initialized.
         """
         if isinstance(coef, int):
-            self.coef = (coef,)
-        elif hasattr(coef, "__iter__") or hasattr(coef, "__getitem__"):
-            coef = tuple(coef)
-            if not all(isinstance(x, int) for x in coef):
-                raise ValueError("Non-integer encountered in coefficients: {}".format(coef))
-            self.coef = self.trim(coef)
+            self.coef = array("i", (coef,))
         else:
-            raise ValueError("cannot initialize a polynomial by this input: {}".format(coef))
+            coef = array("i", coef)
+            self.coef = self.trim(coef)
+
         # degree of this polynomial
         self.D = len(self.coef) - 1
 
@@ -40,7 +33,7 @@ class IntPolynomial(object):
         return arr[:i + 1]
 
     def __str__(self):
-        return self.__class__.__name__ + str(self.coef)
+        return "IntPolynomial" + str(tuple(self.coef))
 
     __repr__ = __str__
 
@@ -52,22 +45,17 @@ class IntPolynomial(object):
 
     def __bool__(self):  # if f
         """
-        Check if this a zero polynomial, note a polynomial of degree 0 with a non-zero
-        constant term is not a zero polynomial.
+        Check if this a zero polynomial, note a non-zero constant
+        is not a zero polynomial.
         """
         return self.D > 0 or self.coef[0] != 0
 
     def __neg__(self):  # -f
-        return self.__class__(-x for x in self.coef)
+        return IntPolynomial(-x for x in self.coef)
 
     @classmethod
     def convert(cls, other):
-        """
-        Try to convert an object `other` to an `IntPolynomial.` Here `other` can be
-        any object that can yield a list of integers, i.e. `other` implements the
-        interface `__iter__` or `__getitem__`. This is because later in this program
-        we want to add/multiply algebraic integers with `IntPolynomial`s.
-        """
+        """Try to convert an object `other` to an `IntPolynomial`."""
         if not isinstance(other, cls):
             try:
                 other = cls(other)
@@ -77,13 +65,13 @@ class IntPolynomial(object):
 
     def __add__(self, other):  # f + g
         other = self.convert(other)
-        return self.__class__(x + y for x, y in lzip(self, other, fillvalue=0))
+        return IntPolynomial(x + y for x, y in lzip(self, other, fillvalue=0))
 
     __iadd__ = __radd__ = __add__
 
     def __sub__(self, other):  # f - g
         other = self.convert(other)
-        return self.__class__(x - y for x, y in lzip(self, other, fillvalue=0))
+        return IntPolynomial(x - y for x, y in lzip(self, other, fillvalue=0))
 
     __isub__ = __sub__
 
@@ -92,7 +80,7 @@ class IntPolynomial(object):
 
     def __eq__(self, other):  # f == g
         """Only `int` and `IntPolynomial` are allowed for comparison."""
-        if isinstance(other, (int, self.__class__)):
+        if isinstance(other, (int, IntPolynomial)):
             return not bool(self - other)
         else:
             return False
@@ -104,7 +92,7 @@ class IntPolynomial(object):
         for i in range(d1 + 1):
             for j in range(d2 + 1):
                 result[i + j] += self[i] * other[j]
-        return self.__class__(result)
+        return IntPolynomial(result)
 
     __imul__ = __rmul__ = __mul__
 
@@ -150,9 +138,9 @@ class IntPolynomial(object):
 
             \Phi_n(x) = \prod (x^{n/d}-1)^{\mu(d)},
 
-        where \mu(d) is the Mobius function:
-        \mu(d) = 0 iff d contains a square factor,
-        \mu(d) = 1 iff d is a product of even number of different primes,
+        where d runs over all divisors of n and \mu(d) is the Mobius function:
+        \mu(d) = 0 iff d contains a square factor.
+        \mu(d) = 1 iff d is a product of even number of different primes.
         \mu(d) = -1 iff d is a product of odd number of different primes.
 
         Examples:

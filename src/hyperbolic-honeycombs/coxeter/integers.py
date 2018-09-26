@@ -1,19 +1,14 @@
 """
-Short helper functions for handling integer arithmetic.
+helper functions for integer arithmetic.
 """
 from collections import defaultdict
 
 
-__all__ = ["gcd", "lcm", "prime_factors"]
-
-
 def gcd(m, n):
     """greatest commond divisor."""
-    m = abs(m)
-    n = abs(n)
     while n:
         m, n = n, m % n
-    return m
+    return abs(m)
 
 
 def lcm(m, n):

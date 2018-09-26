@@ -1,1 +1,0 @@
-from polynomial import IntPolynomial

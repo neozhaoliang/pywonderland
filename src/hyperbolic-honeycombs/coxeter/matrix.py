@@ -1,6 +1,5 @@
 """
-A single class for handling matrix with algebraic integer entries.
-The entries all lie in the same cyclotomic field.
+A class for handling matrices with algebraic integer entries.
 """
 import numpy as np
 from integers import lcm
@@ -13,7 +12,7 @@ class Matrix(object):
     def __init__(self, base, mat):
         """
         `base`: a monic irreducible polynomic in Z[x].
-        `mat`: a 2d array of whose entries are `AlgebraicInteger`.
+        `mat`:  a symmetric 2d matrix whose entries are algebraic integers.
         """
         self.base = base
         self.M = mat
@@ -27,49 +26,51 @@ class Matrix(object):
 
     def __mul__(self, other):
         """
-        Multiplication with another matrix or a vector of algebraic integers.
+        Multiply with another matrix or a vector of algebraic integers.
         """
-        if isinstance(other, self.__class__) and self.base == other.base:
-            return self.__class__(self.base, np.dot(self.M, other.M))
+        if isinstance(other, Matrix) and self.base == other.base:
+            return Matrix(self.base, np.dot(self.M, other.M))
         else:
-            if not all(isinstance(x, aint) for x in other) and len(other) == self.dim:
-                raise TypeError("A list of algebraic integers with the same dimension is expected")
             return np.dot(self.M, other)
 
     def is_identity(self):
         """Check whether this is the identity matrix."""
         for i in range(self.dim):
             # diagonal elements == 1
-            a = self.M[i][i]
+            a = self[i][i]
             if a.p != 1:
                 return False
             # non-diagonal elements == 0
             for j in range(i):
-                a = self.M[i][j]
+                a = self[i][j]
                 if a != 0:
                     return False
         return True
 
     @classmethod
-    def cartan_matrix(cls, sym_matrix):
-        M = sym_matrix
+    def cartan_matrix(cls, coxeter_matrix):
+        M = coxeter_matrix
         dim = len(M)
+
+        # C is the Cartan matrix
+        C = np.zeros_like(M).astype(object)
+
+        # m is the lcm of all 2*m[i][j]'s,
+        # all entries of the Cartan matrix are cyclotomic integers
+        # in the m-th cyclotomic field.
         m = 2
         for i in range(dim):
             for j in range(i):
                 m = lcm(m, 2 * M[i][j])
-        # m is now the lcm of all 2*m[i][j]'s,
-        # all entries of the Cartan matrix C (see below) lie in
-        # the m-th cyclotomic field.
 
-        # b is the monic irreducible polynomial for m-th roots of unity
+        # b is the m-th cyclotomic polynomial.
         b = intpoly.cyclotomic(m)
-        # C is the Cartan matrix
-        C = np.zeros_like(M).astype(object)
-        # diagonal entries are always 2
+
+        # diagonal entries in the Cartan matrix.
         for i in range(dim):
             C[i][i] = aint(b, 2)
 
+        # non-diagonal entries in the Cartan matrix.
         for i in range(dim):
             for j in range(i):
                 # C[i][j] = -(zeta_{2*mij} + zeta^{-1}_{2*mij})
