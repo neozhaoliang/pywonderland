@@ -19,7 +19,7 @@ To build a polytope two inputs are required:
    (5, 2, 2, 3, 2, 3) is the H4 group,
    (4, 2, 2, 3, 2, 2) is the BC3xA1 group of the octahedral prism,
    etc.
-
+   
    Given this Coxeter-Dynkin diagram the presentation of the symmetry
    group `G` is built and 3 or 4 reflection planes are then computed.
 
