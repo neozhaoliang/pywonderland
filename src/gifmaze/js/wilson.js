@@ -16,7 +16,8 @@ const PATH = 2;
 
 var canvas;
 var ctx;
-var unexplored = [];  // cells to explore
+
+var unexplored;  // cells to explore
 var grid = new Array(width);  // the maze grid
 var currPath;  // path of current random walk
 
@@ -27,11 +28,13 @@ function start() {
 
 function init() {
     canvas = document.getElementById("wilson");
+    canvas.addEventListener("click", restart);
     ctx = canvas.getContext("2d");
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.translate(offset, offset);
 
+    unexplored = [];
     for (var y = 0; y < height; y += 2) {
         for (var x = 0; x < width; x += 2) {
             unexplored.push([x, y]);
@@ -42,6 +45,7 @@ function init() {
     for (var i = 0; i < width; i++) {
         grid[i] = new Array(height).fill(WALL);
     }
+
 
     var root = unexplored.shift();
     ctx.fillStyle = "#FFF";
@@ -88,7 +92,6 @@ function loopErasedRandomWalk() {
         markSpace(currPath[index], currPath[index+1], WALL);
         currPath = currPath.slice(0, index + 1);
         ctx.restore();
-        return;
     }
 
     else if (inTree(next)) {
@@ -160,11 +163,38 @@ function inPath(cell) {
 }
 
 function findCellIndex(path, cell) {
-    for (var i=0; i<path.length; i++) {
+    for (var i = 0; i < path.length; i++) {
         var item = path[i];
         if (item[0] === cell[0] && item[1] === cell[1]) {
             return i;
         }
     }
     return -1;
+}
+
+function restart() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    unexplored = [];
+    for (var y = 0; y < height; y += 2) {
+        for (var x = 0; x < width; x += 2) {
+            unexplored.push([x, y]);
+        }
+    }
+
+    for (var i = 0; i < width; i++) {
+        grid[i] = new Array(height).fill(WALL);
+    }
+
+    currPath = null;
+
+    var root = unexplored.shift();
+    ctx.fillStyle = "#FFF";
+    markCell(root, TREE);
+
+    ctx.fillStyle = "#F0F";
+
+    loop();
 }
