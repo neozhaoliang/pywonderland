@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 """
-This file contains some helper functions for calculating the geometry
-and converting vectors to POV-Ray format.
 """
 import sys
 import numpy as np
@@ -24,9 +21,9 @@ def reflection_matrix(v):
 
 def get_init_point(M, d):
     """
-    Given the mirrors stored as row vectors in `M` and a tuple of non-negative
-    floats `d`, compute the vector `v` whose distances to the mirrors are `d`
-    and return its normalize version.
+    Given the normal vectors of the mirrors stored as row vectors in `M`
+    and a tuple of non-negative floats `d`, compute the vector `v` whose
+    distance vector to the mirrors is `d` and return its normalized version.
     """
     return normalize(np.linalg.solve(M, d))
 
@@ -43,7 +40,14 @@ def proj3d(v):
 def get_sphere_info(points):
     """
     Given a list of 4d points that lie on the same face of a polytope,
-    compute the 3d sphere that passes through the projected points.
+    compute the 3d sphere that passes through their projected points.
+    The returned tuple contains:
+      1. a boolean value indicates whether this face is flat.
+      2. the center of this face.
+      3. the radius of this "bubble" face (it's None if this face is flat)
+      4. a float measures the size of this face.
+
+    see "http://www.ambrsoft.com/TrigoCalc/Sphere/Spher3D_.htm"
     """
     rib = np.sum(points, axis=0)
     rib3d = proj3d(rib)
@@ -84,7 +88,7 @@ def pov_array(arr):
 
 def export_face(ind, face, isplane, center,
                 radius, facesize):
-    """Export the information of a polytope face to a POV-Ray macro."""
+    """Export the information of a face to a POV-Ray macro."""
     if isplane:
         macro = "FlatFace({}, {}, vertices_list, {}, {})\n"
         return macro.format(ind, len(face), pov_vector(center), facesize)
@@ -94,7 +98,12 @@ def export_face(ind, face, isplane, center,
 
 
 def check_duplicate_face(f, l):
-    """Check if a face `f` is already in the list `l`."""
+    """
+    Check if a face `f` is already in the list `l`.
+    We need this function here because when some rotation r fixes a face
+    f = (v1, v2, ..., v_k), r maps f as an ordered tuple to (v_k, v_1, ..., v_{k-1})
+    or (v_2, ..., v_k, v_1) and they all represent the same face.
+    """
     for _ in range(len(f)):
         if f in l or f[::-1] in l:
             return True
@@ -104,8 +113,8 @@ def check_duplicate_face(f, l):
 
 def fill_matrix(upper_triangle):
     """
-    Given a tuple of three or six integers/rationals, fill them in the upper triangle
-    part of a 3x3 (or 4x4) symmetric matrix."""
+    Given three or six integers/rationals, fill them into a
+    3x3 (or 4x4) symmetric matrix."""
     if len(upper_triangle) == 3:
         a12, a13, a23 = upper_triangle
         return [[1, a12, a13],
@@ -123,8 +132,9 @@ def fill_matrix(upper_triangle):
 
 def get_mirrors(upper_triangle):
     """
-    Given 3 or 6 rational numbers, return a 3x3 or 4x4 matrix whose rows are
-    the normal vectors of the reflection planes.
+    Given three or six integers/rationals that represent the
+    angles between the mirrors (a rational p means the angle is π/p),
+    return a 3x3 or 4x4 matrix whose rows are the normal vectors of the mirrors.
     """
     # error handling function when the input coxeter matrix is invalid.
     def err_handler(err_type, flag):
@@ -132,7 +142,7 @@ def get_mirrors(upper_triangle):
         sys.exit(1)
 
     np.seterrcall(err_handler)
-    np.seterr(all='call')
+    np.seterr(all="call")
 
     coxeter_matrix = np.array(fill_matrix(upper_triangle)).astype(np.float)
     C = -np.cos(np.pi / coxeter_matrix)
@@ -150,7 +160,3 @@ def get_mirrors(upper_triangle):
         M[3, 2] = (C[2, 3] - M[2, 0]*M[3, 0] - M[2, 1]*M[3, 1]) / M[2, 2]
         M[3, 3] = np.sqrt(1 - M[3, 0]*M[3, 0] - M[3, 1]*M[3, 1] - M[3, 2]*M[3, 2])
     return M
-
-
-def get_coxeter_matrix(upper_triangle):
-    return fill_matrix(upper_triangle)

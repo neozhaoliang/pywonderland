@@ -11,10 +11,8 @@ Example usage:
     python run_coset_enum.py filename [-std] [-o][filename]
 
     filename: required, the .yaml file to be parsed.
-        -std: optional, needs no value, if added then
-              the output table is standardized.
-          -o: optional, output filename, the default
-              one is sys.stdout.
+        -std: optional, if added then the output table is standardized.
+          -o: optional, output filename, the default is sys.stdout.
 """
 import sys
 import argparse

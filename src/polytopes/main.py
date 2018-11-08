@@ -12,6 +12,7 @@ Usage:
 """
 import subprocess
 import models
+import helpers
 
 
 # use higher supersampling level and smaller
@@ -68,10 +69,12 @@ def render_polyhedra(coxeter_diagram,
     """
     The main entrance for rendering 3d polyhedra.
     """
+    coxeter_matrix = helpers.fill_matrix(coxeter_diagram)
+    mirrors = helpers.get_mirrors(coxeter_diagram)
     if snub:
-        P = models.Snub(coxeter_diagram, trunc_type)
+        P = models.Snub(coxeter_matrix, mirrors, trunc_type)
     else:
-        P = models.Polyhedra(coxeter_diagram, trunc_type)
+        P = models.Polyhedra(coxeter_matrix, mirrors, trunc_type)
 
     if not description:
         description = render_file[:-4]
@@ -89,7 +92,9 @@ def render_polychora(coxeter_diagram,
     if not description:
         description = render_file[:-4]
 
-    P = models.Polychora(coxeter_diagram, trunc_type)
+    coxeter_matrix = helpers.fill_matrix(coxeter_diagram)
+    mirrors = helpers.get_mirrors(coxeter_diagram)
+    P = models.Polychora(coxeter_matrix, mirrors, trunc_type)
     _render_model(P, render_file, description)
 
 
@@ -146,3 +151,6 @@ if __name__ == "__main__":
     # 4d prism and duoprism
     render_polychora((6, 2, 2, 2, 2, 8), (1, 0, 1.6, 0), "duoprism.pov", "6-8-duoprism")
     render_polychora((5, 2, 2, 3, 2, 2), (1, 1, 0, 1), "prism.pov", "5-3-prism")
+
+    # you can also embed a 3d polyhedra in 4d and then project it back to 3d
+    render_polychora((3, 2, 2, 5, 2, 2), (1, 1, 0, 0), "polyhedra-ball.pov", description="buckyball")

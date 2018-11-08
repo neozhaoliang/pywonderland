@@ -21,7 +21,7 @@ class CosetTable(object):
     coset k by x: T[k][x] = kx. If T[k][x] is not defined yet we set it to
     None. When the algorithm terminates all entries in the table are
     assigned a non-negative integer, all rows scan correctly under all words
-    in R and the 0-th row scans correctly under all generators of H.
+    in R and the first row scans correctly under all generators of H.
     """
     def __init__(self, gens, rels, subgens=(), coxeter=True):
         """

@@ -4,7 +4,6 @@ window.requestAnimationFrame = window.requestAnimationFrame       ||
                                window.msRequestAnimationFrame;
 window.onload = start;
 
-
 const width = 177;
 const height = 177;
 const offset = 6;
@@ -45,7 +44,6 @@ function init() {
     for (var i = 0; i < width; i++) {
         grid[i] = new Array(height).fill(WALL);
     }
-
 
     var root = unexplored.shift();
     ctx.fillStyle = "#FFF";
