@@ -20,7 +20,7 @@ import helpers
 POVRAY_EXE = "povray"
 IMAGE_SIZE = 600
 IMAGE_QUALITY_LEVEL = 11  # between 0-11
-SUPER_SAMPLING_LEVEL = 5  # between 1-9
+SUPER_SAMPLING_LEVEL = 2  # between 1-9
 ANTIALIASING_LEVEL = 0.001
 
 POV_COMMAND = "cd povray && " + \
@@ -31,7 +31,7 @@ POV_COMMAND = "cd povray && " + \
               " +Q{}".format(IMAGE_QUALITY_LEVEL) + \
               " +A{}".format(ANTIALIASING_LEVEL) + \
               " +R{}".format(SUPER_SAMPLING_LEVEL) + \
-              " +O{}"
+              " +O../{}"
 
 
 def _render_model(P, input_file, output_file):
