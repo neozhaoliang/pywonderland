@@ -11,6 +11,7 @@ Usage:
   2. Run python main.py and wait for amazing things to happen!
 """
 import subprocess
+from fractions import Fraction
 import models
 import helpers
 
@@ -20,7 +21,7 @@ import helpers
 POVRAY_EXE = "povray"
 IMAGE_SIZE = 600
 IMAGE_QUALITY_LEVEL = 11  # between 0-11
-SUPER_SAMPLING_LEVEL = 2  # between 1-9
+SUPER_SAMPLING_LEVEL = 3  # between 1-9
 ANTIALIASING_LEVEL = 0.001
 
 POV_COMMAND = "cd povray && " + \
@@ -34,21 +35,24 @@ POV_COMMAND = "cd povray && " + \
               " +O../{}"
 
 
-def _render_model(P, input_file, output_file):
+def _render_model(P, render_file, output=None):
     """
     P: a polyhedra/polychora that has been initialized.
 
-    input_file: the POV-Ray scene decription file to render.
+    render_file: the POV-Ray scene decription file.
 
-    output_file: output image file.
+    output: output file name.
     """
+    if output is None:
+        output = render_file[:-4]
+
     P.build_geometry()
     P.export_pov()
-    print("rendering {} with {} vertices, {} edges, {} faces".format(output_file,
+    print("rendering {} with {} vertices, {} edges, {} faces".format(output,
                                                                      P.num_vertices,
                                                                      P.num_edges,
                                                                      P.num_faces))
-    command = POV_COMMAND.format(input_file, output_file)
+    command = POV_COMMAND.format(render_file, output)
     process = subprocess.Popen(command,
                                shell=True,
                                stderr=subprocess.PIPE,
@@ -64,7 +68,7 @@ def _render_model(P, input_file, output_file):
 def render_polyhedra(coxeter_diagram,
                      trunc_type,
                      render_file="polyhedra.pov",
-                     description=None,
+                     output=None,
                      snub=False):
     """
     The main entrance for rendering 3d polyhedra.
@@ -76,58 +80,69 @@ def render_polyhedra(coxeter_diagram,
     else:
         P = models.Polyhedra(coxeter_matrix, mirrors, trunc_type)
 
-    if not description:
-        description = render_file[:-4]
-
-    _render_model(P, render_file, description)
+    _render_model(P, render_file, output)
 
 
 def render_polychora(coxeter_diagram,
                      trunc_type,
                      render_file,
-                     description=None):
+                     output=None):
     """
     The main entrance for rendering 4d polychora.
     """
-    if not description:
-        description = render_file[:-4]
-
     coxeter_matrix = helpers.fill_matrix(coxeter_diagram)
     mirrors = helpers.get_mirrors(coxeter_diagram)
     P = models.Polychora(coxeter_matrix, mirrors, trunc_type)
-    _render_model(P, render_file, description)
+    _render_model(P, render_file, output)
 
 
-if __name__ == "__main__":
+def render_star_polyhedra(coxeter_diagram,
+                          trunc_type,
+                          h=0,
+                          render_file="star-polyhedra.pov",
+                          output=None):
+    coxeter_matrix = helpers.fill_matrix([x.numerator for x in coxeter_diagram])
+    mirrors = helpers.get_mirrors(coxeter_diagram)
+    P = models.Star(coxeter_matrix, mirrors, trunc_type, h)
+    _render_model(P, render_file, output)
+
+
+def main():
     # platonic solids
     """
-    render_polyhedra((3, 2, 3), (1, 0, 0), description="tetrahedron")
-    render_polyhedra((4, 2, 3), (1, 0, 0), description="cube")
-    render_polyhedra((3, 2, 4), (1, 0, 0), description="octahedron")
-    render_polyhedra((5, 2, 3), (1, 0, 0), description="dodecahedron")
+    render_polyhedra((3, 2, 3), (1, 0, 0), output="tetrahedron")
+    render_polyhedra((4, 2, 3), (1, 0, 0), output="cube")
+    render_polyhedra((3, 2, 4), (1, 0, 0), output="octahedron")
     """
-    render_polyhedra((3, 2, 5), (1, 0, 0), description="icosahedron")
+    render_polyhedra((5, 2, 3), (1, 0, 0), output="dodecahedron")
+    render_polyhedra((3, 2, 5), (1, 0, 0), output="icosahedron")
 
     # archimedean solids
     """
-    render_polyhedra((3, 2, 3), (1, 1, 0), description="truncated-tetrahedron")
-    render_polyhedra((4, 2, 3), (1, 1, 0), description="truncated-cube")
-    render_polyhedra((3, 2, 4), (1, 1, 0), description="truncated-octahedron")
-    render_polyhedra((5, 2, 3), (1, 1, 0), description="truncated-dodecahedron")
-    render_polyhedra((3, 2, 5), (1, 1, 0), description="truncated-icosahedron")
-    render_polyhedra((4, 2, 3), (0, 1, 0), description="cuboctahedron")
-    render_polyhedra((5, 2, 3), (0, 1, 0), description="icosidodecahedron")
-    render_polyhedra((4, 2, 3), (1, 0, 1), description="rhombicuboctahedron")
-    render_polyhedra((5, 2, 3), (1, 0, 1), description="rhombicosidodecahedron")
-    render_polyhedra((4, 2, 3), (1, 1, 1), description="truncated-cuboctahedron")
+    render_polyhedra((3, 2, 3), (1, 1, 0), output="truncated-tetrahedron")
+    render_polyhedra((4, 2, 3), (1, 1, 0), output="truncated-cube")
+    render_polyhedra((3, 2, 4), (1, 1, 0), output="truncated-octahedron")
+    render_polyhedra((5, 2, 3), (1, 1, 0), output="truncated-dodecahedron")
+    render_polyhedra((3, 2, 5), (1, 1, 0), output="truncated-icosahedron")
+    render_polyhedra((4, 2, 3), (0, 1, 0), output="cuboctahedron")
+    render_polyhedra((5, 2, 3), (0, 1, 0), output="icosidodecahedron")
+    render_polyhedra((4, 2, 3), (1, 0, 1), output="rhombicuboctahedron")
+    render_polyhedra((5, 2, 3), (1, 0, 1), output="rhombicosidodecahedron")
     """
-    render_polyhedra((5, 2, 3), (1, 1, 1), description="truncated-icosidodecahedron")
-    render_polyhedra((4, 2, 3), (1, 1, 1), description="snub-cube", snub=True)
-    render_polyhedra((5, 2, 3), (1, 1, 1), description="snub-dodecahedron", snub=True)
+    render_polyhedra((4, 2, 3), (1, 1, 1), output="truncated-cuboctahedron")
+    render_polyhedra((5, 2, 3), (1, 1, 1), output="truncated-icosidodecahedron")
+    render_polyhedra((4, 2, 3), (1, 1, 1), output="snub-cube", snub=True)
+    render_polyhedra((5, 2, 3), (1, 1, 1), output="snub-dodecahedron", snub=True)
 
     # prism and antiprism
-    render_polyhedra((7, 2, 2), (1, 0, 1), description="7-prism")
-    render_polyhedra((8, 2, 2), (1, 1, 1), description="8-antiprism", snub=True)
+    render_polyhedra((7, 2, 2), (1, 0, 1), output="7-prism")
+    render_polyhedra((8, 2, 2), (1, 1, 1), output="8-antiprism", snub=True)
+
+    # Kepler-Poinsot solids
+    render_star_polyhedra((5, 2, Fraction(5, 2)), (1, 0, 0), 3, output="great-dodecahedron")
+    render_star_polyhedra((5, 2, Fraction(5, 2)), (0, 0, 1), 3, output="small-stellated-dodecahedron")
+    render_star_polyhedra((3, 2, Fraction(5, 2)), (0, 0, 1), output="great-stellated-dodecahedron")
+    render_star_polyhedra((3, 2, Fraction(5, 2)), (1, 0, 0), output="great-icosahedron")
 
     # regular polychora
     render_polychora((3, 2, 2, 3, 2, 3), (1, 0, 0, 0), "5-cell-1000.pov", "5-cell")
@@ -153,4 +168,8 @@ if __name__ == "__main__":
     render_polychora((5, 2, 2, 3, 2, 2), (1, 1, 0, 1), "prism.pov", "5-3-prism")
 
     # you can also embed a 3d polyhedra in 4d and then project it back to 3d
-    render_polychora((3, 2, 2, 5, 2, 2), (1, 1, 0, 0), "polyhedra-ball.pov", description="buckyball")
+    render_polychora((3, 2, 2, 5, 2, 2), (1, 1, 0, 0), "polyhedra-ball.pov", output="buckyball")
+
+
+if __name__ == "__main__":
+    main()
