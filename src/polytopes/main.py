@@ -144,6 +144,15 @@ def main():
     render_star_polyhedra((3, 2, Fraction(5, 2)), (0, 0, 1), output="great-stellated-dodecahedron")
     render_star_polyhedra((3, 2, Fraction(5, 2)), (1, 0, 0), output="great-icosahedron")
 
+    # some star polyhedron
+    """
+    render_star_polyhedra((Fraction(4, 3), 2, 3), (1, 1, 0), output="stellated-truncated-hexahedron")
+    render_star_polyhedra((Fraction(3, 2), 2, 4), (1, 0, 1), output="nonconvex-great-rhombicuboctahedron")
+    render_star_polyhedra((Fraction(3, 2), 4, 4), (0, 1, 1), 2, output="small-cubicuboctahedron")
+    render_star_polyhedra((Fraction(4, 3), 2, 3), (1, 1, 1), output="great-truncated-cuboctahedron")
+    render_star_polyhedra((Fraction(5, 2), 2, 5), (0, 1, 0), 3, output="dodecadodecahedron")
+    """
+
     # regular polychora
     render_polychora((3, 2, 2, 3, 2, 3), (1, 0, 0, 0), "5-cell-1000.pov", "5-cell")
     """
@@ -153,8 +162,8 @@ def main():
     render_polychora((5, 2, 2, 3, 2, 3), (1, 0, 0, 0), "120-cell-1000.pov", "120-cell")
     """
     render_polychora((3, 2, 2, 3, 2, 5), (1, 0, 0, 0), "600-cell-1000.pov", "600-cell")
-    # some truncated polychora
-    # for more examples see the .pov files in the povray directory
+
+    # some truncated polychoron. for more examples see the .pov files in the povray directory
     """
     render_polychora((3, 2, 2, 3, 2, 3), (1, 1, 1, 0), "5-cell-1110.pov", "cantitruncated-5-cell")
     render_polychora((4, 2, 2, 3, 2, 3), (1, 1, 0, 0), "8-cell-1100.pov", "truncated-8-cell")

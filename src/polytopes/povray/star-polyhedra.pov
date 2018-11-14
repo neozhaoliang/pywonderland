@@ -19,8 +19,8 @@ background { White }
 #declare face_filter = 0.1;
 
 #declare vertex_color = Black * 0.05;
-#declare edge_colors = array[3] { Orange, Green, Cyan };
-#declare face_colors = array[3] { Yellow, Maroon, Red };
+#declare edge_colors = array[3] { Orange, Orange, Orange };
+#declare face_colors = array[3] { Yellow, Red, SkyBlue };
 
 #declare edge_finish = finish {
     ambient 0.2
@@ -32,9 +32,9 @@ background { White }
 
 #declare face_finish = finish {
     ambient 0.3
-    specular 0.1
-    diffuse 0.5
-    roughness 0.3
+    specular 0.2
+    diffuse 0.6
+    roughness 0.1
     phong 0.6
     phong_size 20
 }
@@ -77,26 +77,39 @@ background { White }
 
 #macro Face(i, num, pts)
     #local ind = 0;
-    #local center = <0, 0, 0>;
-    #while (ind < num)
+    #local center = 0;
+    #while (ind<num)
         #local center = center + pts[ind];
-        #local ind = ind + 1;
+        #local ind=ind+1;
     #end
     #local center = center / num;
-    intersection {
+
+    union {
+        polygon {
+            num + 1,
+            #local ind = 0;
+            #while (ind<num)
+                pts[ind]
+                #local ind=ind+1;
+            #end
+            pts[0]
+        }
         plane {
-        vnormalize(center), vlength(center) }
-        
-            polygon {
-                num+1,
-                #local ind=0;
-                #while (ind<num)
-                    pts[ind]
-                    #local ind=ind+1;
+            vnormalize(center), vlength(center)
+            clipped_by {
+                #local ind = 0;
+                #while (ind < num)
+                    #local nv = vnormalize(vcross(pts[ind], pts[mod(ind+1, num)]));
+                    #if (vdot(center - pts[ind], nv) > 0)
+                        #local nv = -nv;
+                    #end
+                    plane {
+                        nv, 0
+                    }
+                    #local ind = ind + 1;
                 #end
-                pts[0]
             }
-        
+        }
         face_tex(i)
     }
 #end
