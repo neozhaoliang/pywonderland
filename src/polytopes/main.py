@@ -98,12 +98,12 @@ def render_polychora(coxeter_diagram,
 
 def render_star_polyhedra(coxeter_diagram,
                           trunc_type,
-                          h=0,
+                          extra_relations=(),
                           render_file="star-polyhedra.pov",
                           output=None):
     coxeter_matrix = helpers.fill_matrix([x.numerator for x in coxeter_diagram])
     mirrors = helpers.get_mirrors(coxeter_diagram)
-    P = models.Star(coxeter_matrix, mirrors, trunc_type, h)
+    P = models.Polyhedra(coxeter_matrix, mirrors, trunc_type, extra_relations)
     _render_model(P, render_file, output)
 
 
@@ -139,8 +139,14 @@ def main():
     render_polyhedra((8, 2, 2), (1, 1, 1), output="8-antiprism", snub=True)
 
     # Kepler-Poinsot solids
-    render_star_polyhedra((5, 2, Fraction(5, 2)), (1, 0, 0), 3, output="great-dodecahedron")
-    render_star_polyhedra((5, 2, Fraction(5, 2)), (0, 0, 1), 3, output="small-stellated-dodecahedron")
+    render_star_polyhedra((5, 2, Fraction(5, 2)),
+                          (1, 0, 0),
+                          extra_relations=((0, 1, 2, 1) * 3,),
+                          output="great-dodecahedron")
+    render_star_polyhedra((5, 2, Fraction(5, 2)),
+                          (0, 0, 1),
+                          extra_relations=((0, 1, 2, 1) * 3,),
+                          output="small-stellated-dodecahedron")
     render_star_polyhedra((3, 2, Fraction(5, 2)), (0, 0, 1), output="great-stellated-dodecahedron")
     render_star_polyhedra((3, 2, Fraction(5, 2)), (1, 0, 0), output="great-icosahedron")
 
@@ -148,9 +154,9 @@ def main():
     """
     render_star_polyhedra((Fraction(4, 3), 2, 3), (1, 1, 0), output="stellated-truncated-hexahedron")
     render_star_polyhedra((Fraction(3, 2), 2, 4), (1, 0, 1), output="nonconvex-great-rhombicuboctahedron")
-    render_star_polyhedra((Fraction(3, 2), 4, 4), (0, 1, 1), 2, output="small-cubicuboctahedron")
+    render_star_polyhedra((Fraction(3, 2), 4, 4), (0, 1, 1), extra_relations=((0, 1, 2, 1) * 2,), output="small-cubicuboctahedron")
     render_star_polyhedra((Fraction(4, 3), 2, 3), (1, 1, 1), output="great-truncated-cuboctahedron")
-    render_star_polyhedra((Fraction(5, 2), 2, 5), (0, 1, 0), 3, output="dodecadodecahedron")
+    render_star_polyhedra((Fraction(5, 2), 2, 5), (0, 1, 0), extra_relations=((0, 1, 2, 1) * 3,), output="dodecadodecahedron")
     """
 
     # regular polychora

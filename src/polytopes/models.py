@@ -187,11 +187,14 @@ class BasePolytope(object):
 class Polyhedra(BasePolytope):
     """
     Base class for 3d polyhedron.
+    A presentation of the star polyhedra can be obtained by imposing more relations on
+    the generators.
     """
-    def __init__(self, coxeter_matrix, mirrors, init_dist):
+    def __init__(self, coxeter_matrix, mirrors, init_dist, extra_relations=()):
         if not len(coxeter_matrix) == len(mirrors) == len(init_dist) == 3:
             raise ValueError("Length error: the inputs must all have length 3")
         super().__init__(coxeter_matrix, mirrors, init_dist)
+        self.symmetry_rels += extra_relations
 
     def export_pov(self, filename="./povray/polyhedra-data.inc"):
         vstr = "Vertex({})\n"
@@ -310,13 +313,3 @@ class Polychora(BasePolytope):
                     f.write(helpers.pov_array(face))
                     f.write(helpers.export_face(i, face, isplane, center,
                                                 radius, facesize))
-
-
-class Star(Polyhedra):
-    """
-    A presentation of the star polytope can be obtained by imposing one more
-    relation on the generators:  (ρ0ρ1ρ2ρ1)^h = 1.
-    """
-    def __init__(self, coxeter_matrix, mirrors, init_dist, h):
-        super().__init__(coxeter_matrix, mirrors, init_dist)
-        self.symmetry_rels += ((0, 1, 2, 1) * h,)
