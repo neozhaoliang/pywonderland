@@ -15,8 +15,10 @@ from todd_coxeter import CosetTable
 class BasePolytope(object):
     """
     Base class for building polyhedron and polychoron using Wythoff's construction.
+    A presentation of the star polyhedra can be obtained by imposing more relations on
+    the generators.
     """
-    def __init__(self, coxeter_matrix, mirrors, init_dist):
+    def __init__(self, coxeter_matrix, mirrors, init_dist, extra_relations):
         """
         params:
             `coxeter_matrix`: Coxeter matrix of the symmetry group.
@@ -35,6 +37,7 @@ class BasePolytope(object):
         # relations between the generators
         self.symmetry_rels = tuple((i, j) * self.coxeter_matrix[i][j]
                                    for i, j in combinations(self.symmetry_gens, 2))
+        self.symmetry_rels += extra_relations
 
         # to be calculated later
         self.vtable = None
@@ -187,14 +190,11 @@ class BasePolytope(object):
 class Polyhedra(BasePolytope):
     """
     Base class for 3d polyhedron.
-    A presentation of the star polyhedra can be obtained by imposing more relations on
-    the generators.
     """
     def __init__(self, coxeter_matrix, mirrors, init_dist, extra_relations=()):
         if not len(coxeter_matrix) == len(mirrors) == len(init_dist) == 3:
             raise ValueError("Length error: the inputs must all have length 3")
-        super().__init__(coxeter_matrix, mirrors, init_dist)
-        self.symmetry_rels += extra_relations
+        super().__init__(coxeter_matrix, mirrors, init_dist, extra_relations)
 
     def export_pov(self, filename="./povray/polyhedra-data.inc"):
         vstr = "Vertex({})\n"
@@ -287,10 +287,10 @@ class Polychora(BasePolytope):
     """
     Base class for 4d polychoron.
     """
-    def __init__(self, coxeter_matrix, mirrors, init_dist):
+    def __init__(self, coxeter_matrix, mirrors, init_dist, extra_relations=()):
         if not len(coxeter_matrix) == len(mirrors) == len(init_dist) == 4:
             raise ValueError("Length error: the inputs must all have length 4")
-        super().__init__(coxeter_matrix, mirrors, init_dist)
+        super().__init__(coxeter_matrix, mirrors, init_dist, extra_relations)
 
     def export_pov(self, filename="./povray/polychora-data.inc"):
         vstr = "Vertex({})\n"
