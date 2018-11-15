@@ -37,25 +37,20 @@ import cairocffi as cairo
 import numpy as np
 
 
-PI = 3.14159265358979
-
-WIDTH = 800
-HEIGHT = 640
+IMAGE_SIZE = (800, 800)
 NUM_LINES = 12
-
-DIMENSION = 8  # you can change this to any integer >=2 but usually <= 12
+PI = np.pi
+DIMENSION = 5  # DIMENSION = 4 is the Ammann-Beenker tiling
 
 if DIMENSION % 2 == 0:
     GRIDS = [np.exp(PI * 1j * i / DIMENSION) for i in range(DIMENSION)]
 else:
     GRIDS = [np.exp(PI * 2j * i / DIMENSION) for i in range(DIMENSION)]
 
-SHIFTS = np.random.random(DIMENSION)
+SHIFTS = [0.5] * 5  # you can use np.random.random(5) to draw a random pattern
 
-FACE_COLOR_1 = (1.0, 0.5, 0.0)
-FACE_COLOR_2 = (0.894, 0.102, 0.11)
-FACE_COLOR_3 = (0.59, 0.9, 0.42)
-FACE_COLOR_4 = (0.13, 0.28, 0.41)
+FAT_COLOR = (0.894, 0.102, 0.11)
+THIN_COLOR = (1.0, 0.5, 0.0)
 EDGE_COLOR   = (0.216, 0.494, 0.72)
 
 
@@ -88,12 +83,12 @@ def compute_rhombus(r, s, kr, ks):
             [(kr, ks), (kr+1, ks), (kr+1, ks+1), (kr, ks+1)]]
 
 
-surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
+surface = cairo.SVGSurface("debruijn.svg", IMAGE_SIZE[0], IMAGE_SIZE[1])
 ctx = cairo.Context(surface)
 ctx.set_line_cap(cairo.LINE_CAP_ROUND)
 ctx.set_line_join(cairo.LINE_JOIN_ROUND)
 ctx.set_line_width(0.1)
-scale = max(WIDTH, HEIGHT) / (2.0 * NUM_LINES)
+scale = max(IMAGE_SIZE) / (2.0 * NUM_LINES)
 ctx.scale(scale, scale)
 ctx.translate(NUM_LINES, NUM_LINES)
 
@@ -101,17 +96,11 @@ with open("./povray/rhombus.inc", "w") as f:
     for r, s in itertools.combinations(range(DIMENSION), 2):
         for kr, ks in itertools.product(range(-NUM_LINES, NUM_LINES), repeat=2):
             if (s-r == 1 or s-r == DIMENSION - 1):
-                color = FACE_COLOR_1
+                color = FAT_COLOR
                 shape = 0
-            elif (s-r == 2 or s-r == DIMENSION - 2):
-                color = FACE_COLOR_2
-                shape = 1
-            elif (s-r == 3 or s-r == DIMENSION - 3):
-                color = FACE_COLOR_3
-                shape = 2
             else:
-                color = FACE_COLOR_4
-                shape = 3
+                color = THIN_COLOR
+                shape = 1
 
             ctx.set_source_rgb(*color)
             A, B, C, D = compute_rhombus(r, s, kr, ks)
@@ -125,7 +114,7 @@ with open("./povray/rhombus.inc", "w") as f:
             ctx.set_source_rgb(*EDGE_COLOR)
             ctx.stroke()
 
-            f.write("Rhombus(<%f, %f>, <%f, %f>, <%f, %f>, <%f, %f>, %d)\n"
+            f.write("Tile(<%f, %f>, <%f, %f>, <%f, %f>, <%f, %f>, %d)\n"
                     % (A.real, A.imag, B.real, B.imag, C.real, C.imag, D.real, D.imag, shape))
 
-surface.write_to_png("debruijn.png")
+surface.finish()

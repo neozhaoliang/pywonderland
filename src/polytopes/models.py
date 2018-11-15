@@ -16,7 +16,7 @@ class BasePolytope(object):
     """
     Base class for building polyhedron and polychoron using Wythoff's construction.
     A presentation of the star polyhedra can be obtained by imposing more relations on
-    the generators.
+    the generators. For example "(ρ0ρ1ρ2ρ1)^h = 1" for some integer h.
     """
     def __init__(self, coxeter_matrix, mirrors, init_dist, extra_relations):
         """
@@ -26,6 +26,8 @@ class BasePolytope(object):
             `mirrors`: normal vectors of the mirrors.
 
             `init_dist`: the distances between the initial point and the mirrors.
+
+            `extra_relations`: extra relations to be imposed on the generators.
         """
         self.coxeter_matrix = coxeter_matrix
         self.reflections = tuple(helpers.reflection_matrix(v) for v in mirrors)

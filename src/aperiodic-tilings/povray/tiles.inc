@@ -17,7 +17,7 @@
 //====================================================================
 // Textures of the rhombus
 
-#declare RhombusNormal = normal {
+#declare TileNormal = normal {
     average
     normal_map {
         [ .5 wrinkles .3 scale 20 ]
@@ -27,7 +27,7 @@
     scale <3, 1, 1>
 }
 
-#declare RhombusFinish = finish {
+#declare TileFinish = finish {
     ambient 0
     diffuse .9
     reflection 0.1
@@ -48,8 +48,8 @@
         #end
         #end
         #end
-        finish { RhombusFinish }
-        normal {  RhombusNormal }
+        finish { TileFinish }
+        normal {  TileNormal }
     }
 #end
 
@@ -67,7 +67,7 @@
     #end
 #end
 
-#macro RhombusTexture(shape)
+#macro TileTexture(shape)
     #declare tex1 = BaseTexture(shape)
     #declare tex2 = StoneTexture(shape)
     texture {
@@ -81,7 +81,7 @@
 
 // ========================================================
 // The main macro for a tile
-#macro Rhombus(p1, p2, p3, p4, shape)
+#macro Tile(p1, p2, p3, p4, shape)
     #local ang1 = VAngle(p2-p1, p4-p1)/2;
     #local ang2 = VAngle(p1-p2, p3-p2)/2;
     #local d1 = tile_gap/sin(ang1);
@@ -97,6 +97,6 @@
         linear_spline
         -tile_height, 0, 5
         w1 w2 w3 w4 w1
-        RhombusTexture(shape)
+        TileTexture(shape)
     }
 #end

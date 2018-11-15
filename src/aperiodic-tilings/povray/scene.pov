@@ -21,7 +21,7 @@ global_settings {
 /* Tiling                                                  */
 
 #include "tiles.inc"
-#include "rhombus.inc"
+#include "data.inc"
 
 /*=========================================================*/
 /* Icosahedron                                             */
