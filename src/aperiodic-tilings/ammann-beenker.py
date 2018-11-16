@@ -14,8 +14,9 @@ PI4 = math.pi / 4
 SQRT2 = math.sqrt(2)
 ALPHA = SQRT2 - 1
 BETA = 1 - 1 / SQRT2
-RED = (0.697, 0.425, 0.333)
-BLUE = (0, 0.4078, 0.5451)
+SQURE_COLOR = (0.098, 0.16, 0.212)
+LOZENGE_COLOR = (0.533, 0.525, 0.761)
+EDGE_COLOR = (0.474, 0.42, 0.212)
 
 
 def subdivide(tiles):
@@ -100,18 +101,20 @@ for shape, vertices in tiles:
         ctx.line_to(C.real, C.imag)
         ctx.line_to(D.real, D.imag)
         ctx.close_path()
-        ctx.set_source_rgb(*RED)
+        ctx.set_source_rgb(*LOZENGE_COLOR)
 
     else:
         A, B, C = vertices
+        D = B + C - A
         ctx.move_to(A.real, A.imag)
         ctx.line_to(B.real, B.imag)
+        ctx.line_to(D.real, D.imag)
         ctx.line_to(C.real, C.imag)
         ctx.close_path()
-        ctx.set_source_rgb(*BLUE)
+        ctx.set_source_rgb(*SQURE_COLOR)
 
     ctx.fill_preserve()
-    ctx.set_source_rgb(0.2, 0.2, 0.2)
+    ctx.set_source_rgb(*EDGE_COLOR)
     ctx.stroke()
 
 surface.finish()

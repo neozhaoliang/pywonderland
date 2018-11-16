@@ -92,7 +92,7 @@ scale = max(IMAGE_SIZE) / (2.0 * NUM_LINES)
 ctx.scale(scale, scale)
 ctx.translate(NUM_LINES, NUM_LINES)
 
-with open("./povray/rhombus.inc", "w") as f:
+with open("./povray/data.inc", "w") as f:
     for r, s in itertools.combinations(range(DIMENSION), 2):
         for kr, ks in itertools.product(range(-NUM_LINES, NUM_LINES), repeat=2):
             if (s-r == 1 or s-r == DIMENSION - 1):
