@@ -68,7 +68,7 @@ class Shader(object):
             gl.glGetShaderiv(shader, gl.GL_INFO_LOG_LENGTH, ct.byref(info_length))
             error_info = ct.create_string_buffer(info_length.value)
             gl.glGetShaderInfoLog(shader, info_length, None, error_info)
-            print(error_info.value)
+            print(error_info.value.decode("ascii"))
 
         # 6. else attach the shader to our program
         else:
