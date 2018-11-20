@@ -2,6 +2,8 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Draw Hilbert's curve using Gray code
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:copyright (c) 2018 by Zhao Liang
 """
 from colorsys import hls_to_rgb
 import gifmaze as gm
@@ -20,7 +22,6 @@ class Hilbert(object):
     def encode(self, index):
         """Convert index to coordinates of a point on the Hilbert curve.
         """
-
         # Compute base-n digits of index.
         digits = []
         while True:
@@ -51,7 +52,6 @@ class Hilbert(object):
     def decode(self, coords):
         """Convert coordinates to index of a point on the Hilbert curve.
         """
-
         # Convert n m-bit coordinates to m base-n digits.
         coords = list(coords)
         m = self.log2(max(coords)) + 1
@@ -119,7 +119,7 @@ def color_pixel(index):
 
 
 def pixels_hilbert(size):
-    """Return the pixels of a 2d Hilbert curve.
+    """Generate the pixels of a 2d Hilbert curve.
     """
     h = Hilbert(2)
     for k in range(size * size):
@@ -141,15 +141,16 @@ def hilbert(maze, render, pixels, speed=30):
 order = 6
 curve_size = (1 << order)
 maze_size = 2 * curve_size + 1
-cell_size = 4
-margin = 6
+cell_size = 5
+margin = 4
 image_size = cell_size * maze_size + 2 * margin
 
 pixels = tuple(pixels_hilbert(curve_size))
 colors = [0, 0, 0]
-for i in range(255):
-    rgb = hls_to_rgb((i / 360.0) % 1, 0.5, 1.0)
-    colors += [int(round(255 * x)) for x in rgb]
+h = Hilbert(3)
+for i in range(256):
+    rgb = hls_to_rgb(i / 256.0, 0.5, 1.0)
+    colors += [int(255 * x) for x in rgb]
 
 surface = gm.GIFSurface(image_size, image_size, bg_color=0)
 surface.set_palette(colors)
