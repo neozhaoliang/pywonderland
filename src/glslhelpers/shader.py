@@ -95,7 +95,7 @@ class Shader(object):
             gl.glGetProgramiv(self.program, gl.GL_INFO_LOG_LENGTH, ct.byref(info_length))
             error_info = ct.create_string_buffer(info_length.value)
             gl.glGetProgramInfoLog(self.program, info_length, None, error_info)
-            print(error_info.value)
+            print(error_info.value.decode("ascii"))
 
     def bind(self):
         gl.glUseProgram(self.program)

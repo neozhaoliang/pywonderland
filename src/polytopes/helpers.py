@@ -1,4 +1,5 @@
 """
+Some helper functions for building the geometry and exporting to POV-Ray.
 """
 import sys
 import numpy as np
