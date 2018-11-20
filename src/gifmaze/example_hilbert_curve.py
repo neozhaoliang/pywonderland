@@ -1,7 +1,7 @@
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Draw Hilbert's curve using Gray code
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Hilbert curve animation based on Gray code
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :copyright (c) 2018 by Zhao Liang
 """
@@ -47,7 +47,8 @@ class Hilbert(object):
 
             # Compute orientation of next sub-cube.
             vertex, edge = self.rotate(digit, vertex, edge)
-        return tuple(2 * x + 1 for x in coords)
+        # Map to the pixels in the gif image.
+        return tuple(2 * x for x in coords)
 
     def decode(self, coords):
         """Convert coordinates to index of a point on the Hilbert curve.
@@ -113,7 +114,9 @@ class Hilbert(object):
 
 
 def color_pixel(index):
-    """Color the vertex by its index.
+    """Color the vertex by its index. Note the color index must lie
+       between 0-255 since gif allows at most 256 colors in the global
+       color table.
     """
     return max(index % 256, 1)
 
@@ -127,6 +130,8 @@ def pixels_hilbert(size):
 
 
 def hilbert(maze, render, pixels, speed=30):
+    """We just walk along the curve and color the pixels.
+    """
     for i in range(len(pixels) - 1):
         maze.mark_cell(pixels[i], color_pixel(i))
         maze.mark_space(pixels[i], pixels[i + 1], color_pixel(i))
@@ -140,17 +145,16 @@ def hilbert(maze, render, pixels, speed=30):
 
 order = 6
 curve_size = (1 << order)
-maze_size = 2 * curve_size + 1
-cell_size = 5
-margin = 4
+maze_size = 2 * curve_size - 1
+cell_size = 4
+margin = 6
 image_size = cell_size * maze_size + 2 * margin
 
 pixels = tuple(pixels_hilbert(curve_size))
 colors = [0, 0, 0]
-h = Hilbert(3)
-for i in range(256):
-    rgb = hls_to_rgb(i / 256.0, 0.5, 1.0)
-    colors += [int(255 * x) for x in rgb]
+for i in range(255):
+    rgb = hls_to_rgb((i / 256.0) % 1, 0.5, 1.0)
+    colors += [int(round(255 * x)) for x in rgb]
 
 surface = gm.GIFSurface(image_size, image_size, bg_color=0)
 surface.set_palette(colors)
@@ -158,7 +162,7 @@ maze = gm.Maze(maze_size, maze_size, mask=None).scale(cell_size).translate((marg
 
 anim = gm.Animation(surface)
 anim.pause(100)
-anim.run(hilbert, maze, speed=15, delay=5, pixels=pixels)
+anim.run(hilbert, maze, speed=20, delay=5, pixels=pixels)
 anim.pause(500)
 surface.save("hilbert.gif")
 surface.close()
