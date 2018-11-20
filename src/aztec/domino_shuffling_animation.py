@@ -26,17 +26,14 @@ def make_animation(order, size, filename):
     """
     Begin with the Aztec diamond of order zero, repeat the operations
     `delete`, `slide` and `create` until its order reaches `order`.
-    Render one frame for each operation and then use ImageMagick to
+    Render one frame for each operation and call ImageMagick to
     convert the images to a gif file.
 
     Parameters
     ----------
-
-    order: total steps to run the algorithm.
-
-    size: size of the gif image.
-
-    filename: the output .gif filename.
+    :order:  total steps to run the algorithm.
+    :size:  size of the gif image.
+    :filename:  the output .gif filename.
     """
     az = aztec.AztecDiamond(0)
     for i in trange(order):

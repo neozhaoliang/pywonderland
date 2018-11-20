@@ -36,7 +36,8 @@ class AztecDiamond(object):
     """
 
     def __init__(self, n):
-        """Create an Aztec diamond graph of order n with an empty tiling."""
+        """Create an Aztec diamond graph of order n with an empty tiling.
+        """
         self.order = n
 
         self.cells = []
@@ -49,14 +50,14 @@ class AztecDiamond(object):
 
     @staticmethod
     def block(i, j):
-        """Return the 2x2 block with its bottom-left cell at (i, j)."""
+        """Return the 2x2 block with its bottom-left cell at (i, j).
+        """
         return [(i, j), (i+1, j), (i, j+1), (i+1, j+1)]
 
     def is_black(self, i, j):
         """
-        Check if cell (i, j) is colored black.
-        Note that the chessboard is colored in the fashion that the
-        leftmost cell in the top row is white.
+        Check if cell (i, j) is colored black. Note that the chessboard is
+        colored in the fashion that the leftmost cell in the top row is white.
         """
         return (i + j + self.order) % 2 == 1
 
@@ -66,15 +67,15 @@ class AztecDiamond(object):
         return all(self.tile[cell] == fill for cell, fill in zip(self.block(i, j), dominoes))
 
     def fill(self, i, j, dominoes):
-        """Fill a block with two parallel dominoes of given orientations."""
+        """Fill a block with two parallel dominoes of given orientations.
+        """
         for cell, fill in zip(self.block(i, j), dominoes):
             self.tile[cell] = fill
 
     def delete(self):
         """
-        Delete all bad blocks in a tiling.
-        A block is called bad if it contains a pair of parallel dominoes that
-        have orientations toward each other.
+        Delete all bad blocks in a tiling. A block is called bad if it contains
+        a pair of parallel dominoes that have orientations toward each other.
         """
         for i, j in self.cells:
             try:
@@ -86,7 +87,8 @@ class AztecDiamond(object):
         return self
 
     def slide(self):
-        """Move all dominoes one step according to their orientations."""
+        """Move all dominoes one step according to their orientations.
+        """
         new_board = AztecDiamond(self.order + 1)
         for (i, j) in self.cells:
             if self.tile[(i, j)] == 'n':

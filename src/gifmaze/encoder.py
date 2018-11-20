@@ -21,6 +21,7 @@ Structure of a GIF file: (in the order they appear in the file)
 Reference for the GIF89a specification:
 
     http://giflib.sourceforge.net/whatsinagif/index.html
+
 """
 from struct import pack
 
@@ -30,16 +31,14 @@ __all__ = ['screen_descriptor', 'loop_control_block', 'graphics_control_block',
 
 
 def screen_descriptor(width, height, color_depth):
-    """
-    This block specifies both the size of the image and its global color table.
+    """This block specifies both the size of the image and its global color table.
     """
     byte = 0b10000000 | (color_depth - 1) | (color_depth - 1) << 4
     return pack('<6s2H3B', b'GIF89a', width, height, byte, 0, 0)
 
 
 def loop_control_block(loop):
-    """
-    This block specifies the number of loops (0 means loop infinitely).
+    """This block specifies the number of loops (0 means loop infinitely).
     """
     return pack('<3B8s3s2BHB', 0x21, 0xFF, 11, b'NETSCAPE', b'2.0', 3, 1, loop, 0)
 
@@ -64,8 +63,7 @@ def image_descriptor(left, top, width, height, byte=0):
 
 
 def rectangle(left, top, width, height, color):
-    """
-    A rectangle painted with a given color.
+    """A rectangle painted with a given color.
     """
     descriptor = image_descriptor(left, top, width, height)
     data = lzw_compress([color] * width * height, mcl=2)
@@ -73,9 +71,8 @@ def rectangle(left, top, width, height, color):
 
 
 def pause(delay, trans_index=0):
-    """
-    A 1x1 invisible frame that can be used for padding delay time
-    in an animation.
+    """A 1x1 invisible frame that can be used for padding delay time
+       in an animation.
     """
     control = graphics_control_block(delay, trans_index)
     pixel1x1 = rectangle(0, 0, 1, 1, trans_index)
@@ -85,7 +82,7 @@ def pause(delay, trans_index=0):
 def parse_image(img):
     """
     Parse a gif image and get its palette and LZW compressed pixel data.
-    `image` must be an instance of `PIL.Image.Image` class and of the .gif format.
+    `img` must be an instance of `PIL.Image.Image` class and of the .gif format.
     """
     data = list(img.getdata())
     colors = []
@@ -174,12 +171,13 @@ def lzw_compress(input_data, mcl):
     """
     The Lempel-Ziv-Welch compression algorithm used in the GIF89a specification.
 
-    `input_data`: a 1-d list consists of integers in range [0, 255],
-         these integers are the indices of the colors of the pixels
-         in the global color table. We do not check the validity of
-         this input data here for efficiency.
-
-    `mcl`: minimum code length for compression, it's an integer between 2 and 12.
+    parameters
+    ----------
+    :input_data:  a 1-d list consists of integers in range [0, 255],
+                  these integers are the indices of the colors of the pixels
+                  in the global color table. We do not check the validity of
+                  this input data here for efficiency.
+    :mcl:  minimum code length for compression, it's an integer between 2 and 12.
 
     GIF allows the minimum code length as small as 2 and as large as 12.
     Even there are only two colors, the minimum code length must be at least 2.
