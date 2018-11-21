@@ -47,7 +47,6 @@ class Hilbert(object):
 
             # Compute orientation of next sub-cube.
             vertex, edge = self.rotate(digit, vertex, edge)
-        # Map to the pixels in the gif image.
         return tuple(2 * x for x in coords)
 
     def decode(self, coords):
@@ -124,7 +123,7 @@ def color_pixel(index):
 def pixels_hilbert(size):
     """Generate the pixels of a 2d Hilbert curve.
     """
-    h = Hilbert(2)
+    h = Hilbert(2)  # 2d curve
     for k in range(size * size):
         yield h.encode(k)
 
@@ -143,15 +142,15 @@ def hilbert(maze, render, pixels, speed=30):
         yield render(maze)
 
 
-order = 6
-curve_size = (1 << order)
-maze_size = 2 * curve_size - 1
+order = 6  # order of the curve
+curve_size = (1 << order)  # width & height of the curve
+maze_size = 2 * curve_size - 1  # pad one space between two adjacent vertices
 cell_size = 4
 margin = 6
 image_size = cell_size * maze_size + 2 * margin
 
-pixels = tuple(pixels_hilbert(curve_size))
-colors = [0, 0, 0]
+pixels = tuple(pixels_hilbert(curve_size))  # (x, y) coordinate of the pixels
+colors = [0, 0, 0]  # global color table
 for i in range(255):
     rgb = hls_to_rgb((i / 256.0) % 1, 0.5, 1.0)
     colors += [int(round(255 * x)) for x in rgb]

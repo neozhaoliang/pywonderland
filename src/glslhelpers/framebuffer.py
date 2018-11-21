@@ -4,8 +4,7 @@ import pyglet.gl as gl
 
 
 class FrameBuffer(object):
-    """
-    A very simple helper class for handling the frame buffer object (fbo).
+    """A very simple helper class for handling the frame buffer object (fbo).
     """
 
     def __init__(self):
@@ -19,7 +18,8 @@ class FrameBuffer(object):
         gl.glBindFramebufferEXT(gl.GL_FRAMEBUFFER_EXT, 0)
 
     def attach_texture(self, texture):
-        """`texture` must be an instance of pyglet's texture class."""
+        """`texture` must be an instance of pyglet's texture class.
+        """
         gl.glFramebufferTexture2DEXT(gl.GL_FRAMEBUFFER_EXT, gl.GL_COLOR_ATTACHMENT0_EXT,
                                      texture.target, texture.id, texture.level)
 

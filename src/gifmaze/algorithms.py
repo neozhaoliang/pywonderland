@@ -14,22 +14,21 @@ from gifmaze import Maze
 
 
 def wilson(maze, render, speed=50, root=(0, 0)):
-    """Maze by Wilson's uniform spanning tree algorithm."""
+    """Maze by Wilson's uniform spanning tree algorithm.
+    """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Wilson's algorithm")
 
     def add_to_path(path, cell):
-        """
-        Add a cell to the path of current random walk.
-        Note `path` is modified inside this function.
+        """Add a cell to the path of current random walk.
+           Note `path` is modified inside this function.
         """
         maze.mark_cell(cell, Maze.PATH)
         maze.mark_space(path[-1], cell, Maze.PATH)
         path.append(cell)
 
     def erase_loop(path, cell):
-        """
-        When a cell is visited twice then a loop is created, erase it.
-        Note this function returns a new version of the path.
+        """When a cell is visited twice then a loop is created, erase it.
+           Note this function returns a new version of the path.
         """
         index = path.index(cell)
         # erase the loop
@@ -127,8 +126,10 @@ def bfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
 
 
 def random_dfs(maze, render, speed=10, start=(0, 0)):
-    """Maze generation by random depth-first search."""
+    """Maze generation by random depth-first search.
+    """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running random depth first search")
+
     stack = [(start, v) for v in maze.get_neighbors(start)]
     maze.mark_cell(start, Maze.TREE)
 
@@ -156,8 +157,10 @@ def random_dfs(maze, render, speed=10, start=(0, 0)):
 
 
 def dfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
-    """Solve a maze by dfs."""
+    """Solve a maze by dfs.
+    """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running dfs search.")
+
     came_from = {start: start}  # a dict to remember each step.
     stack = [start]
     maze.mark_cell(start, Maze.FILL)
@@ -197,7 +200,8 @@ def dfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
 
 
 def prim(maze, render, speed=30, start=(0, 0)):
-    """Maze by Prim's algorithm."""
+    """Maze by Prim's algorithm.
+    """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Prim's algorithm")
 
     queue = [(random.random(), start, v) for v in maze.get_neighbors(start)]
@@ -227,8 +231,10 @@ def prim(maze, render, speed=30, start=(0, 0)):
 
 
 def kruskal(maze, render, speed=30):
-    """Maze by Kruskal's algorithm."""
+    """Maze by Kruskal's algorithm.
+    """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Kruskal's algorithm")
+
     parent = {v: v for v in maze.cells}
     rank = {v: 0 for v in maze.cells}
     edges = [(random.random(), u, v) for u in maze.cells

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-`Maze` is the top layer object on which we run the algorithms.
+This file contains three main classes:
 
-`GIFSurface` is the bottom layer object that handles the information
-about the output GIF image.
-
-`Animation` is the middle layer object that controls how
-a `PixelCanvas` object is rendered to a `GIFSurface` object.
+1. `Maze` is the top layer object on which we run the algorithms.
+2. `GIFSurface` is the bottom layer object that handles the information
+   about the output GIF image.
+3. `Animation` is the middle layer object that controls how a `PixelCanvas`
+   object is rendered to a `GIFSurface` object.
 """
 from io import BytesIO
 from functools import partial
@@ -73,14 +73,14 @@ class Maze(PixelCanvas):
         """
         Parameters
         ----------
-        width, height: size of the maze, must both be odd integers.
+        :width &height:  size of the maze, must both be odd integers.
 
-        mask: `None` or a file-like image or an instance of PIL's Image class.
-              If not `None` then this mask image must be of binary type:
-              the black pixels are considered as `walls` and are overlayed
-              on top of the grid graph. Note the walls must preserve the
-              connectivity of the grid graph, otherwise the program will
-              not terminate.
+        :mask:  `None` or a file-like image or an instance of PIL's Image class.
+                 If not `None` then this mask image must be of binary type:
+                 the black pixels are considered as `walls` and are overlayed
+                 on top of the grid graph. Note the walls must preserve the
+                 connectivity of the grid graph, otherwise the program will
+                 not terminate.
         """
         if (width * height % 2 == 0):
             raise ValueError('The width and height must both be odd integers.')
@@ -123,17 +123,20 @@ class Maze(PixelCanvas):
         return self._graph[cell]
 
     def mark_cell(self, cell, value):
-        """Mark a cell and update `frame_box` and `num_changes`."""
+        """Mark a cell and update `frame_box` and `num_changes`.
+        """
         self.set_pixel(cell[0], cell[1], value)
         self._num_changes += 1
 
     def mark_space(self, c1, c2, value):
-        """Mark the space between two adjacent cells."""
+        """Mark the space between two adjacent cells.
+        """
         c = ((c1[0] + c2[0]) // 2, (c1[1] + c2[1]) // 2)
         self.mark_cell(c, value)
 
     def mark_path(self, path, value):
-        """Mark the cells in a path and the spaces between them."""
+        """Mark the cells in a path and the spaces between them.
+        """
         for cell in path:
             self.mark_cell(cell, value)
         for c1, c2 in zip(path[1:], path[:-1]):
@@ -143,7 +146,8 @@ class Maze(PixelCanvas):
         return self.get_pixel(*cell)
 
     def barrier(self, c1, c2):
-        """Check if two adjacent cells are connected."""
+        """Check if two adjacent cells are connected.
+        """
         x = (c1[0] + c2[0]) // 2
         y = (c1[1] + c2[1]) // 2
         return self._grid[x][y] == Maze.WALL
@@ -180,14 +184,11 @@ class GIFSurface(object):
     """
     def __init__(self, width, height, loop=0, bg_color=None):
         """
-        ----------
         Parameters
-
-        width, height: size of the image in pixels.
-
-        loop: number of loops of the image.
-
-        bg_color: background color index.
+        ----------
+        :width & height:  size of the image in pixels.
+        :loop:  number of loops of the image.
+        :bg_color:  background color index.
         """
         self.width = width
         self.height = height
@@ -200,10 +201,8 @@ class GIFSurface(object):
 
     @classmethod
     def from_image(cls, img_file, loop=0):
-        """
-        Create a surface from a given image file.
-        The size of the returned surface is the same with the image's.
-        The image is then painted as the background.
+        """Create a surface from a given image file. The size of the returned
+           surface is the same with the image's. The image is then painted as the background.
         """
         # the image file usually contains more than 256 colors
         # so we need to convert it to gif format first.
@@ -218,10 +217,8 @@ class GIFSurface(object):
         self._io.write(data)
 
     def set_palette(self, palette):
-        """
-        Set the global color table of the GIF image.
-        The user must specify at least one rgb color for it.
-        `palette` must be a 1-d list of integers between 0-255.
+        """Set the global color table of the GIF image. The user must specify at
+           least one rgb color for it. `palette` must be a 1-d list of integers between 0-255.
         """
         try:
             palette = bytearray(palette)
@@ -243,9 +240,8 @@ class GIFSurface(object):
 
     @property
     def _gif_header(self):
-        """
-        Get the `logical screen descriptor`, `global color table`
-        and `loop control block`.
+        """Get the `logical screen descriptor`, `global color table`
+           and `loop control block`.
         """
         if self.palette is None:
             raise ValueError('Missing global color table.')
@@ -256,8 +252,7 @@ class GIFSurface(object):
         return screen + self.palette + loop
 
     def save(self, filename):
-        """
-        Save the animation to a .gif file, note the 'wb' mode here!
+        """Save the animation to a .gif file, note the 'wb' mode here!
         """
         with open(filename, 'wb') as f:
             f.write(self._gif_header)
@@ -269,15 +264,16 @@ class GIFSurface(object):
 
 
 class Render(object):
+    """This class encodes the region specified by the `frame_box` attribute of
+       a PixelCanvas into one frame in the GIF image.
     """
-    This class encodes the region specified by the `frame_box` attribute of a PixelCanvas
-    into one frame in the GIF image.
-    """
+
     def __init__(self, cmap, mcl):
         """
-        cmap: a dict that maps the value of the cells to their color indices.
-
-        mcl: the minimum code length for the LZW compression.
+        parameters
+        ----------
+        :cmap:  a dict that maps the value of the cells to their color indices.
+        :mcl:  the minimum code length for the LZW compression.
 
         A default dict is initialized so that one can set the colormap by
         just specifying what needs to be specified.
@@ -319,20 +315,21 @@ class Render(object):
 
 
 class Animation(object):
-    """
-    This class is the main entrance for calling algorithms to
-    run and rendering the PixelCanvas into the image.
+    """This class is the main entrance for calling algorithms to
+       run and rendering the PixelCanvas into the image.
     """
 
     def __init__(self, surface):
         self._gif_surface = surface
 
     def pause(self, delay, trans_index=0):
-        """Pause the animation by padding a 1x1 invisible frame."""
+        """Pause the animation by padding a 1x1 invisible frame.
+        """
         self._gif_surface.write(encoder.pause(delay, trans_index))
 
     def paint(self, *args):
-        """Paint a rectangular region in the surface."""
+        """Paint a rectangular region in the surface.
+        """
         self._gif_surface.write(encoder.rectangle(*args))
 
     def run(self, algo, pcanvas, delay=5, trans_index=None,
@@ -340,22 +337,14 @@ class Animation(object):
         """
         The entrance for running the animations.
 
-        --------
-        Parameters:
-
-        algo: name of the algorithm.
-
-        pcanvas: an instance of the `PixelCanvas` class.
-
-        delay: delay time between successive frames.
-
-        trans_index: the transparent channel.
-            `None` means there is no transparent color.
-
-        cmap: a dict that maps the values of the cells in a PixelCanvas
-            to their color indices.
-
-        mcl: see the doc for the lzw_compress.
+        Parameters
+        ----------
+        :algo:  name of the algorithm.
+        :maze:  an instance of the `PixelCanvas` class.
+        :delay:  delay time between successive frames.
+        :trans_index:  the transparent channel. `None` means there is no transparent color.
+        :cmap:  a dict that maps the values of the cells in a maze to their color indices.
+        :mcl:  see the doc for `lzw_compress`.
         """
         render = Render(cmap, mcl)
         control = encoder.graphics_control_block(delay, trans_index)

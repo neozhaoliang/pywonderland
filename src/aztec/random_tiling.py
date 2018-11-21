@@ -26,14 +26,10 @@ def render_with_cairo(az, imgsize, extent, filename):
 
     Parameters
     ----------
-
-    az: an instance of the AztecDiamond class.
-
-    imgsize: image size in pixels, e.g. size = 600 means 600x600.
-
-    extent: range of the axis: [-extent, extent] x [-extent, extent]
-
-    filename: output filename, must be a .png image.
+    :az:  an instance of the AztecDiamond class.
+    :imgsize:  image size in pixels, e.g. size = 600 means 600x600.
+    :extent:  range of the axis: [-extent, extent] x [-extent, extent]
+    :filename:  output filename, must be a .png image.
     """
     import cairocffi as cairo
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, imgsize, imgsize)
@@ -108,7 +104,8 @@ def render_with_matplotlib(az, imgsize, extent, filename):
 
 
 def render(program, *args, **kwargs):
-    """`program must be either `cairo` or `matplotlib`."""
+    """`program` must be either `cairo` or `matplotlib`.
+    """
     if program == 'cairo':
         render_with_cairo(*args, **kwargs)
     elif program == 'matplotlib':
@@ -133,4 +130,4 @@ if __name__ == '__main__':
     for _ in trange(args.order):
         az = az.delete().slide().create()
 
-    render(args.prog, az, args.size, az.order+1, args.filename)
+    render(args.prog, az, args.size, az.order + 1, args.filename)

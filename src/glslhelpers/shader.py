@@ -4,17 +4,15 @@ import pyglet.gl as gl
 
 
 class Shader(object):
-    """
-    A helper class for compiling and communicating with shader programs.
+    """A helper class for compiling and communicating with shader programs.
     """
 
     def __init__(self, vert_files, frag_files):
         """
         Parameters
         ----------
-
-        vert_files: a list of files that contain the vertex shader.
-        frag_files: a list of files that contain the fragment shader.
+        :vert_files:  a list of files that contain the vertex shader.
+        :frag_files:  a list of files that contain the fragment shader.
         """
         self.program = gl.glCreateProgram()
         self.compile_and_attach_shader(vert_files, gl.GL_VERTEX_SHADER)
@@ -25,9 +23,8 @@ class Shader(object):
         """
         Parameters
         ----------
-
-        shader_files: a list of the shader files.
-        shader_type: `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`.
+        :shader_files:  a list of the shader files.
+        :shader_type:  `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`.
 
         Main steps to compile and attach a shader:
         1. glCreateShader:
@@ -95,7 +92,7 @@ class Shader(object):
             gl.glGetProgramiv(self.program, gl.GL_INFO_LOG_LENGTH, ct.byref(info_length))
             error_info = ct.create_string_buffer(info_length.value)
             gl.glGetProgramInfoLog(self.program, info_length, None, error_info)
-            print(error_info.value.decode("ascii"))
+            print(error_info.value)
 
     def bind(self):
         gl.glUseProgram(self.program)
@@ -145,12 +142,10 @@ class Shader(object):
 
         Parameters
         ----------
+        :name:  the attribute name in the shader.
+        :data:  a list of vertex attributes (positions, colors, ...)
 
-        name: the attribute name in the shader.
-
-        data: a list of vertex attributes (positions, colors, ...)
-
-        Example: name = "positions", data = [0, 0, 0, 1, 1, 0, 1, 1].
+        Example:  name = "positions", data = [0, 0, 0, 1, 1, 0, 1, 1].
         """
         data_ctype = (gl.GLfloat * len(data))(*data)
 
