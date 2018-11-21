@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-This file contains the three main classes:
+This file contains three main classes:
 
 1. `Maze` is the top layer object on which we run the algorithms.
 2. `GIFSurface` is the bottom layer object that handles the information
    about the output GIF image.
-3. `Animation` is the middle layer object that controls how a `Maze`
+3. `Animation` is the middle layer object that controls how a `PixelCanvas`
    object is rendered to a `GIFSurface` object.
-
 """
 from io import BytesIO
 from functools import partial
@@ -15,7 +14,44 @@ from PIL import Image
 import encoder
 
 
-class Maze(object):
+class PixelCanvas(object):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self._grid = [[0] * height for _ in range(width)]
+        self._frame_box = None  # a 4-tuple maintains the region that to be updated.
+        self.scaling = 1
+        self.translation = (0, 0)
+
+    def set_pixel(self, x, y, value):
+        self._grid[x][y] = value
+        if self._frame_box is not None:
+            left, top, right, bottom = self._frame_box
+            self._frame_box = (min(x, left),  min(y, top),
+                               max(x, right), max(y, bottom))
+        else:
+            self._frame_box = (x, y, x, y)
+
+    def get_pixel(self, x, y):
+        return self._grid[x][y]
+
+    def reset(self):
+        self._frame_box = None
+
+    @property
+    def frame_box(self):
+        return self._frame_box
+
+    def scale(self, c):
+        self.scaling = c
+        return self
+
+    def translate(self, v):
+        self.translation = v
+        return self
+
+
+class Maze(PixelCanvas):
     """
     This class defines the basic structure of a maze and some operations on it.
     A maze is represented by a grid with `height` rows and `width` columns,
@@ -49,11 +85,9 @@ class Maze(object):
         if (width * height % 2 == 0):
             raise ValueError('The width and height must both be odd integers.')
 
-        self.width = width
-        self.height = height
-        self._grid = [[0] * height for _ in range(width)]
+        super(Maze, self).__init__(width, height)
+
         self._num_changes = 0   # a counter holds how many cells are changed.
-        self._frame_box = None  # a 4-tuple maintains the region that to be updated.
 
         if mask is not None:
             if isinstance(mask, Image.Image):
@@ -84,8 +118,6 @@ class Maze(object):
             return neighbors
 
         self._graph = {v: neighborhood(v) for v in self.cells}
-        self.scaling = 1
-        self.translation = (0, 0)
 
     def get_neighbors(self, cell):
         return self._graph[cell]
@@ -93,16 +125,8 @@ class Maze(object):
     def mark_cell(self, cell, value):
         """Mark a cell and update `frame_box` and `num_changes`.
         """
-        x, y = cell
-        self._grid[x][y] = value
+        self.set_pixel(cell[0], cell[1], value)
         self._num_changes += 1
-
-        if self._frame_box is not None:
-            left, top, right, bottom = self._frame_box
-            self._frame_box = (min(x, left),  min(y, top),
-                               max(x, right), max(y, bottom))
-        else:
-            self._frame_box = (x, y, x, y)
 
     def mark_space(self, c1, c2, value):
         """Mark the space between two adjacent cells.
@@ -119,8 +143,7 @@ class Maze(object):
             self.mark_space(c1, c2, value)
 
     def get_cell(self, cell):
-        x, y = cell
-        return self._grid[x][y]
+        return self.get_pixel(*cell)
 
     def barrier(self, c1, c2):
         """Check if two adjacent cells are connected.
@@ -142,24 +165,12 @@ class Maze(object):
         return self._grid[x][y] == Maze.PATH
 
     def reset(self):
+        super(Maze, self).reset()
         self._num_changes = 0
-        self._frame_box = None
-
-    @property
-    def frame_box(self):
-        return self._frame_box
 
     @property
     def num_changes(self):
         return self._num_changes
-
-    def scale(self, c):
-        self.scaling = c
-        return self
-
-    def translate(self, v):
-        self.translation = v
-        return self
 
 
 class GIFSurface(object):
@@ -253,8 +264,8 @@ class GIFSurface(object):
 
 
 class Render(object):
-    """This class encodes the region specified by the `frame_box` attribute
-       of a maze into one frame in the GIF image.
+    """This class encodes the region specified by the `frame_box` attribute of
+       a PixelCanvas into one frame in the GIF image.
     """
 
     def __init__(self, cmap, mcl):
@@ -272,39 +283,40 @@ class Render(object):
             self.colormap.update(cmap)
         self.compress = partial(encoder.lzw_compress, mcl=mcl)
 
-    def __call__(self, maze):
-        """Encode current maze into one frame and return the encoded data.
-           Note the graphics control block is not added here.
+    def __call__(self, pcanvas):
+        """
+        Encode current PixelCanvas into one frame and return the encoded data.
+        Note the graphics control block is not added here.
         """
         # the image descriptor
-        if maze.frame_box is not None:
-            left, top, right, bottom = maze.frame_box
+        if pcanvas.frame_box is not None:
+            left, top, right, bottom = pcanvas.frame_box
         else:
-            left, top, right, bottom = 0, 0, maze.width - 1, maze.height - 1
+            left, top, right, bottom = 0, 0, pcanvas.width - 1, pcanvas.height - 1
 
         width = right - left + 1
         height = bottom - top + 1
-        descriptor = encoder.image_descriptor(maze.scaling * left + maze.translation[0],
-                                              maze.scaling * top + maze.translation[1],
-                                              maze.scaling * width,
-                                              maze.scaling * height)
+        descriptor = encoder.image_descriptor(pcanvas.scaling * left + pcanvas.translation[0],
+                                              pcanvas.scaling * top + pcanvas.translation[1],
+                                              pcanvas.scaling * width,
+                                              pcanvas.scaling * height)
 
-        pixels = [self.colormap[maze.get_cell((x // maze.scaling + left,
-                                               y // maze.scaling + top))]
-                  for y in range(height * maze.scaling)
-                  for x in range(width * maze.scaling)]
+        pixels = [self.colormap[pcanvas.get_cell((x // pcanvas.scaling + left,
+                                                  y // pcanvas.scaling + top))]
+                  for y in range(height * pcanvas.scaling)
+                  for x in range(width * pcanvas.scaling)]
 
         # the compressed image data of this frame
         data = self.compress(pixels)
         # clear `num_changes` and `frame_box`
-        maze.reset()
+        pcanvas.reset()
 
         return descriptor + data
 
 
 class Animation(object):
     """This class is the main entrance for calling algorithms to
-       run and rendering the maze into the image.
+       run and rendering the PixelCanvas into the image.
     """
 
     def __init__(self, surface):
@@ -320,7 +332,7 @@ class Animation(object):
         """
         self._gif_surface.write(encoder.rectangle(*args))
 
-    def run(self, algo, maze, delay=5, trans_index=None,
+    def run(self, algo, pcanvas, delay=5, trans_index=None,
             cmap=None, mcl=8, **kwargs):
         """
         The entrance for running the animations.
@@ -328,7 +340,7 @@ class Animation(object):
         Parameters
         ----------
         :algo:  name of the algorithm.
-        :maze:  an instance of the `Maze` class.
+        :maze:  an instance of the `PixelCanvas` class.
         :delay:  delay time between successive frames.
         :trans_index:  the transparent channel. `None` means there is no transparent color.
         :cmap:  a dict that maps the values of the cells in a maze to their color indices.
@@ -336,5 +348,5 @@ class Animation(object):
         """
         render = Render(cmap, mcl)
         control = encoder.graphics_control_block(delay, trans_index)
-        for frame in algo(maze, render, **kwargs):
+        for frame in algo(pcanvas, render, **kwargs):
             self._gif_surface.write(control + frame)

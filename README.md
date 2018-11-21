@@ -1,3 +1,5 @@
+[![](https://travis-ci.org/neozhaoliang/pywonderland.svg?branch=master)](https://travis-ci.org/neozhaoliang/pywonderland)
+
 # A Tour in the Wonderland of Math with Python
 
 <p align="center"><img src="http://www.pywonderland.com/polytopes/logo.png"/></p>
