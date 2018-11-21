@@ -301,8 +301,8 @@ class Render(object):
                                               pcanvas.scaling * width,
                                               pcanvas.scaling * height)
 
-        pixels = [self.colormap[pcanvas.get_cell((x // pcanvas.scaling + left,
-                                                  y // pcanvas.scaling + top))]
+        pixels = [self.colormap[pcanvas.get_pixel(x // pcanvas.scaling + left,
+                                                  y // pcanvas.scaling + top)]
                   for y in range(height * pcanvas.scaling)
                   for x in range(width * pcanvas.scaling)]
 
