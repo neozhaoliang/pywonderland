@@ -15,6 +15,9 @@ import encoder
 
 
 class PixelCanvas(object):
+    """A `PixelCanvas` is just an 2d array of pixels.
+    """
+
     def __init__(self, width, height):
         self.width = width
         self.height = height

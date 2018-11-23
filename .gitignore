@@ -90,4 +90,5 @@ ENV/
 
 src/**/*.png
 src/**/*.gif
+src/**/*.py.bak
 !src/**/teacher.png

@@ -15,6 +15,9 @@ REFERENCES:
 [3]. Häggström's book
      "Markov chains and algorithmic applications"
 
+[4]. Book by David Asher Levin, Elizabeth Lee Wilmer, and Yuval Peres
+     "Markov chains and mixing times".
+
 """
 import random
 from tqdm import tqdm
