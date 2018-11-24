@@ -18,15 +18,17 @@ class PixelCanvas(object):
     """A `PixelCanvas` is just an 2d array of pixels.
     """
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, grid_init=0):
         self.width = width
         self.height = height
-        self._grid = [[0] * height for _ in range(width)]
+        self._grid = [[grid_init] * height for _ in range(width)]
         self._frame_box = None  # a 4-tuple maintains the region that to be updated.
         self.scaling = 1
         self.translation = (0, 0)
 
     def set_pixel(self, x, y, value):
+        if self._grid[x][y] == value:
+            return
         self._grid[x][y] = value
         if self._frame_box is not None:
             left, top, right, bottom = self._frame_box
