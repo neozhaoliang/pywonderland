@@ -14,4 +14,4 @@ Requirements: `pillow` and `tqdm`.
 
 These is also a Javascript animation of Wilson's uniform spanning tree algorithm in the directory `/js/`, it's translated directly from the Python version in `algorithms.py`.
 
-The full doc is [here](https://neozhaoliang.github.io/gifmaze/).
+The full doc is [here](https://neozhaoliang.github.io/gifmaze/) and more examples [here](https://imgur.com/a/VsZmuKr).
