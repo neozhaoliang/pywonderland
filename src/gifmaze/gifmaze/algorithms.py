@@ -1,19 +1,29 @@
 # -*- coding: utf-8 -*-
 """
-This file contains the maze generation and maze solving algorithms.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Maze generation and maze solving algorithms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+This file contains the maze generation and maze solving algorithms.
 Each algorithm is implemented as a generator function which runs on
-a `maze` instance and calls a `render` instance to yield the data.
+a `maze` instance and calls a `encode_func` function to yield the data.
+All algorithms have a similar interface:
+
+    algo(maze, encode_func, speed, **kwargs)
+
+Here `maze` is the Maze object that the algorithm runs on,
+`encode_func` is the function to encode the maze into a frame,
+`speed` controls how often the `encode_func` is called.
 """
 import heapq
 import random
 from collections import deque
 from operator import itemgetter
 from tqdm import tqdm
-from gifmaze import Maze
+from .gifmaze import Maze
 
 
-def wilson(maze, render, speed=50, root=(0, 0)):
+def wilson(maze, encode_func, speed=50, root=(0, 0)):
     """Maze by Wilson's uniform spanning tree algorithm.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Wilson's algorithm")
@@ -67,24 +77,29 @@ def wilson(maze, render, speed=50, root=(0, 0)):
                 current_cell = next_cell
 
                 if maze.num_changes >= speed:
-                    yield render(maze)
+                    yield encode_func(maze)
 
             # once the walk hits the tree then add its path to the tree.
             maze.mark_path(lerw, Maze.TREE)
             bar.update(len(lerw) - 1)
 
     if maze.num_changes > 0:
-        yield render(maze)
+        yield encode_func(maze)
 
     bar.close()
 
 
-def bfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
+def bfs(maze, encode_func, speed=20, start=None, end=None):
     """
     Solve a maze by breadth first search.
     The cells are marked by their distances to the starting cell plus three.
     This is because we must distinguish a 'flooded' cell from walls and tree.
     """
+    if start is None:
+        start = (0, 0)
+    if end is None:
+        end = (maze.width - 1, maze.height - 1)
+
     bar = tqdm(total=len(maze.cells) - 1, desc="Solving maze by bfs")
     init_dist = 3
     came_from = {start: start}
@@ -106,10 +121,10 @@ def bfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
                 visited.add(next_cell)
 
         if maze.num_changes >= speed:
-            yield render(maze)
+            yield encode_func(maze)
 
     if maze.num_changes > 0:
-        yield render(maze)
+        yield encode_func(maze)
 
     # retrieve the path
     path = [end]
@@ -120,12 +135,12 @@ def bfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
 
     maze.mark_path(path, Maze.PATH)
     # show the path
-    yield render(maze)
+    yield encode_func(maze)
 
     bar.close()
 
 
-def random_dfs(maze, render, speed=10, start=(0, 0)):
+def random_dfs(maze, encode_func, speed=10, start=(0, 0)):
     """Maze generation by random depth-first search.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running random depth first search")
@@ -148,17 +163,22 @@ def random_dfs(maze, render, speed=10, start=(0, 0)):
             stack.append((child, v))
 
         if maze.num_changes >= speed:
-            yield render(maze)
+            yield encode_func(maze)
 
     if maze.num_changes > 0:
-        yield render(maze)
+        yield encode_func(maze)
 
     bar.close()
 
 
-def dfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
+def dfs(maze, encode_func, speed=20, start=None, end=None):
     """Solve a maze by dfs.
     """
+    if start is None:
+        start = (0, 0)
+    if end is None:
+        end = (maze.width - 1, maze.height - 1)
+
     bar = tqdm(total=len(maze.cells) - 1, desc="Running dfs search.")
 
     came_from = {start: start}  # a dict to remember each step.
@@ -181,10 +201,10 @@ def dfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
                 visited.add(next_cell)
 
         if maze.num_changes >= speed:
-            yield render(maze)
+            yield encode_func(maze)
 
     if maze.num_changes > 0:
-        yield render(maze)
+        yield encode_func(maze)
 
     # retrieve the path
     path = [end]
@@ -194,12 +214,12 @@ def dfs(maze, render, speed=20, start=(0, 0), end=(80, 60)):
         path.append(v)
 
     maze.mark_path(path, Maze.PATH)
-    yield render(maze)
+    yield encode_func(maze)
 
     bar.close()
 
 
-def prim(maze, render, speed=30, start=(0, 0)):
+def prim(maze, encode_func, speed=30, start=(0, 0)):
     """Maze by Prim's algorithm.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Prim's algorithm")
@@ -222,15 +242,15 @@ def prim(maze, render, speed=30, start=(0, 0)):
             heapq.heappush(queue, (weight, child, v))
 
         if maze.num_changes >= speed:
-            yield render(maze)
+            yield encode_func(maze)
 
     if maze.num_changes > 0:
-        yield render(maze)
+        yield encode_func(maze)
 
     bar.close()
 
 
-def kruskal(maze, render, speed=30):
+def kruskal(maze, encode_func, speed=30):
     """Maze by Kruskal's algorithm.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Kruskal's algorithm")
@@ -269,9 +289,9 @@ def kruskal(maze, render, speed=30):
             maze.mark_space(u, v, Maze.TREE)
             bar.update(1)
             if maze.num_changes >= speed:
-                yield render(maze)
+                yield encode_func(maze)
 
     if maze.num_changes > 0:
-        yield render(maze)
+        yield encode_func(maze)
 
     bar.close()

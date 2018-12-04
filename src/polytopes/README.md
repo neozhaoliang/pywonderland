@@ -4,4 +4,4 @@
 
 2. Run `main.py`, get a cup of coffee, sit down and enjoy the results!
 
-The full doc is [here](https://neozhaoliang.github.io/polytopes/).
+The full doc is [here](https://neozhaoliang.github.io/polytopes/) and many examples [here](https://imgur.com/a/KQD7ewA#YEu5FJT).

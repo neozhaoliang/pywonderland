@@ -1,14 +1,13 @@
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Hilbert curve animation based on Gray code
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-:copyright (c) 2018 by Zhao Liang
+~~~~~~~~~~~~~~~~~~~~~~~
+Hilbert curve animation
+~~~~~~~~~~~~~~~~~~~~~~~
 """
-from colorsys import hls_to_rgb
-from tqdm import trange
 from gifmaze import (Maze, GIFSurface, Animation, encode_maze,
                      generate_text_mask, create_animation_for_size)
+from colorsys import hls_to_rgb
+from tqdm import trange
+
 
 
 class Hilbert(object):

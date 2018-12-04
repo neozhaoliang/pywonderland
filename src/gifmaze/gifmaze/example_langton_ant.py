@@ -1,13 +1,11 @@
+# -*- coding: utf-8 -*-
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Make gif animation of Langton's ant
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Make gif animations of Langton's ant
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Reproduce the image at
+See "https://en.wikipedia.org/wiki/Langton%27s_ant"
 
-    "https://en.wikipedia.org/wiki/Langton%27s_ant"
-
-:copyright (c) 2018 by Zhao Liang
 """
 from gifmaze import (Maze, GIFSurface, Animation, encode_maze,
                      generate_text_mask, create_animation_for_size)
@@ -16,7 +14,7 @@ from gifmaze import (Maze, GIFSurface, Animation, encode_maze,
 ncols, nrows = 80, 80  # grid size
 cell_size = 5
 lw = 1
-margin = 6
+margin = 0
 
 
 class Ant(object):
@@ -66,7 +64,7 @@ def langton(maze, encode_func, speed, steps):
 
 
 maze, surface, anim = create_animation_for_size(ncols, nrows, cell_size,
-                                                lw, margin, bg_color=1, wall_init=1)
+                                                lw, margin, wall_init=1)
 surface.set_palette([255, 255, 255,  # white spaces
                      0, 0, 0,        # grid line color
                      0, 0, 255,      # dead cells

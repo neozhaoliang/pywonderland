@@ -1,0 +1,29 @@
+from . import encoder
+from .gifmaze import Maze, GIFSurface, Animation, encode_maze
+from .gentext import generate_text_mask
+
+
+def create_animation_for_size(width, height, cell_size,
+                              linewidth, margin, **kwargs):
+    """
+    A helper function for creating an animation embedded at the center
+    of the image window.
+
+    parameters
+    ----------
+    :width & height:  size of the maze.
+    :cell_size:  size of the cells in pixels.
+    :linewidth:  size of the walls between adjacent cells in pixels.
+    :margin:  margin padded at the boundary of the window.
+    :kwargs:  can be `cell_init`, `wall_init`, `bg_color`.
+    """
+    cell_init = kwargs.get("cell_init", 0)
+    wall_init = kwargs.get("wall_init", 0)
+    bg_color = kwargs.get("bg_color", 0)
+    maze = Maze(width, height, cell_init=cell_init, wall_init=wall_init)
+    maze.scale(cell_size).translate((margin, margin)).setlinewidth(linewidth)
+    surface = GIFSurface(width * cell_size + (width - 1) * linewidth + 2 * margin,
+                         height * cell_size + (height - 1) * linewidth + 2 * margin,
+                         bg_color=bg_color)
+    animation = Animation(surface)
+    return maze, surface, animation
