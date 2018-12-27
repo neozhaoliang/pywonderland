@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Some helper functions for building the geometry and exporting to POV-Ray.
 """
@@ -6,14 +7,14 @@ import numpy as np
 
 
 def normalize(v):
-    """Normalize a vector `v`."""
+    """Normalize a vector `v`.
+    """
     return np.array(v) / np.linalg.norm(v)
 
 
 def reflection_matrix(v):
-    """
-    Return the reflection transformation about a plane with normal vector `v`.
-    see "https://en.wikipedia.org/wiki/Householder_transformation".
+    """Return the reflection transformation about a plane with normal vector `v`.
+       see "https://en.wikipedia.org/wiki/Householder_transformation".
     """
     n = len(v)
     v = np.array(v)[np.newaxis]
@@ -21,17 +22,15 @@ def reflection_matrix(v):
 
 
 def get_init_point(M, d):
-    """
-    Given the normal vectors of the mirrors stored as row vectors in `M`
-    and a tuple of non-negative floats `d`, compute the vector `v` whose
-    distance vector to the mirrors is `d` and return its normalized version.
+    """Given the normal vectors of the mirrors stored as row vectors in `M`
+       and a tuple of non-negative floats `d`, compute the vector `v` whose
+       distance vector to the mirrors is `d` and return its normalized version.
     """
     return normalize(np.linalg.solve(M, d))
 
 
 def proj3d(v):
-    """
-    Stereographic projection of a 4d vector with pole at (0, 0, 0, 1).
+    """Stereographic projection of a 4d vector with pole at (0, 0, 0, 1).
     """
     v = normalize(v)
     x, y, z, w = v
@@ -57,7 +56,7 @@ def get_sphere_info(points):
 
     M = np.ones((4, 4), dtype=np.float)
     M[:3, :3] = pts3d[:3]
-    M[ 3, :3] = rib3d
+    M[3, :3] = rib3d
     b = [-sum(x*x) for x in M[:, :3]]
     # if this is a plane
     if abs(np.linalg.det(M)) < 1e-4:
@@ -72,24 +71,28 @@ def get_sphere_info(points):
 
 
 def pov_vector(v):
-    """Convert a vector to POV-Ray format."""
+    """Convert a vector to POV-Ray format.
+    """
     return "<{}>".format(", ".join([str(x) for x in v]))
 
 
 def pov_vector_list(vectors):
-    """Convert a list of vectors to POV-Ray format."""
+    """Convert a list of vectors to POV-Ray format.
+    """
     return ", ".join([pov_vector(v) for v in vectors])
 
 
 def pov_array(arr):
-    """Export the vertices of a face to POV-Ray array."""
+    """Export the vertices of a face to POV-Ray array.
+    """
     declare = "#declare vertices_list = array[{}] {{ {} }};\n"
     return declare.format(len(arr), pov_vector_list(arr))
 
 
 def export_face(ind, face, isplane, center,
                 radius, facesize):
-    """Export the information of a face to a POV-Ray macro."""
+    """Export the information of a face to a POV-Ray macro.
+    """
     if isplane:
         macro = "FlatFace({}, {}, vertices_list, {}, {})\n"
         return macro.format(ind, len(face), pov_vector(center), facesize)
@@ -99,11 +102,11 @@ def export_face(ind, face, isplane, center,
 
 
 def check_duplicate_face(f, l):
-    """
-    Check if a face `f` is already in the list `l`.
-    We need this function here because when some rotation r fixes a face
-    f = (v1, v2, ..., v_k), r maps f as an ordered tuple to (v_k, v_1, ..., v_{k-1})
-    or (v_2, ..., v_k, v_1) and they all represent the same face.
+    """Check if a face `f` is already in the list `l`.
+       We need this function here because when some rotation r fixes a
+       face f = (v1, v2, ..., v_k), r maps f as an ordered tuple to
+       (v_k, v_1, ..., v_{k-1}) or (v_2, ..., v_k, v_1) where they all
+       represent the same face.
     """
     for _ in range(len(f)):
         if f in l or f[::-1] in l:
@@ -113,9 +116,9 @@ def check_duplicate_face(f, l):
 
 
 def fill_matrix(upper_triangle):
+    """Given three or six integers/rationals, fill them into a
+       3x3 (or 4x4) symmetric matrix.
     """
-    Given three or six integers/rationals, fill them into a
-    3x3 (or 4x4) symmetric matrix."""
     if len(upper_triangle) == 3:
         a12, a13, a23 = upper_triangle
         return [[1, a12, a13],
@@ -132,10 +135,10 @@ def fill_matrix(upper_triangle):
 
 
 def get_mirrors(upper_triangle):
-    """
-    Given three or six integers/rationals that represent the
-    angles between the mirrors (a rational p means the angle is π/p),
-    return a 3x3 or 4x4 matrix whose rows are the normal vectors of the mirrors.
+    """Given three or six integers/rationals that represent
+       the angles between the mirrors (a rational p means the
+       angle is π/p), return a 3x3 or 4x4 matrix whose rows
+       are the normal vectors of the mirrors.
     """
     # error handling function when the input coxeter matrix is invalid.
     def err_handler(err_type, flag):

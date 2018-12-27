@@ -9,6 +9,7 @@ Reference:
     [2] "Computation with finitely presented groups", Charles C.Sims.
     [3] GAP doc at "https://www.gap-system.org/Manuals/doc/ref/chap47.html".
     [4] Ken Brown's code at "http://www.math.cornell.edu/~kbrown/toddcox/".
+
 """
 
 class CosetTable(object):
@@ -303,7 +304,7 @@ class CosetTable(object):
         result = [None] * len(self)
         result[0] = tuple()
         q = deque([0])
-        while len(q) > 0:
+        while q:
             coset = q.popleft()
             for x in gens:
                 new_coset = self[coset][x]

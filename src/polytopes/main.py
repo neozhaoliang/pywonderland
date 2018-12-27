@@ -9,6 +9,7 @@ Usage:
      computer and can be found in system environment variables.
 
   2. Run python main.py and wait for amazing things to happen!
+
 """
 import subprocess
 from fractions import Fraction
@@ -37,11 +38,11 @@ POV_COMMAND = "cd povray && " + \
 
 def _render_model(P, render_file, output=None):
     """
-    P: a polyhedra/polychora that has been initialized.
-
-    render_file: the POV-Ray scene decription file.
-
-    output: output file name.
+    parameters
+    ----------
+    :P: a polyhedra/polychora that has been initialized.
+    :render_file: the POV-Ray scene decription file.
+    :output: output file name.
     """
     if output is None:
         output = render_file[:-4]
@@ -71,7 +72,7 @@ def render_polyhedra(coxeter_diagram,
                      output=None,
                      snub=False):
     """
-    The main entrance for rendering 3d polyhedra.
+    The main entrance for rendering 3d polyhedron.
     """
     coxeter_matrix = helpers.fill_matrix(coxeter_diagram)
     mirrors = helpers.get_mirrors(coxeter_diagram)
@@ -88,7 +89,7 @@ def render_polychora(coxeter_diagram,
                      render_file,
                      output=None):
     """
-    The main entrance for rendering 4d polychora.
+    The main entrance for rendering 4d polychoron.
     """
     coxeter_matrix = helpers.fill_matrix(coxeter_diagram)
     mirrors = helpers.get_mirrors(coxeter_diagram)
@@ -98,12 +99,15 @@ def render_polychora(coxeter_diagram,
 
 def render_star_polyhedra(coxeter_diagram,
                           trunc_type,
-                          extra_relations=(),
+                          extra_relation=(),
                           render_file="star-polyhedra.pov",
                           output=None):
+    """
+    The main entrance for rendering 3d star polyhedron.
+    """
     coxeter_matrix = helpers.fill_matrix([x.numerator for x in coxeter_diagram])
     mirrors = helpers.get_mirrors(coxeter_diagram)
-    P = models.Polyhedra(coxeter_matrix, mirrors, trunc_type, extra_relations)
+    P = models.StarPolyhedra(coxeter_matrix, mirrors, trunc_type, extra_relation)
     _render_model(P, render_file, output)
 
 
@@ -141,11 +145,11 @@ def main():
     # Kepler-Poinsot solids
     render_star_polyhedra((5, 2, Fraction(5, 2)),
                           (1, 0, 0),
-                          extra_relations=((0, 1, 2, 1) * 3,),
+                          extra_relation=(0, 1, 2, 1) * 3,
                           output="great-dodecahedron")
     render_star_polyhedra((5, 2, Fraction(5, 2)),
                           (0, 0, 1),
-                          extra_relations=((0, 1, 2, 1) * 3,),
+                          extra_relation=(0, 1, 2, 1) * 3,
                           output="small-stellated-dodecahedron")
     render_star_polyhedra((3, 2, Fraction(5, 2)), (0, 0, 1), output="great-stellated-dodecahedron")
     render_star_polyhedra((3, 2, Fraction(5, 2)), (1, 0, 0), output="great-icosahedron")

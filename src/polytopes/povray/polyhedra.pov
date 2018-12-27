@@ -76,10 +76,8 @@ background { White }
 #macro Face(i, num, pts)
     polygon {
         num+1,
-        #local ind=0;
-        #while (ind<num)
+        #for (ind, 0, num-1)
             pts[ind]
-            #local ind=ind+1;
         #end
         pts[0]
         face_tex(i)

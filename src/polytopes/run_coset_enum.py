@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*_
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Run coset enumeration examples using Todd-Coxeter algorithm.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Run coset enumeration examples using Todd-Coxeter algorithm
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This script reads information of a group from a .yaml file
 and computes its coset table.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Example usage:
 
-    python run_coset_enum.py filename [-std] [-o][filename]
+    python run_coset_enum.py filename [-std] [-o output]
 
     filename: required, the .yaml file to be parsed.
         -std: optional, if added then the output table is standardized.
           -o: optional, output filename, the default is sys.stdout.
+
+:copyright (c) 2015 by Zhao Liang.
 """
 import sys
 import argparse
@@ -21,8 +24,7 @@ from todd_coxeter import CosetTable
 
 
 def get_symbols(wordslist):
-    """
-    Collect the set of letters from a list of strings.
+    """Collect the set of letters from a list of strings.
     """
     symbols = []
     for word in wordslist:
@@ -36,11 +38,15 @@ def get_symbols(wordslist):
 
 
 def char2int(symbols, c):
+    """Find the integer in the generator list that represents a symbol `c`.
+    """
     ind = symbols.index(c.lower())
     return 2 * ind if c.islower() else 2 * ind + 1
 
 
 def word2int(symbols, wordslist):
+    """Map a list of words to the list of their integer representations.
+    """
     return tuple(tuple(char2int(symbols, c) for c in word)
                  for word in wordslist)
 
@@ -87,7 +93,8 @@ class FpGroup(object):
         self.coset_table.run(standard)
 
     def print_table(self, outfile):
-        """pretty print the table."""
+        """pretty print the table.
+        """
         f = sys.stdout if outfile is None else open(outfile, "w")
         f.write("       ")
         for x in self.generators:
@@ -111,6 +118,7 @@ def main():
     parser.add_argument("-out", metavar="-o", type=str,
                         default=None, help="output file name")
     args = parser.parse_args()
+
     with open(args.filename, "r") as f:
         data = yaml.load(f)
         rels = data["relators"]
