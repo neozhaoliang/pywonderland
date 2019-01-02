@@ -1,0 +1,26 @@
+language: python
+sudo: required
+before_install: sudo apt-get install ffmpeg povray libffic-dev imagemagick
+python:
+  - "3.5"
+  - "3.6"
+  - "3.7"
+install:
+  - pip install -r requirements.txt
+  - pip install Pillow
+script:
+  - cd src/gifmaze/
+  - python example_game_of_life.py
+  - python example_hilbert_curve.py
+  - python example_maze_animations.py
+  - python example_ust.py
+  - cd ../grayscott/
+  - python main.py
+  - cd ../polytopes/
+  - python main.py
+  - cd ../aztec/
+  - python run_domino_shuffling_animation.py
+  - cd ../cftp/
+  - python main.py
+  - cd ../aperiodic-tilings/
+  - python debruijn.py
