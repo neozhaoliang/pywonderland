@@ -3,7 +3,6 @@ matplotlib
 numba
 numpy
 pyglet
-pygraphviz
 PyYaml
 scipy
 tqdm

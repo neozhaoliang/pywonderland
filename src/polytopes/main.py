@@ -170,8 +170,9 @@ def main():
     render_polychora((4, 2, 2, 3, 2, 3), (1, 1, 0, 0), "8-cell-1100.pov", "truncated-8-cell")
     render_polychora((3, 2, 2, 3, 2, 4), (1, 0, 0, 1), "16-cell-1001.pov", "runcinated-16-cell")
     render_polychora((3, 2, 2, 4, 2, 3), (1, 1, 1, 0), "24-cell-1110.pov", "cantitruncated-24-cell")
-    """
     render_polychora((3, 2, 2, 3, 2, 5), (1, 1, 0, 0), "600-cell-1100.pov", "truncated-600-cell")
+    """
+    render_polychora((5, 2, 2, 3, 2, 3), (1, 0, 0, 1), "120-cell-1001.pov", "runcinated-120-cell")
 
     # 4d prism and duoprism
     render_polychora((6, 2, 2, 2, 2, 8), (1, 0, 1.6, 0), "duoprism.pov", "6-8-duoprism")
@@ -179,6 +180,9 @@ def main():
 
     # you can also embed a 3d polyhedra in 4d and then project it back to 3d
     render_polychora((3, 2, 2, 5, 2, 2), (1, 1, 0, 0), "polyhedra-ball.pov", output="buckyball")
+
+    # render a static image of the 120-cell in the movie dimensions
+    render_polychora((5, 2, 2, 3, 2, 3), (1, 0, 0, 0), "dimensions_movie.pov", "120-cell")
 
 
 if __name__ == "__main__":

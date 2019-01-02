@@ -197,7 +197,7 @@ light_source {
 add_light(clock)
 
 union {
-    #include "120-cell-data.inc"
+    #include "polychora-data.inc"
     scale 40 / extent
     rotate <0, 720*clock, 0>
     #if (clock < 0.5)

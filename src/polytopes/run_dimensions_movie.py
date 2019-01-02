@@ -5,7 +5,7 @@ This script reproduces the scene of 120-cell in the movie
 
 at "http://www.dimensions-math.org/".
 
-The rendering may take 3~4 days to complete.
+The rendering process may take several hours to complete.
 
 :copyright (c) 2018 by Zhao Liang.
 """
@@ -19,10 +19,10 @@ POVRAY_EXE = "povray"  # POV-Ray exe binary
 SCENE_FILE = "dimensions_movie.pov"  # the main scene file
 OUTPUT_DIR = "./frames/"  # output directory
 FRAMES = 1200  # number of frames
-IMAGE_SIZE = 600  # image size in pixels
+IMAGE_SIZE = 800  # image size in pixels
 IMAGE_QUALITY_LEVEL = 11  # between 0-11
-SUPER_SAMPLING_LEVEL = 5  # between 1-9
-ANTIALIASING_LEVEL = 0.001 # lower for better quality
+SUPER_SAMPLING_LEVEL = 1  # between 1-9
+ANTIALIASING_LEVEL = 0.005 # lower for better quality
 
 if not os.path.exists(OUTPUT_DIR):
     os.mkdir(OUTPUT_DIR)
@@ -46,7 +46,7 @@ def main():
     mirrors = helpers.get_mirrors(coxeter_diagram)
     P = Polychora(coxeter_matrix, mirrors, (1, 0, 0, 0))
     P.build_geometry()
-    P.export_pov("./povray/120-cell-data.inc")
+    P.export_pov("./povray/polychora-data.inc")
     subprocess.call(POV_COMMAND, shell=True)
 
 
