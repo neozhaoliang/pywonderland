@@ -20,6 +20,11 @@ The website for the docs is still under construction and will be released soon.
 **NB:** I will only maintain the code for `python >= 3.5`.
 
 
+## How to use
+
+Each subdirectory in `/src/` is a single program (except that `glslhelpers` is a helper module for running glsl programs and `misc` is a collection of independent scripts), any file named `main.py`, `run_*.py`, `example_*.py` is an executable script that gives some output.
+
+
 ## Programs to come:
 
 - Fractals with orbit trap
