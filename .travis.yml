@@ -29,7 +29,6 @@ script:
   - python fractaltree.py
   - python e8.py
   - python kaleidoscope.py
-  - python lorenz.py
   - cd ../polytopes/
   - python main.py
   - python run_coset_enum.py tc_examples/G8723.yaml
