@@ -18,12 +18,12 @@ import helpers
 
 
 # use higher supersampling level and smaller
-# antialiasing level to get better images
+# antialiasing threshold to get better images
 POVRAY_EXE = "povray"
 IMAGE_SIZE = 600
 IMAGE_QUALITY_LEVEL = 11  # between 0-11
-SUPER_SAMPLING_LEVEL = 3  # between 1-9
-ANTIALIASING_LEVEL = 0.001
+SUPER_SAMPLING_LEVEL = 1  # between 1-9
+ANTIALIASING_LEVEL = 0.005
 
 POV_COMMAND = "cd povray && " + \
               POVRAY_EXE + \

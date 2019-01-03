@@ -2,6 +2,7 @@ cairocffi
 matplotlib
 numba
 numpy
+pillow
 pyglet
 PyYaml
 scipy

@@ -6,7 +6,6 @@ python:
   - "3.6"
 install:
   - pip install -r requirements.txt
-  - pip install Pillow
 script:
   - cd src/gifmaze/
   - python example_game_of_life.py
