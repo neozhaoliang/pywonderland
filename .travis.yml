@@ -7,19 +7,24 @@ python:
 install:
   - pip install -r requirements.txt
 script:
+  # gifmaze examples
   - cd src/gifmaze/
   - python example_game_of_life.py
   - python example_hilbert_curve.py
   - python example_maze_animations.py
   - python example_ust.py
+  # domino shuffling animation
   - cd ../aztec/
   - python run_domino_shuffling_animation.py
+  # coupling from the past
   - cd ../cftp/
   - python main.py
+  # aperiodic tilings
   - cd ../aperiodic-tilings/
   - python ammann-beenker.py
   - python debruijn.py
   - python penrose.py
+  # miscellaneous examples
   - cd ../misc/
   - python mandelbrot.py
   - python julia.py
@@ -28,6 +33,8 @@ script:
   - python fractaltree.py
   - python e8.py
   - python kaleidoscope.py
+  # polytopes examples
   - cd ../polytopes/
   - python main.py
   - python run_coset_enum.py tc_examples/G8723.yaml
+  # glsl and ffmpeg tests failed on travis-ci
