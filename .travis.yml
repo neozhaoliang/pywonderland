@@ -6,6 +6,7 @@ python:
   - "3.6"
 install:
   - pip install -r requirements.txt
+  - pip install codecov
 script:
   # gifmaze examples
   - cd src/gifmaze/
@@ -37,4 +38,7 @@ script:
   - cd ../polytopes/
   - python main.py
   - python run_coset_enum.py tc_examples/G8723.yaml
-  # glsl and ffmpeg tests failed on travis-ci
+  # travis-ci cannot run glsl and ffmpeg examples, so omit grayscott, mobius and lorenz examples.
+
+after_success:
+  - codecov
