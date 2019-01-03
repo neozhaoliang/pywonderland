@@ -41,4 +41,4 @@ script:
   # travis-ci cannot run glsl and ffmpeg examples, so omit grayscott, mobius and lorenz examples.
 
 after_success:
-  - codecov
+  - bash <(curl -s https://codecov.io/bash)
