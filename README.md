@@ -1,10 +1,16 @@
-# A Tour in the Wonderland of Math with Python
+<h1 align="center">
+  <br>
+  <img src="favicon.png" width="400">
+  <br>
+   A Tour in the Wonderland of Math with Python
+  <br>
+</h1>
 
-> A collection of python scripts for drawing beautiful figures and animating interesting algorithms in mathematics.
+<h4 align="center">A collection of python scripts for drawing beautiful figures and animating interesting algorithms in mathematics.</h4>
 
-
+<p align="center">
 [![Build Status](https://travis-ci.org/neozhaoliang/pywonderland.svg?branch=master)](https://travis-ci.org/neozhaoliang/pywonderland) ![](https://img.shields.io/badge/license-MIT-blue.svg) ![](https://img.shields.io/badge/python-3.5%20%7C%203.6-orange.svg)
-
+</p>
 
 ## About this repo
 
