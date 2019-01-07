@@ -118,15 +118,23 @@ def export_fiber(phi, psi, color):
                                             pov_vector(color))
 
 
-def render_random_fibers():
-    with open("./povray/torus-data.inc", "w") as f:
-        for phi in np.linspace(np.pi / 3, np.pi * 2 / 3, 10):
-            for psi in np.random.random(10) * np. pi * 2:
-                color = np.random.random(3)
-                f.write(export_fiber(phi, psi, color))
+def main():
+    """Render a flower pattern of fibers.
+    """
+    N = 7  # controls the number of petals
+    A = 0.5  # controls the fattness of the petals
+    B = -np.pi / 7  # controls the amplitude of the polar angle range
+    P = np.pi / 2  # controls latitude of the flower
 
-    subprocess.call("cd povray && povray random_fibers.ini", shell=True)
+    with open("./povray/torus-data.inc", "w") as f:
+        for t in np.linspace(0, 1, 200):
+            phi = B * np.sin(N * 2 * np.pi * t) + P
+            psi = np.pi * 2 * t + A * np.cos(N * 2 * np.pi * t)
+            color = np.random.random(3)
+            f.write(export_fiber(phi, psi, color))
+
+    subprocess.call("cd povray && povray hopf_fibers.ini", shell=True)
 
 
 if __name__ == "__main__":
-    render_random_fibers()
+    main()
