@@ -41,7 +41,6 @@ Each subdirectory in `/src/` is a single program (except that `glslhelpers` is a
 - 2D hyperbolic tilings (Escher's circle limit)
 - 3D hyperbolic honeycombs
 - Knots
-- Hopf fibration
 - Minimal surfaces
 
 

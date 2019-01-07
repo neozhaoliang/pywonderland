@@ -45,7 +45,7 @@ def main(hexagon_size, imgsize):
     ctx.set_source_rgb(1, 1, 1)
     ctx.paint()
 
-    T = LozengeTiling(a, b, c)
+    T = LozengeTiling(hexagon_size)
     sample = run_cftp(T)
     for key, val in T.get_tiles(sample).items():
         for verts in val:

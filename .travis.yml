@@ -37,4 +37,7 @@ script:
   - cd ../polytopes/
   - python main.py
   - python run_coset_enum.py tc_examples/G8723.yaml
+  # Hopf fibration examples
+  - cd ../hopf-fibration
+  - python hopf_fibration.py 
   # travis-ci cannot run glsl and ffmpeg examples, so omit grayscott, mobius and lorenz examples.

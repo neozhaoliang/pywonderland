@@ -1,10 +1,46 @@
 # -*- coding: utf-8 -*-
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Perfectly random sampling of lozenge tilings by Propp-Wilson's "coupling from the past"
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Perfectly random lozenge tiling of a hexagon using
+Propp-Wilson's "coupling from the past" algorithm
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This program samples a random lozenge tiling of a
+(a x b x c) hexagon from the uniform distribution.
+In the code a lozeng tiling is represented by a path
+system consists of (c+2) non-intersecting paths in the
+ac-plane, where the i-th path (i=0, 1, ..., c+1) starts
+at (0, i), moves up (in direction b) or moves down
+(in direction a) in each step and ends at (2a, c+i).
+
+The updating rule of the Markov chain is: choose a random
+path and a random position on this path, and try to push
+up/down the path at this position. If the resulting path
+system is not non-intersecting, i.e. does not represent a
+tiling, then leave the path untouched.
+
+      c/y-axis
+            |    /\
+            |   /  \
+            | b/    \ a
+            | /      \
+            |/        \
+            |          |
+            |          |
+          c |          | c
+            |  x-axis  |
+            |------    |
+           O \        /
+              \      /
+             a \    / b
+                \  /
+                 \/
+                  \
+                   \
+                   a-axis
 
 REFERENCES:
+
 
 [1]. Blog post at
      "https://possiblywrong.wordpress.com/2018/02/23/coupling-from-the-past/"
@@ -25,15 +61,19 @@ from tqdm import tqdm
 
 def run_cftp(mc):
     """
-    Sample a random state in a Markov chain `mc` from its stationary
-    distribution using monotone CFTP.
-
-    :mc:  a monotone Markov chain object.
+    Sample a random state in a finite, irreducible Markov chain from its
+    stationary distribution using monotone CFTP.
+    `mc` is a Markov chain object that implements the following methods:
+        1. `new_random_update`: return a new random updating operation.
+        2. `update`: update a state by an updating operation.
+        3. `min_max_state`: return the minimum and maximum states.
     """
     bar = tqdm(desc="Running cftp", unit=" steps")
 
     updates = [(random.getstate(), 1)]
-    while True:  # run the two chains at a new timestamp in the past
+    while True:
+        # run two versions of the chain from the two min, max states
+        # in each round.
         s0, s1 = mc.min_max_states
         rng_next = None
         for rng, steps in updates:
@@ -43,10 +83,13 @@ def run_cftp(mc):
                 mc.update(s0, u)
                 mc.update(s1, u)
                 bar.update(1)
+            # save the latest random seed for future use.
             if rng_next is None:
                 rng_next = random.getstate()
+        # check if these two chains are coupled at time 0.
         if s0 == s1:
             break
+        # if not coupled the look further back into the past.
         else:
             updates.insert(0, (rng_next, 2**len(updates)))
 
@@ -58,19 +101,22 @@ def run_cftp(mc):
 class LozengeTiling(object):
     """
     This class builds the "monotone" Markov chain structure on the set
-    of lozenge tilings of an (axbxc) hexagon. A tiling is represented
-    by c+2 paths (the 0-th and (c+1)-th path are fixed and are used for
-    auxiliary purpose).
+    of lozenge tilings of an (a x b x c) hexagon. A tiling is represented
+    by c+2 pairwise non-intersecting paths, where the 0-th and (c+1)-th
+    paths are fixed and are used for auxiliary purpose.
     """
 
-    def __init__(self, a, b, c):
-        """:(a, b, c):  three integers, they are the side lengths of the hexagon.
+    def __init__(self, size):
         """
-        self.size = (a, b, c)
+        :size: a tuple of three integers, they are the side lengths of the hexagon.
+        """
+        self.size = size
 
     @property
     def min_max_states(self):
-        """Return the minimal and maximal states of the Markov chain.
+        """Return the minimum and maximum tilings. From a bird's view, the minimum
+           tiling is the one that correspondes to a room filled full of boxes and
+           the maximum tiling is the one that correspondes to an empty room.
         """
         a, b, c = self.size
         # min state that all paths move downward and then upward.
