@@ -112,10 +112,12 @@ def export_fiber(phi, psi, color):
     center, radius, normal = get_circle(A, B, C)
     matrix = transform_matrix(normal)
 
-    return "Torus({}, {}, {}, {})\n".format(pov_vector(center),
-                                            radius,
-                                            pov_matrix(matrix),
-                                            pov_vector(color))
+    return "Torus({}, {}, {}, {})\n".format(
+        pov_vector(center),
+        radius,
+        pov_matrix(matrix),
+        pov_vector(color)
+        )
 
 
 def main():

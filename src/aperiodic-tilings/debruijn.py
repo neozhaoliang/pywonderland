@@ -114,7 +114,12 @@ with open("./povray/data.inc", "w") as f:
             ctx.set_source_rgb(*EDGE_COLOR)
             ctx.stroke()
 
-            f.write("Tile(<%f, %f>, <%f, %f>, <%f, %f>, <%f, %f>, %d)\n"
-                    % (A.real, A.imag, B.real, B.imag, C.real, C.imag, D.real, D.imag, shape))
+            f.write("Tile(<{}, {}>, <{}, {}>, <{}, {}>, <{}, {}>, {})\n".format(
+                A.real, A.imag,
+                B.real, B.imag,
+                C.real, C.imag,
+                D.real, D.imag,
+                shape
+                ))
 
 surface.finish()

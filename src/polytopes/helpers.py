@@ -70,37 +70,6 @@ def get_sphere_info(points):
         return False, center, radius, facesize
 
 
-def pov_vector(v):
-    """Convert a vector to POV-Ray format.
-    """
-    return "<{}>".format(", ".join([str(x) for x in v]))
-
-
-def pov_vector_list(vectors):
-    """Convert a list of vectors to POV-Ray format.
-    """
-    return ", ".join([pov_vector(v) for v in vectors])
-
-
-def pov_array(arr):
-    """Export the vertices of a face to POV-Ray array.
-    """
-    declare = "#declare vertices_list = array[{}] {{ {} }};\n"
-    return declare.format(len(arr), pov_vector_list(arr))
-
-
-def export_face(ind, face, isplane, center,
-                radius, facesize):
-    """Export the information of a face to a POV-Ray macro.
-    """
-    if isplane:
-        macro = "FlatFace({}, {}, vertices_list, {}, {})\n"
-        return macro.format(ind, len(face), pov_vector(center), facesize)
-    else:
-        macro = "BubbleFace({}, {}, vertices_list, {}, {}, {})\n"
-        return macro.format(ind, len(face), pov_vector(center), radius, facesize)
-
-
 def check_duplicate_face(f, l):
     """Check if a face `f` is already in the list `l`.
        We need this function here because when some rotation r fixes a
@@ -164,3 +133,37 @@ def get_mirrors(upper_triangle):
         M[3, 2] = (C[2, 3] - M[2, 0]*M[3, 0] - M[2, 1]*M[3, 1]) / M[2, 2]
         M[3, 3] = np.sqrt(1 - M[3, 0]*M[3, 0] - M[3, 1]*M[3, 1] - M[3, 2]*M[3, 2])
     return M
+
+
+# -----------------------------
+# now the POV-Ray part
+
+def pov_vector(v):
+    """Convert a vector to POV-Ray format.
+    """
+    return "<{}>".format(", ".join([str(x) for x in v]))
+
+
+def pov_vector_list(vectors):
+    """Convert a list of vectors to POV-Ray format.
+    """
+    return ", ".join([pov_vector(v) for v in vectors])
+
+
+def pov_array(arr):
+    """Export the vertices of a face to POV-Ray array.
+    """
+    declare = "#declare vertices_list = array[{}] {{ {} }};\n"
+    return declare.format(len(arr), pov_vector_list(arr))
+
+
+def export_face(ind, face, isplane, center,
+                radius, facesize):
+    """Export the information of a face to a POV-Ray macro.
+    """
+    if isplane:
+        macro = "FlatFace({}, {}, vertices_list, {}, {})\n"
+        return macro.format(ind, len(face), pov_vector(center), facesize)
+    else:
+        macro = "BubbleFace({}, {}, vertices_list, {}, {}, {})\n"
+        return macro.format(ind, len(face), pov_vector(center), radius, facesize)
