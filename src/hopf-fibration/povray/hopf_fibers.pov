@@ -11,7 +11,7 @@ background { color Black }
 
 #declare TubeThickness = 0.05;
 
-#macro Torus(center, rad, mat, col) 
+#macro Torus(center, rad, mat, col)
     torus {
         rad, TubeThickness
         texture {

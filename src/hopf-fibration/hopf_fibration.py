@@ -97,7 +97,7 @@ def transform_matrix(v):
     y = normalize(v)
     a, b, c = y
     if a == 0:
-        x = (1, 0, 0)
+        x = [1, 0, 0]
     else:
         x = normalize([-b, a, 0])
     z = np.cross(x, y)
@@ -105,7 +105,7 @@ def transform_matrix(v):
 
 
 def export_fiber(phi, psi, color):
-    """Export the data of a fiber to POVv-Ray format.
+    """Export the data of a fiber to POV-Ray format.
     """
     A, B, C = [proj3d(hopf_inverse(phi, psi, theta))
                for theta in (0, np.pi/2, np.pi)]
