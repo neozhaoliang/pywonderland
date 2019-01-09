@@ -135,17 +135,19 @@ def get_mirrors(upper_triangle):
     return M
 
 
-# -----------------------------
+#---------------------
 # now the POV-Ray part
 
+
 def pov_vector(v):
-    """Convert a vector to POV-Ray format.
+    """Convert a vector to POV-Ray format. e.g. (x, y, z) --> <x, y, z>.
     """
-    return "<{}>".format(", ".join([str(x) for x in v]))
+    return "<{}>".format(", ".join(str(x) for x in v))
 
 
 def pov_vector_list(vectors):
-    """Convert a list of vectors to POV-Ray format.
+    """Convert a list of vectors to POV-Ray format. e.g.
+       [(x, y, z), (a, b, c), ...] --> <x, y, z>, <a, b, c>, ...
     """
     return ", ".join([pov_vector(v) for v in vectors])
 
@@ -167,3 +169,19 @@ def export_face(ind, face, isplane, center,
     else:
         macro = "BubbleFace({}, {}, vertices_list, {}, {}, {})\n"
         return macro.format(ind, len(face), pov_vector(center), radius, facesize)
+
+
+def pov_edge_list(edge_indices):
+    """Convert a polytope's edge indices list into a POV-Ray 2d array.
+    """
+    def pov_edge(e):  # convert (u, v) to {u, v}
+        return "{{{}}}".format(", ".join(str(x) for x in e))
+
+    return ", ".join(pov_edge(e) for elist in edge_indices for e in elist)
+
+
+def format_face(f):
+    """Convert a face indices list to a POV-Ray array. e.g.
+       (0, 1, 2, 3) --> array[4] {0, 1, 2, 3}
+    """
+    return "array[{}] {{{}}}".format(len(f), ", ".join(str(x) for x in f))
