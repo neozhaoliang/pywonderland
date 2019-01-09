@@ -1,7 +1,7 @@
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Make animations of 4d polychoron rotations
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Make animations of 4d polychora rotations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 import subprocess
 import os
@@ -13,6 +13,7 @@ IMAGE_DIR = "rotation4d"
 POV_EXE = "povray"
 FRAMES = 120
 
+# POV-Ray command line options
 POV_COMMAND = " cd povray &&" + \
               " {} polychora-rotation.pov".format(POV_EXE) + \
               " +W500 +H500" + \
@@ -22,11 +23,13 @@ POV_COMMAND = " cd povray &&" + \
               " -V" + \
               " +O../rotation4d/{}"
 
+# ImageMagick command line options
 IM_COMMAND = " cd {} && ".format(IMAGE_DIR) + \
              " convert -layers Optimize" + \
              " -delay 10 {}%03d.png[0-{}]" + \
              " ../{}.gif"
 
+# POV-Ray template string
 POV_TEMPLATE = """
 #declare vertexColor = {};
 #declare edgeColor = {};
@@ -56,20 +59,21 @@ if not os.path.exists(IMAGE_DIR):
 
 
 def write_to_pov(P, glass_tex, face_index, vertex_color, edge_color):
-    """Write the data of a polytope `P` to a POV-Ray include file for rendering.
+    """
+    Write the data of a polytope `P` to a POV-Ray include file for rendering.
 
-       parameter
-       ---------
-       :P: a polychora instance
+    parameter
+    ---------
+    :P: a polychora instance.
 
-       glass_tex: glass texture for the faces, as defined in POV-Ray's "textures.inc".
+    glass_tex: glass texture for the faces, as defined in POV-Ray's "textures.inc".
 
-       face_index: controls which type of faces are rendered. This input can be either an
-           integer or a list/tuple of integers, for example if face_index=1 then the second
-           list of faces will be rendered, and if face_index=(0, 1) then the first and second
-           lists of faces will be rendered.
+    face_index: controls which type of faces are rendered. This input can be either
+        an integer or a list/tuple of integers, for example if face_index=1 then
+        the second list of faces will be rendered, or if face_index=(0, 1) then the
+        first and second lists of faces will be rendered.
 
-       vertex_color && edge_color: must be colors defined in POV-Ray's "colors.inc".
+    vertex_color && edge_color: must be colors defined in POV-Ray's "colors.inc".
     """
     macro = "Face(rvs, {}, {}, {})"
     faces = []
@@ -108,6 +112,9 @@ def anim(coxeter_diagram,
          face_index=0,
          vertex_color="SkyBlue",
          edge_color="Orange"):
+    """Call POV-Ray to render the frames and then call ImageMagick
+       to convert them to GIF.
+    """
     coxeter_matrix = helpers.fill_matrix(coxeter_diagram)
     mirrors = helpers.get_mirrors(coxeter_diagram)
     P = Polychora(coxeter_matrix, mirrors, trunc_type)

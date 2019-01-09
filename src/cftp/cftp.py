@@ -161,7 +161,7 @@ class LozengeTiling(object):
                 if k > 0:
                     if s[k][j] == s[k][j - 1]:
                         verts["L"].append([(j + dx, s[k][j] + dy) for dx, dy in
-                                          [(0, 0), (-1, 0), (-1, -1), (0, -1)]])
+                                           [(0, 0), (-1, 0), (-1, -1), (0, -1)]])
                     else:
                         verts["R"].append([(j + dx, s[k][j] + dy) for dx, dy in
                                            [(0, 0), (-1, -1), (-1, -2), (0, -1)]])
