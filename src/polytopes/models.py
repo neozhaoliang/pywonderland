@@ -23,13 +23,25 @@ class BasePolytope(object):
     Base class for building polyhedron and polychoron using
     Wythoff's construction.
     """
-    def __init__(self, coxeter_matrix, mirrors, init_dist):
+    def __init__(self, coxeter_matrix, mirrors, init_dist, extra_relations=()):
         """
         parameters
         ----------
         :coxeter_matrix: Coxeter matrix of the symmetry group of this polytope.
+
         :mirrors: normal vectors of the mirrors.
+
         :init_dist: distances between the initial vertex and the mirrors.
+
+        A presentation of a star polytope can be obtained by imposing more
+        relations on the generators. For example "(ρ0ρ1ρ2ρ1)^n = 1" for some
+        integer n, where n is the number of sides of a hole.
+
+        See Coxeter's article
+
+            "Regular skew polyhedra in three and four dimensions,
+            and their topological analogues"
+
         """
         self.coxeter_matrix = coxeter_matrix
         # reflection transformations about the mirrors
@@ -44,6 +56,8 @@ class BasePolytope(object):
         # relations between the generators
         self.symmetry_rels = tuple((i, j) * self.coxeter_matrix[i][j]
                                    for i, j in combinations(self.symmetry_gens, 2))
+
+        self.symmetry_rels += tuple(extra_relations)
 
         # to be calculated later
         self.vtable = None
@@ -202,10 +216,10 @@ class Polyhedra(BasePolytope):
     Base class for 3d polyhedron.
     """
 
-    def __init__(self, coxeter_matrix, mirrors, init_dist):
+    def __init__(self, coxeter_matrix, mirrors, init_dist, extra_relations):
         if not len(coxeter_matrix) == len(mirrors) == len(init_dist) == 3:
             raise ValueError("Length error: the inputs must all have length 3")
-        super().__init__(coxeter_matrix, mirrors, init_dist)
+        super().__init__(coxeter_matrix, mirrors, init_dist, extra_relations)
 
     def export_pov(self, filename="./povray/polyhedra-data.inc"):
         vstr = "Vertex({})\n"
@@ -238,7 +252,7 @@ class Snub(Polyhedra):
     """
 
     def __init__(self, coxeter_matrix, mirrors, init_dist=(1.0, 1.0, 1.0)):
-        super().__init__(coxeter_matrix, mirrors, init_dist)
+        super().__init__(coxeter_matrix, mirrors, init_dist, extra_relations=())
         # the representaion is not in the form of a Coxeter group,
         # we must overwrite the relations.
         self.symmetry_gens = (0, 1, 2, 3)
@@ -305,10 +319,10 @@ class Polychora(BasePolytope):
     Base class for 4d polychoron.
     """
 
-    def __init__(self, coxeter_matrix, mirrors, init_dist):
+    def __init__(self, coxeter_matrix, mirrors, init_dist, extra_relations):
         if not len(coxeter_matrix) == len(mirrors) == len(init_dist) == 4:
             raise ValueError("Length error: the inputs must all have length 4")
-        super().__init__(coxeter_matrix, mirrors, init_dist)
+        super().__init__(coxeter_matrix, mirrors, init_dist, extra_relations)
 
     def export_pov(self, filename="./povray/polychora-data.inc"):
         vstr = "Vertex({})\n"
@@ -331,21 +345,3 @@ class Polychora(BasePolytope):
                     f.write(helpers.pov_array(face))
                     f.write(helpers.export_face(i, face, isplane, center,
                                                 radius, facesize))
-
-
-class StarPolyhedra(Polyhedra):
-    """
-    A presentation of a star polyhedra can be obtained by imposing one more
-    relation on the generators. For example "(ρ0ρ1ρ2ρ1)^n = 1" for some
-    integer n, where n is the number of sides of a hole.
-
-    See Coxeter's article
-
-        "Regular skew polyhedra in three and four dimensions,
-        and their topological analogues"
-
-    """
-
-    def __init__(self, coxeter_matrix, mirrors, init_dist, extra_relation=()):
-        super().__init__(coxeter_matrix, mirrors, init_dist)
-        self.symmetry_rels += (extra_relation,)

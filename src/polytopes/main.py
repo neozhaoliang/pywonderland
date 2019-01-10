@@ -49,10 +49,13 @@ def _render_model(P, render_file, output=None):
 
     P.build_geometry()
     P.export_pov()
-    print("rendering {} with {} vertices, {} edges, {} faces".format(output,
-                                                                     P.num_vertices,
-                                                                     P.num_edges,
-                                                                     P.num_faces))
+    print("rendering {} with {} vertices, {} edges, {} faces".format(
+        output,
+        P.num_vertices,
+        P.num_edges,
+        P.num_faces)
+        )
+
     command = POV_COMMAND.format(render_file, output)
     process = subprocess.Popen(command,
                                shell=True,
@@ -68,18 +71,19 @@ def _render_model(P, render_file, output=None):
 
 def render_polyhedra(coxeter_diagram,
                      trunc_type,
+                     extra_relations=(),
                      render_file="polyhedra.pov",
                      output=None,
                      snub=False):
     """
     The main entrance for rendering 3d polyhedron.
     """
-    coxeter_matrix = helpers.fill_matrix(coxeter_diagram)
+    coxeter_matrix = helpers.fill_matrix([x.numerator for x in coxeter_diagram])
     mirrors = helpers.get_mirrors(coxeter_diagram)
     if snub:
         P = models.Snub(coxeter_matrix, mirrors, trunc_type)
     else:
-        P = models.Polyhedra(coxeter_matrix, mirrors, trunc_type)
+        P = models.Polyhedra(coxeter_matrix, mirrors, trunc_type, extra_relations)
 
     _render_model(P, render_file, output)
 
@@ -87,27 +91,14 @@ def render_polyhedra(coxeter_diagram,
 def render_polychora(coxeter_diagram,
                      trunc_type,
                      render_file,
-                     output=None):
+                     output=None,
+                     extra_relations=()):
     """
     The main entrance for rendering 4d polychoron.
     """
-    coxeter_matrix = helpers.fill_matrix(coxeter_diagram)
-    mirrors = helpers.get_mirrors(coxeter_diagram)
-    P = models.Polychora(coxeter_matrix, mirrors, trunc_type)
-    _render_model(P, render_file, output)
-
-
-def render_star_polyhedra(coxeter_diagram,
-                          trunc_type,
-                          extra_relation=(),
-                          render_file="star-polyhedra.pov",
-                          output=None):
-    """
-    The main entrance for rendering 3d star polyhedron.
-    """
     coxeter_matrix = helpers.fill_matrix([x.numerator for x in coxeter_diagram])
     mirrors = helpers.get_mirrors(coxeter_diagram)
-    P = models.StarPolyhedra(coxeter_matrix, mirrors, trunc_type, extra_relation)
+    P = models.Polychora(coxeter_matrix, mirrors, trunc_type, extra_relations)
     _render_model(P, render_file, output)
 
 
@@ -143,16 +134,16 @@ def main():
     render_polyhedra((8, 2, 2), (1, 1, 1), output="8-antiprism", snub=True)
 
     # Kepler-Poinsot solids
-    render_star_polyhedra((5, 2, Fraction(5, 2)),
-                          (1, 0, 0),
-                          extra_relation=(0, 1, 2, 1) * 3,
-                          output="great-dodecahedron")
-    render_star_polyhedra((5, 2, Fraction(5, 2)),
-                          (0, 0, 1),
-                          extra_relation=(0, 1, 2, 1) * 3,
-                          output="small-stellated-dodecahedron")
-    render_star_polyhedra((3, 2, Fraction(5, 2)), (0, 0, 1), output="great-stellated-dodecahedron")
-    render_star_polyhedra((3, 2, Fraction(5, 2)), (1, 0, 0), output="great-icosahedron")
+    render_polyhedra((5, 2, Fraction(5, 2)),
+                     (1, 0, 0),
+                     extra_relations=((0, 1, 2, 1) * 3,),
+                     output="great-dodecahedron")
+    render_polyhedra((5, 2, Fraction(5, 2)),
+                     (0, 0, 1),
+                     extra_relations=((0, 1, 2, 1) * 3,),
+                     output="small-stellated-dodecahedron")
+    render_polyhedra((3, 2, Fraction(5, 2)), (0, 0, 1), output="great-stellated-dodecahedron")
+    render_polyhedra((3, 2, Fraction(5, 2)), (1, 0, 0), output="great-icosahedron")
 
     # regular polychora
     render_polychora((3, 2, 2, 3, 2, 3), (1, 0, 0, 0), "5-cell-1000.pov", "5-cell")
