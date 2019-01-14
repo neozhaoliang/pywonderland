@@ -1,0 +1,12 @@
+# This is the first group depicted in
+# George Havas, M.F.Newman, and E.A.O’Brien.
+# Groups of deficiency zero. In G.Baumslag et al., editors,
+# Geometric and Computational Perspectives on Infinite Groups,
+# volume 25 of Amer. Math. Soc. DIMACS Series, pages 53–67.
+# 6561 cosets
+name: HNO_1
+relators:
+  - aaBab
+  - bbCbc
+  - cABcabc
+subgroup-generators:
