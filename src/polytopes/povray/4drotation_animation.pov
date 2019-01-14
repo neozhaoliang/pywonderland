@@ -1,16 +1,20 @@
 // Persistence of Vision Ray Tracer Scene Description File
 // Vers: 3.7
-// Date: 2018/04/22
+// Date: 2019/01/04
 // Auth: Zhao Liang mathzhaoliang@gmail.com
-// This file is used for making gif animations of rotating 4d polychora
 
+/*
+=========================================
+Make Animations of Rotating 4d Polychoron
+=========================================
+*/
 
 #version 3.7;
 
 global_settings {
     assumed_gamma 2.2
     max_trace_level 8
-} 
+}
 
 #default { finish { ambient 0.1 diffuse 0.9 phong 1 } }
 
@@ -38,12 +42,12 @@ background { Black }
 #end
 
 #macro proj3d(q)
-    <q.x, q.y, q.z> / (2 - q.t) 
+    <q.x, q.y, q.z> / (2 - q.t)
 #end
 
-#macro Vert(p, col)
+#macro Vert(vs, ind, col)
     sphere {
-        p, vertexRad
+        vs[ind], vertexRad
         texture {
             pigment { color col }
             finish {
@@ -51,14 +55,14 @@ background { Black }
                 diffuse 0.5
                 reflection 0.1
                 specular 3
-                roughness 0.003 
+                roughness 0.003
             }
         }
     }
 #end
 
 #macro Edge(vs, i, j, col)
-    cylinder { 
+    cylinder {
         vs[i], vs[j], edgeRad
         texture {
             pigment { color col }
@@ -69,7 +73,6 @@ background { Black }
                 specular .5
                 roughness 0.1
             }
-        
         }
     }
 #end
@@ -81,18 +84,12 @@ background { Black }
             vs[indices[ind]]
         #end
         vs[indices[0]]
-        texture { faceTexture finish { reflection 0 } } 
+        texture { faceTexture finish { reflection 0 } }
     }
 #end
 
 union {
     #include "polychora-data.inc"
-    #for(i, 0, nvertices-1)
-        Vert(rvs[i], vertexColor)
-    #end
-    #for(i, 0, nedges-1)
-        Edge(rvs, adjacencies[i][0], adjacencies[i][1], edgeColor)
-    #end
     scale 4
 }
 

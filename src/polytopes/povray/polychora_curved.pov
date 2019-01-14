@@ -1,31 +1,30 @@
-// Persistence of Vision Ray Tracer Include File
+// Persistence of Vision Ray Tracer Scene Description File
 // Vers: 3.7
 // Date: 2018/04/22
 // Auth: Zhao Liang mathzhaoliang@gmail.com
-// Note: helper functions for rendering 4d polytopes
 
 /*
-To use this file you should have the following params/macros defined and
-implemented in the scene file:
-
-params:
-  1. vertex_size
-  2. edge_size
-  (they are scaling factors for the vertices and edges)
-  3. vertex_tex (texture of the vertices)
-
-macros:
-  1. get_size  (compute the size of a 4d vector in the 3d space)
-  2. choose_face (choose which face to render)
-  3. edge_tex  (return the texture of an edge)
-  4. face_tex  (return the texture of a face)
-
+===============================
+Draw curved polychoron examples
+===============================
 */
 
+#version 3.7;
+
+#include "colors.inc"
+#include "textures.inc"
 #include "math.inc"
+
+global_settings {
+    assumed_gamma 2.2
+    max_trace_level 8
+}
+
+background { color SkyBlue }
 
 // number of spheres for sphere_sweep
 #declare num_segments = 30;
+#declare face_transmit = 0.8;
 
 // stereographic project a 4d vector to 3d space
 #macro proj4d(p)
@@ -59,14 +58,7 @@ macros:
     result
 #end
 
-#macro Vertex(p)
-    #local q = proj4d(p);
-    sphere {
-        q, vertex_size*get_size(q)
-        texture { vertex_tex }
-    }
-#end
-
+// project the arc between two 4d points on sphere S^3 to 3d
 #macro get_arc(p1, p2)
      sphere_sweep {
         cubic_spline
@@ -83,10 +75,69 @@ macros:
      }
 #end
 
-#macro Edge(i, p1, p2)
+#declare edgeColors = array[4] { Silver, Brass, Firebrick, GreenCopper };
+#declare faceColors = array[6] { White*0.9, Violet, Pink, Yellow, Brown, Magenta };
+
+#declare vertexFinish = finish {
+    ambient 0.5
+    diffuse 0.5
+    reflection 0.1
+    roughness 0.03
+    specular 0.5
+}
+
+#declare edgeFinish = finish {
+    metallic
+    ambient 0.2
+    diffuse 0.7
+    brilliance 6
+    reflection 0.25
+    phong 0.75
+    phong_size 80
+}
+
+#declare vertexTexture = texture {
+    pigment { color Gold }
+    finish { vertexFinish }
+}
+
+#macro edgeTexture(i)
+    texture {
+        pigment { edgeColors[i] }
+        finish { edgeFinish }
+    }
+#end
+
+#macro faceTexture(i)
+    texture {
+        pigment {
+            color faceColors[i]
+            transmit face_transmit
+        }
+        finish {
+            ambient 0.5
+            diffuse 0.5
+            reflection 0.1
+            specular 1
+            roughness 0.005
+            irid { 0.3 thickness 0.2 turbulence 0.05 }
+            conserve_energy
+        }
+    }
+#end
+
+#macro Vert(vs, k)
+    #local q = proj4d(vs[k]);
+    sphere {
+        q, vertex_size*get_size(q)
+        texture { vertexTexture }
+    }
+#end
+
+#macro Edge(vs, i, v1, v2)
     object {
-        get_arc(p1, p2)
-        edge_tex(i)
+        get_arc(vs[v1], vs[v2])
+        edgeTexture(i)
     }
 #end
 
@@ -97,7 +148,7 @@ macros:
         #local pnormal = vnormalize(face_center);
         plane {
             pnormal, pdist
-            face_tex(i)
+            faceTexture(i)
             clipped_by {
                 union {
                     #local ind = 0;
@@ -148,7 +199,7 @@ macros:
 
         sphere {
             sphere_center, sphere_radius
-            face_tex(i)
+            faceTexture(i)
             #local ind = 0;
             #while (ind < num)
                 clipped_by { plane { -planes[ind], dists[ind] } }
@@ -157,3 +208,22 @@ macros:
         }
     #end
 #end
+
+union {
+    #include "polychora-data.inc"
+    scale 40 / extent
+    rotate object_rotation
+}
+
+camera {
+    location camera_location
+    look_at <0, 2, 0>
+    angle 40
+    right x*image_width/image_height
+    up y
+}
+
+light_source {
+    <-1, 1, 2> * 200
+    color rgb 1
+}

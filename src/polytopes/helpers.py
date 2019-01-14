@@ -52,7 +52,7 @@ def get_sphere_info(points):
     rib = np.sum(points, axis=0)
     rib3d = proj3d(rib)
     pts3d = np.asarray([proj3d(p) for p in points])
-    facesize = np.linalg.norm(pts3d[0] - rib3d)
+    face_size = np.linalg.norm(pts3d[0] - rib3d)
 
     M = np.ones((4, 4), dtype=np.float)
     M[:3, :3] = pts3d[:3]
@@ -61,13 +61,13 @@ def get_sphere_info(points):
     # if this is a plane
     if abs(np.linalg.det(M)) < 1e-4:
         center = rib3d
-        return True, center, None, facesize
+        return True, center, None, face_size
     else:
         T = np.linalg.solve(M, b)
         D, E, F, G = T
         center = -0.5 * T[:3]
         radius = 0.5 * np.sqrt(D*D + E*E + F*F - 4*G)
-        return False, center, radius, facesize
+        return False, center, radius, face_size
 
 
 def check_duplicate_face(f, l):
@@ -146,42 +146,39 @@ def pov_vector(v):
 
 
 def pov_vector_list(vectors):
-    """Convert a list of vectors to POV-Ray format. e.g.
+    """Convert a list of vectors to POV-Ray format, e.g.
        [(x, y, z), (a, b, c), ...] --> <x, y, z>, <a, b, c>, ...
     """
     return ", ".join([pov_vector(v) for v in vectors])
 
 
 def pov_array(arr):
-    """Export the vertices of a face to POV-Ray array.
-    """
-    declare = "#declare vertices_list = array[{}] {{ {} }};\n"
-    return declare.format(len(arr), pov_vector_list(arr))
-
-
-def export_face(ind, face, isplane, center,
-                radius, facesize):
-    """Export the information of a face to a POV-Ray macro.
-    """
-    if isplane:
-        macro = "FlatFace({}, {}, vertices_list, {}, {})\n"
-        return macro.format(ind, len(face), pov_vector(center), facesize)
-    else:
-        macro = "BubbleFace({}, {}, vertices_list, {}, {}, {})\n"
-        return macro.format(ind, len(face), pov_vector(center), radius, facesize)
-
-
-def pov_edge_list(edge_indices):
-    """Convert a polytope's edge indices list into a POV-Ray 2d array.
-    """
-    def pov_edge(e):  # convert (u, v) to {u, v}
-        return "{{{}}}".format(", ".join(str(x) for x in e))
-
-    return ", ".join(pov_edge(e) for elist in edge_indices for e in elist)
-
-
-def format_face(f):
-    """Convert a face indices list to a POV-Ray array. e.g.
+    """Convert an array to POV-Ray format, e.g.
        (0, 1, 2, 3) --> array[4] {0, 1, 2, 3}
     """
-    return "array[{}] {{{}}}".format(len(f), ", ".join(str(x) for x in f))
+    return "array[{}] {{{}}}".format(len(arr), ", ".join(str(x) for x in arr))
+
+
+def pov_2d_array(array_list):
+    """Convert a mxn 2d array to POV-Ray format, e.g.
+       [(1, 2), (3, 4), (5, 6)] --> arrar[3][2] {{1, 2}, {3, 4}, {5, 6}}.
+    """
+    return "array[{}][{}] {{{}}}".format(
+        len(array_list),
+        len(array_list[0]),
+        ", ".join("{{{}}}".format(", ".join(str(x) for x in arr)) for arr in array_list)
+        )
+
+
+def export_face(ind, face):
+    """Export the information of a face to a POV-Ray macro.
+    """
+    isplane, center, radius, face_size = get_sphere_info(face)
+    if isplane:
+        macro = "FlatFace({}, {}, array[{}]{{{}}}, {}, {})\n"
+        return macro.format(ind, len(face), len(face), pov_vector_list(face),
+                            pov_vector(center), face_size)
+    else:
+        macro = "BubbleFace({}, {}, array[{}]{{{}}}, {}, {}, {})\n"
+        return macro.format(ind, len(face), len(face), pov_vector_list(face),
+                            pov_vector(center), radius, face_size)

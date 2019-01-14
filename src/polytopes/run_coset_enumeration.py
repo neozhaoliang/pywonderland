@@ -4,12 +4,12 @@
 Run coset enumeration examples using Todd-Coxeter algorithm
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This script reads information of a group from a .yaml file
-and computes its coset table.
+This script reads information of a finitely presented group
+from a .yaml file and computes its coset table.
 
 Example usage:
 
-    python run_coset_enum.py filename [-std] [-o output]
+    python run_coset_enumeration.py filename [-std] [-o output]
 
     filename: required, the .yaml file to be parsed.
         -std: optional, if added then the output table is standardized.
@@ -58,11 +58,13 @@ class FpGroup(object):
 
     def __init__(self, relators, subgens=None, name=None):
         """
-        relators: relations between the generators as a 1D list
-                  of strings, e.g. ["aaa", "bb", "abab"].
-        subgens:  generators of the subgroup as a 1D list of
-                  strings, e.g. ["ab", "Ab"]
-        name: decriptive name of the group, e.g. "S3", "D8", ..., etc.
+        :param relators: relations between the generators as a 1D list
+            of strings, e.g. ["aaa", "bb", "abab"].
+
+        :param subgens:  generators of the subgroup as a 1D list of
+            strings, e.g. ["ab", "Ab"]
+
+        :param name: decriptive name of the group, e.g. "S3", "D8", ..., etc.
         """
         if not name:
             name = self.__class__.__name__

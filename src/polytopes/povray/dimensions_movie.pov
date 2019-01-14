@@ -3,22 +3,89 @@
 // Date: 2018/04/22
 // Auth: Zhao Liang mathzhaoliang@gmail.com
 
+/*
+=======================================================
+Make Animation of the 120-cell in the movie "Dimensions"
+=======================================================
+*/
+
 #version 3.7;
 
 #include "colors.inc"
+#include "math.inc"
 
 global_settings {
     assumed_gamma 2.2
-    max_trace_level 10
+    max_trace_level 8
 }
 
 background { color SkyBlue }
 
+// number of spheres for sphere_sweep
+#declare num_segments = 30;
+
 #declare vertex_size = 0.04;
 #declare edge_size = 0.02;
 #declare face_transmit = 0.6;
+#declare face_index = 0;
 
-#declare face_colors = array[12] {
+// stereographic project a 4d vector to 3d space
+#macro proj4d(p)
+    #local q = p / sqrt(p.x*p.x + p.y*p.y + p.z*p.z + p.t*p.t);
+    <q.x, q.y, q.z> / (1.0 - q.t)
+#end
+
+// adjust the size of vertices/edges by there positions
+#macro get_size(q)
+    #local len = vlength(q);
+    #local len = (1.0 + len * len) / 4;
+    len
+#end
+
+// return the normal vector of a 3d plane passes through the
+// projected points of two 4d vectors p1 and p2
+#macro get_clipping_plane(p1, p2)
+    #local q1 = proj4d(p1);
+    #local q2 = proj4d(p2);
+    #local q12 = proj4d((p1+p2)/2);
+    VPerp_To_Plane(q1-q12, q2-q12)
+#end
+
+// compute the signed distance of a vector to a plane,
+// all vectors here are in 3d.
+#macro distance_point_plane(p, p0, pnormal)
+    vdot(p-p0, pnormal) / vlength(pnormal)
+#end
+
+// check if a vectors p is in the halfspace defined
+// by the plane passes through p0 and has orientation pNormal.
+#macro on_same_side(p, p0, pnormal)
+    #local result = false;
+    #local innprod = vdot(pnormal, p-p0);
+    #if (innprod > 0)
+        #local result = true;
+    #end
+    result
+#end
+
+// project the arc between two 4d points on sphere S^3 to 3d
+#macro get_arc(p1, p2)
+     sphere_sweep {
+        cubic_spline
+        num_segments + 3,
+        proj4d(p1), edge_size*get_size(proj4d(p1))
+        #local ind=0;
+        #while (ind < num_segments)
+            #local q = proj4d(p1 + ind*(p2-p1)/num_segments);
+            q, edge_size*get_size(q)
+            #local ind=ind+1;
+        #end
+        proj4d(p2), edge_size*get_size(proj4d(p2))
+        proj4d(p2), edge_size*get_size(proj4d(p2))
+     }
+#end
+
+#declare faceColors = array[12] {
     Pink,
     Green,
     Blue,
@@ -33,8 +100,6 @@ background { color SkyBlue }
     Maroon
 }
 
-#declare face_index = 0;
-
 #declare Fin = finish {
     ambient .5
     diffuse .5
@@ -43,23 +108,17 @@ background { color SkyBlue }
     roughness 0.1
 }
 
-#declare vertex_tex = texture {
+#declare vertexTexture = texture {
     pigment { Yellow }
     finish { Fin }
 }
 
-#declare edge_tex = texture {
+#declare edgeTexture = texture {
     pigment { Orange }
     finish { Fin }
 }
 
-#macro get_size(q)
-    #local len = vlength(q);
-    #local len = (1.0 + len * len) / 4;
-    len
-#end
-
-#macro choose_face(i, face_size)
+#macro choose_face(face_size)
     #local chosen = false;
     #if ((face_size > 3.0))
         #local chosen = true;
@@ -67,10 +126,10 @@ background { color SkyBlue }
     chosen
 #end
 
-#macro face_tex(k)
+#macro faceTexture(k)
     texture {
         pigment {
-            color face_colors[k]
+            color faceColors[k]
             transmit face_transmit
         }
         finish {
@@ -83,31 +142,29 @@ background { color SkyBlue }
     }
 #end
 
-#include "polychora-helpers.inc"
-
-#macro Vertex(p)
-    #local q = proj4d(p);
+#macro Vert(vs, k)
+    #local q = proj4d(vs[k]);
     sphere {
         q, vertex_size*get_size(q)
-        texture { vertex_tex }
+        texture { vertexTexture }
     }
 #end
 
-#macro Edge(i, p1, p2)
+#macro Edge(vs, v1, v2)
     object {
-        get_arc(p1, p2)
-        texture { edge_tex }
+        get_arc(vs[v1], vs[v2])
+        texture { edgeTexture }
     }
 #end
 
 #macro FlatFace(i, num, pts, face_center, face_size)
-    #local chosen = choose_face(i, face_size);
+    #local chosen = choose_face(face_size);
     #if (chosen)
         #local pdist = vlength(face_center);
         #local pnormal = vnormalize(face_center);
         plane {
             pnormal, pdist
-            face_tex(face_index)
+            faceTexture(face_index)
             clipped_by {
                 union {
                     #local ind = 0;
@@ -127,7 +184,7 @@ background { color SkyBlue }
 #end
 
 #macro BubbleFace(i, num, pts, sphere_center, sphere_radius, face_size)
-    #local chosen = choose_face(i, face_size);
+    #local chosen = choose_face(face_size);
     #if (chosen)
         #local rib = 0;
         #local ind = 0;
@@ -159,7 +216,7 @@ background { color SkyBlue }
 
         sphere {
             sphere_center, sphere_radius
-            face_tex(face_index)
+            faceTexture(face_index)
             #local ind = 0;
             #while (ind < num)
                 clipped_by { plane { -planes[ind], dists[ind] } }
@@ -184,7 +241,7 @@ light_source {
 }
 
 // This light is added when the camera is inside the 120-cell,
-// which ranges from the 547-938 frames in our default settings. 
+// which ranges from the 547-938 frames in our default settings.
 #macro add_light(time)
     #if(time > 547/1199.0 & time < 938/1199.0)
         light_source {
@@ -197,7 +254,7 @@ light_source {
 add_light(clock)
 
 union {
-    #include "polychora-data.inc"
+    #include "120-cell-data.inc"
     scale 40 / extent
     rotate <0, 720*clock, 0>
     #if (clock < 0.5)
