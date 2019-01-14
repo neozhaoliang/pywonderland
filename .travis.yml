@@ -1,6 +1,6 @@
 language: python
 sudo: required
-before_install: sudo apt-get install povray libffi-dev imagemagick ffmpeg
+before_install: sudo apt-get install povray libffi-dev imagemagick
 python:
   - "3.5"
   - "3.6"
