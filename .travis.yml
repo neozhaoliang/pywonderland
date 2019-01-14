@@ -37,7 +37,6 @@ script:
   - cd ../polytopes/
   - python run_polychora_examples.py
   - python run_3d_polyhedra_animation.py
-  - python run_4d_rotation_animation.py
   - python run_coset_enum.py tc_examples/G8723.yaml
   # Hopf fibration examples
   - cd ../hopf-fibration
