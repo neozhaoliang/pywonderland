@@ -24,7 +24,7 @@ IMAGE_DIR = "4drotation_frames"           # directory to save the frames
 POV_EXE = "povray"                        # povray command
 FFMPEG_EXE = "ffmpeg"                     # ffmpeg command
 SCENE_FILE = "4drotation_animation.pov"   # scene file to render
-FRAMES = 120                              # number of frames (120 is quite good)
+FRAMES = 1                                # number of frames (120 is quite good)
 IMAGE_SIZE = 500                          # image size
 
 # POV-Ray command line options
