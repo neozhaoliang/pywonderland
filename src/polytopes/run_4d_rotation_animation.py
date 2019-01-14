@@ -101,7 +101,7 @@ def write_to_pov(P, glass_tex, face_index, vertex_color, edge_color):
     faces = []
     for i, flist in enumerate(P.face_indices):
         try:
-            if (face_index == "all"　or i == face_index or i in face_index):
+            if (face_index == "all" or i == face_index or i in face_index):
                 faces += flist
         except:
             pass
