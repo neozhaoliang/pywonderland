@@ -158,6 +158,7 @@ def snub24cell(description="snub-24-cell",
 # NB: set `FRAMES = 1` at the beginning if you want to run a quick view of these examples,
 def main():
     anim((4, 2, 2, 3, 2, 3), (1, 1, 0, 0), "truncated-tesseract", "Dark_Green_Glass", 1)
+    """
     anim((3, 2, 2, 2, 2, 20), (1, 0, 0, 1), "3-20-duoprism", "Dark_Green_Glass", None)
     anim((3, 2, 2, 3, 2, 4), (1, 0, 0, 0), "16-cell", vertex_color="Orange", edge_color="Pink")
     anim((3, 2, 2, 3, 2, 4), (1, 0, 0, 1), "runcinated-16-cell",
@@ -177,6 +178,10 @@ def main():
          glass_tex="NBwinebottle", face_index=(0, 1))
     anim((3, 2, 2, Fraction(5, 2), 2, 2), (1, 0, 0, 0), "great-dodecahedron")
     snub24cell()
+    anim((Fraction(5, 2), 2, 2, 5, 2, Fraction(5, 2)), (1, 0, 0, 0),
+         "grand-stellated-120-cell", extra_relations=((0, 1, 2, 1)*3, (1, 2, 3, 2)*3))
+    """
+
 
 if __name__ == "__main__":
     main()

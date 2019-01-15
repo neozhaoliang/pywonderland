@@ -109,13 +109,26 @@ def anim(coxeter_diagram,
 
     P.build_geometry()
     write_to_pov(P)
-    subprocess.call(POV_COMMAND.format(description), shell=True)
+
+    process = subprocess.Popen(
+        POV_COMMAND.format(description),
+        shell=True,
+        stderr=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE)
+
+    _, err = process.communicate()
+    if process.returncode:
+        print(type(err), err)
+        raise IOError("POVRay error: " + err.decode("ascii"))
+
     subprocess.call(FFMPEG_COMMAND.format(description, description), shell=True)
 
 
 # NB: by default this script draws only one frame for each example,
 # change `FRAMES` at the beginning of this file to what you want.
 def main():
+    """
     # Platonic solids
     anim((3, 2, 3), (1, 0, 0), description="tetrahedron")
     anim((4, 2, 3), (1, 0, 0), description="cube")
@@ -148,6 +161,7 @@ def main():
     anim((5, 2, Fraction(5, 2)), (0, 0, 1),
          extra_relations=((0, 1, 2, 1) * 3,), description="small-stellated-dodecahedron")
     anim((3, 2, Fraction(5, 2)), (0, 0, 1), description="great-stellated-dodecahedron")
+    """
     anim((3, 2, Fraction(5, 2)), (1, 0, 0), description="great-icosahedron")
 
 

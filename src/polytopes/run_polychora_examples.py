@@ -150,14 +150,35 @@ def draw(coxeter_diagram,
     P = Polychora(coxeter_matrix, mirrors, trunc_type, extra_relations)
     P.build_geometry()
     write_to_pov(P, **kwargs)
-    subprocess.call(POV_COMMAND.format(description), shell=True)
+
+    print("rendering {} with {} vertices, {} edges, {} faces".format(
+        description,
+        P.num_vertices,
+        P.num_edges,
+        P.num_faces)
+        )
+
+    process = subprocess.Popen(
+        POV_COMMAND.format(description),
+        shell=True,
+        stderr=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE
+        )
+
+    _, err = process.communicate()
+    if process.returncode:
+        print(type(err), err)
+        raise IOError("POVRay error: " + err.decode("ascii"))
 
 
 def main():
+    """
     draw((3, 2, 2, 3, 2, 3), (1, 0, 0, 0), "5-cell", camera=(0, 0, 200),
          vertex_size=0.08, edge_size=0.04, rotation=(-30, 60, 0), size_func=1)
     draw((5, 2, 2, 3, 2, 3), (1, 0, 0, 1), "runcinated-120-cell", camera=(0, 0, 105),
          vertex_size=0.028, edge_size=0.014, face_min=20)
+    """
     draw((3, 2, 2, 3, 2, 5), (1, 0, 0, 0), "600-cell", camera=(0, 0, 200),
          vertex_size=0.12, edge_size=0.04, size_func=2, face_max=4.0, face_min=3.0)
 
