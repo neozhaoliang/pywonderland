@@ -40,6 +40,7 @@ POV_COMMAND = " cd povray &&" + \
 # FFmpeg command line options
 FFMPEG_COMMAND = " cd {} && ".format(IMAGE_DIR) + \
                  " {} -framerate 12".format(FFMPEG_EXE) + \
+                 " -y" + \
                  " -i {}" + \
                  "%0{}d.png".format(len(str(FRAMES - 1))) + \
                  " -crf 18 -c:v libx264" + \

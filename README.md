@@ -29,10 +29,6 @@ The website for the docs is still under construction and will be released soon.
 
 **NB:** I will only maintain the code for `python >= 3.5`.
 
-## Gallery
-
-see [EXAMPLES](./EXAMPLES.md)
-
 
 ## How to use
 

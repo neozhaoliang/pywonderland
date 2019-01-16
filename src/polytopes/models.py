@@ -4,11 +4,6 @@
 Classes for building models of 3D/4D uniform polytopes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This file implements an "interface" between Python and POV-Ray:
-given the Coxeter-Dynkin diagram of a polytope P, this file
-computes the vertex/edge/face data of P, and export them to a
-POV-Ray '.inc' file for rendering.
-
 See the doc: "https://neozhaoliang.github.io/polytopes/"
 
 """
