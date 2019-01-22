@@ -80,12 +80,34 @@ background { White }
 #end
 
 #macro Face(vs, i, num, indices)
-    polygon {
-        num+1
-        #for(ind, 0, num-1)
-            vs[indices[ind]]
-        #end
-        vs[indices[0]]
+    #local center = 0;
+    #for (ind, 0, num-1)
+        #local center = center + vs[indices[ind]];
+    #end
+    #local center = center / num;
+
+    union {
+        polygon {
+            num + 1,
+            #for (ind, 0, num-1)
+                vs[indices[ind]]
+            #end
+            vs[indices[0]]
+        }
+        plane {
+            vnormalize(center), vlength(center)
+            clipped_by {
+                #for (ind, 0, num-1)
+                    #local nv = vnormalize(vcross(vs[indices[ind]], vs[indices[mod(ind+1, num)]]));
+                    #if (vdot(center - vs[indices[ind]], nv) > 0)
+                        #local nv = -nv;
+                    #end
+                    plane {
+                        nv, 0
+                    }
+                #end
+            }
+        }
         texture { faceTextures[i] }
     }
 #end

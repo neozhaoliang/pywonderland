@@ -30,7 +30,7 @@ ANTIALIASING_LEVEL = 0.001           # lower for better quality
 if not os.path.exists(OUTPUT_DIR):
     os.mkdir(OUTPUT_DIR)
 
-POV_COMMAND = "　cd povray && " + \
+POV_COMMAND = " cd povray && " + \
               " {} +I{}".format(POV_EXE, SCENE_FILE) + \
               " +W{} +H{}".format(IMAGE_SIZE, IMAGE_SIZE) + \
               " +Q{}".format(IMAGE_QUALITY_LEVEL) + \

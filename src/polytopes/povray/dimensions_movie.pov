@@ -246,7 +246,7 @@ light_source {
     #if(time > 547/1199.0 & time < 938/1199.0)
         light_source {
             <0, 0, 180>
-            color rgb 1
+            color rgb 0.5
         }
     #end
 #end

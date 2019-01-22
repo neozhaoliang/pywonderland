@@ -161,6 +161,12 @@ def main():
     anim((5, 2, Fraction(5, 2)), (0, 0, 1),
          extra_relations=((0, 1, 2, 1) * 3,), description="small-stellated-dodecahedron")
     anim((3, 2, Fraction(5, 2)), (0, 0, 1), description="great-stellated-dodecahedron")
+
+    # some uniform star polyhedron
+    anim((4, 4, Fraction(3, 2)), (1, 1, 0),
+         extra_relations=((0, 1, 2, 1) * 2,), description="small-cubicuboctahedron")
+    anim((5, 2, Fraction(5, 2)), (1, 1, 0),
+         extra_relations=((0, 1, 2, 1) * 3,), description="truncated-great-dodecahedron")
     """
     anim((3, 2, Fraction(5, 2)), (1, 0, 0), description="great-icosahedron")
 
