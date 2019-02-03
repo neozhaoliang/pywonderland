@@ -12,6 +12,7 @@ Reference:
 
 """
 
+
 class CosetTable(object):
     """
     Let G = < X | R > be a finitely presented group and H be a subgroup of

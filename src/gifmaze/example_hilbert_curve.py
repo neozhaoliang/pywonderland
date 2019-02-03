@@ -6,9 +6,7 @@ Hilbert curve animation based on Gray code
 :copyright (c) 2018 by Zhao Liang
 """
 from colorsys import hls_to_rgb
-from tqdm import trange
-from gifmaze import (Maze, GIFSurface, Animation, encode_maze,
-                     generate_text_mask, create_animation_for_size)
+from gifmaze import create_animation_for_size
 
 
 class Hilbert(object):
@@ -160,4 +158,4 @@ surface.set_palette(colors)
 anim.pause(100)
 anim.run(hilbert, maze, speed=15, delay=5, pixels=pixels)
 anim.pause(500)
-anim.save("hilbert.gif")
+anim.save("hilbert_curve.gif")

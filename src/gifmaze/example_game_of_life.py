@@ -13,8 +13,7 @@ For more patterns see
 import os
 from tqdm import tqdm
 import numpy as np
-from gifmaze import (Maze, GIFSurface, Animation, encode_maze,
-                     generate_text_mask, create_animation_for_size)
+from gifmaze import create_animation_for_size
 
 
 cell_size = 5
@@ -56,8 +55,8 @@ def evolve(grid):
     G = grid.astype(np.int)
     N = np.zeros_like(G)
     N[1:-1, 1:-1] = (G[:-2, :-2] + G[:-2, 1:-1] + G[:-2, 2:] +
-                       G[1:-1, :-2] + G[1:-1, 2:] +
-                       G[2:, :-2] + G[2:, 1:-1] + G[2:, 2:])
+                     G[1:-1, :-2] + G[1:-1, 2:] +
+                     G[2:, :-2] + G[2:, 1:-1] + G[2:, 2:])
 
     return np.logical_or(N == 3, np.logical_and(G == 1, N == 2))
 
