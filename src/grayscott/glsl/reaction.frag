@@ -8,13 +8,13 @@ uniform sampler2D uv_texture;
 uniform sampler2D mask_texture;
 uniform vec4      params;
 
-out vec4 result;
+out vec4 uv_density;
 
 void main()
 {
     if(u_mouse.x < -5.0)
     {
-        result = vec4(1.0, 0.0, 0.0, 1.0);
+        uv_density = vec4(1.0, 0.0, 0.0, 1.0);
         return;
     }
 
@@ -43,5 +43,5 @@ void main()
             newValue.y = 0.9;
     }
 
-    result = vec4(newValue, 0.0, 1.0);
+    uv_density = vec4(newValue, 0.0, 1.0);
 }

@@ -156,6 +156,6 @@ for i in range(1, 256):
 surface.set_palette(colors)
 
 anim.pause(100)
-anim.run(hilbert, maze, speed=15, delay=5, pixels=pixels)
+anim.run(hilbert, maze, speed=5, delay=5, pixels=pixels)
 anim.pause(500)
 anim.save("hilbert_curve.gif")
