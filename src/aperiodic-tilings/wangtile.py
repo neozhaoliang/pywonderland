@@ -24,6 +24,9 @@ from shader import Shader
 from texture import create_cubemap_texture
 
 
+CUBEMAP_IMAGES = ["../glslhelpers/textures/st_peters_blurred{}.png".format(i) for i in range(6)]
+
+
 class WangTile(pyglet.window.Window):
 
     def __init__(self, width, height, zoom):
@@ -46,7 +49,7 @@ class WangTile(pyglet.window.Window):
         self._start_time = time.clock()
         self.shader = Shader(["./glsl/wang.vert"], ["./glsl/wang.frag"])
 
-        cubemap = create_cubemap_texture(["./glsl/st_peters_blurred{}.png".format(i) for i in range(6)])
+        cubemap = create_cubemap_texture(CUBEMAP_IMAGES)
         gl.glActiveTexture(gl.GL_TEXTURE0)
         gl.glBindTexture(gl.GL_TEXTURE_CUBE_MAP, cubemap)
         with self.shader:

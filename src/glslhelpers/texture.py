@@ -27,7 +27,7 @@ def create_image_texture(imgfile):
     """Create a 2D texture from an image file.
     """
     image = pyglet.image.load(imgfile)
-    data = image.get_data("RGBA", -image.width * 4)
+    data = image.get_data("RGBA", image.width * 4)
     tex = gl.GLuint()
     gl.glGenTextures(1, ct.pointer(tex))
     gl.glBindTexture(gl.GL_TEXTURE_2D, tex)
