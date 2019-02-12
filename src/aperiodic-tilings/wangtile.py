@@ -13,7 +13,7 @@ sys.path.append("../glslhelpers")
 
 import time
 import ctypes
-from PIL import Image, ImageFilter
+from PIL import Image
 
 import pyglet
 pyglet.options["debug_gl"] = False
@@ -21,48 +21,7 @@ import pyglet.gl as gl
 import pyglet.window.key as key
 
 from shader import Shader
-
-
-def create_cubemap_texture(imgfile, radius=12.0):
-    """Create a cubemap texture from a image file.
-    """
-    # generate a new texture
-    gl.glEnable(gl.GL_TEXTURE_CUBE_MAP)
-    cubemap = gl.GLuint()
-    gl.glGenTextures(1, ctypes.byref(cubemap))
-    cubemap = cubemap.value
-
-    # bind it to `GL_TEXTURE_CUBE_MAP` and set the filter and wrap mode
-    gl.glBindTexture(gl.GL_TEXTURE_CUBE_MAP, cubemap)
-    gl.glTexParameteri(gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_MAG_FILTER, gl.GL_LINEAR)
-    gl.glTexParameteri(gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_MIN_FILTER, gl.GL_LINEAR_MIPMAP_LINEAR)
-    gl.glTexParameteri(gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_WRAP_S, gl.GL_CLAMP_TO_EDGE)
-    gl.glTexParameteri(gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_WRAP_T, gl.GL_CLAMP_TO_EDGE)
-    gl.glTexParameteri(gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_WRAP_R, gl.GL_CLAMP_TO_EDGE)
-
-    # read the image file and crop it into six parts
-    img = Image.open(imgfile).filter(ImageFilter.GaussianBlur(radius=radius))
-    size = img.size[0] // 3
-    # right, left, up, down, back, front
-    faces = [img.crop((2 * size, size, 3 * size, 2 * size)),
-             img.crop((0, size, size, 2 * size)),
-             img.crop((size, 0, 2 * size, size)),
-             img.crop((size, 2 * size, 2 * size, 3 * size)),
-             img.crop((size, 3 * size, 2 * size, 4 * size)),
-             img.crop((size, size, 2 * size, size))]
-    faces = [face.resize((1024, 1024)) for face in faces]
-
-    # set the faces of the cubemap texture
-    for i, face in enumerate(faces):
-        width, height = face.size
-        data = face.tobytes("raw", "RGBX", 0, -1)
-        gl.glTexImage2D(gl.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, gl.GL_RGBA,
-                        width, height, 0, gl.GL_RGBA, gl.GL_UNSIGNED_BYTE, data)
-
-    gl.glGenerateMipmap(gl.GL_TEXTURE_CUBE_MAP)
-    gl.glBindTexture(gl.GL_TEXTURE_CUBE_MAP, 0)
-    return cubemap
-
+from texture import create_cubemap_texture
 
 
 class WangTile(pyglet.window.Window):
@@ -87,7 +46,7 @@ class WangTile(pyglet.window.Window):
         self._start_time = time.clock()
         self.shader = Shader(["./glsl/wang.vert"], ["./glsl/wang.frag"])
 
-        cubemap = create_cubemap_texture("./glsl/map.png")
+        cubemap = create_cubemap_texture(["./glsl/st_peters_blurred{}.png".format(i) for i in range(6)])
         gl.glActiveTexture(gl.GL_TEXTURE0)
         gl.glBindTexture(gl.GL_TEXTURE_CUBE_MAP, cubemap)
         with self.shader:

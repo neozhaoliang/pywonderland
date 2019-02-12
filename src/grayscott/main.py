@@ -30,7 +30,7 @@ import pyglet.window.key as key
 
 from shader import Shader
 from framebuffer import FrameBuffer
-
+from texture import create_texture_from_ndarray
 
 # windows users need to add the directory that contains
 # your "ffmpeg.exe" to the environment variables.
@@ -78,22 +78,6 @@ def parse(params):
     species = (params.split(":")[0]).strip()
     colors = re.findall("#[0-9|A-Z]{8}", params)
     return species, htmlcolors_to_rgba(colors)
-
-
-def create_texture_from_ndarray(array):
-    """Create a texture from a numpy ndarray.
-    """
-    height, width = array.shape[:2]
-    texture = pyglet.image.Texture.create_for_size(gl.GL_TEXTURE_2D, width, height,
-                                                   gl.GL_RGBA32F_ARB)
-    gl.glBindTexture(texture.target, texture.id)
-    gl.glTexImage2D(texture.target, texture.level, gl.GL_RGBA32F_ARB,
-                    width, height, 0, gl.GL_RGBA, gl.GL_FLOAT, array.ctypes.data)
-    gl.glTexParameteri(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_WRAP_S, gl.GL_CLAMP_TO_EDGE)
-    gl.glTexParameteri(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_WRAP_T, gl.GL_CLAMP_TO_EDGE)
-    gl.glBindTexture(texture.target, 0)
-    return texture
-
 
 
 class GrayScott(pyglet.window.Window):

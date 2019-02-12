@@ -88,7 +88,5 @@ ENV/
 # Rope project settings
 .ropeproject
 
-src/**/*.png
-src/**/*.gif
+
 src/**/*.py.bak
-!src/**/teacher.png
