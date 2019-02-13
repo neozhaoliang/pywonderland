@@ -63,7 +63,11 @@ def create_cubemap_texture(imgfiles):
     # set the faces of the cubemap texture
     for i, face in enumerate(faces):
         width, height = face.size
-        data = face.tobytes("raw", "RGBX", 0, -1)
+        try:
+            data = face.tobytes("raw", "RGBX", 0, -1)
+        except TypeError:
+            data = face.tobytes("raw", "RGBA", 0, -1)
+
         gl.glTexImage2D(gl.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, gl.GL_RGBA,
                         width, height, 0, gl.GL_RGBA, gl.GL_UNSIGNED_BYTE, data)
 
