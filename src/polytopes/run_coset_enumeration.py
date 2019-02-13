@@ -114,7 +114,7 @@ class FpGroup(object):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-filename", type=str, help="Input file name")
+    parser.add_argument("filename", type=str, help="Input file name")
     parser.add_argument("-std", type=bool, default=True,
                         help="Standardize the coset table or not")
     parser.add_argument("-out", metavar="-o", type=str,
