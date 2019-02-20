@@ -218,11 +218,10 @@ class GrayScott(pyglet.window.Window):
             gl.glViewport(0, 0, self.width, self.height)
             with self.render_shader:
                 gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
+                self.frame_count += 1
 
         if self.video_on and (self.frame_count % self.sample_rate == 0):
             self.write_video_frame()
-
-        self.frame_count += 1
 
     def on_key_press(self, symbol, modifiers):
         """Keyboard interface.
