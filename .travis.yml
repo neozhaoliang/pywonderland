@@ -38,7 +38,4 @@ script:
   - python run_polychora_examples.py
   - python run_3d_polyhedra_animation.py
   - python run_coset_enumeration.py tc_examples/G8723.yaml
-  # Hopf fibration examples
-  - cd ../hopf
-  - travis_wait 5 jupyter notebook hopf_fibration.ipynb
   # travis-ci cannot run glsl and ffmpeg examples, so omit grayscott, mobius and lorenz examples.
