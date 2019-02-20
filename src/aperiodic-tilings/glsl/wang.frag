@@ -3,7 +3,7 @@
 uniform vec3        iResolution;
 uniform float       iTime;
 uniform float       zoom;
-uniform samplerCube cubemap;
+uniform samplerCube iChannel0;
 
 out vec4 FinalColor;
 
@@ -124,7 +124,7 @@ void main()
     vec3 bounce = reflect(rd, normal);
     color *= dot(normal, lightDir);
     color *= mix(vec3(1.0, 0.7, 0.5), vec3(0.2, 0.5, 1.0), smoothstep(0.0, 2.0 / iResolution.y, min(v, abs(v - 0.1) - 0.1) / scale));
-    color *= 3.0 * texture(cubemap, bounce).xyz;
+    color *= 3.0 * texture(iChannel0, bounce).xyz;
     color = sqrt(color);
     FinalColor = vec4(color, 1.0);
 }

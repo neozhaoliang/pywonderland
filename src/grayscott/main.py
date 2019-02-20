@@ -182,8 +182,8 @@ class GrayScott(pyglet.window.Window):
             self.reaction_shader.vertex_attrib("texcoord", [0, 0, 1, 0, 0, 1, 1, 1])
             self.reaction_shader.uniformi("uv_texture", 0)
             self.reaction_shader.uniformi("mask_texture", 1)
-            self.reaction_shader.uniformf("u_resolution", self.tex_width, self.tex_height)
-            self.reaction_shader.uniformf("u_mouse", -1, -1)
+            self.reaction_shader.uniformf("iResolution", self.tex_width, self.tex_height, 0)
+            self.reaction_shader.uniformf("iMouse", -1, -1)
             self.reaction_shader.uniformf("params", *ALL_SPECIES[self.species])
 
         with self.render_shader:
@@ -264,7 +264,7 @@ class GrayScott(pyglet.window.Window):
     def update_mouse(self, x, y):
         with self.fbo:
             with self.reaction_shader:
-                self.reaction_shader.uniformf("u_mouse", x, y)
+                self.reaction_shader.uniformf("iMouse", x, y)
 
     def save_screenshot(self):
         self.buffer.save("screenshot-" + self.species + ".png")

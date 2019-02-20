@@ -1,4 +1,5 @@
 cairocffi
+jupyter
 matplotlib
 numba
 numpy

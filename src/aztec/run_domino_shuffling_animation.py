@@ -4,9 +4,8 @@
 Make GIF Animations of the Domino Shuffling Algorithm
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This script requires ImageMagick be installed on your computer.
-Windows users also need to set the variable `CONVERTER` below
-to be the path to your `convert.exe`.
+This script requires ImageMagick be installed on your computer
+and the command `convert` is added to your system PATH.
 
 :copyright (c) 2015 by Zhao Liang.
 """

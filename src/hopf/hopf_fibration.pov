@@ -5,10 +5,6 @@ global_settings {
     max_trace_level 10
 }
 
-#include "colors.inc"
-
-background { color Black }
-
 #declare TubeThickness = 0.05;
 
 #macro Torus(center, rad, mat, col)

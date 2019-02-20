@@ -71,6 +71,9 @@ They can all be installed via command-line:
 sudo apt-get install imagemagick ffmpeg povray graphviz
 ```
 
+In the scripts these softwares are called in command line by `povray`, `ffmpeg`, `convert`, etc. For Windows users you should add the directories contain these .exe files to the system `Path` environment variables. For example on Windows the default location of POV-Ray's exe file is `C:\Program Files\POV-Ray\v3.7\bin\pvengine64.exe`, so you should add `C:\Program Files\POV-Ray\v3.7\bin` to system `Path` environment variables and rename `pvengine64.exe` to `povray.exe`, then you can run the scripts without any changes and everything works fine.
+
+
 # Thanks
 
 I have learned a lot from the following people:

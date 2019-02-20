@@ -58,7 +58,7 @@ class WangTile(pyglet.window.Window):
             self.shader.uniformf("iResolution", self.width, self.height, 0.0)
             self.shader.uniformf("iTime", 0.0)
             self.shader.uniformf("zoom", zoom)
-            self.shader.uniformi("cubemap", 0)
+            self.shader.uniformi("iChannel0", 0)
 
     def on_draw(self):
         gl.glClearColor(0, 0, 0, 0)

@@ -24,6 +24,7 @@ script:
   - python ammann-beenker.py
   - python debruijn.py
   - python penrose.py
+  - python wangtile.py
   # miscellaneous examples
   - cd ../misc/
   - python mandelbrot.py
@@ -39,6 +40,6 @@ script:
   - python run_3d_polyhedra_animation.py
   - python run_coset_enumeration.py tc_examples/G8723.yaml
   # Hopf fibration examples
-  - cd ../hopf-fibration
-  - python hopf_fibration.py 
+  - cd ../hopf
+  - jupyter notebook hopf_fibration.ipynb
   # travis-ci cannot run glsl and ffmpeg examples, so omit grayscott, mobius and lorenz examples.
