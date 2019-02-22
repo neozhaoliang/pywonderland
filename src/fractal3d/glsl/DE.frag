@@ -2,8 +2,6 @@
 
 uniform vec3  iResolution;
 uniform float iTime;
-uniform float maxDistShadow;
-uniform float maxDistAO;
 uniform int   AA;
 
 #define MAX_TRACE_STEPS  200
@@ -49,6 +47,7 @@ vec3 randomHemisphereDirection(vec3 n, float seed)
     return k == 0.0 ? n : normalize(k * dr);
 }
 
+// you must implement the following two functions in the scene fragment file!
 float DE(vec3 p);
 
 vec3 DE_COLOR(vec3 p);
@@ -84,7 +83,7 @@ vec3 trace(vec3 ro, vec3 rd)
     return vec3(-1.0, 1.0, 0.0);
 }
 
-float calcAO(vec3 ro, vec3 n)
+float calcAO(vec3 ro, vec3 n, float maxDistAO)
 {
     float seed = hash1(ro.x * (ro.y * 32.56) + ro.z * 147.2 + ro.y);
     vec3 rd = randomHemisphereDirection(n, seed);
@@ -94,7 +93,7 @@ float calcAO(vec3 ro, vec3 n)
     return 1.0;
 }
 
-float softShadow(const vec3 ro, const vec3 rd, float tmin, float tmax, float k) {
+float softShadow(const vec3 ro, const vec3 rd, float maxDistShadow) {
     float seed = hash1(ro.x*(ro.y*32.56)+ro.z*147.2 + ro.y);
     float d = hit(ro, rd);
     if (d > 0.0)
@@ -133,7 +132,7 @@ float calcAO(vec3 p, vec3 n)
 }
 */
 
-vec3 render(vec3 ro, vec3 rd)
+vec3 render(vec3 ro, vec3 rd, float maxDistAO, float maxDistShadow)
 {
     vec3 col = vec3(0.0);
     vec3 res = trace(ro, rd);
@@ -146,8 +145,8 @@ vec3 render(vec3 ro, vec3 rd)
 	    col = 0.5 + 0.5 * cos(6.2831 * res.y + vec3(0.0, 1.0, 2.0));
 	    vec3 lig = normalize(vec3(0.2, 0.7, 1.6));
 	    vec3 hal = normalize(lig - rd);
-	    float occ = calcAO(pos, nor);
-	    float sha = 0.5 + 0.5 * softShadow(pos, lig, 0.01, 3.0, 12.0);
+	    float occ = calcAO(pos, nor, maxDistAO);
+	    float sha = 0.5 + 0.5 * softShadow(pos, lig, maxDistShadow);
 	    //float amb = clamp(0.5 + 0.5 * nor.y, 0.0, 1.0);
 	    float amb = 0.3;
 	    float dif = clamp(dot(nor, lig), 0.0, 1.0);

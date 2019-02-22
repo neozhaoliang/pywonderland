@@ -5,6 +5,7 @@ out vec4 FinalColor;
 const vec4 param_min = vec4(-0.8323, -0.694, -0.5045, 0.8067);
 const vec4 param_max = vec4(0.8579, 1.0883, 0.8937, 0.9411);
 
+
 float DE(vec3 p)
 {
     float k, r2;
@@ -61,7 +62,7 @@ void main()
 	    // put screen at distance 3 in front of the camera
 	    vec3 rd = M * normalize(vec3(uv, -3.0));
 	    
-	    vec3 col = render(ro, rd);
+	    vec3 col = render(ro, rd, 0.05, 1.0);
 	    tot += col;
         }
     }
