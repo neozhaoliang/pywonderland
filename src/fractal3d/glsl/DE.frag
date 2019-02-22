@@ -4,13 +4,15 @@ uniform vec3  iResolution;
 uniform float iTime;
 uniform int   AA;
 
+out vec4 FinalColor;
+
+
 #define MAX_TRACE_STEPS  200
 #define MIN_TRACE_DIST   0.01
-#define MAX_TRACE_DIST   5.0
+#define MAX_TRACE_DIST   10.0
 #define PRECISION        1e-4
-#define PI               3.14159265358979323
-#define BACKGROUND       vec3(0.08, 0.16, 0.34)
-#define T                (iTime * 0.02)
+#define PI               3.14159265358979323 
+#define T                (iTime * 0.005)
 
 // view to world transformation
 mat3 viewMatrix(vec3 camera, vec3 lookat, vec3 up)
@@ -132,7 +134,7 @@ float calcAO(vec3 p, vec3 n)
 }
 */
 
-vec3 render(vec3 ro, vec3 rd, float maxDistAO, float maxDistShadow)
+vec3 render(vec3 ro, vec3 rd, float maxDistAO, float maxDistShadow, vec3 background)
 {
     vec3 col = vec3(0.0);
     vec3 res = trace(ro, rd);
@@ -165,11 +167,11 @@ vec3 render(vec3 ro, vec3 rd, float maxDistAO, float maxDistShadow)
 	    float lDist = t;
 	    float atten = 1.0 / (1.0 + lDist * 0.3);
 	    col *= atten * col * occ;
-	    col = mix(col, BACKGROUND, smoothstep(0.0, 0.95, t / MAX_TRACE_DIST));
+	    col = mix(col, background, smoothstep(0.0, 0.95, t / MAX_TRACE_DIST));
 	}
     else
 	{
-	    col = BACKGROUND;
+	    col = background;
 	}
     return sqrt(col);
 }

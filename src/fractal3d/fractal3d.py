@@ -1,7 +1,12 @@
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Wall paper 3D fractals with pygelt and glsl
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Wall paper ray marching 3D fractals with pygelt and glsl
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To make a wall paper you should have a decent GPU and change
+to a higher antialiasing level (AA) and larger window size.
+(e.g. AA=4 and size=1200x960)
+
 """
 import sys
 sys.path.append("../glslhelpers")
@@ -17,8 +22,8 @@ import pyglet.window.key as key
 from shader import Shader
 
 
-# more scene files to come
-scene_file = "./glsl/pseudokleinian.frag"
+# specify a scene file here, more scene files to come.
+scene_file = "./glsl/apollonian.frag"
 
 
 class Fractal3D(pyglet.window.Window):
@@ -38,8 +43,8 @@ class Fractal3D(pyglet.window.Window):
             self.shader.vertex_attrib("position", [-1, -1, 1, -1, -1, 1, 1, 1])
             self.shader.uniformf("iResolution", width, height, 0.0)
             self.shader.uniformf("iTime", 0.0)
-            self.shader.uniformi("AA", 4)
- 
+            self.shader.uniformi("AA", 2)
+
         self.buffer = pyglet.image.get_buffer_manager().get_color_buffer()
 
     def on_draw(self):
@@ -70,5 +75,5 @@ class Fractal3D(pyglet.window.Window):
 
 
 if __name__ == "__main__":
-    app = Fractal3D(1200, 720)
+    app = Fractal3D(800, 600)
     app.run()

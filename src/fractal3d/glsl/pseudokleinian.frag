@@ -1,5 +1,3 @@
-out vec4 FinalColor;
-
 #define FOLDING_NUMBER  7
 
 const vec4 param_min = vec4(-0.8323, -0.694, -0.5045, 0.8067);
@@ -15,7 +13,7 @@ float DE(vec3 p)
 	{
 	    p = 2.0 * clamp(p, param_min.xyz, param_max.xyz) - p;
 	    r2 = dot(p, p);
-	    k = max(param_min.w / dot(p, p), 1.0);
+	    k = max(param_min.w / r2, 1.0);
 	    p *= k;
 	    scale *= k;
 	}
@@ -33,7 +31,7 @@ vec3 DE_COLOR(vec3 p)
 	p = -1.0 + 2.0*fract(0.5*p+0.5);
 	r2 = dot(p, p);
 	orb = min(orb, r2);
-	k = max(param_min.w / dot(p, p), 1.0);
+	k = max(param_min.w / r2, 1.0);
 	p *= k;
 	scale *= k;
     }
@@ -62,7 +60,7 @@ void main()
 	    // put screen at distance 3 in front of the camera
 	    vec3 rd = M * normalize(vec3(uv, -3.0));
 	    
-	    vec3 col = render(ro, rd, 0.05, 1.0);
+	    vec3 col = render(ro, rd, 0.05, 1.0, vec3(0.08, 0.16, 0.34));
 	    tot += col;
         }
     }
