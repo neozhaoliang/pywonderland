@@ -23,7 +23,7 @@ from shader import Shader
 
 
 # specify a scene file here, more scene files to come.
-scene_file = "./glsl/apollonian.frag"
+scene_file = "./glsl/pseudokleinian.frag"
 
 
 class Fractal3D(pyglet.window.Window):
@@ -43,7 +43,7 @@ class Fractal3D(pyglet.window.Window):
             self.shader.vertex_attrib("position", [-1, -1, 1, -1, -1, 1, 1, 1])
             self.shader.uniformf("iResolution", width, height, 0.0)
             self.shader.uniformf("iTime", 0.0)
-            self.shader.uniformi("AA", 2)
+            self.shader.uniformi("AA", 4)
 
         self.buffer = pyglet.image.get_buffer_manager().get_color_buffer()
 

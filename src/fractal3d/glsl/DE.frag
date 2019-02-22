@@ -149,8 +149,7 @@ vec3 render(vec3 ro, vec3 rd, float maxDistAO, float maxDistShadow, vec3 backgro
 	    vec3 hal = normalize(lig - rd);
 	    float occ = calcAO(pos, nor, maxDistAO);
 	    float sha = 0.5 + 0.5 * softShadow(pos, lig, maxDistShadow);
-	    //float amb = clamp(0.5 + 0.5 * nor.y, 0.0, 1.0);
-	    float amb = 0.3;
+	    float amb = clamp(0.2 + 0.5 * nor.y, 0.0, 1.0);
 	    float dif = clamp(dot(nor, lig), 0.0, 1.0);
 	    float bac = clamp(dot(nor, normalize(vec3(-lig.x, 0.0, -lig.z))), 0.0, 1.0) * clamp(1.0 - pos.y, 0.0, 1.0);
 	    float dom = smoothstep(-0.1, 0.1, ref.y);
