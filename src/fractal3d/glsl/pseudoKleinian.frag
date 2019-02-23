@@ -1,5 +1,6 @@
 #define FOLDING_NUMBER  7
 
+const float fovdist = 2.0;
 const vec4 param_min = vec4(-0.8323, -0.694, -0.5045, 0.8067);
 const vec4 param_max = vec4(0.8579, 1.0883, 0.8937, 0.9411);
 
@@ -57,8 +58,8 @@ void main()
 	    vec3 ro = camera;
 	    ro.xy = R(ro.xy, T);
 	    mat3 M = viewMatrix(ro, lookat, up);
-	    // put screen at distance 3 in front of the camera
-	    vec3 rd = M * normalize(vec3(uv, -3.0));
+	    // put screen at distance fovdist in front of the camera
+	    vec3 rd = M * normalize(vec3(uv, -fovdist));
 	    
 	    vec3 col = render(ro, rd, 0.05, 1.0, vec3(0.08, 0.16, 0.34));
 	    tot += col;

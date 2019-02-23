@@ -23,7 +23,7 @@ from shader import Shader
 
 
 # specify a scene file here, more scene files to come.
-scene_file = "./glsl/pseudokleinian.frag"
+scene_file = "./glsl/pseudoKleinian.frag"
 
 
 class Fractal3D(pyglet.window.Window):
