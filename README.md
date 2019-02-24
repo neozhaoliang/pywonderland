@@ -59,6 +59,7 @@ sudo apt-get install libffi-dev
 
 Open source softwares:
 
++ `python3-tk` (for open file dialog)
 + `ImageMagick` (for making gifs and some post-processing)
 + `FFmpeg` (for saving animations into video files)
 + `POV-Ray` (for generating high quality ray-tracing results)
@@ -67,7 +68,7 @@ Open source softwares:
 They can all be installed via command-line:
 
 ```
-sudo apt-get install imagemagick ffmpeg povray graphviz
+sudo apt-get install python3-tk imagemagick ffmpeg povray graphviz
 ```
 
 In the scripts these softwares are called in command line by `povray`, `ffmpeg`, `convert`, etc. For Windows users you should add the directories contain these .exe files to the system `Path` environment variables. For example on Windows the default location of POV-Ray's exe file is `C:\Program Files\POV-Ray\v3.7\bin\pvengine64.exe`, so you should add `C:\Program Files\POV-Ray\v3.7\bin` to system `Path` environment variables and rename `pvengine64.exe` to `povray.exe`, then you can run the scripts without any changes and everything works fine.

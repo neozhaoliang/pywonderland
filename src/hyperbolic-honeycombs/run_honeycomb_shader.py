@@ -1,11 +1,7 @@
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Wall paper ray marching 3D fractals with pygelt and glsl
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-To make a wall paper you should have a decent GPU and change
-to a higher antialiasing level (AA) and larger window size.
-(e.g. AA=4 and size=1200x960)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+3D hyperbolic honeycombs with pygelt and glsl
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
 import sys
@@ -19,29 +15,28 @@ pyglet.options["debug_gl"] = False
 import pyglet.gl as gl
 import pyglet.window.key as key
 
-import tkinter as tk
-from tkinter.filedialog import askopenfilename
-
 from shader import Shader
 
 
-class Fractal3D(pyglet.window.Window):
+class HyperbolicHoneycomb(pyglet.window.Window):
 
-    def __init__(self, width, height, scene_file):
+    def __init__(self, width, height, pqr):
         pyglet.window.Window.__init__(self,
                                       width,
                                       height,
-                                      caption="Fractal3D",
+                                      caption="Hyperbolic-Honeycomb",
                                       resizable=True,
                                       visible=False,
                                       vsync=False)
+        self.pqr = pqr
         self._start_time = time.clock()
-        self.shader = Shader(["./glsl/fractal3d.vert"], [scene_file])
+        self.shader = Shader(["./glsl/hyperbolic3d.vert"], ["./glsl/DE.frag", "./glsl/hyperbolic3d.frag"])
         with self.shader:
             self.shader.vertex_attrib("position", [-1, -1, 1, -1, -1, 1, 1, 1])
             self.shader.uniformf("iResolution", width, height, 0.0)
             self.shader.uniformf("iTime", 0.0)
-            self.shader.uniformi("AA", 4)
+            self.shader.uniformi("AA", 3)
+            self.shader.uniformi("PQR", *self.pqr)
 
         self.buffer = pyglet.image.get_buffer_manager().get_color_buffer()
 
@@ -61,7 +56,7 @@ class Fractal3D(pyglet.window.Window):
             pyglet.app.exit()
 
     def save_screenshot(self):
-        self.buffer.save("screenshot.png")
+        self.buffer.save("screenshot{}.png".format("-".join(str(x) for x in self.pqr)))
 
     def run(self, fps=None):
         self.set_visible(True)
@@ -73,10 +68,5 @@ class Fractal3D(pyglet.window.Window):
 
 
 if __name__ == "__main__":
-    root = tk.TK()
-    root.withdraw()
-    scene = askopenfilename(initialdir="./glsl",
-                            filetypes=[("Text File", "*.frag")],
-                            title="Choose a fragment shader")
-    app = Fractal3D(800, 600, scene_file=scene)
+    app = HyperbolicHoneycomb(800, 600, pqr=(5, 3, 3))
     app.run()
