@@ -87,7 +87,7 @@ float softShadow(vec3 ro, vec3 rd, float tmin, float tmax, float k)
 {
     float res = 1.0;
     float t = tmin;
-    for (int i = 0; i < 30; i++)
+    for (int i = 0; i < 20; i++)
     {
         float h = DE(ro + rd * t).x;
         res = min(res, k * h / t);
@@ -164,8 +164,8 @@ void main()
 		    vec2 uv = (gl_FragCoord.xy + offset) / iResolution.xy;
 		    uv = 2.0 * uv - 1.0;
 		    uv.x *= iResolution.x / iResolution.y;
-		    vec3 camera = vec3(1.0, 1.0, 0.9);
-		    vec3 lookat = vec3(-0.68, -0.63, -0.35);
+		    vec3 camera = vec3(1.07, 1.04, 0.87);
+		    vec3 lookat = vec3(-0.687, -0.63, -0.35);
 		    vec3 up = vec3(0.0, 0.0, 1.0);
 		    // set camera
 		    vec3 ro = camera;
