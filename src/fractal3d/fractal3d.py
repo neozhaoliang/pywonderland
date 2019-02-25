@@ -37,7 +37,7 @@ import subprocess
 import argparse
 
 import tkinter as tk
-from tkinter.filedialog import askopenfilename
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 
 import pyglet
 pyglet.options["debug_gl"] = False
@@ -115,7 +115,13 @@ class Fractal3D(pyglet.window.Window):
             self.init_shader()
 
     def save_screenshot(self):
-        self.buffer.save("screenshot.png")
+        root = tk.Tk()
+        root.withdraw()
+        filename = asksaveasfilename(initialdir="./",
+                                     title="Input a file name",
+                                     defaultextension="png",
+                                     initialfile="screenshot")
+        self.buffer.save(filename)
 
     def run(self, fps=None):
         self.set_visible(True)

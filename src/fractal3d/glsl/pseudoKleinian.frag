@@ -91,7 +91,7 @@ float softShadow(vec3 ro, vec3 rd, float tmin, float tmax, float k)
     {
         float h = DE(ro + rd * t).x;
         res = min(res, k * h / t);
-        t += clamp(h, 0.001, 0.005);
+        t += clamp(h, 0.001, 0.015);
         if (h < 0.0001 || t > tmax)
             break;
     }
@@ -127,13 +127,13 @@ vec3 render(vec3 ro, vec3 rd, vec3 lig)
         vec3 ref = reflect(rd, nor);
 
         float occ = calcAO(pos, nor);
-        float amb = 0.3;
+        float amb = clamp(0.5 + 0.5 * nor.y, 0.0, 1.0);
         float dif = clamp(dot(nor, lig), 0.0, 1.0);
         float bac = clamp(dot(nor, normalize(vec3(-lig.x, 0.0, -lig.z))), 0.0, 1.0 ) * clamp(1.0 - pos.y, 0.0, 1.0);
         float dom = smoothstep(-0.1, 0.1, ref.y);
         float fre = pow(clamp(1.0 + dot(nor, rd), 0.0, 1.0), 2.0);
         float spe = pow(clamp(dot(ref, lig), 0.0, 1.0), 16.0);
-        dif *= (0.5 + 0.5 * softShadow(pos, lig, 0.02, 3.0, 16.0));
+        dif *= softShadow(pos, lig, 0.02, 3.0, 16.0);
         dom *= softShadow(pos, ref, 0.02, 3.0, 16.0);
 
         vec3 lin = vec3(0.5);
@@ -174,7 +174,7 @@ void main()
 		    // put screen at distance FOV_DISt in front of the camera
 		    vec3 rd = M * normalize(vec3(uv, -FOV_DIST));
 
-            vec3 lig = normalize(vec3(0.2, 0.7, 1.6));
+            vec3 lig = normalize(vec3(0.2, 0.7, 0.6));
 		    vec3 col = render(ro, rd, lig);
 		    tot += col;
 		}
