@@ -107,7 +107,7 @@ float softShadow(vec3 ro, vec3 rd, float tmin, float tmax, float k)
     {
         float h = DE(ro + rd * t).x;
         res = min(res, k * h / t);
-        t += clamp(h, 0.001, 0.05);
+        t += clamp(h, 0.005, 0.01);
         if (h < 0.001 || t > tmax)
             break;
     }
