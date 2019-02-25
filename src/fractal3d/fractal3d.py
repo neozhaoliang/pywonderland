@@ -34,6 +34,7 @@ sys.path.append("../glslhelpers")
 
 import time
 import subprocess
+import argparse
 
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
@@ -126,8 +127,15 @@ class Fractal3D(pyglet.window.Window):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-size", metavar="s", type=str,
+                        default="800x480", help="window size in pixels")
+    parser.add_argument("-aa", type=int, default=4,
+                        help="antialiasing depth")
+    args = parser.parse_args()
+    w, h = [int(x) for x in args.size.split("x")]
     scene_file = load()
-    app = Fractal3D(width=800, height=480, scene_file=scene_file)
+    app = Fractal3D(width=w, height=h, scene_file=scene_file, AA=args.aa)
     app.run()
 
 
