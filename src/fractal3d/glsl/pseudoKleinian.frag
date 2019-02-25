@@ -87,12 +87,12 @@ float softShadow(vec3 ro, vec3 rd, float tmin, float tmax, float k)
 {
     float res = 1.0;
     float t = tmin;
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 30; i++)
     {
         float h = DE(ro + rd * t).x;
         res = min(res, k * h / t);
-        t += clamp(h, 0.001, 0.05);
-        if (h < 0.001 || t > tmax)
+        t += clamp(h, 0.001, 0.005);
+        if (h < 0.0001 || t > tmax)
             break;
     }
     return clamp(res, 0.0, 1.0);
@@ -107,7 +107,7 @@ float calcAO(vec3 p, vec3 n)
         float h = 0.01 + 0.15 * float(i) / 4.0;
         float d = DE(p + h * n).x;
         occ += (h - d) * sca;
-        sca *= 0.7;
+        sca *= 0.75;
     }
     return clamp(1.0 - 3.0 * occ, 0.0, 1.0);
 }
@@ -127,19 +127,19 @@ vec3 render(vec3 ro, vec3 rd, vec3 lig)
         vec3 ref = reflect(rd, nor);
 
         float occ = calcAO(pos, nor);
-        float amb = clamp(0.2 + 0.5 * nor.y, 0.0, 0.3);
+        float amb = clamp(0.5 + 0.5 * nor.y, 0.0, 1.0);
         float dif = clamp(dot(nor, lig), 0.0, 1.0);
         float bac = clamp(dot(nor, normalize(vec3(-lig.x, 0.0, -lig.z))), 0.0, 1.0 ) * clamp(1.0 - pos.y, 0.0, 1.0);
         float dom = smoothstep(-0.1, 0.1, ref.y);
         float fre = pow(clamp(1.0 + dot(nor, rd), 0.0, 1.0), 2.0);
         float spe = pow(clamp(dot(ref, lig), 0.0, 1.0), 16.0);
-        dif *= softShadow(pos, lig, 0.02, 5.0, 16.0);
-        dom *= softShadow(pos, ref, 0.02, 5.0, 16.0);
+        dif *= softShadow(pos, lig, 0.02, 3.0, 16.0);
+        dom *= softShadow(pos, ref, 0.02, 3.0, 16.0);
 
         vec3 lin = vec3(0.5);
         lin += 1.3 * dif * vec3(1.0, 0.8, 0.55);
         lin += 2.0 * spe * vec3(1.0, 0.9, 0.7) * dif;
-        lin += 0.3 * amb * vec3(0.4, 0.6, 1.0) * occ;
+        lin += 0.2 * amb * vec3(0.4, 0.6, 1.0) * occ;
         lin += 0.2 * bac * vec3(0.25) * occ;
         lin += 0.5 * dom * vec3(0.4, 0.6, 1.0) * occ;
         lin += 0.25 * fre * vec3(1.0) * occ;

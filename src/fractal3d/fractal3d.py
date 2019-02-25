@@ -51,9 +51,12 @@ def load():
     """
     root = tk.Tk()
     root.withdraw()
-    return askopenfilename(initialdir="./glsl",
-                           filetypes=[("Fragment Shader Files", "*.frag")],
-                           title="Choose a fragment shader file")
+    filename = askopenfilename(initialdir="./glsl",
+                               initialfile="pseudoKleinian.frag",
+                               filetypes=[("Fragment Shader Files", "*.frag")],
+                               title="Choose a fragment shader file")
+    root.quit()
+    return filename
 
 
 class Fractal3D(pyglet.window.Window):
