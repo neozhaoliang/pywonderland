@@ -35,9 +35,10 @@ sys.path.append("../glslhelpers")
 import time
 import subprocess
 import argparse
+import pathlib
 
 import tkinter as tk
-from tkinter.filedialog import askopenfilename, asksaveasfilename
+from tkinter.filedialog import askopenfilename
 
 import pyglet
 pyglet.options["debug_gl"] = False
@@ -80,6 +81,7 @@ class Fractal3D(pyglet.window.Window):
         self._start_time = time.clock()
         self.AA = AA
         self.shader = Shader(["./glsl/fractal3d.vert"], [scene_file])
+        self.scene = pathlib.Path(scene_file).resolve().stem
         self.init_shader()
         self.buffer = pyglet.image.get_buffer_manager().get_color_buffer()
 
@@ -115,13 +117,7 @@ class Fractal3D(pyglet.window.Window):
             self.init_shader()
 
     def save_screenshot(self):
-        root = tk.Tk()
-        root.withdraw()
-        filename = asksaveasfilename(initialdir="./",
-                                     title="Input a file name",
-                                     defaultextension="png",
-                                     initialfile="screenshot")
-        self.buffer.save(filename)
+        self.buffer.save(self.scene + "-screenshoot.png")
 
     def run(self, fps=None):
         self.set_visible(True)
