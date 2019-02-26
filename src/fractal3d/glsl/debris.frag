@@ -15,7 +15,7 @@ out vec4 FinalColor;
 #define MAX_TRACE_DIST     10.0
 #define PRECISION          1e-4
 #define PI                 3.14159265358979323
-
+#define T                  (iTime * 0.05)
 
 // view to world transformation
 mat3 viewMatrix(vec3 camera, vec3 lookat, vec3 up)
@@ -187,11 +187,12 @@ void main()
 		    vec2 uv = (gl_FragCoord.xy + offset) / iResolution.xy;
 		    uv = 2.0 * uv - 1.0;
 		    uv.x *= iResolution.x / iResolution.y;
-		    vec3 camera = vec3(2.0);
+		    vec3 camera = vec3(4.0) / (min(3.5, 1.0 + pow(2.0, T)));
 		    vec3 lookat = vec3(0.0);
 		    vec3 up = vec3(0.0, 1.0, 0.0);
 		    // set camera
 		    vec3 ro = camera;
+		    R(ro.xz, T);
 		    mat3 M = viewMatrix(ro, lookat, up);
 		    // put screen at distance FOV_DISt in front of the camera
 		    vec3 rd = M * normalize(vec3(uv, -FOV_DIST));

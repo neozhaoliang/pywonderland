@@ -27,6 +27,10 @@ Live demos on shadertoy:
 
         https://www.shadertoy.com/view/3dlXWn
 
+    "debris":
+
+        https://www.shadertoy.com/view/WdsXDH
+
 :copyright (c) 2019 by Zhao Liang.
 """
 import sys
