@@ -1,16 +1,16 @@
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Wall paper ray marching 3D fractals with pygelt and glsl
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Make wallpaper ray 3D fractals with pygelt and glsl
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To make a wall paper you should have a decent GPU and change
+To make wallpapers you should have a decent GPU and change
 to a higher antialiasing level (AA) and larger window size.
 (e.g. AA=4 and size=1200x960)
 
 Keyboard control:
 
 1. press 'Enter' to save screenshots.
-2. press 'Ctrl + L' to load a new scene file.
+2. press 'Ctrl + S' to load a new scene file.
 3. press 'Esc' to escape.
 
 Live demos on shadertoy:
@@ -115,7 +115,7 @@ class Fractal3D(pyglet.window.Window):
         if symbol == key.ESCAPE:
             pyglet.app.exit()
 
-        if symbol == key.L and (modifiers & key.LCTRL):
+        if symbol == key.S and (modifiers & key.LCTRL):
             scene_file = load()
             self.shader = Shader(["./glsl/fractal3d.vert"], [scene_file])
             self.init_shader()
@@ -135,7 +135,7 @@ class Fractal3D(pyglet.window.Window):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-size", metavar="s", type=str,
-                        default="800x480", help="window size in pixels")
+                        default="800x600", help="window size in pixels")
     parser.add_argument("-aa", type=int, default=4,
                         help="antialiasing depth")
     args = parser.parse_args()
