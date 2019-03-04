@@ -1,7 +1,7 @@
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Make wallpaper ray 3D fractals with pygelt and glsl
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Make wallpaper raymarching 3D fractals with pygelt and glsl
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To make wallpapers you should have a decent GPU and change
 to a higher antialiasing level (AA) and larger window size.
@@ -135,7 +135,7 @@ class Fractal3D(pyglet.window.Window):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-size", metavar="s", type=str,
-                        default="800x600", help="window size in pixels")
+                        default="800x480", help="window size in pixels")
     parser.add_argument("-aa", type=int, default=4,
                         help="antialiasing depth")
     args = parser.parse_args()

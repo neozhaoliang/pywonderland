@@ -91,8 +91,8 @@ float softShadow(vec3 ro, vec3 rd, float tmin, float tmax, float k)
         {
             float h = DE(ro + rd * t).x;
             res = min(res, k * h / t);
-            t += clamp(h, 0.001, 0.005);
-            if (h < 0.0001 || t > tmax)
+            t += clamp(h, 0.01, 0.1);
+            if (h < 0.001 || t > tmax)
                 break;
         }
     return clamp(res, 0.0, 1.0);
@@ -107,12 +107,11 @@ float calcAO(vec3 p, vec3 n)
             float h = 0.01 + 0.15 * float(i) / 4.0;
             float d = DE(p + h * n).x;
             occ += (h - d) * sca;
-            sca *= 0.75;
+            sca *= 0.9;
         }
     return clamp(1.0 - 3.0 * occ, 0.0, 1.0);
 }
 
-// https://www.shadertoy.com/view/4dSfRc
 vec3 render(vec3 ro, vec3 rd, vec3 lig)
 {
     vec3 background = vec3(0.08, 0.16, 0.32);
@@ -140,11 +139,11 @@ vec3 render(vec3 ro, vec3 rd, vec3 lig)
             lin += 0.25 * fre * vec3(1.0) * occ;
 
             col *= lin;
-            float atten = 1.0 / (1.0 + t * 0.3 + t * t * 0.1);
-            col *= atten * col * occ;
+            float atten = 1.0 / (1.0 + t * t * 0.05);
+            col *= atten;
             col = mix(col, background, smoothstep(0.0, 0.95, t / MAX_TRACE_DIST));
         }
-    return sqrt(col);
+    return col;
 }
 
 void main()

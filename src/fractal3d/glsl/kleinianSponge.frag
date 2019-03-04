@@ -107,7 +107,7 @@ float softShadow(vec3 ro, vec3 rd, float tmin, float tmax, float k)
         {
             float h = DE(ro + rd * t).x;
             res = min(res, k * h / t);
-            t += clamp(h, 0.005, 0.01);
+            t += clamp(h, 0.01, 0.1);
             if (h < 0.001 || t > tmax)
                 break;
         }
@@ -123,7 +123,7 @@ float calcAO(vec3 p, vec3 n)
             float h = 0.01 + 0.15 * float(i) / 4.0;
             float d = DE(p + h * n).x;
             occ += (h - d) * sca;
-            sca *= 0.9;
+            sca *= 0.95;
         }
     return clamp(1.0 - 3.0 * occ, 0.0, 1.0);
 }
@@ -143,7 +143,7 @@ vec3 render(vec3 ro, vec3 rd, vec3 lig)
             vec3 ref = reflect(rd, nor);
 
             float occ = calcAO(pos, nor);
-            float amb = 0.4;
+            float amb = 0.1;
             float dif = clamp(dot(nor, lig), 0.0, 1.0);
             float bac = clamp(dot(nor, normalize(vec3(-lig.x, 0.0, -lig.z))), 0.0, 1.0 ) * clamp(1.0 - pos.y, 0.0, 1.0);
             float dom = smoothstep(-0.1, 0.1, ref.y);
@@ -152,17 +152,17 @@ vec3 render(vec3 ro, vec3 rd, vec3 lig)
             dif *= softShadow(pos, lig, 0.02, 5.0, 16.0);
             dom *= softShadow(pos, ref, 0.02, 5.0, 16.0);
 
-            vec3 lin = vec3(0.5);
+            vec3 lin = vec3(0.05);
             lin += 1.5 * dif * vec3(1.0, 0.8, 0.55);
-            lin += 3.0 * spe * vec3(1.0, 0.9, 0.7) * dif;
+            lin += 4.0 * spe * vec3(1.0, 0.9, 0.7) * dif;
             lin += 0.3 * amb * vec3(0.4, 0.6, 1.0) * occ;
             lin += 0.2 * bac * vec3(0.25) * occ;
             lin += 0.5 * dom * vec3(0.4, 0.6, 1.0) * occ;
             lin += 0.25 * fre * vec3(1.0) * occ;
 
             col *= lin;
-            float atten = 1.0 / (1.0 + t * t * 0.2);
-            col *= atten * col * occ;
+            float atten = 1.0 / (1.0 + t * t * 0.3);
+            col *= atten;
             col = mix(col, background, smoothstep(0.0, 0.95, t / MAX_TRACE_DIST));
         }
     return sqrt(col);

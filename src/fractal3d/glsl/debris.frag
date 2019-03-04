@@ -110,11 +110,11 @@ float softShadow(vec3 ro, vec3 rd, float tmin, float tmax, float k)
 {
     float res = 1.0;
     float t = tmin;
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 30; i++)
         {
             float h = DE(ro + rd * t);
             res = min(res, k * h / t);
-            t += clamp(h, 0.01, 0.05);
+            t += clamp(h, 0.01, 0.1);
             if (h < 0.001 || t > tmax)
                 break;
         }
@@ -160,7 +160,7 @@ vec3 render(vec3 ro, vec3 rd, vec3 lig)
 
             vec3 lin = vec3(0.5);
             lin += 1.5 * dif * vec3(1.0, 0.8, 0.55);
-            lin += 2.0 * spe * vec3(1.0, 0.9, 0.7) * dif;
+            lin += 4.0 * spe * vec3(1.0, 0.9, 0.7) * dif;
             lin += 0.3 * amb * vec3(0.4, 0.6, 1.0) * occ;
             lin += 0.5 * bac * vec3(0.25) * occ;
             lin += 0.5 * dom * vec3(0.4, 0.6, 1.0) * occ;
@@ -168,8 +168,8 @@ vec3 render(vec3 ro, vec3 rd, vec3 lig)
 
             col *= lin;
 
-            float atten = 1.0 / (1.0 + t * t * 0.2);
-            col *= atten * col * occ;
+            float atten = 1.0 / (1.0 + t * t * 0.1);
+            col *= atten * occ;
             col = mix(col, background, smoothstep(0.0, 0.95, t / MAX_TRACE_DIST));
         }
     return sqrt(col);
