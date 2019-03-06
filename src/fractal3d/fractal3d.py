@@ -103,7 +103,7 @@ class Fractal3D(pyglet.window.Window):
         self.clear()
         gl.glViewport(0, 0, self.width, self.height)
         with self.shader:
-            #self.shader.uniformf("iTime", time.clock() - self._start_time)
+            self.shader.uniformf("iTime", time.clock() - self._start_time)
             gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
 
     def on_key_press(self, symbol, modifiers):
