@@ -52,7 +52,7 @@ class Mobius(pyglet.window.Window):
                                       visible=False,
                                       vsync=False)
         self._start_time = time.clock()
-        self.shader = Shader(["./glsl/mobius.vert"], ["./glsl/helpers.frag", "./glsl/mobius.frag"])
+        self.shader = Shader(["./glsl/mobius.vert"], ["./glsl/mobius.frag"])
         self.apply, self.elliptic, self.hyperbolic = [int(x) for x in bin(scene)[2:].zfill(3)]
         self.video_on = video
         self.buffer = pyglet.image.get_buffer_manager().get_color_buffer()

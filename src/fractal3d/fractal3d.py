@@ -103,7 +103,7 @@ class Fractal3D(pyglet.window.Window):
         self.clear()
         gl.glViewport(0, 0, self.width, self.height)
         with self.shader:
-            self.shader.uniformf("iTime", time.clock() - self._start_time)
+            #self.shader.uniformf("iTime", time.clock() - self._start_time)
             gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
 
     def on_key_press(self, symbol, modifiers):
@@ -138,9 +138,11 @@ def main():
                         default="800x480", help="window size in pixels")
     parser.add_argument("-aa", type=int, default=4,
                         help="antialiasing depth")
+    parser.add_argument("-file", metavar="f", type=str,
+                        default=None, help="scene file name")
     args = parser.parse_args()
     w, h = [int(x) for x in args.size.split("x")]
-    scene_file = load()
+    scene_file = args.file if args.file is not None else load()
     app = Fractal3D(width=w, height=h, scene_file=scene_file, AA=args.aa)
     app.run()
 

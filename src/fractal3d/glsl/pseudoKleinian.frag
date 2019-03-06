@@ -16,7 +16,7 @@ out vec4 FinalColor;
 #define PI               3.14159265358979323
 #define T                (iTime * 0.005)
 
-
+// magic constants
 const vec4 param_min = vec4(-0.8323, -0.694, -0.5045, 0.8067);
 const vec4 param_max = vec4(0.8579, 1.0883, 0.8937, 0.9411);
 
@@ -36,6 +36,7 @@ void R(inout vec2 p, float a)
     p = cos(a) * p + sin(a) * vec2(p.y, -p.x);
 }
 
+// return vec2(distance_field, orbit_trap)
 vec2 DE(vec3 p)
 {
     float k1, k2, rp2, rq2;
@@ -60,6 +61,7 @@ vec2 DE(vec3 p)
                 0.25 + sqrt(orb));
 }
 
+// normal vector at p
 vec3 calcNormal(vec3 p)
 {
     const vec2 e = vec2(0.001, 0.0);
@@ -104,10 +106,10 @@ float calcAO(vec3 p, vec3 n)
     float sca = 1.0;
     for (int i = 0; i < 5; i++)
         {
-            float h = 0.01 + 0.15 * float(i) / 4.0;
+            float h = 0.02 + 0.15 * float(i) / 4.0;
             float d = DE(p + h * n).x;
             occ += (h - d) * sca;
-            sca *= 0.9;
+            sca *= 0.95;
         }
     return clamp(1.0 - 3.0 * occ, 0.0, 1.0);
 }
@@ -120,6 +122,7 @@ vec3 render(vec3 ro, vec3 rd, vec3 lig)
     float t = res.x;
     if (t >= 0.0)
 	    {
+            // material color
             col = 0.5 + 0.5 * cos(2.0 * PI * res.y + vec3(0.0, 1.0, 2.0));
             vec3 pos = ro + rd * t;
             vec3 nor = calcNormal(pos);
@@ -138,9 +141,10 @@ vec3 render(vec3 ro, vec3 rd, vec3 lig)
             lin += 0.5 * amb * vec3(0.4, 0.6, 1.0) * occ;
             lin += 0.25 * fre * vec3(1.0) * occ;
 
-            col *= lin;
+            // attenuate
             float atten = 1.0 / (1.0 + t * t * 0.05);
-            col *= atten;
+            col *= lin * atten;
+            // fog
             col = mix(col, background, smoothstep(0.0, 0.95, t / MAX_TRACE_DIST));
         }
     return col;

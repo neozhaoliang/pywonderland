@@ -143,7 +143,7 @@ vec3 render(vec3 ro, vec3 rd, vec3 lig)
             vec3 ref = reflect(rd, nor);
 
             float occ = calcAO(pos, nor);
-            float amb = 0.1;
+            float amb = 0.2;
             float dif = clamp(dot(nor, lig), 0.0, 1.0);
             float bac = clamp(dot(nor, normalize(vec3(-lig.x, 0.0, -lig.z))), 0.0, 1.0 ) * clamp(1.0 - pos.y, 0.0, 1.0);
             float dom = smoothstep(-0.1, 0.1, ref.y);
