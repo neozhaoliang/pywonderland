@@ -1,12 +1,6 @@
 #version 130
 
-struct Mobius
-{
-    vec2 A;
-    vec2 B;
-    vec2 C;
-    vec2 D;
-};
+struct Mobius { vec2 A, B, C, D; };
 
 uniform vec3          iResolution;
 uniform float         iTime;
@@ -128,7 +122,7 @@ vec3 hsv2rgb(vec3 hsv)
 }
 
 // 2d rotation
-vec2 R(inout vec2 p, float a) { return cos(a) * p + sin(a) * vec2(p.y, -p.x); }
+vec2 R(vec2 p, float a) { return cos(a) * p + sin(a) * vec2(p.y, -p.x); }
 
 /*------------------------- 
     Mobius transformations
