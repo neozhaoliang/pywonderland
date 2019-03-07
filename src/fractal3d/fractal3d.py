@@ -1,6 +1,6 @@
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Make wallpaper raymarching 3D fractals with pygelt and glsl
+Make wallpaper raymarching 3D fractals with pyglet and glsl
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To make wallpapers you should have a decent GPU and change
