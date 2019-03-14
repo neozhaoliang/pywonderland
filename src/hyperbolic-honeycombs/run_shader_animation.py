@@ -20,15 +20,11 @@ import pyglet.gl as gl
 import pyglet.window.key as key
 
 from shader import Shader
-from texture import create_image_texture
-
-
-IMG_PATH = "../glslhelpers/textures/rusty_metal.png"
 
 
 class HyperbolicHoneycomb(pyglet.window.Window):
 
-    def __init__(self, width, height, pqr, AA=2):
+    def __init__(self, width, height, pqr, trunc_type, AA=2):
         """
         :param width and height: size of the window in pixels.
 
@@ -44,20 +40,18 @@ class HyperbolicHoneycomb(pyglet.window.Window):
                                       visible=False,
                                       vsync=False)
         self.pqr = pqr
+        self.trunc_type = trunc_type
         self._start_time = time.clock()
         self.shader = Shader(["./glsl/hyperbolic3d.vert"], ["./glsl/hyperbolic3d.frag"])
         self.buffer = pyglet.image.get_buffer_manager().get_color_buffer()
-        # create the texture
-        texture = create_image_texture(IMG_PATH)
-        gl.glActiveTexture(gl.GL_TEXTURE0)
-        gl.glBindTexture(gl.GL_TEXTURE_2D, texture)
 
         with self.shader:
             self.shader.vertex_attrib("position", [-1, -1, 1, -1, -1, 1, 1, 1])
             self.shader.uniformf("iResolution", self.width, self.height, 0.0)
             self.shader.uniformf("iTime", 0.0)
-            self.shader.uniformi("iTexture", 0)
-            self.shader.uniformf("pqr", *self.pqr)
+            self.shader.uniformf("iMouse", 0.0, 0.0, 0.0, 0.0)
+            self.shader.uniformf("PQR", *self.pqr)
+            self.shader.uniformf("truncType", *self.trunc_type)
             self.shader.uniformi("AA", AA)
 
     def on_draw(self):
@@ -77,6 +71,10 @@ class HyperbolicHoneycomb(pyglet.window.Window):
         if symbol == key.ESCAPE:
             pyglet.app.exit()
 
+    def on_mouse_press(self, x, y, button, modifiers):
+        with self.shader:
+            self.shader.uniformf("iMouse", x, y, 0.0, 0.0)
+
     def save_screenshot(self):
         self.buffer.save("{}-{}-{}-screenshoot.png".format(*self.pqr))
 
@@ -92,14 +90,17 @@ class HyperbolicHoneycomb(pyglet.window.Window):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-size", metavar="s", type=str,
-                        default="800x600", help="window size in pixels")
+                        default="1200x800", help="window size in pixels")
     parser.add_argument("-aa", type=int, default=2,
                         help="antialiasing depth")
     parser.add_argument("-pqr", nargs="+", type=int, default=(3, 5, 3),
                         help="Coxeter diagram of the tessellation")
+    parser.add_argument("-trunc", nargs="+", type=float, default=(1, 0, 1, 0),
+                        help="position of the initial vertex, which determines the truncation type of the honeycomb")
     args = parser.parse_args()
     w, h = [int(x) for x in args.size.split("x")]
-    app = HyperbolicHoneycomb(width=w, height=h, pqr=args.pqr, AA=args.aa)
+    app = HyperbolicHoneycomb(width=w, height=h, pqr=args.pqr,
+                              trunc_type=args.trunc, AA=args.aa)
     app.run()
 
 
