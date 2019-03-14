@@ -215,7 +215,7 @@ vec3 baseColor(vec3 p)
                 obj = i;
             }
         }
-	return obj == -1 ? vertexColor : vec3(1.0, 0.0, 0.);
+	return obj == -1 ? vertexColor : segmentColors[obj];
 }
 
 vec3 render(vec3 ro, vec3 rd, vec3 lp)

@@ -3,9 +3,15 @@
 3D hyperbolic honeycomb animation with pyglet and glsl
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Reference:
+Keyboard and Mouse control:
 
-    "http://www.fractalforums.com/general-discussion-b77/solids-many-many-solids/msg43794/#msg43794"
+    1. press `Enter` to save screenshots.
+    2. press `Esc` to escape.
+    3. click on the screen to change view direction.
+
+Code adapted from knighty's fragmentarium script at
+
+    "http://www.fractalforums.com/general-discussion-b77/solids-many-many-solids/"
 
 """
 import sys
@@ -27,9 +33,9 @@ class HyperbolicHoneycomb(pyglet.window.Window):
     def __init__(self, width, height, pqr, trunc_type, AA=2):
         """
         :param width and height: size of the window in pixels.
-
-        :param pqr: Coxeter diagram of the tessellation.
-
+        :param pqr: a 3-tuple of integers which specifies the Coxeter diagram of the tessellation.
+        :param trunc_type: a 4-tuple of non-negative floats which
+            determines the truncation type of the honeycomb.
         :param AA: antialiasing level.
         """
         pyglet.window.Window.__init__(self,
@@ -90,7 +96,7 @@ class HyperbolicHoneycomb(pyglet.window.Window):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-size", metavar="s", type=str,
-                        default="1200x800", help="window size in pixels")
+                        default="800x600", help="window size in pixels")
     parser.add_argument("-aa", type=int, default=2,
                         help="antialiasing depth")
     parser.add_argument("-pqr", nargs="+", type=int, default=(3, 5, 3),
