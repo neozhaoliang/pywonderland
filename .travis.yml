@@ -24,6 +24,9 @@ script:
   - python ammann-beenker.py
   - python debruijn.py
   - python penrose.py
+  # Hopf fibration
+  - cd ../hopf/
+  - jupyter nbconvert --execute hopf_fibration.ipynb
   # miscellaneous examples
   - cd ../misc/
   - python mandelbrot.py
