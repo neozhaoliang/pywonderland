@@ -65,10 +65,15 @@ def main(seed_file, grid_size, offsets, cutoff, frames):
     """
     parameters
     ----------
-    :seed_file:  the pattern file.
-    :grid_size:  (width, height) of the grid in the life world.
-    :offsets:  (left, top) position of the initial pattern with respect to the grid.
-    :frames:  number of frames in the animation.
+    :seed_file: the pattern file.
+
+    :grid_size: (width, height) of the grid in the life world.
+
+    :offsets: (left, top) position of the initial pattern with respect to the grid.
+
+    :cutoff: cutoff of the image relative to the actual grid.
+
+    :frames: number of frames in the animation.
     """
     seed = np.array(parse(seed_file), dtype=np.bool)
     grid = np.zeros(grid_size).astype(np.bool)

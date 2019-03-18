@@ -35,7 +35,7 @@ for vertex in G:
         neighbor = random.choice(G[v])
         parent[v] = neighbor
         v = neighbor
-    # do you see how the loop is erased in the above code?
+    # can you see how the loops are erased in the above code?
     v = vertex
     while v not in tree:
         tree.add(v)

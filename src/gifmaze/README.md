@@ -1,6 +1,7 @@
-This project generates gif animations of various maze algorithms, run the `example*.py` scripts to see the results :smile:.
+This project generates gif animations of various maze algorithms, simply run the `example*.py` scripts (without arguments) to see the results :smile:.
 
-Requirements: `pillow` and `tqdm`.
+**Requirements**: `pillow` and `tqdm`.
 
-These is also a Javascript animation of Wilson's uniform spanning tree algorithm in the directory `/js/`, it's translated directly from the python version in `algorithms.py`.
+There is also a Javascript animation of Wilson's uniform spanning tree algorithm in the directory `/js/`, it's translated directly from the python version implemented in `algorithms.py`.
 
+**Update**: add animations for game of life, Langton's ant and Hilbert curve.

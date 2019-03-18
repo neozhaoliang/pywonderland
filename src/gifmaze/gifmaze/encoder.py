@@ -82,7 +82,7 @@ def pause(delay, trans_index=0):
 def parse_image(img):
     """
     Parse a gif image and get its palette and LZW compressed pixel data.
-    `img` must be an instance of `PIL.Image.Image` class and of the .gif format.
+    `img` must be an instance of `PIL.Image.Image` class and has .gif format.
     """
     data = list(img.getdata())
     colors = []
