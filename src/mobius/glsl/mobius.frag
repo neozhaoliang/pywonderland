@@ -4,7 +4,6 @@ struct Mobius { vec2 A, B, C, D; };
 
 uniform vec3          iResolution;
 uniform float         iTime;
-uniform sampler2D     iTexture;
 uniform bool          iApply;
 uniform bool          iHyperbolic;
 uniform bool          iElliptic;
