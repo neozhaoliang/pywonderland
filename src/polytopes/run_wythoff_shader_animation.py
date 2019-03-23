@@ -7,7 +7,7 @@ Code adapted from Matt Zucker's excellent shadertoy program at
 
     "https://www.shadertoy.com/view/Md3yRB"
 
-This program has some rich features and a great UI (as a pure shader program!).
+Matt's program has some rich features and a great UI (as a pure shader program!).
 
 Some notes:
 
@@ -16,11 +16,12 @@ Some notes:
    symbol (3, 5/2), but you must change the code manually in the function
    `setup_triangle` in `common.frag` to see them.
 
-2. The antialiasing routine in Matt's code is replaced by the usual supersampling
-   method, it's slower than Matt's method but can give better result. Also I deleted
-   some redundant code (for example the usage of iChannel1 in BufferA and BufferB)
-   from Matt's program.
-
+2. The antialiasing routine in Matt's original code is replaced by the usual supersampling
+   method, it's slower but can give better result. Also I deleted some redundant code
+   (for example the usage of iChannel1 in BufferA and BufferB) from Matt's program.
+   
+3. This program used two invisible "frame buffers" for rendering the UI and the poyhedron,
+   and finally put them together in a third main shader.
 """
 import sys
 sys.path.append("../glslhelpers")
@@ -180,7 +181,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-size", metavar="s", type=str,
                         default="800x480", help="window size in pixels")
-    parser.add_argument("-qq", type=int, default=1,
+    parser.add_argument("-aa", type=int, default=1,
                         help="antialiasing level")
     args = parser.parse_args()
     w, h = [int(x) for x in args.size.split("x")]
