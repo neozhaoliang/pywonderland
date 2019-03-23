@@ -19,9 +19,12 @@ Some notes:
 2. The antialiasing routine in Matt's original code is replaced by the usual supersampling
    method, it's slower but can give better result. Also I deleted some redundant code
    (for example the usage of iChannel1 in BufferA and BufferB) from Matt's program.
-   
-3. This program used two invisible "frame buffers" for rendering the UI and the poyhedron,
+
+3. This program used two invisible "frame buffers" for rendering the UI and the polyhedra,
    and finally put them together in a third main shader.
+
+
+Press "Enter" to save screenshots and "Esc" to escape.
 """
 import sys
 sys.path.append("../glslhelpers")
@@ -59,13 +62,16 @@ class Wythoff(pyglet.window.Window):
                                       visible=False,
                                       vsync=False)
         self._start_time = time.clock()
-        self._frame_count = 0
-        self._speed = 20
+        self._frame_count = 0  # count number of frames rendered so far
+        self._speed = 20  # control speed of the animation
         self.aa = aa
+        # shader A draws the UI
         self.shaderA = Shader(["./glsl/wythoff.vert"], ["./glsl/common.frag",
                                                         "./glsl/BufferA.frag"])
+        # shadwr B draws the polyhedra
         self.shaderB = Shader(["./glsl/wythoff.vert"], ["./glsl/common.frag",
                                                         "./glsl/BufferB.frag"])
+        # shader C puts them together
         self.shaderC = Shader(["./glsl/wythoff.vert"], ["./glsl/common.frag",
                                                         "./glsl/main.frag"])
         self.font_texture = create_image_texture(FONT_TEXTURE)
@@ -80,11 +86,14 @@ class Wythoff(pyglet.window.Window):
         gl.glActiveTexture(gl.GL_TEXTURE2)
         gl.glBindTexture(gl.GL_TEXTURE_2D, self.font_texture)
 
+        # frame buffer A renders the UI to texture iChannel0
         with FrameBuffer() as self.bufferA:
             self.bufferA.attach_texture(self.iChannel0)
-
+        # frame buffer B render the polyhedra to texture iChannel1
         with FrameBuffer() as self.bufferB:
             self.bufferB.attach_texture(self.iChannel1)
+
+        # initialize the shaders
 
         with self.shaderA:
             self.shaderA.vertex_attrib("position", [-1, -1, 1, -1, -1, 1, 1, 1])
@@ -154,6 +163,8 @@ class Wythoff(pyglet.window.Window):
             self.shaderC.uniformf("iMouse", x, y, x, self.height - y)
 
     def on_mouse_release(self, x, y, button, modifiers):
+        """Don't forget reset 'iMouse' in the shaders when mouse is released.
+        """
         with self.shaderA:
             self.shaderA.uniformf("iMouse", 0, 0, 0, 0)
 
