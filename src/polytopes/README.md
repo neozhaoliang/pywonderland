@@ -6,7 +6,7 @@ a rotating polyhedra/polychora in 4d space.
 + `run_dimensions_movie.py` calls `POV-Ray` to render the frames of an animation which reproduces the scene of 120-cell in the movie "Dimensions: A walk through mathematics".
 + `run_coset_enumeration.py` reads the data of a finitely presented group from a `yaml` file and outputs its coset table.
 + `run_polychora_example.py` calls `POV-Ray` to render "curved" polychora.
-+ `run_shader_animation.py` is a shader program for real-time animation (still under developing).
++ `run_wythoff_shader_animation.py` is a shader program for real-time animation.
 
 
 See the full doc [here](https://neozhaoliang.github.io/polytopes/).
