@@ -23,7 +23,6 @@ Some notes:
 3. This program used two invisible "frame buffers" for rendering the UI and the polyhedra,
    and finally put them together in a third main shader.
 
-
 Press "Enter" to save screenshots and "Esc" to escape.
 """
 import sys
@@ -52,7 +51,7 @@ class Wythoff(pyglet.window.Window):
         :param width and height: size of the window in pixels.
 
         :param aa: antialiasing level, a higher value will give better
-            result but also slow down the animation. (AA=2 is recommended)
+            result but also slow down the animation. (aa=2 is recommended)
         """
         pyglet.window.Window.__init__(self,
                                       width,
