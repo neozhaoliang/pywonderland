@@ -153,25 +153,13 @@ class Wythoff(pyglet.window.Window):
 
     def on_mouse_press(self, x, y, button, modifiers):
         with self.shaderA:
-            self.shaderA.uniformf("iMouse", x, y, x, self.height - y)
-
-        with self.shaderB:
-            self.shaderB.uniformf("iMouse", x, y, x, self.height - y)
-
-        with self.shaderC:
-            self.shaderC.uniformf("iMouse", x, y, x, self.height - y)
+            self.shaderA.uniformf("iMouse", x, y, x, y)
 
     def on_mouse_release(self, x, y, button, modifiers):
-        """Don't forget reset 'iMouse' in the shaders when mouse is released.
+        """Don't forget reset 'iMouse' when mouse is released.
         """
         with self.shaderA:
             self.shaderA.uniformf("iMouse", 0, 0, 0, 0)
-
-        with self.shaderB:
-            self.shaderB.uniformf("iMouse", 0, 0, 0, 0)
-
-        with self.shaderC:
-            self.shaderC.uniformf("iMouse", 0, 0, 0, 0)
 
     def save_screenshot(self):
         with self.shaderB:
