@@ -162,9 +162,8 @@ class Wythoff(pyglet.window.Window):
             self.shaderA.uniformf("iMouse", 0, 0, 0, 0)
 
     def save_screenshot(self):
-        with self.shaderB:
-            image_buffer = pyglet.image.get_buffer_manager().get_color_buffer()
-            image_buffer.save("screenshoot.png")
+        image_buffer = pyglet.image.get_buffer_manager().get_color_buffer()
+        image_buffer.save("screenshoot.png")
 
     def run(self, fps=None):
         self.set_visible(True)

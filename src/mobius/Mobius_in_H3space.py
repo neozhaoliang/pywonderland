@@ -8,9 +8,11 @@ Code exported and adapted from Roice Nelson's code at
 
     "https://www.shadertoy.com/view/MstcWr"
 
-Reference:
+References:
 
     "Visual complex analysis" by Needham.
+
+    "https://www.maths.ox.ac.uk/about-us/departmental-art/dupin-cyclides"
 
 """
 import sys
