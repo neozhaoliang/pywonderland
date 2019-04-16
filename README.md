@@ -51,7 +51,7 @@ Python libs: you can install almost all the libs by running
 pip install -r requirements.txt
 ```
 
-the only exception is `cairocffi` which also requires `libffi-dev`:
+The only exception is `cairocffi` which also requires `libffi-dev`:
 
 ```
 sudo apt-get install libffi-dev
@@ -59,10 +59,10 @@ sudo apt-get install libffi-dev
 
 Open source softwares:
 
-+ `python3-tk` (for open file dialog)
-+ `ImageMagick` (for making gifs and some post-processing)
-+ `FFmpeg` (for saving animations into video files)
-+ `POV-Ray` (for generating high quality ray-tracing results)
++ `python3-tk` (for file dialog)
++ `ImageMagick` (for making gif animations)
++ `FFmpeg` (for saving animations to video files)
++ `POV-Ray` (for generating high quality raytracing results)
 + `graphviz` (for drawing automata of Coxeter groups)
 
 They can all be installed via command-line:
@@ -71,7 +71,7 @@ They can all be installed via command-line:
 sudo apt-get install python3-tk imagemagick ffmpeg povray graphviz
 ```
 
-In the scripts these softwares are called in command line by `povray`, `ffmpeg`, `convert`, etc. For Windows users you should add the directories contain these .exe files to the system `Path` environment variables. For example on Windows the default location of POV-Ray's exe file is `C:\Program Files\POV-Ray\v3.7\bin\pvengine64.exe`, so you should add `C:\Program Files\POV-Ray\v3.7\bin` to system `Path` environment variables and rename `pvengine64.exe` to `povray.exe`, then you can run the scripts without any changes and everything works fine.
+In the scripts these softwares are called in command line by `povray`, `ffmpeg`, `convert`, etc. For Windows users you should add the directories contain these .exe files to the system `Path` environment variables. For example on Windows the default location of POV-Ray's exe file is `C:\Program Files\POV-Ray\v3.7\bin\pvengine64.exe`, so you should add `C:\Program Files\POV-Ray\v3.7\bin` to system `Path` and rename `pvengine64.exe` to `povray.exe`, then you can run the scripts without any changes and everything works fine.
 
 
 # Thanks
