@@ -3,10 +3,11 @@
 Make animations of 3d rotating polyhedron
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This script computes the data of the polyhedron, writes them
-as macros into a POV-Ray include file, and automatically
-calls POV-Ray to render the frames and finally calls FFmpeg
-to convert the frames into a mp4 video.
+This script computes the data of a given polyhedra and writes it
+into a POV-Ray .inc file, then automatically calls POV-Ray
+to render the frames and finally calls FFmpeg to convert the frames to
+a mp4 movie. You need to have POV-Ray and FFmpeg installed and
+set the paths to their executables in `POV_EXE` and `FFMPEG_EXE`.
 
 You need to have POV-Ray and FFmpeg installed and
 set the paths to their executables in `POV_EXE` and `FFMPEG_EXE`.

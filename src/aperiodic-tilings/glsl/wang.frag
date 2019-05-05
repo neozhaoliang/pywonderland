@@ -13,37 +13,30 @@ float k = 0.1;
 #define K3 (sqrt(2.0) * 0.5 - K2)
 
 
-float tile0(vec2 uv)
-{
+float tile0(vec2 uv) {
     float v = length(uv) - K3;
     float w = K2 - length(vec2(abs(uv.x) - 0.5, uv.y - 0.5));
     return mix(v, w, step(abs(uv.x), uv.y));
 }
 
-float tile1(vec2 uv)
-{
+float tile1(vec2 uv) {
     return abs(length(uv - 0.5) - 0.5) - k * 0.5;
 }
 
-float tile2(vec2 uv)
-{
+float tile2(vec2 uv) {
     return abs(uv.x) - k * 0.5;
 }
 
-float tile3(vec2 uv)
-{
+float tile3(vec2 uv) {
     return max(-uv.x - k * 0.5, K2 - length(vec2(uv.x - 0.5, abs(uv.y) - 0.5)));
 }
 
-float tile4(vec2 uv)
-{
+float tile4(vec2 uv) {
     return K2 - length(vec2(abs(uv.x) - 0.5, abs(uv.y) - 0.5));
 }
 
-float tile(vec2 uv, int tile)
-{
-    switch(tile)
-    {
+float tile(vec2 uv, int tile) {
+    switch(tile) {
         case 0: return 1.414;
         case 1: return max(tile0(uv), 0.15 - length(uv));
         case 2: return tile0(uv.yx);
@@ -64,15 +57,14 @@ float tile(vec2 uv, int tile)
 }
 
 #define HASHSCALE1 0.1031
-float hash(vec2 p)
-{
+
+float hash(vec2 p) {
     vec3 p3 = fract(vec3(p.xyx) * HASHSCALE1);
     p3 += dot(p3, p3.yzx + 19.19);
     return fract((p3.x + p3.y) * p3.z);
 }
 
-float map(vec2 uv)
-{
+float map(vec2 uv) {
     int b = 0;
     uv += 0.5;
     vec2 id = floor(uv);
@@ -87,21 +79,18 @@ float map(vec2 uv)
     return tile(fract(uv) - 0.5, b);
 }
 
-vec2 rotate(vec2 uv, float a)
-{
+vec2 rotate(vec2 uv, float a) {
     float co = cos(a);
     float si = sin(a);
     return uv * mat2(co, si, -si, co);
 }
 
-float height(vec2 uv)
-{
+float height(vec2 uv) {
     float r = map(uv) - 0.1;
     return sqrt(0.01 - min(r * r, 0.01));
 }
 
-void main()
-{
+void main() {
     vec2 uv = gl_FragCoord.xy / iResolution.xy;
     uv = uv * 2.0 - 1.0;
     uv.x *= iResolution.x / iResolution.y;

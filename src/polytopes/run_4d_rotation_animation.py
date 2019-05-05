@@ -3,12 +3,10 @@
 Make animations of rotating 4d polychoron
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This script computes the data of the polychoron, writes them
-as macros into a POV-Ray include file, and automatically
-calls POV-Ray to render the frames and finally calls FFmpeg
-to convert the frames into a mp4 movie.
-
-You need to have POV-Ray and FFmpeg installed and
+This script computes the data of a given polychora and writes it
+into a POV-Ray .inc file, then automatically calls POV-Ray
+to render the frames and finally calls FFmpeg to convert the frames to
+a mp4 movie. You need to have POV-Ray and FFmpeg installed and
 set the paths to their executables in `POV_EXE` and `FFMPEG_EXE`.
 
 :copyright (c) 2018 by Zhao Liang.

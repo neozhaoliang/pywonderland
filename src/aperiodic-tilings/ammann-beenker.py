@@ -69,9 +69,9 @@ ctx.translate(IMAGE_SIZE[0] / 2.0, IMAGE_SIZE[1] / 2.0)
 wheel_radius = math.sqrt(IMAGE_SIZE[0] ** 2 + IMAGE_SIZE[1] ** 2) / SQRT2
 ctx.scale(wheel_radius, wheel_radius)
 
-A = 0j
 tiles = []
 for i in range(8):
+    A = 0j
     B = cmath.rect(1, i * PI4)
     D = cmath.rect(1, (i + 1) * PI4)
     C = B + D
@@ -80,6 +80,7 @@ for i in range(8):
 for i in range(8):
     C = cmath.rect(1, i * PI4)
     B = (1 + math.sqrt(2)) * C
+
     A = cmath.rect(1, i * PI4) + cmath.rect(1, (i + 1) * PI4)
     tiles.append((1, (A, B, C)))
 
@@ -102,7 +103,6 @@ for shape, vertices in tiles:
         ctx.line_to(D.real, D.imag)
         ctx.close_path()
         ctx.set_source_rgb(*LOZENGE_COLOR)
-
     else:
         A, B, C = vertices
         D = B + C - A

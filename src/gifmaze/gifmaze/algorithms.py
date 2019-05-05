@@ -12,8 +12,8 @@ All algorithms have a similar interface:
     algo(maze, encode_func, speed, **kwargs)
 
 Here `maze` is the Maze object that the algorithm runs on,
-`encode_func` is the function to encode the maze into a frame,
-`speed` controls how often the `encode_func` is called.
+`encode_func` is the function that encodes the animation into frames,
+`speed` controls how often `encode_func` is called.
 """
 import heapq
 import random
