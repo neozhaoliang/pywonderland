@@ -6,10 +6,10 @@ Compute the automaton that recognizes the language of a Coxeter group
 
 This script computes the automaton of a given Coxeter group, minimizes
 this automaton and calls graphviz to draw it. You should have pygraphviz
-and graphviz installed to run it.
+and graphviz installed to run this file.
 
-For some Coxeter groups W its defining automaton (the Brink-Howlett automaton)
-is already minimized, for example
+For some Coxeter group W its defining automaton (the Brink-Howlett automaton)
+is already minimal, for example
 
     1. W is finite.
     2. W is of affine type A_n.
@@ -29,7 +29,8 @@ from minroots import get_reflection_table
 class DFAState(object):
 
     def __init__(self, subset, accept=True):
-        """`subset`: a subset of the set of minimal roots, stored in a frozenset.
+        """`subset`: a set of integers which specifies a subset of the minimal roots,
+           stored in a frozenset.
         """
         self.subset = subset
         self.accept = accept
@@ -116,8 +117,8 @@ class Hopcroft(object):
         while W:
             A = W.pop()
             for c in self.sigma:
-                # We should be careful that if we modify a set while iterating over it then unpredictable things would happen.
-                # So iterate over another but same partition!
+                # Be careful that if we modify a set while iterating over it then unpredictable
+                # things would happen, so iterate over another same partition!
                 T = frozenset(self.P)
                 for Y in T:
                     S = self.split(Y,c,A)
@@ -183,7 +184,6 @@ class Hopcroft(object):
         """
         s1 = set()
         s2 = set()
-
         for x in S:
             y = x.transitions.get(c, None)
             if y in B:
@@ -253,10 +253,12 @@ def build_automaton(cox_mat):
 
 
 def test():
-    cox_mat = [[1, 3, 3], [3, 1, 3], [3, 3, 1]] # affine A_2 Coxeter group
+    # The affine A_2 Coxeter group, it has 6 minimal roots and 16 states in its
+    # defining automaton. The automaton is already minimal since its rank is 3.
+    cox_mat = [[1, 3, 3], [3, 1, 3], [3, 3, 1]]
     dfa = build_automaton(cox_mat)
     print("The automaton contains {} states".format(dfa.num_states))
-    dfa.minimize().draw("a2~.png")
+    dfa.minimize().draw("a2~.png")  # the minimization step is unnecessary here
 
 
 if __name__ == "__main__":
