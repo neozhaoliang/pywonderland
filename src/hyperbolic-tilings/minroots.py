@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Compute reflection table of minimal roots of a Coxeter group
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compute the reflection table of minimal roots of a Coxeter group
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This script computes the reflection table of minimal roots of a Coxeter group
 as discovered by Brink and Howlett [1]. All computations are done in the ring
@@ -29,11 +29,25 @@ For example:
            [None, 2, 1],
            [2, None, 6]], dtype=object)
 
-Here -1 means this root is negative and None means this root is positive but not minimal.
+So there are 7 minimal roots for the (433) triangle group. Here -1 means this root
+is negative and None means this root is positive but not minimal.
 
 The two classes `IntPolynomial` and `AlgebraicInteger` are mainly for handling arithmetic
 of algebraic integers in cyclotomic fields (they are the coefficients of a root as a linear
 combination of simple roots).
+
+For the cases that there are infinity in the Coxeter matrix, simply replace them with -1.
+For example for the Coxeter group
+
+    G = <s, t | s^2 = t^2 = 1>
+
+The Coxeter matrix of G is [[1, +inf], [+inf, 1]], replace +inf with -1 one get [[1, -1], [-1, 1]], hence
+
+>>> cox_mat = [[1, -1], [-1, 1]]
+>>> table = get_reflection_table(cox_mat)
+>>> table
+>>> array([[-1, None],
+           [None, -1]], dtype=object)
 
 References:
 

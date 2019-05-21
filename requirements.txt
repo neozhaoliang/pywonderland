@@ -5,6 +5,7 @@ numba
 numpy
 pillow
 pyglet
+pygraphviz
 PyYaml
 scipy
 tqdm
