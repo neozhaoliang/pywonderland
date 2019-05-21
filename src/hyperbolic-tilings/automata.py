@@ -4,9 +4,13 @@
 Compute the automaton that recognizes the language of a Coxeter group
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This script computes the automaton of a given Coxeter group, minimizes
-this automaton and calls graphviz to draw it. You should have pygraphviz
-and graphviz installed to run this file.
+This script computes the automaton of a given Coxeter group, minimizes this
+automaton and calls graphviz to draw it. In the resulting image the nodes are
+subsets of the minimal roots and edges are simple reflections. You should have
+pygraphviz and graphviz installed to run this file.
+
+You should also note the difference between the automaton for "reduced words"
+and the automaton for "normal forms of the words".
 
 For some Coxeter group W its defining automaton (the Brink-Howlett automaton)
 is already minimal, for example
@@ -121,7 +125,7 @@ class Hopcroft(object):
                 # things would happen, so iterate over another same partition!
                 T = frozenset(self.P)
                 for Y in T:
-                    S = self.split(Y,c,A)
+                    S = self.split(Y, c, A)
                     if S:
                         s1, s2 = S
                         self.P.remove(Y)
@@ -147,7 +151,6 @@ class Hopcroft(object):
 
             for symbol, target in state.transitions.items():
                 target_subset = self.current_partition_containing(target)
-
                 if target_subset not in result_dfa:
                     aux(target_subset)
                 dfa_state.add_transition(symbol, result_dfa[target_subset])
@@ -164,7 +167,7 @@ class Hopcroft(object):
         s2 = set()
 
         def aux(state):
-            if state.accept == True:
+            if state.accept:
                 s1.add(state)
             else:
                 s2.add(state)
@@ -203,9 +206,12 @@ class Hopcroft(object):
         raise ValueError("partition does contain given state, something must be wrong")
 
 
-def build_automaton(cox_mat):
+def build_automaton(cox_mat, type="normal"):
     """build the automaton that recognizes the language of a Coxeter group.
     """
+    if type not in ["normal", "reduced"]:
+        raise ValueError("Unknown type of automaton, must be either 'reduced' or 'normal'")
+
     rank = len(cox_mat)
     table = get_reflection_table(cox_mat)
 
@@ -215,11 +221,19 @@ def build_automaton(cox_mat):
         """
         if i in S:
             return None
+
         result = set([i])
         for j in S:
             k = table[j][i]
             if k is not None:
                 result.add(k)
+
+        if type == "normal":
+            for j in range(i):
+                k = table[j][i]
+                if k is not None:
+                    result.add(k)
+
         return frozenset(result)
 
     start = DFAState(frozenset())
@@ -256,10 +270,13 @@ def test():
     # The affine A_2 Coxeter group, it has 6 minimal roots and 16 states in its
     # defining automaton. The automaton is already minimal since its rank is 3.
     cox_mat = [[1, 3, 3], [3, 1, 3], [3, 3, 1]]
-    dfa = build_automaton(cox_mat)
-    print("The automaton contains {} states".format(dfa.num_states))
-    dfa.minimize().draw("a2~.png")  # the minimization step is unnecessary here
+    dfa1 = build_automaton(cox_mat, type="reduced")
+    print("The automaton recognizes reduced words contains {} states".format(dfa1.num_states))
+    dfa1.minimize().draw("a2~_reduced.png")
 
+    dfa2 = build_automaton(cox_mat, type="normal")
+    print("The automaton recognizes normal forms contains {} states".format(dfa2.num_states))
+    dfa2.minimize().draw("a2~_normal.png")
 
 if __name__ == "__main__":
     test()

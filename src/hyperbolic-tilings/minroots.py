@@ -60,7 +60,6 @@ References:
 
 :copyright (c) 2019 by Zhao Liang.
 """
-import argparse
 from collections import defaultdict, deque
 from copy import copy
 from itertools import zip_longest
@@ -237,9 +236,9 @@ class IntPolynomial(object):
         num_square_free_factors = 1 << len(primes)
         for k in range(num_square_free_factors):
             d = 1
-            for i in range(len(primes)):
+            for i, e in enumerate(primes):
                 if (k & (1 << i)) != 0:
-                    d *= primes[i]
+                    d *= e
             m = cls.monomial(n // d, 1) - 1
             b = bin(k).count("1")
             if b % 2 == 0:
@@ -283,8 +282,7 @@ class AlgebraicInteger(object):
             return False
         if isinstance(beta, int):
             return self.poly == beta
-        else:
-            return self.base == beta.base and self.poly == beta.poly
+        return self.base == beta.base and self.poly == beta.poly
 
     def __neg__(self):
         return AlgebraicInteger(self.base, -self.poly)
@@ -394,6 +392,9 @@ def get_reflection_table(cox_mat):
        3. table[i][j] = k (k >= 0) if and only if s_j(α_i) = α_k and α_k is also minimal.
     """
     M = np.array(cox_mat, dtype=np.int)  # Coxeter matrix
+    if not (M == M.T).all():
+        raise ValueError("A symmetric group is expected")
+
     C, base = get_cartan_matrix(M)  # Cartan matrix
     rank = len(M)
     R = [get_simple_reflection(C, k) for k in range(rank)]  # simple reflections
