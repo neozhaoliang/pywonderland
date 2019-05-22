@@ -279,30 +279,26 @@ class AlgebraicInteger(object):
         return hash(self.poly.coef)
 
     def __eq__(self, beta):
-        if not isinstance(beta, (int, AlgebraicInteger)):
-            return False
+        """For speed considerations we always assume `beta` is an (algebraic) integer
+           in the same cyclotomic field.
+        """
         if isinstance(beta, int):
             return self.poly == beta
-        return self.base == beta.base and self.poly == beta.poly
+        return self.poly == beta.poly
 
     def __neg__(self):
         return AlgebraicInteger(self.base, -self.poly)
 
-    def valid(self, beta):
-        if isinstance(beta, int):
-            beta = AlgebraicInteger(self.base, beta)
-        elif not isinstance(beta, AlgebraicInteger) or self.base != beta.base:
-            raise ValueError("An integer or an AlgebraicInteger with same base is expected")
-        return beta
-
     def __add__(self, beta):
-        beta = self.valid(beta)
+        if isinstance(beta, int):
+            return AlgebraicInteger(self.base, self.poly + beta)
         return AlgebraicInteger(self.base, self.poly + beta.poly)
 
     __iadd__ = __radd__ = __add__
 
     def __sub__(self, beta):
-        beta = self.valid(beta)
+        if isinstance(beta, int):
+            return AlgebraicInteger(self.base, self.poly - beta)
         return AlgebraicInteger(self.base, self.poly - beta.poly)
 
     __isub__ = __sub__
@@ -311,7 +307,8 @@ class AlgebraicInteger(object):
         return -self + beta
 
     def __mul__(self, beta):
-        beta = self.valid(beta)
+        if isinstance(beta, int):
+            return AlgebraicInteger(self.base, self.poly * beta)
         return AlgebraicInteger(self.base, self.poly * beta.poly)
 
     __imul__ = __rmul__ = __mul__
@@ -394,7 +391,7 @@ def get_reflection_table(cox_mat):
     """
     M = np.array(cox_mat, dtype=np.int)  # Coxeter matrix
     if not (M == M.T).all():
-        raise ValueError("A symmetric group is expected")
+        raise ValueError("A symmetric matrix is expected")
 
     C, base = get_cartan_matrix(M)  # Cartan matrix
     rank = len(M)
