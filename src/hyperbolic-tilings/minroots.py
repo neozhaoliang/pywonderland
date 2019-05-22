@@ -16,9 +16,9 @@ Coxeter matrix (a symmetric matrix with integer entries and the diagonals are al
 and the output is a 2d array.
 
 For example:
->>> cox_mat = np.array([[1, 3, 4],
-                        [3, 1, 3],
-                        [4, 3, 1]])
+>>> cox_mat = [[1, 3, 4],
+               [3, 1, 3],
+               [4, 3, 1]]
 >>> table = get_reflection_table(cox_mat)
 >>> table
 >>> array([[-1, 3, 4],
@@ -29,8 +29,8 @@ For example:
            [None, 2, 1],
            [2, None, 6]], dtype=object)
 
-So there are 7 minimal roots for the (433) triangle group. Here -1 means this root
-is negative and None means this root is positive but not minimal.
+So there are 7 minimal roots for the (343) triangle group. Here -1 means this root
+is negative, None means this root is positive but not minimal.
 
 The two classes `IntPolynomial` and `AlgebraicInteger` are mainly for handling arithmetic
 of algebraic integers in cyclotomic fields (they are the coefficients of a root as a linear
@@ -41,7 +41,8 @@ For example for the Coxeter group
 
     G = <s, t | s^2 = t^2 = 1>
 
-The Coxeter matrix of G is [[1, +inf], [+inf, 1]], replace +inf with -1 one get [[1, -1], [-1, 1]], hence
+The Coxeter matrix of G is [[1, +inf], [+inf, 1]], replace +inf with -1 one get
+[[1, -1], [-1, 1]], hence
 
 >>> cox_mat = [[1, -1], [-1, 1]]
 >>> table = get_reflection_table(cox_mat)

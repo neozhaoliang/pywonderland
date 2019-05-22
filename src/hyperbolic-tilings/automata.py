@@ -19,6 +19,8 @@ is already minimal, for example
     2. W is of affine type A_n.
     3. W has rank 3.
 
+For these groups the minimization step (using Hopcroft's algorithm) is unnecessary.
+
 see
     "Coxeter systems for which the Brink-Howlett automaton is minimal", by
     James Parkinson and Yeeka Yau.
@@ -206,18 +208,29 @@ class Hopcroft(object):
         raise ValueError("partition does contain given state, something must be wrong")
 
 
-def build_automaton(cox_mat, type="normal"):
-    """build the automaton that recognizes the language of a Coxeter group.
+def get_automaton(cox_mat, type="normal"):
+    """Construct the automaton that recognizes the language of a Coxeter group.
     """
     if type not in ["normal", "reduced"]:
-        raise ValueError("Unknown type of automaton, must be either 'reduced' or 'normal'")
+        raise ValueError("Unknown type of automaton, must be 'reduced' or 'normal'")
 
     rank = len(cox_mat)
     table = get_reflection_table(cox_mat)
 
     def subset_transition(S, i):
-        """`S` is a subset of the set of minimal roots, this function computes
+        r"""`S` is a subset of the set of minimal roots, this function computes
            the transition of S by the simple reflection s_i in the automaton.
+           The transition rule for the automaton of "reduced words" is:
+           for s_i ∉ S,
+
+                   s_i
+                S -----> {s_i} ∪ (s_i(S) ∩ Σ)
+
+            where Σ is the set of minimal roots.
+            For the automaton of "normal forms" the transition rule is
+
+                   s_i
+                S -----> {s_i} ∪ (s_i(S) ∪ {s_i(α_j), j<i}) ∩ Σ
         """
         if i in S:
             return None
@@ -270,11 +283,11 @@ def test():
     # The affine A_2 Coxeter group, it has 6 minimal roots and 16 states in its
     # defining automaton. The automaton is already minimal since its rank is 3.
     cox_mat = [[1, 3, 3], [3, 1, 3], [3, 3, 1]]
-    dfa1 = build_automaton(cox_mat, type="reduced")
+    dfa1 = get_automaton(cox_mat, type="reduced")
     print("The automaton recognizes reduced words contains {} states".format(dfa1.num_states))
     dfa1.minimize().draw("a2~_reduced.png")
 
-    dfa2 = build_automaton(cox_mat, type="normal")
+    dfa2 = get_automaton(cox_mat, type="normal")
     print("The automaton recognizes normal forms contains {} states".format(dfa2.num_states))
     dfa2.minimize().draw("a2~_normal.png")
 
