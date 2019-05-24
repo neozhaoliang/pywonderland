@@ -3,8 +3,8 @@
 Draw 2d Euclidean uniform tilings using the automata approach
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-There are three kinds of 2d Euclidean uniform tiings, their symmetry groups
-are all Coxeter groups of affine type (hence are infinite)
+There are three kinds of uniform tilings in the 2d Euclidean plane,
+their symmetry groups are all Coxeter groups of affine type:
 
 1. Tiling (3, 3), its group is affine A_2~.
 2. Tiling (4, 4), its group is affine B_2~.
@@ -43,7 +43,7 @@ cox_mat = helpers.make_symmetry_matrix(p, q, r)  # Coxeter matrix
 A, B, C = get_euclidean_fundamental_triangle(p, q, r)  # fundamental triangle
 dfa = automata.get_automaton(cox_mat)  # the dfa of the Coxeter group
 v0 = helpers.from_bary_coords([A, B, C], active)  # initial vertex
-edges = [[B, C], [A, C], [A, B]]
+edges = [[B, C], [A, C], [A, B]]  # i-th edge must be opposite to the i-th vertex in [A, B, C].
 reflections = [helpers.reflection_by_line(*e) for e in edges]  # three reflections
 
 
