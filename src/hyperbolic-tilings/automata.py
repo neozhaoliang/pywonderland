@@ -205,7 +205,6 @@ class Hopcroft(object):
         for p in self.P:
             if state in p:
                 return p
-        raise ValueError("partition does contain given state, something must be wrong")
 
 
 def get_automaton(cox_mat, type="normal"):
