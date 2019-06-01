@@ -23,8 +23,8 @@ background { White }
 #declare vertexRad = 0.035;
 #declare edgeRad = 0.02;
 
-#declare vertexColor = SkyBlue;
-#declare edgeColors = array[3]{ Orange, Pink,  SpringGreen };
+#declare vertexColors = array[3] { SkyBlue, Silver, Violet };
+#declare edgeColors = array[3]{ Orange, Pink, SteelBlue };
 
 #declare edgeFinish = finish {
     ambient 0.2
@@ -44,26 +44,26 @@ background { White }
 
 #declare faceTextures = array[3]{
     texture {
-        pigment { rgbf <0.4, 0.72, 0.4, 0.8> }
+        pigment { rgb <0.4, 0.72, 0.4> }
         finish { faceFinish }
     },
 
     texture {
-        pigment { rgbf <0.9, 0.1, 0.2, 0.6> }
+        pigment { rgb <0.9, 0.1, 0.2> }
         finish { faceFinish }
     },
 
     texture {
-        pigment { rgbf <0.1, 0.15, 0.5, 0.8> }
+        pigment { rgb <0.1, 0.15, 0.5> }
         finish { faceFinish }
     }
 };
 
-#macro Vert(vs, k)
+#macro Vert(vs, k, ind)
     sphere {
-        vs[k], vertexRad
+        vs[ind], vertexRad
         texture {
-            pigment { color vertexColor }
+            pigment { color vertexColors[k] }
             finish { edgeFinish }
         }
     }

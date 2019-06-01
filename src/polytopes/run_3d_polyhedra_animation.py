@@ -17,7 +17,7 @@ set the paths to their executables in `POV_EXE` and `FFMPEG_EXE`.
 import subprocess
 import os
 from fractions import Fraction
-from models import Polyhedra, Snub
+from models import Polyhedra, Snub, Catalan3D
 import helpers
 
 
@@ -64,7 +64,7 @@ if not os.path.exists(IMAGE_DIR):
     os.makedirs(IMAGE_DIR)
 
 
-VERT_MACRO = "Vert(vertices, {})"          # Vert(vertices, ind)
+VERT_MACRO = "Vert(vertices, {}, {})"          # Vert(vertices, ind, v)
 EDGE_MACRO = "Edge(vertices, {}, {}, {})"  # Edge(vertices, ind, v1, v2)
 FACE_MACRO = "Face(vertices, {}, {}, {})"  # Face(vertices, ind, nsides, indices)
 
@@ -74,19 +74,29 @@ def write_to_pov(P):
 
     :param P: a polytope instance.
     """
-    vert_macros = "\n".join(VERT_MACRO.format(i) for i in range(P.num_vertices))
-    edge_macros = "\n".join(EDGE_MACRO.format(i, e[0], e[1])
-                            for i, elist in enumerate(P.edge_indices)
-                                for e in elist)
-    face_macros = "\n".join(FACE_MACRO.format(i, len(face), helpers.pov_array(face))
+    if isinstance(P, Catalan3D):
+        vert_macros = "\n".join(VERT_MACRO.format(i, v + sum(len(vlist) for vlist in P.vertex_coords[:i]))
+                                for i, vlist in enumerate(P.vertex_coords)
+                                for v in range(len(vlist)))
+        face_macros = "\n".join(FACE_MACRO.format(0, len(face), helpers.pov_array(face))
+                                for face in P.face_indices)
+        vertex_coords = helpers.pov_vector_list(P.vertex_coords_flatten)
+    else:
+        vert_macros = "\n".join(VERT_MACRO.format(0, i) for i in range(P.num_vertices))
+        face_macros = "\n".join(FACE_MACRO.format(i, len(face), helpers.pov_array(face))
                             for i, flist in enumerate(P.face_indices)
                                 for face in flist)
+        vertex_coords = helpers.pov_vector_list(P.vertex_coords)
+
+    edge_macros = "\n".join(EDGE_MACRO.format(i, e[0], e[1])
+                            for i, elist in enumerate(P.edge_indices)
+                            for e in elist)
 
     with open("./povray/polyhedra-data.inc", "w") as f:
         f.write(POV_TEMPLATE.format(
             P.num_vertices,
             P.num_vertices,
-            helpers.pov_vector_list(P.vertex_coords),
+            vertex_coords,
             vert_macros,
             edge_macros,
             face_macros)
@@ -97,6 +107,7 @@ def anim(coxeter_diagram,
          trunc_type,
          description="polyhedra",
          snub=False,
+         catalan=False,
          extra_relations=()):
     """Call POV-Ray to render the frames and FFmpeg to generate the movie.
     """
@@ -107,6 +118,9 @@ def anim(coxeter_diagram,
         P = Snub(coxeter_matrix, mirrors, trunc_type)
     else:
         P = Polyhedra(coxeter_matrix, mirrors, trunc_type, extra_relations)
+
+    if catalan:
+        P = Catalan3D(P)
 
     P.build_geometry()
     write_to_pov(P)
@@ -170,6 +184,7 @@ def main():
          extra_relations=((0, 1, 2, 1) * 3,), description="truncated-great-dodecahedron")
     """
     anim((3, 2, Fraction(5, 2)), (1, 0, 0), description="great-icosahedron")
+    anim((5, 2, 3), (1, 1, 0), catalan=True, description="triakis-icosahedron")
 
 
 if __name__ == "__main__":

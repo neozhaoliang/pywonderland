@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Classes for building models of 3D/4D uniform polytopes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Classes for building models of 3D/4D polytopes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See the doc: "https://neozhaoliang.github.io/polytopes/"
 
@@ -375,3 +375,74 @@ class Snub24Cell(Polychora):
                 vertex = np.dot(vertex, self.reflections[1])
                 vertex = np.dot(vertex, self.reflections[3])
         return vertex
+
+
+class Catalan3D(object):
+
+    """Construct the dual 3d Catalan solid from a given uniform polytope.
+    """
+
+    def __init__(self, P):
+        if len(P.coxeter_matrix) != 3:
+            raise ValueError("A 3d polyhedra is expected")
+        self.P = P
+
+        self.num_vertices = None
+        self.vertex_coords = []
+        self.vertex_coords_flatten = []
+
+        self.num_edges = None
+        self.edge_indices = []
+        self.edge_coords = []
+
+        self.num_faces = None
+        self.face_indices = []
+        self.face_coords = []
+
+    def build_geometry(self):
+        self.P.build_geometry()
+        self.get_vertices()
+        self.get_edges()
+        self.get_faces()
+
+    def get_vertices(self):
+        """The vertices in the Catalan solid are centers of P's faces.
+        """
+        for face_list in self.P.face_coords:
+            vlist = []
+            for face in face_list:
+                v = np.sum(face, axis=0) / len(face)
+                vlist.append(v)
+                self.vertex_coords_flatten.append(v)
+
+            self.vertex_coords.append(vlist)
+        self.num_vertices = len(self.vertex_coords_flatten)
+
+    def get_edges(self):
+        """Two face centers are connected by an edge if and only if
+           their faces are adjacent in P.
+        """
+        P_faces_flatten = [face for flist in self.P.face_indices for face in flist]
+        for elist_P in self.P.edge_indices:
+            elist = []
+            for eP in elist_P:
+                e = helpers.common_edge(eP, P_faces_flatten)
+                if e is not None:
+                    elist.append(e)
+            self.edge_indices.append(elist)
+
+        self.num_edges = sum(len(elist) for elist in self.edge_indices)
+
+    def get_faces(self):
+        """A set of face centers form a face in the Catalan solid if and
+           only if their faces surround a common vertex in P.
+        """
+        P_faces_flatten = [face for flist in self.P.face_indices for face in flist]
+        for v in range(self.P.num_vertices):
+            f = []
+            for i, face in enumerate(P_faces_flatten):
+                if v in face:
+                    f.append(i)
+            self.face_indices.append(f)
+
+        self.num_faces = len(self.face_indices)

@@ -84,6 +84,27 @@ def check_duplicate_face(f, l):
     return False
 
 
+def has_edge(e, f):
+    """Check if an edge `e` is in a face `f`.
+    """
+    for pair in zip(f, f[1:] + (f[0],)):
+        if e == pair or e == pair[::-1]:
+            return True
+    return False
+
+
+def common_edge(e, face_list):
+    """Find the pair of faces in `face_list` that has `e` as a common edge.
+    """
+    result = []
+    for i, face in enumerate(face_list):
+        if has_edge(e, face):
+            result.append(i)
+        if len(result) == 2:
+            return tuple(result)
+    return None
+
+
 def fill_matrix(upper_triangle):
     """Given three or six integers/rationals, fill them into a
        3x3 (or 4x4) symmetric matrix.

@@ -207,11 +207,11 @@ class Hopcroft(object):
                 return p
 
 
-def get_automaton(cox_mat, type="normal"):
+def get_automaton(cox_mat, type="shortlex"):
     """Construct the automaton that recognizes the language of a Coxeter group.
     """
-    if type not in ["normal", "reduced"]:
-        raise ValueError("Unknown type of automaton, must be 'reduced' or 'normal'")
+    if type not in ["shortlex", "reduced"]:
+        raise ValueError("Unknown type of automaton, must be 'reduced' or 'shortlex'")
 
     rank = len(cox_mat)
     table = get_reflection_table(cox_mat)
@@ -240,7 +240,7 @@ def get_automaton(cox_mat, type="normal"):
             if k is not None:
                 result.add(k)
 
-        if type == "normal":
+        if type == "shortlex":
             for j in range(i):
                 k = table[j][i]
                 if k is not None:
@@ -286,9 +286,9 @@ def test():
     print("The automaton recognizes reduced words contains {} states".format(dfa1.num_states))
     dfa1.minimize().draw("a2~_reduced.png")
 
-    dfa2 = get_automaton(cox_mat, type="normal")
-    print("The automaton recognizes normal forms contains {} states".format(dfa2.num_states))
-    dfa2.minimize().draw("a2~_normal.png")
+    dfa2 = get_automaton(cox_mat, type="shortlex")
+    print("The automaton recognizes shortlex words contains {} states".format(dfa2.num_states))
+    dfa2.minimize().draw("a2~_shortlex.png")
 
 if __name__ == "__main__":
     test()
