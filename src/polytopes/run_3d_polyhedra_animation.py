@@ -186,7 +186,7 @@ def main():
          extra_relations=((0, 1, 2, 1) * 3,), description="truncated-great-dodecahedron")
     """
     anim((3, 2, Fraction(5, 2)), (1, 0, 0), description="great-icosahedron")
-    anim((5, 2, 3), (1, 1, 1), snub=True, catalan=True, description="pentagonal- hexecontahedron")
+    anim((5, 2, 3), (1, 1, 1), snub=True, catalan=True, description="pentagonal-hexecontahedron")
 
 
 if __name__ == "__main__":
