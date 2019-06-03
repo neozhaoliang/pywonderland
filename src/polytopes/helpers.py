@@ -93,7 +93,16 @@ def has_edge(e, f):
     return False
 
 
-def common_edge(e, face_list):
+def has_common_edge(f1, f2):
+    """Check if two faces `f1` and `f2` has an common edge.
+    """
+    for e1 in zip(f1, f1[1:] + (f1[0],)):
+        if has_edge(e1, f2):
+            return True
+    return False
+
+
+def find_face_by_edge(e, face_list):
     """Find the pair of faces in `face_list` that has `e` as a common edge.
     """
     result = []
@@ -105,7 +114,7 @@ def common_edge(e, face_list):
     return None
 
 
-def fill_matrix(upper_triangle):
+def make_symmetry_matrix(upper_triangle):
     """Given three or six integers/rationals, fill them into a
        3x3 (or 4x4) symmetric matrix.
     """
@@ -138,7 +147,7 @@ def get_mirrors(upper_triangle):
     np.seterrcall(err_handler)
     np.seterr(all="call")
 
-    coxeter_matrix = np.array(fill_matrix(upper_triangle)).astype(np.float)
+    coxeter_matrix = np.array(make_symmetry_matrix(upper_triangle)).astype(np.float)
     C = -np.cos(np.pi / coxeter_matrix)
     M = np.zeros_like(C)
 

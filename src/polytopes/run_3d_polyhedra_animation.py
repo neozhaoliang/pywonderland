@@ -41,6 +41,7 @@ POV_COMMAND = " cd povray &&" + \
 # FFmpeg command line options
 FFMPEG_COMMAND = " cd {} && ".format(IMAGE_DIR) + \
                  " {} -framerate 15".format(FFMPEG_EXE) + \
+                 " -y" + \
                  " -i {}" + \
                  "%0{}d.png".format(len(str(FRAMES - 1))) + \
                  " -crf 18 -c:v libx264" + \
@@ -70,7 +71,8 @@ FACE_MACRO = "Face(vertices, {}, {}, {})"  # Face(vertices, ind, nsides, indices
 
 
 def write_to_pov(P):
-    """Write the data of a polytope to a POV-Ray include file for rendering.
+    """
+    Write the data of a polytope to a POV-Ray include file for rendering.
 
     :param P: a polytope instance.
     """
@@ -84,7 +86,7 @@ def write_to_pov(P):
     else:
         vert_macros = "\n".join(VERT_MACRO.format(0, i) for i in range(P.num_vertices))
         face_macros = "\n".join(FACE_MACRO.format(i, len(face), helpers.pov_array(face))
-                            for i, flist in enumerate(P.face_indices)
+                                for i, flist in enumerate(P.face_indices)
                                 for face in flist)
         vertex_coords = helpers.pov_vector_list(P.vertex_coords)
 
@@ -111,7 +113,7 @@ def anim(coxeter_diagram,
          extra_relations=()):
     """Call POV-Ray to render the frames and FFmpeg to generate the movie.
     """
-    coxeter_matrix = helpers.fill_matrix([x.numerator for x in coxeter_diagram])
+    coxeter_matrix = helpers.make_symmetry_matrix([x.numerator for x in coxeter_diagram])
     mirrors = helpers.get_mirrors(coxeter_diagram)
 
     if snub:
@@ -184,7 +186,7 @@ def main():
          extra_relations=((0, 1, 2, 1) * 3,), description="truncated-great-dodecahedron")
     """
     anim((3, 2, Fraction(5, 2)), (1, 0, 0), description="great-icosahedron")
-    anim((5, 2, 3), (1, 1, 0), catalan=True, description="triakis-icosahedron")
+    anim((5, 2, 3), (1, 1, 1), snub=True, catalan=True, description="pentagonal- hexecontahedron")
 
 
 if __name__ == "__main__":

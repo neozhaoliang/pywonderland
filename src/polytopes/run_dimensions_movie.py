@@ -77,7 +77,7 @@ def write_to_pov(P):
 
 def main():
     coxeter_diagram = (5, 2, 2, 3, 2, 3)
-    coxeter_matrix = helpers.fill_matrix(coxeter_diagram)
+    coxeter_matrix = helpers.make_symmetry_matrix(coxeter_diagram)
     mirrors = helpers.get_mirrors(coxeter_diagram)
     P = Polychora(coxeter_matrix, mirrors, (1, 0, 0, 0))
     P.build_geometry()

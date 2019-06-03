@@ -312,7 +312,7 @@ class Snub24Cell(Polychora):
 
     def __init__(self):
         coxeter_diagram = (3, 2, 2, 3, 3, 2)
-        coxeter_matrix = helpers.fill_matrix(coxeter_diagram)
+        coxeter_matrix = helpers.make_symmetry_matrix(coxeter_diagram)
         mirrors = helpers.get_mirrors(coxeter_diagram)
         super().__init__(coxeter_matrix, mirrors, (1, 1, 1, 1), extra_relations=())
         self.symmetry_gens = tuple(range(6))
@@ -378,45 +378,54 @@ class Snub24Cell(Polychora):
 
 
 class Catalan3D(object):
-
     """Construct the dual 3d Catalan solid from a given uniform polytope.
+       The computation of edges and faces of this dual shape are all done
+       with integer arithmetic and floating comparison is avoided.
     """
-
     def __init__(self, P):
+        """`P`: a 3d polyhedra.
+        """
         if len(P.coxeter_matrix) != 3:
             raise ValueError("A 3d polyhedra is expected")
         self.P = P
 
         self.num_vertices = None
-        self.vertex_coords = []
-        self.vertex_coords_flatten = []
+        self.vertex_coords = []  # [[v1, v2, ...], [v_k, ...]]
+        self.vertex_coords_flatten = []  # [v1, v2, ..., vk, ...]
 
         self.num_edges = None
         self.edge_indices = []
-        self.edge_coords = []
 
         self.num_faces = None
         self.face_indices = []
-        self.face_coords = []
 
     def build_geometry(self):
         self.P.build_geometry()
+        self.num_vertices = self.P.num_faces
+        self.num_edges = self.P.num_edges
+        self.num_faces = self.P.num_vertices
         self.get_vertices()
         self.get_edges()
         self.get_faces()
 
     def get_vertices(self):
-        """The vertices in the Catalan solid are centers of P's faces.
+        """The vertices in the Catalan solid are in one-to-one correspondence
+           with P's faces.
         """
-        for face_list in self.P.face_coords:
+        for flist in self.P.face_coords:
             vlist = []
-            for face in face_list:
-                v = np.sum(face, axis=0) / len(face)
+            for face in flist:
+                # for each face of P, compute the normal of P
+                p1, p2, p3 = face[:3]
+                normal = helpers.normalize(np.cross(p2 - p1, p3 - p1))
+                # compute the dot of the vertices with the normal
+                inn = sum([np.dot(normal, p) for p in face]) / len(face)
+                # divide the reciprocal, this is the vertex of the dual solid
+                v = normal / inn
                 vlist.append(v)
                 self.vertex_coords_flatten.append(v)
 
             self.vertex_coords.append(vlist)
-        self.num_vertices = len(self.vertex_coords_flatten)
 
     def get_edges(self):
         """Two face centers are connected by an edge if and only if
@@ -426,12 +435,10 @@ class Catalan3D(object):
         for elist_P in self.P.edge_indices:
             elist = []
             for eP in elist_P:
-                e = helpers.common_edge(eP, P_faces_flatten)
+                e = helpers.find_face_by_edge(eP, P_faces_flatten)
                 if e is not None:
                     elist.append(e)
             self.edge_indices.append(elist)
-
-        self.num_edges = sum(len(elist) for elist in self.edge_indices)
 
     def get_faces(self):
         """A set of face centers form a face in the Catalan solid if and
@@ -439,10 +446,24 @@ class Catalan3D(object):
         """
         P_faces_flatten = [face for flist in self.P.face_indices for face in flist]
         for v in range(self.P.num_vertices):
+            # for each vertex of v of P, find P' faces that surround v, their indices
+            # are stored in f.
             f = []
             for i, face in enumerate(P_faces_flatten):
                 if v in face:
                     f.append(i)
-            self.face_indices.append(f)
+            # the faces in f may not be in the right order,
+            # rearrange them so that f0 and f1 are adjacent, f1 and f2 are adjacent, ... etc.
+            nsides = len(f)
+            v0 = f[0]
+            new_face = [v0]
+            visited = set([v0])
+            while len(new_face) < nsides:
+                v = new_face[-1]
+                for u in f:
+                    if u not in visited and helpers.has_common_edge(P_faces_flatten[v], P_faces_flatten[u]):
+                        new_face.append(u)
+                        visited.add(u)
+                        break
 
-        self.num_faces = len(self.face_indices)
+            self.face_indices.append(tuple(new_face))
