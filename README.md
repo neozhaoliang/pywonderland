@@ -35,6 +35,18 @@ The website for the docs is still under construction and will be released soon.
 Each subdirectory in `/src/` is a single program (except that `glslhelpers` is a helper module for running glsl programs and `misc` is a collection of independent scripts), any file named `main.py`, `run_*.py`, `example_*.py` is an executable script that gives some output.
 
 
+## List of algorithms
+
+Here is a list of some algorithms implemented in this project:
+
++ [Domino shuffling algorithm](./src/aztec/aztec.py)
++ [Hopcroft's DFA minimization algorithm](./src/hyperbolic-tilings/automata.py)
++ [Lempel–Ziv–Welch compression algorithm](./src/gifmaze/gifmaze/encoder.py)
++ [Propp-Wilson's coupling from the past algorithm](./src/cftp/cftp.py)
++ [Todd-Coxeter coset enumeration algorithm](./src/polytopes/todd_coxeter.py)
++ [Wilson's uniform spanning tree algorithm](./src/gifmaze/gifmaze/algorithms.py)
+
+
 ## Programs to come:
 
 - 2D hyperbolic tilings (Escher's circle limit)

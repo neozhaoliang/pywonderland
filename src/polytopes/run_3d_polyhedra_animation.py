@@ -186,6 +186,22 @@ def main():
          extra_relations=((0, 1, 2, 1) * 3,), description="truncated-great-dodecahedron")
     """
     anim((3, 2, Fraction(5, 2)), (1, 0, 0), description="great-icosahedron")
+
+    """
+    # Catalan solids
+    anim((3, 2, 3), (1, 1, 0), catalan=True, description="triakis-tetrahedron")
+    anim((4, 2, 3), (0, 1, 0), catalan=True, description="rhombic-dodecahedron")
+    anim((4, 2, 3), (1, 1, 0), catalan=True, description="triakis-octahedron")
+    anim((4, 2, 3), (0, 1, 1), catalan=True, description="tetrakis-hexahedron")
+    anim((4, 2, 3), (1, 0, 1), catalan=True, description="deltoidal-icositetrahedron")
+    anim((4, 2, 3), (1, 1, 1), catalan=True, description="disdyakis-dodecahedron")
+    anim((5, 2, 3), (0, 1, 0), catalan=True, description="rhombic-triacontahedron")
+    anim((5, 2, 3), (1, 1, 0), catalan=True, description="triakis-icosahedron")
+    anim((5, 2, 3), (0, 1, 1), catalan=True, description="pentakis-dodecahedron")
+    anim((5, 2, 3), (1, 0, 1), catalan=True, description="deltoidal-hexecontahedron")
+    anim((5, 2, 3), (1, 1, 1), catalan=True, description="disdyakis-triacontahedron")
+    anim((4, 2, 3), (1, 1, 1), snub=True, catalan=True, description="pentagonal-icositetrahedron")
+    """
     anim((5, 2, 3), (1, 1, 1), snub=True, catalan=True, description="pentagonal-hexecontahedron")
 
 
