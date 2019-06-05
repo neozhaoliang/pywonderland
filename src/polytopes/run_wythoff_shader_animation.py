@@ -12,8 +12,8 @@ Matt's program has some rich features and a great UI (as a pure shader program!)
 Some notes:
 
 1. This program draws only a subset of all uniform polyhedron in 3d,
-   it can't draw star and snub ones (the only exception is those with Schläfli
-   symbol (3, 5/2), but you must change the code manually in the function
+   it can't draw star and snub ones (the only exceptiona are those with Schläfli
+   symbol (3, 5/2), you need to change the code manually in the function
    `setup_triangle` in `common.frag` to see them.
 
 2. The antialiasing routine in Matt's original code is replaced by the usual supersampling

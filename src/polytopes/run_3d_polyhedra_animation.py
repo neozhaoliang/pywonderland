@@ -9,9 +9,6 @@ to render the frames and finally calls FFmpeg to convert the frames to
 a mp4 movie. You need to have POV-Ray and FFmpeg installed and
 set the paths to their executables in `POV_EXE` and `FFMPEG_EXE`.
 
-You need to have POV-Ray and FFmpeg installed and
-set the paths to their executables in `POV_EXE` and `FFMPEG_EXE`.
-
 :copyright (c) 2018 by Zhao Liang.
 """
 import subprocess
