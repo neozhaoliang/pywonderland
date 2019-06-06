@@ -62,7 +62,7 @@ if not os.path.exists(IMAGE_DIR):
     os.makedirs(IMAGE_DIR)
 
 
-VERT_MACRO = "Vert(vertices, {}, {})"          # Vert(vertices, ind, v)
+VERT_MACRO = "Vert(vertices, {}, {})"      # Vert(vertices, ind, v)
 EDGE_MACRO = "Edge(vertices, {}, {}, {})"  # Edge(vertices, ind, v1, v2)
 FACE_MACRO = "Face(vertices, {}, {}, {})"  # Face(vertices, ind, nsides, indices)
 

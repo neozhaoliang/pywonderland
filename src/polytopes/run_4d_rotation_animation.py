@@ -156,31 +156,55 @@ def snub24cell(description="snub-24-cell",
 
 # NB: set `FRAMES = 1` at the beginning if you want to run a quick view of these examples,
 def main():
-    anim((4, 2, 2, 3, 2, 3), (1, 1, 0, 0), "truncated-tesseract", "Dark_Green_Glass", 1)
+    # 5-cell family, symmetry group A_4
+    anim((3, 2, 2, 3, 2, 3), (1, 0, 0, 0), "5-cell", vertex_color="Orange", edge_color="Pink")
     """
-    anim((3, 2, 2, 2, 2, 20), (1, 0, 0, 1), "3-20-duoprism", "Dark_Green_Glass", None)
+    anim((3, 2, 2, 3, 2, 3), (1, 1, 0, 0), "truncated-5-cell", vertex_color="Orange", edge_color="Pink")
+    anim((3, 2, 2, 3, 2, 3), (0, 1, 0, 0), "rectified-5-cell", vertex_color="Orange", edge_color="Pink", face_index="all")
+    anim((3, 2, 2, 3, 2, 3), (0, 1, 1, 0), "bitruncated-5-cell", vertex_color="Orange", edge_color="Pink")
+    anim((3, 2, 2, 3, 2, 3), (1, 0, 0, 1), "runcinated-5-cell", vertex_color="Orange", edge_color="Pink")
+
+    # tesseract family, symmetry group B_4
+    anim((4, 2, 2, 3, 2, 3), (1, 0, 0, 0), "tesseract", vertex_color="Orange", edge_color="Pink")
+    anim((4, 2, 2, 3, 2, 3), (1, 1, 0, 0), "truncated-tesseract", "Dark_Green_Glass", 1
+    anim((4, 2, 2, 3, 2, 3), (1, 0, 1, 0), "cantellated-tesseract", "Dark_Green_Glass", 1)
+
+    # 16-cell family, dual to tesseract
     anim((3, 2, 2, 3, 2, 4), (1, 0, 0, 0), "16-cell", vertex_color="Orange", edge_color="Pink")
+    anim((3, 2, 2, 3, 2, 4), (1, 1, 0, 0), "truncated-16-cell", vertex_color="Orange", edge_color="Pink")
     anim((3, 2, 2, 3, 2, 4), (1, 0, 0, 1), "runcinated-16-cell",
          glass_tex="Yellow_Glass", face_index=(0, 1), vertex_color="Orange", edge_color="Pink")
-    anim((3, 2, 2, 3, 2, 3), (1, 0, 0, 0), "5-cell", vertex_color="Orange", edge_color="Pink")
+
+    # 24-cell family, symmetry group F_4
+    anim((3, 2, 2, 4, 2, 3), (1, 0, 0, 0), "24-cell", vertex_color="Orange", edge_color="Pink")
+    anim((3, 2, 2, 4, 2, 3), (1, 0, 1, 0), "cantellated-24-cell", vertex_color="Orange", edge_color="Pink")
+    snub24cell()
+
+    # 120-cell family, symmetry group H_4
+    anim((5, 2, 2, 3, 2, 3), (1, 0, 0, 0), "120-cell")
+
+    # 600-cell family, dual to 120-cell
+    anim((3, 2, 2, 3, 2, 5), (1, 0, 0, 0), "600-cell")
+
+    # prism and duoprism
     anim((5, 2, 2, 3, 2, 2), (1, 1, 0, 1), "prism", glass_tex="Ruby_Glass",
          vertex_color="Coral", edge_color="Violet", face_index=2)
-    anim((4, 2, 2, 3, 2, 3), (1, 0, 0, 0), "tesseract", vertex_color="Orange", edge_color="Pink")
-    anim((3, 2, 2, 4, 2, 3), (1, 0, 0, 0), "24-cell", vertex_color="Orange", edge_color="Pink")
+    anim((3, 2, 2, 2, 2, 20), (1, 0, 0, 1), "3-20-duoprism", "Dark_Green_Glass")
+
+    # some regular star polytopes (there are 10 of them, all can be rendered in this way)
     anim((3, 2, 2, 5, 2, Fraction(5, 2)), (1, 0, 0, 0), "icosahedral-120-cell", extra_relations=((1, 2, 3, 2)*3,))
     anim((5, 2, 2, Fraction(5, 2), 2, 5), (1, 0, 0, 0), "great-120-cell",
          extra_relations=((0, 1, 2, 1)*3, (1, 2, 3, 2)*3))
     anim((5, 2, 2, 3, 2, Fraction(5, 2)), (1, 0, 0, 0), "grand-120-cell",
-         glass_tex="NBbeerbottle", extra_relations=((0, 1, 2, 3, 2, 1)*3,))
-    # you can also render a 3d polyhedra by embedding it into 4d and project it back.
+         extra_relations=((0, 1, 2, 3, 2, 1)*3,))
+    anim((Fraction(5, 2), 2, 2, 5, 2, Fraction(5, 2)), (1, 0, 0, 0),
+         "grand-stellated-120-cell", extra_relations=((0, 1, 2, 1)*3, (1, 2, 3, 2)*3))
+
+    # you can also render a 3d polyhedra by embedding it into 4d and project back.
     anim((5, 2, 2, 3, 2, 2), (1, 1, 0, 0), "truncated-dodecahedron",
          glass_tex="NBwinebottle", face_index=(0, 1))
     anim((3, 2, 2, Fraction(5, 2), 2, 2), (1, 0, 0, 0), "great-dodecahedron")
-    snub24cell()
-    anim((Fraction(5, 2), 2, 2, 5, 2, Fraction(5, 2)), (1, 0, 0, 0),
-         "grand-stellated-120-cell", extra_relations=((0, 1, 2, 1)*3, (1, 2, 3, 2)*3))
     """
-
 
 if __name__ == "__main__":
     main()
