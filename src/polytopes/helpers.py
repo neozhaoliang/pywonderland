@@ -37,6 +37,16 @@ def proj3d(v):
     return np.array([x, y, z]) / (1 + 1e-8 - w)  # avoid divide by zero
 
 
+def get_face_normal(face):
+    """Get the normal vector (point outward) of a face.
+    """
+    p1, p2, p3 = face[:3]
+    normal = normalize(np.cross(p2 - p1, p3 - p1))
+    if np.dot(p1, normal) < 0:
+        normal = -normal
+    return normal
+
+
 def get_sphere_info(points):
     """
     Given a list of 4d points that lie on the same face of a polytope,

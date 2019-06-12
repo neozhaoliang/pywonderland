@@ -5,7 +5,7 @@ import numpy as np
 def normalize(v):
     """Normalize a vector `v`.
     """
-    return np.array(v) / np.linalg.norm(v)
+    return np.array(v) / np.sqrt(abs(np.dot(v, v)))
 
 
 def make_symmetry_matrix(upper_triangle):

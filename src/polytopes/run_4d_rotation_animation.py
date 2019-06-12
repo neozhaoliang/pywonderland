@@ -190,6 +190,9 @@ def main():
     anim((5, 2, 2, 3, 2, 2), (1, 1, 0, 1), "prism", glass_tex="Ruby_Glass",
          vertex_color="Coral", edge_color="Violet", face_index=2)
     anim((3, 2, 2, 2, 2, 20), (1, 0, 0, 1), "3-20-duoprism", "Dark_Green_Glass")
+    anim((4, 4, 2, Fraction(3, 2), 2, 2), (1, 1, 0, 1),
+         extra_relations=((0, 1, 2, 1) * 2,), face_index="all", description="small-cubicuboctahedron-prism")
+
 
     # some regular star polytopes (there are 10 of them, all can be rendered in this way)
     anim((3, 2, 2, 5, 2, Fraction(5, 2)), (1, 0, 0, 0), "icosahedral-120-cell", extra_relations=((1, 2, 3, 2)*3,))

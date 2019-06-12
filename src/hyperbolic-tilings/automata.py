@@ -10,7 +10,7 @@ subsets of the minimal roots and edges are simple reflections. You should have
 pygraphviz and graphviz installed to run this file.
 
 You should also note the difference between the automaton for "reduced words"
-and the automaton for "normal forms of the words".
+and the automaton for "shortlex words".
 
 For some Coxeter group W its defining automaton (the Brink-Howlett automaton)
 is already minimal, for example

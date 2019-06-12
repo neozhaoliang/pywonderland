@@ -11,11 +11,11 @@ their symmetry groups are all Coxeter groups of affine type:
 3. Tiling (6, 3), its group is affine G_2~.
 
 In this program we used the standard geometric representation for
-an affine Coxeter group and used its automaton to generated its
-Tit's cone in R^3 (which is the upper halfspace {(x, y, z) ∈ R^3 | z ≥ 0}).
-Our 2d tiling is obtained by drawing the cross-section of the cone with the plane z=1.
+an affine Coxeter group and its automaton to generated the Tit's
+cone in R^3 (which is the upper halfspace {(x, y, z) ∈ R^3 | z ≥ 0}).
+Our 2d tiling is obtained by drawing the cross-section of the cone with plane z=1.
 
-reference: see the paper
+reference:
 
     "Cells in Coxeter groups", Paul E. Gunnells.
 

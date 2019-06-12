@@ -416,8 +416,7 @@ class Catalan3D(object):
             vlist = []
             for face in flist:
                 # for each face of P, compute the normal of P
-                p1, p2, p3 = face[:3]
-                normal = helpers.normalize(np.cross(p2 - p1, p3 - p1))
+                normal = helpers.get_face_normal(face)
                 # compute the dot of the vertices with the normal
                 inn = sum([np.dot(normal, p) for p in face]) / len(face)
                 # divide the reciprocal, this is the vertex of the dual solid
