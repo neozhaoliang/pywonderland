@@ -13,7 +13,8 @@ errors can be avoided.
 
 The main part of this script is the function `get_reflection_table`, whose input is a
 Coxeter matrix (a symmetric matrix with integer entries and the diagonals are all 1)
-and the output is a 2d array.
+and the output is a 2d array. The rows of this array is indexed by the minimal roots
+and columns are indexed by the simple reflections.
 
 For example:
 >>> cox_mat = [[1, 3, 4],
@@ -29,14 +30,20 @@ For example:
            [None, 2, 1],
            [2, None, 6]], dtype=object)
 
-So there are 7 minimal roots for the (343) triangle group. Here -1 means this root
-is negative, None means this root is positive but not minimal.
+Let α_i be the i-th minimal root and s_j be the reflection by the j-th simple root, then
+
+1. table[i][j] = -1 if and only if s_j(α_i) is a negative root. This happens only
+   when α_i is also a simple root and i = j.
+2. table[i][j] = None if and only if s_j(α_i) is a positive root but not minimal.
+3. table[i][j] = k (k >= 0) if and only if s_j(α_i) is the k-th minimal root.
+
+So there are 7 minimal roots for the (3, 4, 3) triangle group.
 
 The two classes `IntPolynomial` and `AlgebraicInteger` are mainly for handling arithmetic
 of algebraic integers in cyclotomic fields (they are the coefficients of a root as a linear
 combination of simple roots).
 
-For the cases that there are infinity in the Coxeter matrix, simply replace them with -1.
+For the cases that there are infinities in the Coxeter matrix, simply replace them with -1.
 For example for the Coxeter group
 
     G = <s, t | s^2 = t^2 = 1>
@@ -382,12 +389,7 @@ def get_reflection_table(cox_mat):
     """Get the reflection table of minimal roots of a Coxeter group.
        `cox_mat` is the Coxeter matrix of a Coxeter group.
        Return a 2d array `table` whose rows are indexed by the set of
-       minimal roots and columns are indexed by the simple roots.
-       Let α_i be the i-th minimal root and s_j be the j-th simple root, then
-       1. table[i][j] = -1 if and only if s_j(α_i) is a negative root. This happens only
-          when α_i is also a simple root and i = j.
-       2. table[i][j] = None if and only if s_j(α_i) is a positive root but not minimal.
-       3. table[i][j] = k (k >= 0) if and only if s_j(α_i) = α_k and α_k is also minimal.
+       minimal roots and columns are indexed by the simple reflections.
     """
     M = np.array(cox_mat, dtype=np.int)  # Coxeter matrix
     if not (M == M.T).all():
@@ -397,7 +399,7 @@ def get_reflection_table(cox_mat):
     rank = len(M)
     R = [get_simple_reflection(C, k) for k in range(rank)]  # simple reflections
     max_order = np.amax(M)
-    # a tricky way to store the set of m_ij in the Coxeter matrix
+    # a tricky way to store the set of m_ij's in the Coxeter matrix
     mset = 0
     for k in M.ravel():
         if k > 2:
@@ -407,15 +409,14 @@ def get_reflection_table(cox_mat):
     queue = deque()
     # a root is appended to the list when all its information are known
     roots = []
-    count = 0  # number of minimal roots that are found
+    count = 0  # current number of minimal roots
     MINUS = Root(index=-1)  # the negative root
 
     # generate all simple roots
     for i in range(rank):
         coords = [AlgebraicInteger(base, 0) if k != i else AlgebraicInteger(base, 1) for k in range(rank)]
-        s = Root(coords=coords, mat=R[i])
+        s = Root(coords=coords, index=count, mat=R[i])
         s.reflections = [None if k != i else MINUS for k in range(rank)]
-        s.index = count
         queue.append(s)
         roots.append(s)
         count += 1
