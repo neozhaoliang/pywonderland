@@ -90,7 +90,7 @@ def write_to_pov(P,
                  vertex_size=0.04,
                  edge_size=0.02,
                  size_func=0,
-                 face_index=[0],
+                 face_index=(0,),
                  face_max=3,
                  face_min=0.5):
     """Write the data of a polytope `P` to the include file.
@@ -118,10 +118,10 @@ def write_to_pov(P,
         vert_macros = "\n".join(VERT_MACRO.format(k) for k in range(P.num_vertices))
         edge_macros = "\n".join(EDGE_MACRO.format(i, e[0], e[1])
                                 for i, elist in enumerate(P.edge_indices)
-                                    for e in elist)
+                                for e in elist)
         face_macros = "\n".join(helpers.export_face(i, face)
                                 for i, flist in enumerate(P.face_coords)
-                                    for face in flist)
+                                for face in flist)
         f.write(POV_TEMPLATE.format(
             vertex_size,
             edge_size,

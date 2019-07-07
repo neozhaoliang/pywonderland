@@ -72,12 +72,12 @@ def get_sphere_info(points):
     if abs(np.linalg.det(M)) < 1e-4:
         center = rib3d
         return True, center, None, face_size
-    else:
-        T = np.linalg.solve(M, b)
-        D, E, F, G = T
-        center = -0.5 * T[:3]
-        radius = 0.5 * np.sqrt(D*D + E*E + F*F - 4*G)
-        return False, center, radius, face_size
+
+    T = np.linalg.solve(M, b)
+    D, E, F, G = T
+    center = -0.5 * T[:3]
+    radius = 0.5 * np.sqrt(D*D + E*E + F*F - 4*G)
+    return False, center, radius, face_size
 
 
 def check_duplicate_face(f, l):

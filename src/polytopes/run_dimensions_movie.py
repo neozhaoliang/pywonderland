@@ -61,10 +61,10 @@ def write_to_pov(P):
         vert_macros = "\n".join(VERT_MACRO.format(k) for k in range(P.num_vertices))
         edge_macros = "\n".join(EDGE_MACRO.format(e[0], e[1])
                                 for elist in P.edge_indices
-                                    for e in elist)
+                                for e in elist)
         face_macros = "\n".join(helpers.export_face(i, face)
                                 for i, flist in enumerate(P.face_coords)
-                                    for face in flist)
+                                for face in flist)
         f.write(POV_TEMPLATE.format(
             extent,
             P.num_vertices,

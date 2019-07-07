@@ -17,7 +17,7 @@ class Maze(object):
     """
     This class defines the basic structure of a maze and some operations on it.
     A maze with `height` rows and `width` columns is represented by a larger 2d
-    array with (2 * height - 1) rows and (2 * width - 1) columns: we also added
+    array with (2 * height - 1) rows and (2 * width - 1) columns: we also add
     entries for the 'wall's between adjacent cells, so adjacent cells are spaced
     out by one cell in the larger grid.
     Each cell has 4 possible states:

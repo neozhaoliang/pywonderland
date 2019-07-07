@@ -274,8 +274,8 @@ def get_automaton(cox_mat, type="shortlex"):
                         S.add_transition(i, T)
                         queue.append(T)
                         states.append(T)
-
-    return DFA(start, tuple(range(rank)))
+    # return the minimized dfa
+    return DFA(start, tuple(range(rank))).minimize()
 
 
 def test():
@@ -283,12 +283,12 @@ def test():
     # defining automaton. The automaton is already minimal since its rank is 3.
     cox_mat = [[1, 3, 3], [3, 1, 3], [3, 3, 1]]
     dfa1 = get_automaton(cox_mat, type="reduced")
-    print("The automaton recognizes reduced words contains {} states".format(dfa1.num_states))
-    dfa1.minimize().draw("a2~_reduced.png")
+    print("The minimized automaton recognizes reduced words contains {} states".format(dfa1.num_states))
+    dfa1.draw("a2~_reduced.png")
 
     dfa2 = get_automaton(cox_mat, type="shortlex")
-    print("The automaton recognizes shortlex words contains {} states".format(dfa2.num_states))
-    dfa2.minimize().draw("a2~_shortlex.png")
+    print("The minimized automaton recognizes shortlex words contains {} states".format(dfa2.num_states))
+    dfa2.draw("a2~_shortlex.png")
 
 if __name__ == "__main__":
     test()

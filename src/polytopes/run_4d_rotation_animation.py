@@ -164,7 +164,7 @@ def main():
 
     # tesseract family, symmetry group B_4
     anim((4, 2, 2, 3, 2, 3), (1, 0, 0, 0), "tesseract", vertex_color="Orange", edge_color="Pink")
-    anim((4, 2, 2, 3, 2, 3), (1, 1, 0, 0), "truncated-tesseract", "Dark_Green_Glass", 1
+    anim((4, 2, 2, 3, 2, 3), (1, 1, 0, 0), "truncated-tesseract", "Dark_Green_Glass", 1)
     anim((4, 2, 2, 3, 2, 3), (1, 0, 1, 0), "cantellated-tesseract", "Dark_Green_Glass", 1)
 
     # 16-cell family, dual to tesseract
@@ -185,7 +185,7 @@ def main():
     anim((3, 2, 2, 3, 2, 5), (1, 0, 0, 0), "600-cell")
 
     # prism and duoprism
-    anim((5, 2, 2, 3, 2, 2), (1, 1, 0, 1), "prism", glass_tex="Ruby_Glass",
+    anim((5, 2, 2, 3, 2, 2), (1, 1, 0, 1), "truncated-dodecahedron-prism", glass_tex="Ruby_Glass",
          vertex_color="Coral", edge_color="Violet", face_index=2)
     anim((3, 2, 2, 2, 2, 20), (1, 0, 0, 1), "3-20-duoprism", "Dark_Green_Glass")
     anim((4, 4, 2, Fraction(3, 2), 2, 2), (1, 1, 0, 1),

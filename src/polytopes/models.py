@@ -38,6 +38,7 @@ class BasePolytope(object):
             and their topological analogues"
 
         """
+        # Coxeter matrix of the symmetry group
         self.coxeter_matrix = coxeter_matrix
         # reflection transformations about the mirrors
         self.reflections = tuple(helpers.reflection_matrix(v) for v in mirrors)
@@ -131,20 +132,21 @@ class BasePolytope(object):
         """
         for i, j in combinations(self.symmetry_gens, 2):
             f0 = []
+            m = self.coxeter_matrix[i][j]
             if self.active[i] and self.active[j]:
                 fgens = [(i, j)]
-                for k in range(self.coxeter_matrix[i][j]):
+                for k in range(m):
                     # rotate the base edge m times to get the base f,
                     # where m = self.coxeter_matrix[i][j]
                     f0.append(self.move(0, (i, j) * k))
                     f0.append(self.move(0, (j,) + (i, j) * k))
-            elif self.active[i] and self.coxeter_matrix[i][j] > 2:
+            elif self.active[i] and m > 2:
                 fgens = [(i,), (j,)]
-                for k in range(self.coxeter_matrix[i][j]):
+                for k in range(m):
                     f0.append(self.move(0, (i, j) * k))
-            elif self.active[j] and self.coxeter_matrix[i][j] > 2:
+            elif self.active[j] and m > 2:
                 fgens = [(i,), (j,)]
-                for k in range(self.coxeter_matrix[i][j]):
+                for k in range(m):
                     f0.append(self.move(0, (i, j) * k))
             else:
                 continue
@@ -160,7 +162,7 @@ class BasePolytope(object):
 
             self.face_indices.append(flist)
             self.face_coords.append([tuple(self.vertex_coords[x] for x in face)
-                                    for face in flist])
+                                     for face in flist])
 
         self.num_faces = sum([len(flist) for flist in self.face_indices])
 
@@ -258,7 +260,7 @@ class Snub(Polyhedra):
 
             self.edge_indices.append(elist)
             self.edge_coords.append([(self.vertex_coords[i], self.vertex_coords[j])
-                                    for i, j in elist])
+                                     for i, j in elist])
         self.num_edges = sum(len(elist) for elist in self.edge_indices)
 
     def get_faces(self):
@@ -274,7 +276,7 @@ class Snub(Polyhedra):
 
             self.face_indices.append(flist)
             self.face_coords.append([tuple(self.vertex_coords[v] for v in face)
-                                    for face in flist])
+                                     for face in flist])
 
         self.num_faces = sum([len(flist) for flist in self.face_indices])
 
@@ -339,7 +341,7 @@ class Snub24Cell(Polychora):
 
             self.edge_indices.append(elist)
             self.edge_coords.append([(self.vertex_coords[i], self.vertex_coords[j])
-                                    for i, j in elist])
+                                     for i, j in elist])
         self.num_edges = sum(len(elist) for elist in self.edge_indices)
 
     def get_faces(self):
@@ -359,7 +361,7 @@ class Snub24Cell(Polychora):
 
             self.face_indices.append(flist)
             self.face_coords.append([tuple(self.vertex_coords[v] for v in face)
-                                    for face in flist])
+                                     for face in flist])
 
         self.num_faces = sum([len(flist) for flist in self.face_indices])
 
@@ -380,7 +382,7 @@ class Snub24Cell(Polychora):
 class Catalan3D(object):
     """Construct the dual 3d Catalan solid from a given uniform polytope.
        The computation of edges and faces of this dual shape are all done
-       with integer arithmetic and floating comparison is avoided.
+       with integer arithmetic so floating comparison is avoided.
     """
     def __init__(self, P):
         """`P`: a 3d polyhedra.

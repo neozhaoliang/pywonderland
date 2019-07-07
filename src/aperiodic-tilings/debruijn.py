@@ -51,7 +51,7 @@ SHIFTS = [0.5] * 5  # you can use np.random.random(5) to draw a random pattern
 
 FAT_COLOR = (0.894, 0.102, 0.11)
 THIN_COLOR = (1.0, 0.5, 0.0)
-EDGE_COLOR   = (0.216, 0.494, 0.72)
+EDGE_COLOR = (0.216, 0.494, 0.72)
 
 
 def compute_rhombus(r, s, kr, ks):

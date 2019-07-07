@@ -71,8 +71,7 @@ vec4 Q_Div(vec4 p, vec4 q)  { return Q_Mult(p, vec4(q.x, -q.yzw) / dot(q, q)); }
 
 // Mobius transformation opertations
 vec2 M_Apply(Mobius m, vec2 z) { return C_Div(C_Mult(m.A, z) + m.B, C_Mult(m.C, z) + m.D); }
-vec4 M_Apply(Mobius m, vec4 q)
-{
+vec4 M_Apply(Mobius m, vec4 q) {
     vec4 a = vec4(m.A, 0.0, 0.0);
     vec4 b = vec4(m.B, 0.0, 0.0);
     vec4 c = vec4(m.C, 0.0, 0.0);
@@ -87,15 +86,13 @@ float h2e(float d) { return pow(e_, d); }
 // 1d and 2d rectangular/sperical grid
 float grid1d(float x, float size)  { return mod(x + 0.5 * size, size) - 0.5 * size; }
 vec2  grid2d(vec2 p, vec2 size)    { return mod(p + 0.5 * size, size) - 0.5 * size; }
-vec2  polarGrid(vec2 p, vec2 size)
-{
+vec2  polarGrid(vec2 p, vec2 size) {
     float theta = atan(p.y, p.x), r = e2h(length(p));
     return grid2d(vec2(r, theta), size);
 }
 
 // view to world transformation
-mat3 viewMatrix(vec3 camera, vec3 lookat, vec3 up)
-{
+mat3 viewMatrix(vec3 camera, vec3 lookat, vec3 up) {
     vec3 f = normalize(lookat - camera);
     vec3 r = normalize(cross(f, up));
     vec3 u = normalize(cross(r, f));
@@ -106,8 +103,7 @@ mat3 viewMatrix(vec3 camera, vec3 lookat, vec3 up)
 float sdPlane(vec3 p)          { return p.y; }
 float sdPlane(vec3 p, float c) { return p.y - c; }
 // signed distance function for sphere kissing at y=0 with radius r
-float sdSphere(vec3 p, float r)
-{
+float sdSphere(vec3 p, float r) {
     p.y -= r;
     return length(p) - r;
 }
@@ -123,13 +119,12 @@ vec3 hsv2rgb(vec3 hsv)
 // 2d rotation
 vec2 R(vec2 p, float a) { return cos(a) * p + sin(a) * vec2(p.y, -p.x); }
 
-/*------------------------- 
+/*-------------------------
     Mobius transformations
   -------------------------*/
 
 // A Mobius transformation of hyperbolic type is conjugate to a pure scaling
-void isometryHyperbolic(inout vec2 p)
-{
+void isometryHyperbolic(inout vec2 p) {
     float d = grid1d(e2h(length(p)) - SPEED * polar_grid.x, polar_grid.x);
     p = normalize(p) * h2e(d);
 }
@@ -140,8 +135,7 @@ void isometryElliptic(inout vec2 p) { p = R(p, SPEED * polar_grid.y); }
 // A Mobius transformation of parabolic type is conjugate to a pure translation
 void isometryParabolic(inout vec2 p) { p.x += iTime * polar_grid.x / 3.0; }
 
-float applyMobius(inout vec3 p)
-{
+float applyMobius(inout vec3 p) {
     if (!iApply) return 1.0;
     p = M_Apply(iMobius, vec4(p, 0)).xyz;
     float scale = length(p);
@@ -153,8 +147,7 @@ float applyMobius(inout vec3 p)
 float sdCone(vec3 p)
 {
     float t = 1.0;
-    if (iApply)
-    {
+    if (iApply) {
         t = applyMobius(p);
         p = normalize(p);
     }
@@ -168,8 +161,7 @@ float sdScene1(vec3 p) { return iApply ? min(sdPlane(p), sdSphere(p, horo_sphere
 // signed distance function for elliptic/hyperbolic case
 float sdScene2(vec3 p) { return min(sdPlane(p), sdCone(p)); }
 
-float getIntensity1(vec2 p)
-{
+float getIntensity1(vec2 p) {
     // Horizontal and vertical branches
     float dist  = length(p);
     float disth = length(p * star_hv_factor);
@@ -192,8 +184,7 @@ float getIntensity1(vec2 p)
     return 0.0;
 }
 
-float getIntensity2(vec2 p)
-{
+float getIntensity2(vec2 p) {
     float angle = atan(polar_grid.x, polar_grid.y);
     float dist  = length(p);
     float disth = length(p * star_hv_factor);
@@ -214,8 +205,7 @@ float getIntensity2(vec2 p)
     return 0.0;
 }
 
-vec3 getColor(vec2 p, float pint)
-{
+vec3 getColor(vec2 p, float pint) {
     float sat = 0.75 / pow(pint, 2.5) + center_sat;
     float time2 = parabolic ?
                   hue_speed - length(p.y) / 5.0 :
@@ -224,42 +214,37 @@ vec3 getColor(vec2 p, float pint)
     return hsv2rgb(vec3(hue, sat, pint)) + pint / 3.0;
 }
 
-float trace(vec3 ro, vec3 rd, out vec2 p, out float pint)
-{
+float trace(vec3 ro, vec3 rd, out vec2 p, out float pint) {
     float depth = MIN_TRACE_DIST;
     float dist;
     vec3 pos;
-    for (int i = 0; i < MAX_TRACE_STEPS; i++)
-        {
-            pos = ro + rd * depth;
-            dist = parabolic ? sdScene1(pos) : sdScene2(pos);
-            if (dist < PRECISION || depth >= MAX_TRACE_DIST) break;
-            depth += dist;
-        }
-    if (parabolic)
-    {
+    for (int i = 0; i < MAX_TRACE_STEPS; i++) {
+        pos = ro + rd * depth;
+        dist = parabolic ? sdScene1(pos) : sdScene2(pos);
+        if (dist < PRECISION || depth >= MAX_TRACE_DIST) break;
+        depth += dist;
+    }
+    if (parabolic) {
         if (iApply) pos /= dot(pos, pos);
         p = pos.xz;
         isometryParabolic(pos.xz);
         pos.xz = grid2d(pos.xz, vec2(polar_grid.x / 2.0));
         pint = getIntensity1(pos.xz);
     }
-    else
-    {
+    else {
         applyMobius(pos);
         p = pos.xz;
         if (iHyperbolic) isometryHyperbolic(pos.xz);
         if (iElliptic)   isometryElliptic(pos.xz);
         pos.xz = polarGrid(pos.xz, polar_grid);
         pint = getIntensity2(pos.xz);
-   }
+    }
     return depth;
 }
 
 // ACES tone mapping
 // https://knarkowicz.wordpress.com/2016/01/06/aces-filmic-tone-mapping-curve/
-vec3 tonemap(vec3 color)
-{
+vec3 tonemap(vec3 color) {
    const float A = 2.51;
    const float B = 0.03;
    const float C = 2.43;
@@ -268,8 +253,7 @@ vec3 tonemap(vec3 color)
    return (color * (A * color + B)) / (color * (C * color + D) + E);
 }
 
-void main()
-{
+void main() {
     parabolic = !(iElliptic || iHyperbolic);
 
     vec3 ro = vec3(-2.0, 4.0, 6.0);
@@ -277,22 +261,20 @@ void main()
     vec3 up = vec3(0.0, 1.0, 0.0);
     mat3 M = viewMatrix(ro, lookat, up);
     vec3 tot = vec3(0.1);
-    for (int ii = 0; ii < AA; ii++)
-        {
-            for (int jj = 0; jj < AA; jj++)
-                {
-                    vec2 offset = vec2(float(ii), float(jj)) / float(AA);
-                    vec2 uv = (gl_FragCoord.xy + offset) / iResolution.xy;
-                    uv = 2.0 * uv - 1.0;
-                    uv.x *= iResolution.x / iResolution.y;
-                    vec3 rd = M * normalize(vec3(uv, -4.0));
-                    vec2 p;
-                    float pint;
-                    float dist = trace(ro, rd, p, pint);
-                    if (dist >= 0.0)
-                        tot += tonemap(4.0 * getColor(p, pint));
-                }
+    for (int ii = 0; ii < AA; ii++) {
+        for (int jj = 0; jj < AA; jj++) {
+            vec2 offset = vec2(float(ii), float(jj)) / float(AA);
+            vec2 uv = (gl_FragCoord.xy + offset) / iResolution.xy;
+            uv = 2.0 * uv - 1.0;
+            uv.x *= iResolution.x / iResolution.y;
+            vec3 rd = M * normalize(vec3(uv, -4.0));
+            vec2 p;
+            float pint;
+            float dist = trace(ro, rd, p, pint);
+            if (dist >= 0.0)
+                tot += tonemap(4.0 * getColor(p, pint));
         }
+    }
     tot /= float(AA * AA);
     FinalColor = vec4(tot, 1.0);
 }
