@@ -361,7 +361,6 @@ class GrayScott(pyglet.window.Window):
         pyglet.app.run()
 
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-size", type=str, default="640x480",

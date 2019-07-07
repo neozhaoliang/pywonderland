@@ -116,9 +116,7 @@ def write_to_pov(P, glass_tex, face_index, vertex_color, edge_color):
             helpers.pov_vector_list(P.vertex_coords),
             vert_macros,
             edge_macros,
-            face_macros
-            )
-        )
+            face_macros))
 
 
 def anim(coxeter_diagram,

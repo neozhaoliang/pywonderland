@@ -1,0 +1,3 @@
+# Uniform tilings and automata of Coxeter groups
+
+This is a very first version of a very complicated program: draw uniform Euclidean/Spherical/Hyperbolic tilings using automaton of Coxeter groups. Currently only the Euclidean is finished (the spherical case have been implemented in the `polytopes` project but using a very different approach called "coset enumeration"), the hyperbolic case is almostly done but still requires a lot of work to fine-tune the code. You can refer to [Gunnells's paper](https://people.math.umass.edu/~gunnells/pubs/cells/cells.pdf) for an introduction to the math behind tilings and Coxeter groups. I'll write a more detailed doc once all coding part are done.

@@ -1,4 +1,6 @@
+<p align="center">
 <img src="favicon.png" width="400">
+</p>
 
 # A Tour in the Wonderland of Math with Python
 
@@ -30,6 +32,101 @@ The website for the docs is still under construction and will be released soon.
 **NB:** I will only maintain the code for `python >= 3.5`.
 
 
+## Examples
+
+Here is *a very small portion* of examples that this projects can do:
+
++ Wilson's uniform spanning tree algorithm animation
+
+<p align="center">
+<a href="https://imgur.com/ptSqlDl"><img src="https://i.imgur.com/ptSqlDl.gif"/></a>
+</p>
+
++ Hilbert's curve animation
+
+<p align="center">
+<a href="https://imgur.com/gEO7AMR"><img src="https://i.imgur.com/gEO7AMR.gif"/></a>
+</p>
+
++ Domino shuffling algorithm animation
+
+<p align="center">
+<a href="https://imgur.com/BWUBjto"><img src="https://i.imgur.com/BWUBjto.gif"/></a>
+</p>
+
++ Raymarching fractals
+
+<p align="center">
+<a href="https://imgur.com/yca2GAj"><img src="https://i.imgur.com/yca2GAj.png" width="600"/></a>
+</p>
+
+<p align="center">
+<a href="https://imgur.com/Tts3ZUd"><img src="https://i.imgur.com/Tts3ZUd.png" width="600"/></a>
+</p>
+
+<p align="center">
+<a href="https://imgur.com/O9Q3VOr"><img src="https://i.imgur.com/O9Q3VOr.png" width="600"/></a>
+</p>
+
++ Hopf fibration
+
+<p align="center">
+<a href="https://imgur.com/hJJeone"><img src="https://i.imgur.com/hJJeone.png"/></a>
+</p>
+
++ Aperiodic tilings
+
+<p align="center">
+<a href="https://imgur.com/oJ5N06Z"><img src="https://i.imgur.com/oJ5N06Z.png"/></a>
+</p>
+
+
++ Langton's ant animation
+
+<p align="center">
+<a href="https://imgur.com/XwIg4QL"><img src="https://i.imgur.com/XwIg4QL.gif"/></a>
+</p>
+
+
++ Reaction-diffusion simulation
+
+<p align="center">
+<a href="https://imgur.com/3dPrFa6"><img src="https://i.imgur.com/3dPrFa6.png" width="600"/></a>
+</p>
+
+<p align="center">
+<a href="https://imgur.com/3fklRDM"><img src="https://i.imgur.com/3fklRDM.png" width="600"/></a>
+</p>
+
++ Uniform polytopes
+
+<p align="center">
+<a href="https://imgur.com/CpfGucn"><img src="https://i.imgur.com/CpfGucn.png"/></a>
+</p>
+
+<p align="center">
+<a href="https://imgur.com/pM1gePd"><img src="https://i.imgur.com/pM1gePd.png"/></a>
+</p>
+
+<p align="center">
+<a href="https://imgur.com/fr69m1j"><img src="https://i.imgur.com/fr69m1j.gif"/></a>
+</p>
+
+
++ Uniform tilings
+
+<p align="center">
+<a href="https://imgur.com/TFTR5Oo"><img src="https://i.imgur.com/TFTR5Oo.png" width="600"/></a>
+</p>
+
+
++ Mobius transformations in hyperbolic 3-space
+
+<p align="center">
+<a href="https://imgur.com/U1XgWkc"><img src="https://i.imgur.com/U1XgWkc.png" width="600"/></a>
+</p>
+
+
 ## How to use
 
 Each subdirectory in `/src/` is a single program (except that `glslhelpers` is a helper module for running glsl programs and `misc` is a collection of independent scripts), any file named `main.py`, `run_*.py`, `example_*.py` is an executable script that gives some output.
@@ -51,22 +148,22 @@ Here is a list of some algorithms implemented in this project:
 
 - 2D hyperbolic tilings (Escher's circle limit)
 - 3D hyperbolic honeycombs
-- Knots
-- Minimal surfaces
 
 
 ## Dependencies
 
-Python libs: you can install almost all the libs by running
+The recommended way to install all dependencies is to  simply run the script `install_dependencies.sh`.
+
+Or you can install the python libs by running
 
 ```
 pip install -r requirements.txt
 ```
 
-The only exception is `cairocffi` which also requires `libffi-dev`:
+A few exceptions are: `cairocffi` also requires `libffi-dev` and `pygraphviz` also requires `libgraphviz-dev`:
 
 ```
-sudo apt-get install libffi-dev
+sudo apt-get install libffi-dev libgraphviz-dev
 ```
 
 Open source softwares:

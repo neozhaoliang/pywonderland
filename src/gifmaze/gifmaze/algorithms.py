@@ -24,7 +24,7 @@ from .gifmaze import Maze
 
 
 def wilson(maze, encode_func, speed=50, root=(0, 0)):
-    """Maze by Wilson's uniform spanning tree algorithm.
+    """Maze generation using Wilson's uniform spanning tree algorithm.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Wilson's algorithm")
 
@@ -91,7 +91,7 @@ def wilson(maze, encode_func, speed=50, root=(0, 0)):
 
 def bfs(maze, encode_func, speed=20, start=None, end=None):
     """
-    Solve a maze by breadth first search.
+    Solve a maze using breadth-first search.
     The cells are marked by their distances to the starting cell plus three.
     This is because we must distinguish a 'flooded' cell from walls and tree.
     """
@@ -141,7 +141,7 @@ def bfs(maze, encode_func, speed=20, start=None, end=None):
 
 
 def random_dfs(maze, encode_func, speed=10, start=(0, 0)):
-    """Maze generation by random depth-first search.
+    """Maze generation using random depth-first search.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running random depth first search")
 
@@ -172,7 +172,7 @@ def random_dfs(maze, encode_func, speed=10, start=(0, 0)):
 
 
 def dfs(maze, encode_func, speed=20, start=None, end=None):
-    """Solve a maze by dfs.
+    """Solve a maze using depth-first search.
     """
     if start is None:
         start = (0, 0)
@@ -220,7 +220,7 @@ def dfs(maze, encode_func, speed=20, start=None, end=None):
 
 
 def prim(maze, encode_func, speed=30, start=(0, 0)):
-    """Maze by Prim's algorithm.
+    """Maze generation using Prim's algorithm.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Prim's algorithm")
 
@@ -251,7 +251,7 @@ def prim(maze, encode_func, speed=30, start=(0, 0)):
 
 
 def kruskal(maze, encode_func, speed=30):
-    """Maze by Kruskal's algorithm.
+    """Maze generation using Kruskal's algorithm.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Kruskal's algorithm")
 

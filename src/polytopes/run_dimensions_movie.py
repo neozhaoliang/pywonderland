@@ -71,8 +71,7 @@ def write_to_pov(P):
             helpers.pov_vector_list(P.vertex_coords),
             vert_macros,
             edge_macros,
-            face_macros)
-            )
+            face_macros))
 
 
 def main():

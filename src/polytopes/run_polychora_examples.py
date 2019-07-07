@@ -136,8 +136,7 @@ def write_to_pov(P,
             helpers.pov_array(face_index),
             vert_macros,
             edge_macros,
-            face_macros)
-            )
+            face_macros))
 
 
 def draw(coxeter_diagram,
@@ -155,16 +154,14 @@ def draw(coxeter_diagram,
         description,
         P.num_vertices,
         P.num_edges,
-        P.num_faces)
-        )
+        P.num_faces))
 
     process = subprocess.Popen(
         POV_COMMAND.format(description),
         shell=True,
         stderr=subprocess.PIPE,
         stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE
-        )
+        stdout=subprocess.PIPE)
 
     _, err = process.communicate()
     if process.returncode:

@@ -98,8 +98,7 @@ def write_to_pov(P):
             vertex_coords,
             vert_macros,
             edge_macros,
-            face_macros)
-        )
+            face_macros))
 
 
 def anim(coxeter_diagram,

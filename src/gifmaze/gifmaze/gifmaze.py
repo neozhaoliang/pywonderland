@@ -2,8 +2,8 @@
 """
 This file contains three main classes:
 1. `Maze` is the top layer object on which we run the algorithms.
-2. `GIFSurface` is the bottom layer object that handles the information
-   about the output GIF image.
+2. `GIFSurface` is the bottom layer object which holds the information
+   of the output GIF image.
 3. `Animation` is the middle layer object that controls how a `Maze`
    object is rendered to a `GIFSurface` object.
 """
@@ -295,7 +295,7 @@ def encode_maze(maze, mcl=8, cmap=None):
         left, top, right, bottom = 0, 0, maze.width - 1, maze.height - 1
 
     def enum_pixels(k, l):
-        """Compute all many pixels are there from the k-th cell to the l-th
+        """Compute how many pixels are there from the k-th cell to the l-th
            cell (k < l) in the same row (or the same column).
         """
         w = l - k + 1  # total number of cells in this interval

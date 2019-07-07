@@ -104,7 +104,7 @@ def has_edge(e, f):
 
 
 def has_common_edge(f1, f2):
-    """Check if two faces `f1` and `f2` has an common edge.
+    """Check if two faces `f1` and `f2` have an edge in common.
     """
     for e1 in zip(f1, f1[1:] + (f1[0],)):
         if has_edge(e1, f2):
@@ -151,7 +151,10 @@ def get_mirrors(upper_triangle):
     """
     # error handling function when the input coxeter matrix is invalid.
     def err_handler(err_type, flag):
-        print("Invalid input Coxeter diagram.")
+        print("Invalid input Coxeter diagram. This diagram does not give a finite \
+symmetry group of an uniform polytope. See \
+https://en.wikipedia.org/wiki/Coxeter_group#Symmetry_groups_of_regular_polytopes \
+for a complete list of valid Coxeter diagrams.")
         sys.exit(1)
 
     np.seterrcall(err_handler)
@@ -206,8 +209,7 @@ def pov_2d_array(array_list):
     return "array[{}][{}] {{{}}}".format(
         len(array_list),
         len(array_list[0]),
-        ", ".join("{{{}}}".format(", ".join(str(x) for x in arr)) for arr in array_list)
-        )
+        ", ".join("{{{}}}".format(", ".join(str(x) for x in arr)) for arr in array_list))
 
 
 def export_face(ind, face):
