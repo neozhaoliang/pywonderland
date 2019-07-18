@@ -1,11 +1,10 @@
 language: python
 sudo: required
-before_install: sudo apt-get install povray libffi-dev imagemagick
 python:
   - "3.5"
   - "3.6"
 install:
-  - pip install -r requirements.txt
+  - bash install_dependencies.sh
 script:
   # gifmaze examples
   - cd src/gifmaze/
@@ -38,4 +37,6 @@ script:
   - python run_polychora_examples.py
   - python run_3d_polyhedra_animation.py
   - python run_coset_enumeration.py tc_examples/G8723.yaml
+  - cd ../hyperbolic-tilings
+  - python example_compute_coxeter_automaton.py cox_examples/343.txt
   # travis-ci cannot run glsl and ffmpeg examples, so omit grayscott, mobius and lorenz examples.

@@ -6,6 +6,6 @@ numpy
 pillow
 pyglet
 pygraphviz
-PyYaml
+pyyaml
 scipy
 tqdm
