@@ -74,6 +74,15 @@ from itertools import zip_longest
 import numpy as np
 
 
+def lcm(m, n):
+    if m * n == 0:
+        return 0
+    q, r = m, n
+    while r != 0:
+        q, r = r, q % r
+    return abs((m * n) // q)
+
+
 def decompose(n):
     """Decompose an integer `n` into a product of primes.
        The result is stored in a dict {prime: exponent}.
@@ -356,7 +365,10 @@ def get_cartan_matrix(cox_mat):
     M = np.array(cox_mat, dtype=np.int)
     C = np.zeros_like(M).astype(object)  # the Cartan matrix
     rank = len(M)
-    m = np.lcm.reduce(2 * M.ravel())  # all entries of the Cartan matrix lie in the m-th cyclotomic field
+    # all entries of the Cartan matrix lie in the m-th cyclotomic field
+    m = 2
+    for k in 2 * M.ravel():
+        m = lcm(m, k)
     b = IntPolynomial.cyclotomic(m)
     # diagonal entries
     for i in range(rank):

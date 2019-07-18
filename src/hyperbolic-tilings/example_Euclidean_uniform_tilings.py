@@ -26,7 +26,7 @@ from collections import deque
 import numpy as np
 import cairocffi as cairo
 import helpers
-import automata
+from coxeter import get_automaton
 
 
 def hex_to_rgb(value):
@@ -66,7 +66,7 @@ class EuclideanUniformTiling(object):
 
         self.active = [bool(x) for x in init_dist]
         self.cox_mat = helpers.make_symmetry_matrix(pqr)
-        self.dfa = automata.get_automaton(self.cox_mat)
+        self.dfa = get_automaton(self.cox_mat)
         self.mirrors = self.get_mirrors(self.cox_mat)
         self.init_v = helpers.get_init_point(self.mirrors, init_dist)
         self.reflections = self.get_reflections(self.mirrors, init_dist)

@@ -29,7 +29,7 @@ see
 """
 from collections import deque
 import pygraphviz
-from minroots import get_reflection_table
+from .minroots import get_reflection_table
 
 
 class DFAState(object):
