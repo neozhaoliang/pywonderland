@@ -1,10 +1,10 @@
 language: python
 sudo: required
+before_install:
+  - sudo bash install_dependencies.sh
 python:
   - "3.5"
   - "3.6"
-install:
-  - sudo bash install_dependencies.sh
 script:
   # gifmaze examples
   - cd src/gifmaze/
