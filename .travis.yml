@@ -1,10 +1,12 @@
 language: python
 sudo: required
 before_install:
-  - sudo bash install_dependencies.sh
+  - sudo apt-get install povray imagemagick graphviz libffi-dev libgraphviz-dev
 python:
   - "3.5"
   - "3.6"
+install:
+  - pip install -r requirements.txt
 script:
   # gifmaze examples
   - cd src/gifmaze/
