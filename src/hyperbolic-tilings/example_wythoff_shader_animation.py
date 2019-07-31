@@ -56,8 +56,6 @@ class Wythoff(pyglet.window.Window):
         self._start_time = time.clock()
         self._last = self._now = self._start_time
         self._frame_count = 0  # count number of frames rendered so far
-        self._speed = 20  # control speed of the animation
-
         self.shaderA = Shader(["./glsl/wythoff.vert"], ["./glsl/common.frag",
                                                         "./glsl/BufferA.frag"])
 
@@ -75,12 +73,10 @@ class Wythoff(pyglet.window.Window):
         gl.glActiveTexture(gl.GL_TEXTURE2)
         gl.glBindTexture(gl.GL_TEXTURE_2D, self.noise_texture)
 
-        # frame buffer A renders the UI to texture iChannel0
         with FrameBuffer() as self.bufferA:
             self.bufferA.attach_texture(self.iChannel0)
 
         # initialize the shaders
-
         with self.shaderA:
             self.shaderA.vertex_attrib("position", [-1, -1, 1, -1, -1, 1, 1, 1])
             self.shaderA.uniformf("iResolution", width, height, 0.0)
@@ -110,17 +106,18 @@ class Wythoff(pyglet.window.Window):
         self._last = self._now
         self._now = time.clock()
         itime = self._now - self._start_time
+        idate = get_idate()
         delta = self._now - self._last
         with self.bufferA:
             with self.shaderA:
-                self.shaderA.uniformf("iTime", itime * self._speed)
-                self.shaderA.uniformf("iDate", *get_idate())
+                self.shaderA.uniformf("iTime", itime)
+                self.shaderA.uniformf("iDate", *idate)
                 self.shaderA.uniformf("iTimeDelta", delta)
                 gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
 
         with self.shaderB:
-            self.shaderB.uniformf("iTime", itime * self._speed)
-            self.shaderB.uniformf("iDate", *get_idate())
+            self.shaderB.uniformf("iTime", itime)
+            self.shaderB.uniformf("iDate", *idate)
             self.shaderB.uniformf("iTimeDelta", delta)
             gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
 
