@@ -45,9 +45,6 @@ class Wythoff(pyglet.window.Window):
     def __init__(self, width, height):
         """
         :param width and height: size of the window in pixels.
-
-        :param aa: antialiasing level, a higher value will give better
-            result but also slow down the animation. (aa=2 is recommended)
         """
         pyglet.window.Window.__init__(self,
                                       width,
@@ -92,7 +89,6 @@ class Wythoff(pyglet.window.Window):
             self.shaderA.uniformi("iChannel0", 0)
             self.shaderA.uniformi("iChannel1", 1)
             self.shaderA.uniformi("iChannel2", 2)
-            self.shaderA.uniformi("iFrame", 0)
             self.shaderA.uniformf("iDate", *get_idate())
             self.shaderA.uniformf("iTimeDelta", 0)
 
@@ -118,7 +114,6 @@ class Wythoff(pyglet.window.Window):
         with self.bufferA:
             with self.shaderA:
                 self.shaderA.uniformf("iTime", itime * self._speed)
-                self.shaderA.uniformi("iFrame", self._frame_count)
                 self.shaderA.uniformf("iDate", *get_idate())
                 self.shaderA.uniformf("iTimeDelta", delta)
                 gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
