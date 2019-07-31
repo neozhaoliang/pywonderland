@@ -1,11 +1,11 @@
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Load Coxeter matrix from a textfile and compute its DFA
+Load Coxeter matrix from a txt file and compute its DFA
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Example usage:
 
-    python example_compute_dfa.py cox_examples/343.txt
+    python example_compute_coxeter_automaton.py cox_examples/343.txt
 
 warning: for a large DFA it may take quite long time for graphviz to draw the image.
 """
@@ -17,7 +17,7 @@ from coxeter import get_automaton
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("filename", type=str, help="Coxeter matrix data file")
+    parser.add_argument("filename", help="Coxeter matrix data file")
     args = parser.parse_args()
     cox_mat = np.loadtxt(args.filename, dtype=np.int, delimiter=" ")
     print("Computing the shorlex DFA for Coxeter group:")

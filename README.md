@@ -137,11 +137,12 @@ Each subdirectory in `/src/` is a single program (except that `glslhelpers` is a
 Here is a list of some algorithms implemented in this project:
 
 + [Domino shuffling algorithm](./src/aztec/aztec.py)
-+ [Hopcroft's DFA minimization algorithm](./src/hyperbolic-tilings/automata.py)
++ [Hopcroft's DFA minimization algorithm](./src/hyperbolic-tilings/coxeter/automata.py)
 + [Lempel–Ziv–Welch compression algorithm](./src/gifmaze/gifmaze/encoder.py)
 + [Propp-Wilson's coupling from the past algorithm](./src/cftp/cftp.py)
 + [Todd-Coxeter coset enumeration algorithm](./src/polytopes/todd_coxeter.py)
 + [Wilson's uniform spanning tree algorithm](./src/gifmaze/gifmaze/algorithms.py)
++ [Casselman's minimal roots algorithm](./src/hyperbolic-tilings/coxeter/minroots.py)
 
 
 ## Programs to come:
@@ -152,9 +153,9 @@ Here is a list of some algorithms implemented in this project:
 
 ## Dependencies
 
-The recommended way to install all dependencies is to  simply run the script `install_dependencies.sh`.
+The recommended way to install all dependencies is simply running the script `install_dependencies.sh`.
 
-Or you can install the python libs by running
+Or you can install the python libs by pip:
 
 ```
 pip install -r requirements.txt

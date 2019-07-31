@@ -6,17 +6,17 @@ Compute the reflection table of minimal roots of a Coxeter group
 
 This script computes the reflection table of minimal roots of a Coxeter group
 as discovered by Brink and Howlett [1]. All computations are done in the ring
-of algebraic integers in the cyclotomic field, which is isomorphic to Z[x]/Φ(x)
+of algebraic integers in the cyclotomic field which is isomorphic to Z[x]/Φ(x)
 for some cyclotomic polynomial Φ(x), hence only arithmetic of integers are involved.
 This approach has the advantage that the computation is exact and floating rounding
 errors can be avoided.
 
-The main part of this script is the function `get_reflection_table`, whose input is a
+The main part of this script is the function `get_reflection_table` whose input is a
 Coxeter matrix (a symmetric matrix with integer entries and the diagonals are all 1)
 and the output is a 2d array. The rows of this array is indexed by the minimal roots
 and columns are indexed by the simple reflections.
 
-For example:
+For example the triangle group (3, 4, 3):
 >>> cox_mat = [[1, 3, 4],
                [3, 1, 3],
                [4, 3, 1]]
@@ -37,14 +37,14 @@ Let α_i be the i-th minimal root and s_j be the reflection by the j-th simple r
 2. table[i][j] = None if and only if s_j(α_i) is a positive root but not minimal.
 3. table[i][j] = k (k >= 0) if and only if s_j(α_i) is the k-th minimal root.
 
-So there are 7 minimal roots for the (3, 4, 3) triangle group.
+So there are 7 minimal roots for this group.
 
 The two classes `IntPolynomial` and `AlgebraicInteger` are mainly for handling arithmetic
 of algebraic integers in cyclotomic fields (they are the coefficients of a root as a linear
 combination of simple roots).
 
 For the cases that there are infinities in the Coxeter matrix, simply replace them with -1.
-For example for the Coxeter group
+For example for the infinite dihedral group
 
     G = <s, t | s^2 = t^2 = 1>
 
@@ -56,6 +56,8 @@ The Coxeter matrix of G is [[1, +inf], [+inf, 1]], replace +inf with -1 one get
 >>> table
 >>> array([[-1, None],
            [None, -1]], dtype=object)
+
+So the only minimal roots of G are the two simple roots.
 
 References:
 
