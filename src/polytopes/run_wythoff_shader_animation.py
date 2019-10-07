@@ -17,10 +17,10 @@ Some notes:
    `setup_triangle` in `common.frag` to see them.
 
 2. The antialiasing routine in Matt's original code is replaced by the usual supersampling
-   method, it's slower but can give better result. I have also deleted some redundant code
-   (for example the usage of iChannel1 in BufferA and BufferB) from Matt's program.
+   method, it runs slower but gives better result. I also deleted some redundant code
+   (for example the usage of iChannel1 in BufferA and BufferB) from Matt's version.
 
-3. This program used two invisible "frame buffers" for rendering the UI and the polyhedra,
+3. This program uses two invisible "frame buffers" for rendering the UI and the polyhedra,
    and finally put them together in a third main shader.
 
 Press "Enter" to save screenshots and "Esc" to escape.
@@ -62,7 +62,7 @@ class Wythoff(pyglet.window.Window):
                                       vsync=False)
         self._start_time = time.clock()
         self._frame_count = 0  # count number of frames rendered so far
-        self._speed = 20  # control speed of the animation
+        self._speed = 1  # control speed of the animation
         self.aa = aa
         # shader A draws the UI
         self.shaderA = Shader(["./glsl/wythoff.vert"], ["./glsl/common.frag",

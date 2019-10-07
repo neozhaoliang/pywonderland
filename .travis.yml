@@ -36,8 +36,6 @@ script:
   - python kaleidoscope.py
   # polytopes examples
   - cd ../polytopes/
-  - python run_polychora_examples.py
-  - python run_3d_polyhedra_animation.py
   - python run_coset_enumeration.py tc_examples/G8723.yaml
   # hyperbolic tilings and Coxeter groups examples
   - cd ../hyperbolic-tilings

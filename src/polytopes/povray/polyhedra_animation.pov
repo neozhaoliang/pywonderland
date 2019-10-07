@@ -44,17 +44,17 @@ background { White }
 
 #declare faceTextures = array[3]{
     texture {
-        pigment { rgb <0.4, 0.72, 0.4> }
+        pigment { Pink filter 0.5 }
         finish { faceFinish }
     },
 
     texture {
-        pigment { rgb <0.9, 0.1, 0.2> }
+        pigment { Violet filter 0.5 }
         finish { faceFinish }
     },
 
     texture {
-        pigment { rgb <0.1, 0.15, 0.5> }
+        pigment { Brass filter 0.5 }
         finish { faceFinish }
     }
 };

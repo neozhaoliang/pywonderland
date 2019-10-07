@@ -13,7 +13,7 @@ errors can be avoided.
 
 The main part of this script is the function `get_reflection_table` whose input is a
 Coxeter matrix (a symmetric matrix with integer entries and the diagonals are all 1)
-and the output is a 2d array. The rows of this array is indexed by the minimal roots
+and the output is a 2d array. The rows of this array are indexed by the minimal roots
 and columns are indexed by the simple reflections.
 
 For example the triangle group (3, 4, 3):
@@ -361,8 +361,9 @@ def is_identity(M):
 
 
 def get_cartan_matrix(cox_mat):
-    """`cox_mat` is the Coxeter matrix with entries m[i][j].
-       Return the Cartan matrix with entries -2*cos(PI/m[i][j]).
+    """`cox_mat` is the Coxeter matrix with entries m[i][j],
+       return the Cartan matrix with entries -2*cos(PI/m[i][j]),
+       note the entries are all algebraic integers!
     """
     M = np.array(cox_mat, dtype=np.int)
     C = np.zeros_like(M).astype(object)  # the Cartan matrix
@@ -472,6 +473,7 @@ def get_reflection_table(cox_mat):
                         queue.append(beta)
                         roots.append(beta)
                         print("Current number of minimal roots: {}".format(len(roots)), end="\r")
+
     print("\n{} minimal roots in total".format(len(roots)))
     # finally put all reflection information into a 2d array
     table = np.zeros((len(roots), rank)).astype(object)

@@ -105,7 +105,7 @@ class CosetTable(object):
 
     def merge(self, coset1, coset2):
         """Merge two equivalent cosets. The larger one is declared
-           to "dead" and is added to the queue `q` to be process later on.
+           to "dead" and is added to the queue `q` to be processed later on.
         """
         s = self.rep(coset1)
         t = self.rep(coset2)

@@ -38,7 +38,7 @@ class Shader(object):
         5. glGetShaderInfoLog:
                 print the error info if compiling failed.
         6. glAttachShader:
-                attach the shader to our program if compiling successed.
+                attach the shader to our program if compiling succeeded.
         """
         src = []
         for src_f in shader_files:

@@ -17,7 +17,7 @@
 
 ## About this repo
 
-Math is beautiful, but to truly enjoy it one has to walk a long and painful way learning lots of boring stuff before he could see the full landscape. I hope this repo could help those people without a strong math background get some intuitive understanding of the beauty and elegance of math. The topics are chosen largely due to my personal taste:
+Math is beautiful, but to truly enjoy it one has to walk a long and painful way learning lots of boring stuff before he could see the full landscape. I hope this repo could help those people without a strong math background could get some intuitive understanding of the beauty and elegance of math. The topics are chosen largely due to my personal taste:
 
 1. They must produce appealing results.
 2. There must be some non-trivial math behind them.
@@ -36,25 +36,25 @@ The website for the docs is still under construction and will be released soon.
 
 Here is *a very small portion* of examples that this projects can do:
 
-+ Wilson's uniform spanning tree algorithm animation
++ [Wilson's uniform spanning tree algorithm animation](./src/gifmaze/example_maze_animations.py)
 
 <p align="center">
 <a href="https://imgur.com/ptSqlDl"><img src="https://i.imgur.com/ptSqlDl.gif"/></a>
 </p>
 
-+ Hilbert's curve animation
++ [Hilbert's curve animation](./src/gifmaze/example_hilbert_curve.py)
 
 <p align="center">
 <a href="https://imgur.com/gEO7AMR"><img src="https://i.imgur.com/gEO7AMR.gif"/></a>
 </p>
 
-+ Domino shuffling algorithm animation
++ [Domino shuffling algorithm animation](./src/aztec/run_domino_shuffling_animation.py)
 
 <p align="center">
 <a href="https://imgur.com/BWUBjto"><img src="https://i.imgur.com/BWUBjto.gif"/></a>
 </p>
 
-+ Raymarching fractals
++ [Raymarching fractals](./src/fractal3d/fractal3d.py)
 
 <p align="center">
 <a href="https://imgur.com/yca2GAj"><img src="https://i.imgur.com/yca2GAj.png" width="600"/></a>
@@ -68,27 +68,27 @@ Here is *a very small portion* of examples that this projects can do:
 <a href="https://imgur.com/O9Q3VOr"><img src="https://i.imgur.com/O9Q3VOr.png" width="600"/></a>
 </p>
 
-+ Hopf fibration
++ [Hopf fibration](./src/hopf/hopf_fibration.ipynb)
 
 <p align="center">
 <a href="https://imgur.com/hJJeone"><img src="https://i.imgur.com/hJJeone.png"/></a>
 </p>
 
-+ Aperiodic tilings
++ [Aperiodic tilings](./src/aperiodic-tilings/debruijn.py)
 
 <p align="center">
 <a href="https://imgur.com/oJ5N06Z"><img src="https://i.imgur.com/oJ5N06Z.png"/></a>
 </p>
 
 
-+ Langton's ant animation
++ [Langton's ant animation](./src/gifmaze/example_langton_ant.py)
 
 <p align="center">
 <a href="https://imgur.com/XwIg4QL"><img src="https://i.imgur.com/XwIg4QL.gif"/></a>
 </p>
 
 
-+ Reaction-diffusion simulation
++ [Reaction-diffusion simulation](./src/grayscott/main.py)
 
 <p align="center">
 <a href="https://imgur.com/3dPrFa6"><img src="https://i.imgur.com/3dPrFa6.png" width="600"/></a>
@@ -98,7 +98,7 @@ Here is *a very small portion* of examples that this projects can do:
 <a href="https://imgur.com/3fklRDM"><img src="https://i.imgur.com/3fklRDM.png" width="600"/></a>
 </p>
 
-+ Uniform polytopes
++ [Uniform polytopes](./src/polytopes)
 
 <p align="center">
 <a href="https://imgur.com/CpfGucn"><img src="https://i.imgur.com/CpfGucn.png"/></a>
@@ -113,14 +113,14 @@ Here is *a very small portion* of examples that this projects can do:
 </p>
 
 
-+ Uniform tilings
++ [Uniform tilings](./src/hyperbolic-tilings/example_Euclidean_uniform_tilings.py)
 
 <p align="center">
 <a href="https://imgur.com/TFTR5Oo"><img src="https://i.imgur.com/TFTR5Oo.png" width="600"/></a>
 </p>
 
 
-+ Mobius transformations in hyperbolic 3-space
++ [Möbius transformations in hyperbolic 3-space](./src/mobius/Mobius_in_H3space.py)
 
 <p align="center">
 <a href="https://imgur.com/U1XgWkc"><img src="https://i.imgur.com/U1XgWkc.png" width="600"/></a>

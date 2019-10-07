@@ -191,7 +191,6 @@ def main():
     anim((4, 4, 2, Fraction(3, 2), 2, 2), (1, 1, 0, 1),
          extra_relations=((0, 1, 2, 1) * 2,), face_index="all", description="small-cubicuboctahedron-prism")
 
-
     # some regular star polytopes (there are 10 of them, all can be rendered in this way)
     anim((3, 2, 2, 5, 2, Fraction(5, 2)), (1, 0, 0, 0), "icosahedral-120-cell", extra_relations=((1, 2, 3, 2)*3,))
     anim((5, 2, 2, Fraction(5, 2), 2, 5), (1, 0, 0, 0), "great-120-cell",

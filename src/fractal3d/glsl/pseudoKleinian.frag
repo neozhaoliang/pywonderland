@@ -152,7 +152,7 @@ void main() {
             vec3 up = vec3(0.0, 0.0, 1.0);
             // set camera
             vec3 ro = camera;
-            //R(ro.xy, T);
+            R(ro.xy, T);
             mat3 M = viewMatrix(ro, lookat, up);
             // put screen at distance FOV_DISt in front of the camera
             vec3 rd = M * normalize(vec3(uv, -FOV_DIST));
