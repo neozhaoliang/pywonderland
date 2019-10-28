@@ -36,7 +36,7 @@ def main(imgsize):
     H = np.sin(z[0]*np.pi)**2
     S = np.cos(z[1]*np.pi)**2
     V = abs(np.sin(z[2]*np.pi) * np.cos(z[2]*np.pi))**0.2
-    HSV = np.dstack((H, S, V))
+    HSV = np.stack((H, S, V), axis=2)
 
     # transform to rgb space
     img = hsv_to_rgb(HSV)

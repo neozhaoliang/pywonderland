@@ -23,8 +23,8 @@ background { White }
 #declare vertexRad = 0.035;
 #declare edgeRad = 0.02;
 
-#declare vertexColors = array[3] { SkyBlue, Silver, Violet };
-#declare edgeColors = array[3]{ Orange, Pink, SteelBlue };
+#declare vertexColors = array[3] { SkyBlue, Silver, Magenta };
+#declare edgeColors = array[3]{ Orange, GreenYellow, Maroon };
 
 #declare edgeFinish = finish {
     ambient 0.2
@@ -105,10 +105,5 @@ camera {
 
 light_source {
     <1, 3, 1> * 100
-    color rgb 0.9
-}
-
-light_source {
-    <-2, 1, 1> * 100
-    color rgb 0.8
+    color rgb 1.3
 }

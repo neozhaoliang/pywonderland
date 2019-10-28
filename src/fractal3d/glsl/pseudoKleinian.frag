@@ -7,7 +7,7 @@ uniform int   AA;
 out vec4 FinalColor;
 
 
-#define FOV_DIST         3.0
+#define FOV_DIST         2.0
 #define FOLDING_NUMBER   7
 #define MAX_TRACE_STEPS  200
 #define MIN_TRACE_DIST   0.01

@@ -1,5 +1,5 @@
 <p align="center">
-<img src="favicon.png" width="400">
+<img src="120-cell.png" width="400">
 </p>
 
 # A Tour in the Wonderland of Math with Python
@@ -17,7 +17,7 @@
 
 ## About this repo
 
-Math is beautiful, but to truly enjoy it one has to walk a long and painful way learning lots of boring stuff before he could see the full landscape. I hope this repo could help those people without a strong math background could get some intuitive understanding of the beauty and elegance of math. The topics are chosen largely due to my personal taste:
+Math is beautiful, but to truly enjoy it one has to walk a long and painful way learning lots of boring stuff before he could see the full landscape. I hope this repo could help those people without a strong math background get some intuitive understanding of the beauty and elegance of math. The topics are chosen largely due to my personal taste:
 
 1. They must produce appealing results.
 2. There must be some non-trivial math behind them.
@@ -34,7 +34,7 @@ The website for the docs is still under construction and will be released soon.
 
 ## Examples
 
-Here is *a very small portion* of examples that this projects can do:
+Here is *a very small portion* of examples that this project can do:
 
 + [Wilson's uniform spanning tree algorithm animation](./src/gifmaze/example_maze_animations.py)
 
@@ -74,10 +74,14 @@ Here is *a very small portion* of examples that this projects can do:
 <a href="https://imgur.com/hJJeone"><img src="https://i.imgur.com/hJJeone.png"/></a>
 </p>
 
-+ [Aperiodic tilings](./src/aperiodic-tilings/debruijn.py)
++ [Aperiodic tilings](./src/aperiodic-tilings)
 
 <p align="center">
 <a href="https://imgur.com/oJ5N06Z"><img src="https://i.imgur.com/oJ5N06Z.png"/></a>
+</p>
+
+<p align="center">
+<a href="https://imgur.com/oLJQBU2"><img src="https://i.imgur.com/oLJQBU2.png"/></a>
 </p>
 
 
@@ -112,6 +116,10 @@ Here is *a very small portion* of examples that this projects can do:
 <a href="https://imgur.com/fr69m1j"><img src="https://i.imgur.com/fr69m1j.gif"/></a>
 </p>
 
+<p align="center">
+<a href="https://imgur.com/qeyPqMZ"><img src="https://imgur.com/qeyPqMZ.png"/></a>
+</p>
+
 
 + [Uniform tilings](./src/hyperbolic-tilings/example_Euclidean_uniform_tilings.py)
 
@@ -143,13 +151,6 @@ Here is a list of some algorithms implemented in this project:
 + [Todd-Coxeter coset enumeration algorithm](./src/polytopes/todd_coxeter.py)
 + [Wilson's uniform spanning tree algorithm](./src/gifmaze/gifmaze/algorithms.py)
 + [Casselman's minimal roots algorithm](./src/hyperbolic-tilings/coxeter/minroots.py)
-
-
-## Programs to come:
-
-- 2D hyperbolic tilings (Escher's circle limit)
-- 3D hyperbolic honeycombs
-
 
 ## Dependencies
 

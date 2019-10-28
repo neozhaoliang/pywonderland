@@ -29,7 +29,7 @@ so it's not obvious how to traverse each element only once without omitting any.
 
 Here is the deep math: the modular group is an automatic group, i.e.
 there exists a DFA such that the words accepted by the DFA are exactly
-the elements of the group under the shortest-lex-order representation,
+the elements of the group under the shortest lexicographical representation,
 thus finding all elements in this group amounts to traversing a finite
 directed graph, which is a much easier job. (we will use breadth-first search here)
 
