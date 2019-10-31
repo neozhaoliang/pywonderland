@@ -144,7 +144,7 @@ def draw(coxeter_diagram,
          description="polychora",
          extra_relations=(),
          **kwargs):
-    coxeter_matrix = helpers.make_symmetry_matrix([x.numerator for x in coxeter_diagram])
+    coxeter_matrix = helpers.get_coxeter_matrix(coxeter_diagram)
     mirrors = helpers.get_mirrors(coxeter_diagram)
     P = Polychora(coxeter_matrix, mirrors, trunc_type, extra_relations)
     P.build_geometry()

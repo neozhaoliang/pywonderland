@@ -109,7 +109,7 @@ def anim(coxeter_diagram,
          extra_relations=()):
     """Call POV-Ray to render the frames and FFmpeg to generate the movie.
     """
-    coxeter_matrix = helpers.make_symmetry_matrix([x.numerator for x in coxeter_diagram])
+    coxeter_matrix = helpers.get_coxeter_matrix(coxeter_diagram)
     mirrors = helpers.get_mirrors(coxeter_diagram)
 
     if snub:

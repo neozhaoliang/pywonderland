@@ -96,6 +96,12 @@ def check_duplicate_face(f, l):
 
 def has_edge(e, f):
     """Check if an edge `e` is in a face `f`.
+
+       Example:
+       >>> e = (0, 1)
+       >>> f = (1, 2, 3, 0)
+       >>> has_edge(e, f)
+       >>> True  # because 0, 1 are adjacent in f (first and last)
     """
     for pair in zip(f, f[1:] + (f[0],)):
         if e == pair or e == pair[::-1]:
@@ -143,7 +149,29 @@ def make_symmetry_matrix(upper_triangle):
         raise ValueError("Three or six inputs are expected.")
 
 
-def get_mirrors(upper_triangle):
+def get_coxeter_matrix(coxeter_diagram):
+    """Get the Coxeter matrix from a given coxeter_diagram.
+       The Coxeter matrix is square and entries are all integers,
+       it describes the relations between the generators of the symmetry group.
+       Here is the math: suppose two mirrors m_i, m_j form an angle p/q
+       where p,q are coprime integers, then the two generator reflections
+       about these two mirrors r_i, r_j satisfy (r_ir_j)^p = 1.
+
+       Example:
+       >>> coxeter_diagram = (3, 2, Fraction(5, 2))  # Fraction(5, 2) means symbol 5/2
+       >>> get_coxeter_matrix(coxeter_diagram)
+       >>> [[1, 3, 2],
+            [3, 1, 5],
+            [2, 5, 1]]
+
+       Note that in general one cannot recover the Coxeter diagram from the Coxeter matrix,
+       since a star polytope may have the same Coxeter matrix with a convex one.
+    """
+    upper_triangle = [x.numerator for x in coxeter_diagram]
+    return make_symmetry_matrix(upper_triangle)
+
+
+def get_mirrors(coxeter_diagram):
     """Given three or six integers/rationals that represent
        the angles between the mirrors (a rational p means the
        angle is π/p), return a 3x3 or 4x4 matrix whose rows
@@ -160,7 +188,7 @@ for a complete list of valid Coxeter diagrams.")
     np.seterrcall(err_handler)
     np.seterr(all="call")
 
-    coxeter_matrix = np.array(make_symmetry_matrix(upper_triangle)).astype(np.float)
+    coxeter_matrix = np.array(make_symmetry_matrix(coxeter_diagram)).astype(np.float)
     C = -np.cos(np.pi / coxeter_matrix)
     M = np.zeros_like(C)
 

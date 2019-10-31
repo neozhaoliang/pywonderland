@@ -14,28 +14,29 @@ from todd_coxeter import CosetTable
 
 
 class BasePolytope(object):
+
     """
     Base class for building polyhedron and polychoron using
     Wythoff's construction.
     """
+
     def __init__(self, coxeter_matrix, mirrors, init_dist, extra_relations=()):
         """
         parameters
         ----------
         :coxeter_matrix: Coxeter matrix of the symmetry group of this polytope.
 
-        :mirrors: normal vectors of the mirrors.
+        :mirrors: normal vectors of the reflection mirrors.
 
         :init_dist: distances between the initial vertex and the mirrors.
 
-        A presentation of a star polytope can be obtained by imposing more
-        relations on the generators. For example "(ρ0ρ1ρ2ρ1)^n = 1" for some
-        integer n, where n is the number of sides of a hole.
+        :extra_relations: a presentation of a star polytope can be obtained by
+            imposing more relations on the generators. For example "(ρ0ρ1ρ2ρ1)^n = 1"
+            for some integer n, where n is the number of sides of a hole.
+            See Coxeter's article
 
-        See Coxeter's article
-
-            "Regular skew polyhedra in three and four dimensions,
-            and their topological analogues"
+                "Regular skew polyhedra in three and four dimensions,
+                 and their topological analogues"
 
         """
         # Coxeter matrix of the symmetry group
