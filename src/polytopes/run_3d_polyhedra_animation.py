@@ -109,13 +109,10 @@ def anim(coxeter_diagram,
          extra_relations=()):
     """Call POV-Ray to render the frames and FFmpeg to generate the movie.
     """
-    coxeter_matrix = helpers.get_coxeter_matrix(coxeter_diagram)
-    mirrors = helpers.get_mirrors(coxeter_diagram)
-
     if snub:
-        P = Snub(coxeter_matrix, mirrors, trunc_type)
+        P = Snub(coxeter_diagram, trunc_type)
     else:
-        P = Polyhedra(coxeter_matrix, mirrors, trunc_type, extra_relations)
+        P = Polyhedra(coxeter_diagram, trunc_type, extra_relations)
 
     if catalan:
         P = Catalan3D(P)

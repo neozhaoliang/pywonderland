@@ -10,7 +10,7 @@ from matplotlib.colors import hsv_to_rgb
 import tqdm
 
 
-IMAGE_SIZE = 600
+IMAGE_SIZE = 1200
 ESCAPE_RADIUS = 1000
 ITERATIONS = 1000
 SUPER_SAMPLING = 12
@@ -84,7 +84,7 @@ def main():
     ax.axis("off")
     ax.imshow(img, interpolation="bilinear")
     plt.show()
-    fig.savefig("buddhebrot.png")
+    fig.savefig("buddhabrot.png")
 
 
 if __name__ == "__main__":

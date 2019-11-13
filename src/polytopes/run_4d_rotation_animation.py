@@ -129,9 +129,7 @@ def anim(coxeter_diagram,
          extra_relations=()):
     """Call POV-Ray to render the frames and FFmpeg to generate the movie.
     """
-    coxeter_matrix = helpers.get_coxeter_matrix(coxeter_diagram)
-    mirrors = helpers.get_mirrors(coxeter_diagram)
-    P = Polychora(coxeter_matrix, mirrors, trunc_type, extra_relations)
+    P = Polychora(coxeter_diagram, trunc_type, extra_relations)
     P.build_geometry()
     write_to_pov(P, glass_tex, face_index, vertex_color, edge_color)
     subprocess.call(POV_COMMAND.format(description), shell=True)

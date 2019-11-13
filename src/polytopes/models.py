@@ -20,14 +20,11 @@ class BasePolytope(object):
     Wythoff's construction.
     """
 
-    def __init__(self, coxeter_matrix, mirrors, init_dist, extra_relations=()):
+    def __init__(self, coxeter_diagram, init_dist, extra_relations=()):
         """
         parameters
         ----------
-        :coxeter_matrix: Coxeter matrix of the symmetry group of this polytope.
-
-        :mirrors: normal vectors of the reflection mirrors.
-
+        :coxeter_diagram: Coxeter diagram for this polytope.
         :init_dist: distances between the initial vertex and the mirrors.
 
         :extra_relations: a presentation of a star polytope can be obtained by
@@ -40,16 +37,17 @@ class BasePolytope(object):
 
         """
         # Coxeter matrix of the symmetry group
-        self.coxeter_matrix = coxeter_matrix
+        self.coxeter_matrix = helpers.get_coxeter_matrix(coxeter_diagram)
+        self.mirrors = helpers.get_mirrors(coxeter_diagram)
         # reflection transformations about the mirrors
-        self.reflections = tuple(helpers.reflection_matrix(v) for v in mirrors)
+        self.reflections = tuple(helpers.reflection_matrix(v) for v in self.mirrors)
         # the initial vertex
-        self.init_v = helpers.get_init_point(mirrors, init_dist)
+        self.init_v = helpers.get_init_point(self.mirrors, init_dist)
         # a mirror is active if and only if the initial vertex is off it
         self.active = tuple(bool(x) for x in init_dist)
 
         # generators of the symmetry group
-        self.symmetry_gens = tuple(range(len(coxeter_matrix)))
+        self.symmetry_gens = tuple(range(len(self.coxeter_matrix)))
         # relations between the generators
         self.symmetry_rels = tuple((i, j) * self.coxeter_matrix[i][j]
                                    for i, j in combinations(self.symmetry_gens, 2))
@@ -211,10 +209,10 @@ class Polyhedra(BasePolytope):
     Base class for 3d polyhedron.
     """
 
-    def __init__(self, coxeter_matrix, mirrors, init_dist, extra_relations=()):
-        if not len(coxeter_matrix) == len(mirrors) == len(init_dist) == 3:
+    def __init__(self, coxeter_diagram, init_dist, extra_relations=()):
+        if not len(coxeter_diagram) == len(init_dist) == 3:
             raise ValueError("Length error: the inputs must all have length 3")
-        super().__init__(coxeter_matrix, mirrors, init_dist, extra_relations)
+        super().__init__(coxeter_diagram, init_dist, extra_relations)
 
 
 class Snub(Polyhedra):
@@ -229,8 +227,8 @@ class Snub(Polyhedra):
     transform the initial vertex to get all vertices.
     """
 
-    def __init__(self, coxeter_matrix, mirrors, init_dist=(1.0, 1.0, 1.0)):
-        super().__init__(coxeter_matrix, mirrors, init_dist, extra_relations=())
+    def __init__(self, coxeter_diagram, init_dist=(1.0, 1.0, 1.0)):
+        super().__init__(coxeter_diagram, init_dist, extra_relations=())
         # the representaion is not in the form of a Coxeter group,
         # we must overwrite the relations.
         self.symmetry_gens = (0, 1, 2, 3)
@@ -297,10 +295,10 @@ class Polychora(BasePolytope):
     Base class for 4d polychoron.
     """
 
-    def __init__(self, coxeter_matrix, mirrors, init_dist, extra_relations=()):
-        if not len(coxeter_matrix) == len(mirrors) == len(init_dist) == 4:
-            raise ValueError("Length error: the inputs must all have length 4")
-        super().__init__(coxeter_matrix, mirrors, init_dist, extra_relations)
+    def __init__(self, coxeter_diagram, init_dist, extra_relations=()):
+        if not (len(coxeter_diagram) == 6 and len(init_dist) == 4):
+            raise ValueError("Length error: the input coxeter_diagram must have length 6 and init_dist has length 4")
+        super().__init__(coxeter_diagram, init_dist, extra_relations)
 
 
 class Snub24Cell(Polychora):

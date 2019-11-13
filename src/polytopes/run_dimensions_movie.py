@@ -76,9 +76,7 @@ def write_to_pov(P):
 
 def main():
     coxeter_diagram = (5, 2, 2, 3, 2, 3)
-    coxeter_matrix = helpers.get_coxeter_matrix(coxeter_diagram)
-    mirrors = helpers.get_mirrors(coxeter_diagram)
-    P = Polychora(coxeter_matrix, mirrors, (1, 0, 0, 0))
+    P = Polychora(coxeter_diagram, (1, 0, 0, 0))
     P.build_geometry()
     write_to_pov(P)
     subprocess.call(POV_COMMAND, shell=True)

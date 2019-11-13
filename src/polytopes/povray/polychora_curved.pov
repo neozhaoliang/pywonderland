@@ -20,11 +20,11 @@ global_settings {
     max_trace_level 8
 }
 
-background { color SkyBlue }
+background { color White }
 
 // number of spheres for sphere_sweep
 #declare num_segments = 30;
-#declare face_transmit = 0.8;
+#declare face_transmit = 0.7;
 
 // stereographic project a 4d vector to 3d space
 #macro proj4d(p)

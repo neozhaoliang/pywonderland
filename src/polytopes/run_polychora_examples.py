@@ -21,7 +21,7 @@ POV_EXE = "povray"                   # POV-Ray exe binary
 SCENE_FILE = "polychora_curved.pov"  # the main scene file
 IMAGE_SIZE = 600                     # image size in pixels
 IMAGE_QUALITY_LEVEL = 11             # between 0-11
-SUPER_SAMPLING_LEVEL = 3             # between 1-9
+SUPER_SAMPLING_LEVEL = 7             # between 1-9
 ANTIALIASING_LEVEL = 0.001           # lower for better quality
 
 POV_COMMAND = " cd povray && " + \
@@ -144,9 +144,7 @@ def draw(coxeter_diagram,
          description="polychora",
          extra_relations=(),
          **kwargs):
-    coxeter_matrix = helpers.get_coxeter_matrix(coxeter_diagram)
-    mirrors = helpers.get_mirrors(coxeter_diagram)
-    P = Polychora(coxeter_matrix, mirrors, trunc_type, extra_relations)
+    P = Polychora(coxeter_diagram, trunc_type, extra_relations)
     P.build_geometry()
     write_to_pov(P, **kwargs)
 
