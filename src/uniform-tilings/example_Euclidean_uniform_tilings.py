@@ -138,10 +138,10 @@ def main():
     draw(T, "236-111.png", width, height, extent=30, depth=50)
 
     # cube tiling
-
-
-
-if __name__ == "__main__":
     T = EuclideanTiling((4, 2, 2, 3, 2, 4), (1, 0, 0, 0))
     T.build_geometry(80, maxcount=30000)
     render3d(T)
+
+
+if __name__ == "__main__":
+    main()

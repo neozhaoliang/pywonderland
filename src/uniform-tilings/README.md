@@ -17,6 +17,7 @@ The program knows everything of a tiling before you draw it:
 9. For triangle groups it computes the data quite fast.
 10. Finally draw the tiling.
 
+It's still a quite straight and dirty implementation so there's a long way to improve it.
 
 TODO:
 

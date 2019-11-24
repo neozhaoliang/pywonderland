@@ -132,3 +132,20 @@ class PoincareTiling(UniformTiling):
             return v - 2 * np.dot(v, normal) * normal
 
         return [partial(reflect, normal=n) for n in self.mirrors]
+
+
+class SphericalTiling(UniformTiling):
+
+    def project(self, v):
+        return helpers.project_spherical(v)
+
+    def get_mirrors(self, coxeter_diagram):
+        return helpers.get_spherical_or_affine_mirrors(coxeter_diagram)
+
+    def get_reflections(self, init_dist):
+        def reflect(v, normal):
+            """(affine) reflection.
+            """
+            return v - 2 * np.dot(v, normal) * normal
+
+        return [partial(reflect, normal=n) for n in self.mirrors]
