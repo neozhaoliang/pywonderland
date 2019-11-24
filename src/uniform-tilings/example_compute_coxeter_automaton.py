@@ -12,7 +12,7 @@ warning: for a large DFA it may take quite long time for graphviz to draw the im
 import os
 import argparse
 import numpy as np
-from coxeter import get_automaton
+from coxeter import CoxeterGroup
 
 
 def main():
@@ -22,10 +22,10 @@ def main():
     cox_mat = np.loadtxt(args.filename, dtype=np.int, delimiter=" ")
     print("Computing the shorlex DFA for Coxeter group:")
     print(cox_mat)
-    dfa = get_automaton(cox_mat, type="shortlex")
-    print("The minimal DFA contains {} states".format(dfa.num_states))
+    G = CoxeterGroup(cox_mat).init()
+    print("The minimal DFA contains {} states".format(G.dfa.num_states))
     imgname = os.path.splitext(os.path.basename(args.filename))[0] + ".png"
-    dfa.draw(imgname)
+    G.dfa.draw(imgname)
 
 
 if __name__ == "__main__":

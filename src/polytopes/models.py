@@ -117,7 +117,7 @@ class BasePolytope(object):
                 self.edge_indices.append(elist)
                 self.edge_coords.append([(self.vertex_coords[x], self.vertex_coords[y])
                                          for x, y in elist])
-        self.num_edges = sum([len(elist) for elist in self.edge_indices])
+        self.num_edges = sum(len(elist) for elist in self.edge_indices)
 
     def get_faces(self):
         """
@@ -125,26 +125,19 @@ class BasePolytope(object):
 
         The composition of the i-th and the j-th reflection is a rotation
         which fixes a base face f. The stabilizing group of f is generated
-        by (i, j) or [(i,), (j,)] depends on whether the two mirrors are both
-        active or exactly one of them is active and the they are not perpendicular
-        to each other.
+        by [(i,), (j,)].
         """
         for i, j in combinations(self.symmetry_gens, 2):
             f0 = []
             m = self.coxeter_matrix[i][j]
+            fgens = [(i,), (j,)]
             if self.active[i] and self.active[j]:
-                fgens = [(i, j)]
                 for k in range(m):
                     # rotate the base edge m times to get the base f,
                     # where m = self.coxeter_matrix[i][j]
                     f0.append(self.move(0, (i, j) * k))
                     f0.append(self.move(0, (j,) + (i, j) * k))
-            elif self.active[i] and m > 2:
-                fgens = [(i,), (j,)]
-                for k in range(m):
-                    f0.append(self.move(0, (i, j) * k))
-            elif self.active[j] and m > 2:
-                fgens = [(i,), (j,)]
+            elif (self.active[i] or self.active[j]) and m > 2:
                 for k in range(m):
                     f0.append(self.move(0, (i, j) * k))
             else:
@@ -163,7 +156,7 @@ class BasePolytope(object):
             self.face_coords.append([tuple(self.vertex_coords[x] for x in face)
                                      for face in flist])
 
-        self.num_faces = sum([len(flist) for flist in self.face_indices])
+        self.num_faces = sum(len(flist) for flist in self.face_indices)
 
     def transform(self, vector, word):
         """Transform a vector by a word in the symmetry group.

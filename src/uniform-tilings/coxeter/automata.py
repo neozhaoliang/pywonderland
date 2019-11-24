@@ -1,35 +1,11 @@
-# -*- coding: utf-8 -*-
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Compute the automaton that recognizes the language of a Coxeter group
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This script computes the automaton of a given Coxeter group, minimizes this
-automaton and calls graphviz to draw it. In the resulting image the nodes are
-subsets of the minimal roots and edges are simple reflections. You should have
-pygraphviz and graphviz installed to run this file.
-
-You should also note the difference between the automaton for "reduced words"
-and the automaton for "shortlex words".
-
-For some Coxeter group W its defining automaton (the Brink-Howlett automaton)
-is already minimal, for example
-
-    1. W is finite.
-    2. W is of affine type A_n.
-    3. W has rank 3.
-
-For these groups the minimization step (using Hopcroft's algorithm) is unnecessary.
-
-see
-    "Coxeter systems for which the Brink-Howlett automaton is minimal", by
-    James Parkinson and Yeeka Yau.
-
-:copyright (c) 2019 by Zhao Liang.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+DFA construction and minimization for Coxeter automata
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 from collections import deque
+import numpy as np
 import pygraphviz
-from .minroots import get_reflection_table
 
 
 class DFAState(object):
@@ -207,14 +183,14 @@ class Hopcroft(object):
                 return p
 
 
-def get_automaton(cox_mat, type="shortlex"):
+def get_automaton(reftable, type="shortlex"):
     """Construct the automaton that recognizes the language of a Coxeter group.
     """
     if type not in ["shortlex", "reduced"]:
         raise ValueError("Unknown type of automaton, must be 'reduced' or 'shortlex'")
 
-    rank = len(cox_mat)
-    table = get_reflection_table(cox_mat)
+    table = np.asarray(reftable, dtype=object)
+    rank = table.shape[1]
 
     def subset_transition(S, i):
         r"""`S` is a subset of the set of minimal roots, this function computes
@@ -276,19 +252,3 @@ def get_automaton(cox_mat, type="shortlex"):
                         states.append(T)
     # return the minimized dfa
     return DFA(start, tuple(range(rank))).minimize()
-
-
-def test():
-    # The affine A_2 Coxeter group, it has 6 minimal roots and 16 states in its
-    # defining automaton. The automaton is already minimal since its rank is 3.
-    cox_mat = [[1, 3, 3], [3, 1, 3], [3, 3, 1]]
-    dfa1 = get_automaton(cox_mat, type="reduced")
-    print("The minimized automaton recognizes reduced words contains {} states".format(dfa1.num_states))
-    dfa1.draw("a2~_reduced.png")
-
-    dfa2 = get_automaton(cox_mat, type="shortlex")
-    print("The minimized automaton recognizes shortlex words contains {} states".format(dfa2.num_states))
-    dfa2.draw("a2~_shortlex.png")
-
-if __name__ == "__main__":
-    test()
