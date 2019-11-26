@@ -127,6 +127,11 @@ Here is *a very small portion* of examples that this project can do:
 <a href="https://imgur.com/TFTR5Oo"><img src="https://i.imgur.com/TFTR5Oo.png" width="600"/></a>
 </p>
 
+<p align="center">
+<a href="https://imgur.com/xbDdPuQ"><img src="https://i.imgur.com/xbDdPuQ.png" width="600"/></a>
+</p>
+
+
 
 + [Möbius transformations in hyperbolic 3-space](./src/mobius/Mobius_in_H3space.py)
 
