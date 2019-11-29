@@ -1,4 +1,6 @@
 cairocffi
+drawSvg
+hyperbolic
 jupyter
 matplotlib
 numba

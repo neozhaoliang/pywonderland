@@ -1,73 +1,80 @@
-import numpy as np
-import cairocffi as cairo
-import helpers
+"""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2D hyperbolic tilings in Poincare model
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Quite dirty and quick implementation, requires hyperbolic
+and drawSvg packages from https://github.com/cduck to
+render the tilings into a svg file. Note I only borrowed the
+drawing stuff.
+"""
 from tiling import PoincareTiling
+import drawSvg
+from hyperbolic import euclid
+from hyperbolic.poincare.shapes import Polygon
 
 
-def arc_to(ctx, x1, y1):
-    x0, y0 = ctx.get_current_point()
-    cx, cy, rad = helpers.get_circle(x0, y0, x1, y1)
-
-    if rad is None:
-        ctx.line_to(x1, y1)
-        return
-
-    A0 = np.arctan2(y0 - cy, x0 - cx)
-    A1 = np.arctan2(y1 - cy, x1 - cx)
-
-    if abs(A0 - A1) <= np.pi:
-        if A0 < A1:
-            ctx.arc(cx, cy, rad, A0, A1)
-        else:
-            ctx.arc_negative(cx, cy, rad, A0, A1)
-    else:
-        if A0 < A1:
-            ctx.arc_negative(cx, cy, rad, A0, A1)
-        else:
-            ctx.arc(cx, cy, rad, A0, A1)
-
-
-def draw(T, output, image_size, line_width=0.005, edge_color=0x313E4A,
-         face_colors=[0x88CCEE, 0xDDCC77, 0xCC6677, 0x02CA8F]):
-    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, image_size, image_size)
-    ctx = cairo.Context(surface)
-    ctx.scale(image_size / 2, -image_size / 2)
-    ctx.translate(1, -1)
-    ctx.set_source_rgb(1, 1, 1)
-    ctx.paint()
-    ctx.set_line_width(line_width)
-    ctx.set_line_cap(cairo.LINE_CAP_ROUND)
-    ctx.set_line_join(cairo.LINE_JOIN_ROUND)
+def render(T, output, image_size,
+           vertices_labels=True,
+           draw_inner_lines=True,
+           face_colors=["lightcoral", "mistyrose", "steelblue"]):
+    d = drawSvg.Drawing(2.1, 2.1, origin="center")
+    d.draw(euclid.shapes.Circle(0, 0, 1), fill="silver")
     for (i, j), flist in T.face_indices.items():
         for face in flist:
-            coords = [T.vertices_coords[k] for k in face]
-            coords = [T.project(v) for v in coords]
-            p = coords[0]
-            ctx.move_to(*p)
-            for q in coords[1:]:
-                arc_to(ctx, *q)
-            arc_to(ctx, *p)
-            ctx.set_source_rgb(*helpers.hex_to_rgb(face_colors[(i + j) % 3]))
-            ctx.fill_preserve()
-            ctx.set_source_rgb(*helpers.hex_to_rgb(edge_color))
-            ctx.stroke()
+            coords = [T.project(v) for v in face.points]
+            center = T.project(face.center)
+            for k, D in enumerate(face.domain1):
+                if len(D) == 2:
+                    P, V = [T.project(p) for p in D]
+                    poly = Polygon.fromVertices([P, V, center])
+                else:
+                    P1, V, P2 = [T.project(p) for p in D]
+                    poly = Polygon.fromVertices([P1, V, P2, center])
 
-    ctx.arc(0, 0, 1, 0, 2*np.pi)
-    ctx.set_source_rgb(0, 0, 0)
-    ctx.stroke()
-    surface.write_to_png(output)
+                d.draw(poly, fill=face_colors[2 * (i + j) % 3])
+
+                if draw_inner_lines:
+                    d.draw(poly, fill="papayawhip", hwidth=0.02)
+
+            for k, D in enumerate(face.domain2):
+                if len(D) == 2:
+                    P, V = [T.project(p) for p in D]
+                    poly = Polygon.fromVertices([P, V, center])
+                else:
+                    P1, V, P2 = [T.project(p) for p in D]
+                    poly = Polygon.fromVertices([P1, V, P2, center])
+
+                d.draw(poly, fill=face_colors[2 * (i + j) % 3], opacity=0.3)
+
+                if draw_inner_lines:
+                    d.draw(poly, fill="papayawhip", hwidth=0.02)
+
+            poly2 = Polygon.fromVertices(coords)
+            d.draw(poly2, fill="#666", hwidth=0.05)
+
+    if vertices_labels:
+        for i in range(min(100, T.num_vertices)):
+            d.draw(drawSvg.Text(str(i), 0.05, *T.project(T.vertices_coords[i]),
+                                center=0.7, fill="yellow"))
+
+    d.setRenderSize(w=image_size)
+    d.saveSvg(output)
+
+
+def main():
+    T = PoincareTiling((3, 2, 7), (-1, 0, 0))
+    depth = 40
+    maxcount = 30000
+    T.build_geometry(depth, maxcount)
+    render(T, "237.svg", 800, vertices_labels=False, draw_inner_lines=False)
+
+    T = PoincareTiling((4, 2, 5), (-1, -1, -1))
+    depth = 30
+    maxcount = 20000
+    T.build_geometry(depth, maxcount)
+    render(T, "omnitruncated-425.svg", 800)
 
 
 if __name__ == "__main__":
-    T = PoincareTiling((7, 2, 3), (-1, -1, -1))
-    depth = 20
-    maxcount = 1000
-    T.build_geometry(depth, maxcount)
-    draw(T, "723.png", 800)
-    print("Coxeter group:\n{}\n".format(T.cox_mat))
-    print("The automaton recognizes the shortlex language has {} states\n".format(T.G.dfa.num_states))
-    T.G.dfa.draw("automaton-723.png")
-    print("words up to depth {} in latex format:\n{}\n".format(depth, T.G.get_latex_words_array(T.words)))
-    print("number of vertices in the tiling:\n{}\n".format(T.num_vertices))
-    print("edge indices of the tiling:\n{}\n".format(T.edge_indices))
-    print("face indices of the tiling:\n{}\n".format(T.face_indices))
+    main()

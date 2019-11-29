@@ -45,7 +45,7 @@ Here is *a very small portion* of examples that this project can do:
 + [Hilbert's curve animation](./src/gifmaze/example_hilbert_curve.py)
 
 <p align="center">
-<a href="https://imgur.com/gEO7AMR"><img src="https://i.imgur.com/gEO7AMR.gif"/></a>
+<a href="https://imgur.com/gEO7AMR"><img src="https://i.imgur.com/gEO7AMR.gif" width="600"/></a>
 </p>
 
 + [Domino shuffling algorithm animation](./src/aztec/run_domino_shuffling_animation.py)
@@ -71,17 +71,17 @@ Here is *a very small portion* of examples that this project can do:
 + [Hopf fibration](./src/hopf/hopf_fibration.ipynb)
 
 <p align="center">
-<a href="https://imgur.com/hJJeone"><img src="https://i.imgur.com/hJJeone.png"/></a>
+<a href="https://imgur.com/hJJeone"><img src="https://i.imgur.com/hJJeone.png" width="600"/></a>
 </p>
 
 + [Aperiodic tilings](./src/aperiodic-tilings)
 
 <p align="center">
-<a href="https://imgur.com/oJ5N06Z"><img src="https://i.imgur.com/oJ5N06Z.png"/></a>
+<a href="https://imgur.com/oJ5N06Z"><img src="https://i.imgur.com/oJ5N06Z.png" width="600"/></a>
 </p>
 
 <p align="center">
-<a href="https://imgur.com/oLJQBU2"><img src="https://i.imgur.com/oLJQBU2.png"/></a>
+<a href="https://imgur.com/oLJQBU2"><img src="https://i.imgur.com/oLJQBU2.png" width="600"/></a>
 </p>
 
 
@@ -123,12 +123,19 @@ Here is *a very small portion* of examples that this project can do:
 
 + [Uniform tilings](./src/hyperbolic-tilings/example_Euclidean_uniform_tilings.py)
 
+
 <p align="center">
 <a href="https://imgur.com/TFTR5Oo"><img src="https://i.imgur.com/TFTR5Oo.png" width="600"/></a>
 </p>
 
+
 <p align="center">
-<a href="https://imgur.com/xbDdPuQ"><img src="https://i.imgur.com/xbDdPuQ.png" width="600"/></a>
+<a href="https://imgur.com/YQ3CZrO"><img src="https://imgur.com/YQ3CZrO.png" width="600"/></a>
+</p>
+
+
+<p align="center">
+<a href="https://imgur.com/NtPeZDb"><img src="https://imgur.com/NtPeZDb.png" width="600"/></a>
 </p>
 
 
