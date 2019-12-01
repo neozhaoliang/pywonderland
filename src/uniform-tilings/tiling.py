@@ -50,11 +50,6 @@ class UniformTiling(object):
         self.edge_indices = {}
         self.face_indices = {}
 
-        # vertices of the fundamental triangle
-        self.fundamental_triangle = self.get_fundamental_triangle_vertices()
-        # middle points of the edges of the fundamental triangle
-        self.edge_points = self.get_edge_points()
-
     def build_geometry(self, depth=None, maxcount=20000):
         self.G.init()
         self.words = tuple(self.G.traverse(depth, maxcount))
@@ -85,6 +80,102 @@ class UniformTiling(object):
                 self.edge_indices[i] = elist
 
         self.num_edges = sum(len(L) for L in self.edge_indices.values())
+
+    def get_faces(self):
+        for i, j in combinations(range(len(self.active)), 2):
+            f0 = []
+            m = self.cox_mat[i][j]
+            parabolic = (i, j)
+            if self.active[i] and self.active[j]:
+                for k in range(m):
+                    f0.append(self.G.move(self.vtable, 0, (i, j) * k))
+                    f0.append(self.G.move(self.vtable, 0, (i, j) * k + (i,)))
+            elif self.active[i] and m > 2:
+                for k in range(m):
+                    f0.append(self.G.move(self.vtable, 0, (j, i) * k))
+            elif self.active[j] and m > 2:
+                for k in range(m):
+                    f0.append(self.G.move(self.vtable, 0, (i, j) * k))
+            else:
+                continue
+
+            coset_reps = set([self.G.get_coset_representative(w, parabolic, True) for w in self.words])
+            flist = []
+            for word in self.G.sort_words(coset_reps):
+                f = tuple(self.G.move(self.vtable, v, word) for v in f0)
+                if None not in f and not helpers.check_duplicate_face(f, flist):
+                    flist.append(f)
+
+            self.face_indices[(i, j)] = flist
+
+        self.num_faces = sum(len(L) for L in self.face_indices.values())
+
+    def transform(self, word, v):
+        for w in reversed(word):
+            v = self.reflections[w](v)
+        return v
+
+    def get_reflections(self, init_dist):
+        raise NotImplementedError
+
+    def get_fundamental_triangle_vertices(self):
+        raise NotImplementedError
+
+    def project(self, v):
+        raise NotImplementedError
+
+    def get_mirrors(self, coxeter_diagram):
+        raise NotImplementedError
+
+
+class EuclideanTiling(UniformTiling):
+
+    def project(self, v):
+        return helpers.project_euclidean(v)
+
+    def get_mirrors(self, coxeter_diagram):
+        return helpers.get_spherical_or_affine_mirrors(coxeter_diagram)
+
+    def get_reflections(self, init_dist):
+        def reflect(v, normal, dist):
+            """(affine) reflection.
+            """
+            return v - 2 * (np.dot(v, normal) + dist) * normal
+
+        return [partial(reflect, normal=n, dist=d) for n, d in zip(self.mirrors, init_dist)]
+
+
+class Poincare2D(UniformTiling):
+
+    def __init__(self, coxeter_diagram, init_dist):
+        super().__init__(coxeter_diagram, init_dist)
+        # vertices of the fundamental triangle
+        self.fundamental_triangle = self.get_fundamental_triangle_vertices()
+        # middle points of the edges of the fundamental triangle
+        self.edge_points = self.get_edge_points()
+
+    def project(self, v):
+        return helpers.project_hyperbolic(v)
+
+    def get_mirrors(self, coxeter_diagram):
+        return helpers.get_hyperbolic_mirrors(coxeter_diagram)
+
+    def get_reflections(self, init_dist):
+        def reflect(v, normal):
+            """(affine) reflection.
+            """
+            return v - 2 * np.dot(v, normal) * normal
+
+        return [partial(reflect, normal=n) for n in self.mirrors]
+
+    def get_fundamental_triangle_vertices(self):
+        return [helpers.get_point_from_distance(self.mirrors, d) for d in -np.eye(3)]
+
+    def get_edge_points(self):
+        d0 = (0, -1, -1)
+        d1 = (-1, 0, -1)
+        d2 = (-1, -1, 0)
+        return [helpers.get_point_from_distance(self.mirrors, d) for d in (d0, d1, d2)]
 
     def get_faces(self):
         for i, j in combinations(range(len(self.active)), 2):
@@ -137,66 +228,6 @@ class UniformTiling(object):
             self.face_indices[(i, j)] = flist
 
         self.num_faces = sum(len(L) for L in self.face_indices.values())
-
-    def transform(self, word, v):
-        for w in reversed(word):
-            v = self.reflections[w](v)
-        return v
-
-    def get_reflections(self, init_dist):
-        raise NotImplementedError
-
-    def get_fundamental_triangle_vertices():
-        raise NotImplementedError
-
-    def project(self, v):
-        raise NotImplementedError
-
-    def get_mirrors(self, coxeter_diagram):
-        raise NotImplementedError
-
-
-class EuclideanTiling(UniformTiling):
-
-    def project(self, v):
-        return helpers.project_euclidean(v)
-
-    def get_mirrors(self, coxeter_diagram):
-        return helpers.get_spherical_or_affine_mirrors(coxeter_diagram)
-
-    def get_reflections(self, init_dist):
-        def reflect(v, normal, dist):
-            """(affine) reflection.
-            """
-            return v - 2 * (np.dot(v, normal) + dist) * normal
-
-        return [partial(reflect, normal=n, dist=d) for n, d in zip(self.mirrors, init_dist)]
-
-
-class PoincareTiling(UniformTiling):
-
-    def project(self, v):
-        return helpers.project_hyperbolic(v)
-
-    def get_mirrors(self, coxeter_diagram):
-        return helpers.get_hyperbolic_mirrors(coxeter_diagram)
-
-    def get_reflections(self, init_dist):
-        def reflect(v, normal):
-            """(affine) reflection.
-            """
-            return v - 2 * np.dot(v, normal) * normal
-
-        return [partial(reflect, normal=n) for n in self.mirrors]
-
-    def get_fundamental_triangle_vertices(self):
-        return [helpers.get_point_from_distance(self.mirrors, d) for d in -np.eye(3)]
-
-    def get_edge_points(self):
-        d0 = (0, -1, -1)
-        d1 = (-1, 0, -1)
-        d2 = (-1, -1, 0)
-        return [helpers.get_point_from_distance(self.mirrors, d) for d in (d0, d1, d2)]
 
 
 class SphericalTiling(UniformTiling):

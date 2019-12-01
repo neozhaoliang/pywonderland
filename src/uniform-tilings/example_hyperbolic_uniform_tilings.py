@@ -8,7 +8,7 @@ and drawSvg packages from https://github.com/cduck to
 render the tilings into a svg file. Note I only borrowed the
 drawing stuff.
 """
-from tiling import PoincareTiling
+from tiling import Poincare2D
 import drawSvg
 from hyperbolic import euclid
 from hyperbolic.poincare.shapes import Polygon
@@ -63,13 +63,13 @@ def render(T, output, image_size,
 
 
 def main():
-    T = PoincareTiling((3, 2, 7), (-1, 0, 0))
+    T = Poincare2D((3, 2, 7), (-1, 0, 0))
     depth = 40
     maxcount = 30000
     T.build_geometry(depth, maxcount)
     render(T, "237.svg", 800, vertices_labels=False, draw_inner_lines=False)
 
-    T = PoincareTiling((4, 2, 5), (-1, -1, -1))
+    T = Poincare2D((4, 2, 5), (-1, -1, -1))
     depth = 30
     maxcount = 20000
     T.build_geometry(depth, maxcount)
