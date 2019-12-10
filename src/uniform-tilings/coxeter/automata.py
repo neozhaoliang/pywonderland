@@ -2,6 +2,11 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 DFA construction and minimization for Coxeter automata
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Reference for dfa minimization:
+
+    "Describing an algorithm by Hopcroft", David Gries.
+
 """
 from collections import deque
 import numpy as np
@@ -99,7 +104,7 @@ class Hopcroft(object):
         while W:
             A = W.pop()
             for c in self.sigma:
-                # Be careful that if we modify a set while iterating over it then unpredictable
+                # if we modify a set while iterating over it then unpredictable
                 # things would happen, so iterate over another same partition!
                 T = frozenset(self.P)
                 for Y in T:
@@ -240,12 +245,14 @@ def get_automaton(reftable, type="shortlex"):
                     # so t is a subset in the automaton, have we seen it yet?
                     found = False
                     for T in states:
-                        if t == T.subset:  # we have seen t before, just add the transition
+                        # we have seen t before, simply add the transition
+                        if t == T.subset:
                             S.add_transition(i, T)
                             found = True
                             break
+
                     if not found:
-                        # so t is a new subset, create a new state for it.
+                        # t is a new subset, create a new state for it.
                         T = DFAState(t)
                         S.add_transition(i, T)
                         queue.append(T)

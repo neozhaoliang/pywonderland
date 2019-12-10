@@ -1,3 +1,14 @@
+"""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Class for handling algebraic integers in cyclotomic fields
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As pointed out by Casselman, any root in the root system can
+be expressed as a linear combination of simple roots with
+coefficients in the algebraic integer ring of a cyclotomic
+field. We can use this fact to avoid floating arithmetic in the
+process of searching for minimal roots.
+"""
 from .polynomial import IntPolynomial
 
 
@@ -5,13 +16,13 @@ class AlgebraicInteger(object):
 
     """An algebraic integer is a root of an irreducible monic polynomial with
        integer coefficients. It's represented by two `IntPolynomial`s　`base`
-       and `poly`: `base` is an irreducible monic polynomial, which determines
-       the algebraic number field F (F = Q(α) and α is any root of `base`)
-       that our `AlgebraicInteger`s lie in. In this program `base` is always a
+       and `poly`: `base` is an irreducible monic polynomial determines the
+       algebraic number field F (F = Q(α) and α is any root of `base`) that
+       our `AlgebraicInteger`s lie in. In this program `base` is always a
        cyclotomic polynomial, so α is a primitive n-th root of unity and the
-       ring of algebraic integers in F equals Z[α] (see any textbook on algebraic
-       number theory). Any algebraic integer in Z[α] can be represented by a
-       second `IntPolynomial` `poly`.
+       ring of algebraic integers in F equals Z[α] (see any textbook on
+       algebraic number theory). Any algebraic integer in Z[α] can be
+       represented by a second `IntPolynomial` `poly`.
     """
 
     def __init__(self, base, p):

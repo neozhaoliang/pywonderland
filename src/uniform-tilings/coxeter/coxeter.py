@@ -1,3 +1,24 @@
+"""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Class for processing words in Coxeter groups
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+With this class you can:
+
+    1. Build and visualize the automaton that recognizes the
+       shortlex language of a Coxeter group.
+    2. Compute the normal form of a word (hence also multiplications
+       of two words).
+    3. Compute the set of minimal representatives of a standard
+       parabolic subgroup.
+    4. Compute the coset table for a standard parabolic subgroup.
+       For an infinite Coxeter group the table is generated up
+       to a given depth.
+
+Important: always be aware of left and right cosets when doing coset
+computations, in this program we use the left cosets convention:
+x for xH (assume x = s1s2...sn is a shortlex word).
+"""
 from collections import deque
 from itertools import combinations
 import numpy as np
@@ -6,24 +27,6 @@ from .automata import get_automaton
 
 
 class CoxeterGroup(object):
-
-    """Class for doing computations in Coxeter groups.
-       With this class you can:
-
-       1. Build and visualize the automaton that recognizes the
-          shortlex language of this group.
-       2. Compute the normal form of a word (hence also multiplications
-          in this group).
-       3. Compute the set of minimal representatives of a standard
-          parabolic subgroup.
-       4. Compute the coset table for a standard parabolic subgroup.
-          (for an infinite Coxeter group the table is computed up
-           to a given depth of words)
-
-       Important: always be aware of left and right cosets when you
-       are doing coset computations, in this program we use the left
-       cosets convention: x for xH (if x = s1s2...sn is a shortlex word).
-    """
 
     def __init__(self, cox_mat):
         """A Coxeter group is determined by a Coxeter matrix.
@@ -34,6 +37,9 @@ class CoxeterGroup(object):
         self.dfa = None  # automaton for shortlex language
 
     def init(self):
+        """Delegate the computations of the reflection table and
+           the automaton to this method.
+        """
         self.reftable = get_reflection_table(self.cox_mat)
         self.dfa = get_automaton(self.reftable)
         return self
@@ -94,8 +100,10 @@ class CoxeterGroup(object):
     # ---------------------------------------------------
 
     def _left_mult_invshortlex(self, s, word):
-        """Multipy an inverse shortlex word by a generator s on the
-           left: w --> sw.
+        """Multiply an inverse shortlex word by a generator s on the
+           left: w --> sw. The result is also a reduced word in the normal
+           form of inverse shortlex.
+
            For more details about the algorithm see:
 
                https://www.math.ubc.ca/~cass/research/pdf/roots.pdf
@@ -104,7 +112,7 @@ class CoxeterGroup(object):
           >>> cox_mat = [[1, 3, 3], [3, 1, 3], [3, 3, 1]]
           >>> G = CoxeterGroup(cox_mat)
           >>> s = 0
-          >>> word = (1, 0, 1, 0)  # this is a invserse shortlex word
+          >>> word = (1, 0, 1, 0)  # this is an invserse shortlex word
           >>> G._left_mult_invshortlex(s, word)
           >>> (1 ,0, 0)
         """
@@ -131,18 +139,20 @@ class CoxeterGroup(object):
         return word[:k+1] + (t,) + word[k+1:]
 
     def _right_mult_shortlex(self, s, word):
-        """Multipy a shortlex word by a generator s on the
-           right: w --> sw.
+        """Multipy a shortlex word by a generator s on the right: w --> ws.
+           The result is also a reduced wordin the normal form of inverse
+           shortlex. We simply make it an inverse shortlex word by reversing
+           it, multiply s on the left and then reverse it back.
         """
         word = reversed(word)
         return self._left_mult_invshortlex(s, word)[::-1]
 
     def multiply(self, s, word, right=True):
-        """Multiply a word (under shortlex order) by a generator
-           s on the left or right.
-           If multiply on the left then we progressively compute
-               sw = s(s1s2...sn) = (ss1)s2...sn = ((ss1)s2))...sn
-           by multiplying each si on the right.
+        """Multiply a word (under shortlex order) by a generator s on the left
+           or right. The result is also a reduced word in the normal form of
+           shortlex. If multiply on the left then we progressively compute
+           sw = s(s1s2...sn) = (ss1)s2...sn = ((ss1)s2))...sn by multiplying
+           each si on the right.
         """
         if right:
             return self._right_mult_shortlex(s, word)
@@ -169,6 +179,8 @@ class CoxeterGroup(object):
     def get_coset_representative(self, word, parabolic=(), right=False):
         """Get the minimal (left or right) coset representative for
            a given word with respect to a standard parabolic subgroup.
+           Use `right=True` for right coset representatives and `right=False`
+           for left coset representatives.
         """
         if len(word) == 0:
             return tuple()
@@ -192,17 +204,20 @@ class CoxeterGroup(object):
 
     def get_coset_table(self, words, parabolic=()):
         """Return the coset table T for a given list of representatives of
-           the cosets of a standard parabolic subgroup. Here the rows of T
-           are index by the coset representatives and the columns are indexed
+           the left cosets of a standard parabolic subgroup. Here the rows of
+           T are index by the coset representatives and the columns are indexed
            by the generators of the group. T[i][j] is the word obtained by
            multiplying the j-th generator on the left of the i-th word.
            If the resulting word is not in the list then the entry is set
-           to None. The representatives are assumed to be in shortlex form.
+           to None. The representatives are assumed to be in normal form of
+           shortlex order.
         """
         T = [[None for _ in range(self.rank)] for _ in range(len(words))]
         for i, word in enumerate(words):
             for j in range(self.rank):
                 if T[i][j] is None:
+                    # the tricky part: multiply j on the left and then compute
+                    # the right coset representative
                     next_word = self.multiply(j, word, right=False)
                     next_word = self.get_coset_representative(next_word, parabolic, right=True)
                     try:
@@ -214,6 +229,9 @@ class CoxeterGroup(object):
         return T
 
     def move(self, T, v, word):
+        """For a given coset table `T`, a coset `v` (represented by an integer)
+           and a `word`, return the the coset by applying `word` to `v`.
+        """
         for w in reversed(word):
             v = T[v][w]
             if v is None:

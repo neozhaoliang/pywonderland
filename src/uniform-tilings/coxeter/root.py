@@ -1,7 +1,11 @@
-class Root(object):
+"""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Class for holding the data of a root of a Coxeter group
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""
 
-    """Class for holding the data of a root in the root system of a Coxeter group.
-    """
+
+class Root(object):
 
     def __init__(self, coords=(), index=None, mat=None):
         """`coords`: coefficients of this root as a linear combination of simple roots.

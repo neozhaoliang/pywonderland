@@ -1,4 +1,9 @@
-from itertools import zip_longest
+"""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Class for handling arithmetic of polynomials in Z[x]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""
+from itertools import zip_longest as lzip
 from copy import copy
 from .integer import decompose
 
@@ -7,8 +12,8 @@ class IntPolynomial(object):
 
     """An `IntPolynomial` is a polynomial with integer coefficients. It's
        represented by a tuple of integers and can be initialized either by
-       an integer or by an iterable that can be converted to a tuple of integers.
-       Note trailing zeros are discarded when initialing.
+       an integer or by an iterable that can be converted to a tuple of
+       integers. Note trailing zeros are discarded at the initializing stage.
     """
 
     def __init__(self, coef=0):
@@ -56,13 +61,13 @@ class IntPolynomial(object):
         """Add a polynomial or an integer.
         """
         g = self.valid(g)
-        return IntPolynomial(x + y for x, y in zip_longest(self, g, fillvalue=0))
+        return IntPolynomial(x + y for x, y in lzip(self, g, fillvalue=0))
 
     __iadd__ = __radd__ = __add__
 
     def __sub__(self, g):
         g = self.valid(g)
-        return IntPolynomial(x - y for x, y in zip_longest(self, g, fillvalue=0))
+        return IntPolynomial(x - y for x, y in lzip(self, g, fillvalue=0))
 
     __isub__ = __sub__
 
