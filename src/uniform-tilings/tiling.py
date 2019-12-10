@@ -59,7 +59,7 @@ class UniformTiling(object):
 
     def get_vertices(self):
         parabolic = tuple(i for i, x in enumerate(self.active) if not x)
-        coset_reps = set([self.G.get_coset_representative(w, parabolic, True) for w in self.words])
+        coset_reps = set([self.G.get_coset_representative(w, parabolic) for w in self.words])
         self.vwords = self.G.sort_words(coset_reps)
         self.vtable = self.G.get_coset_table(self.vwords, parabolic)
         self.num_vertices = len(self.vwords)
@@ -69,7 +69,7 @@ class UniformTiling(object):
         for i in range(len(self.active)):
             if self.active[i]:
                 elist = []
-                coset_reps = set([self.G.get_coset_representative(w, (i,), True) for w in self.words])
+                coset_reps = set([self.G.get_coset_representative(w, (i,)) for w in self.words])
                 for word in self.G.sort_words(coset_reps):
                     v1 = self.G.move(self.vtable, 0, word)
                     v2 = self.G.move(self.vtable, 0, word + (i,))
@@ -99,7 +99,7 @@ class UniformTiling(object):
             else:
                 continue
 
-            coset_reps = set([self.G.get_coset_representative(w, parabolic, True) for w in self.words])
+            coset_reps = set([self.G.get_coset_representative(w, parabolic) for w in self.words])
             flist = []
             for word in self.G.sort_words(coset_reps):
                 f = tuple(self.G.move(self.vtable, v, word) for v in f0)
@@ -201,7 +201,7 @@ class Poincare2D(UniformTiling):
             else:
                 continue
 
-            coset_reps = set([self.G.get_coset_representative(w, parabolic, True) for w in self.words])
+            coset_reps = set([self.G.get_coset_representative(w, parabolic) for w in self.words])
             flist = []
             for word in self.G.sort_words(coset_reps):
                 f = tuple(self.G.move(self.vtable, v, word) for v in f0)

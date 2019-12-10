@@ -188,7 +188,9 @@ class CoxeterGroup(object):
         while True:
             w = word
             for s in parabolic:
-                sw = self.multiply(s, w, right=right)
+                # right coset requires multiply s on the left,
+                # left coset requires multiply s on the right.
+                sw = self.multiply(s, w, right=not right)
                 if len(sw) < len(w):
                     w = sw
             if len(w) == len(word):
@@ -216,10 +218,8 @@ class CoxeterGroup(object):
         for i, word in enumerate(words):
             for j in range(self.rank):
                 if T[i][j] is None:
-                    # the tricky part: multiply j on the left and then compute
-                    # the right coset representative
                     next_word = self.multiply(j, word, right=False)
-                    next_word = self.get_coset_representative(next_word, parabolic, right=True)
+                    next_word = self.get_coset_representative(next_word, parabolic)
                     try:
                         ind = words.index(next_word)
                         T[i][j] = ind
