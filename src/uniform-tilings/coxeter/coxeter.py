@@ -101,8 +101,7 @@ class CoxeterGroup(object):
 
     def _left_mult_invshortlex(self, s, word):
         """Multiply an inverse shortlex word by a generator s on the
-           left: w --> sw. The result is also a reduced word in the normal
-           form of inverse shortlex.
+           left: w --> sw. The result is also a reduced inverse shortlex word.
 
            For more details about the algorithm see:
 
@@ -114,7 +113,7 @@ class CoxeterGroup(object):
           >>> s = 0
           >>> word = (1, 0, 1, 0)  # this is an invserse shortlex word
           >>> G._left_mult_invshortlex(s, word)
-          >>> (1 ,0, 0)
+          >>> (1 ,0, 0)  # the result is also an inverse shortlex word
         """
         # again check if we already have the reflection table.
         # note doing multiplications does not use the automaton.
@@ -140,19 +139,21 @@ class CoxeterGroup(object):
 
     def _right_mult_shortlex(self, s, word):
         """Multipy a shortlex word by a generator s on the right: w --> ws.
-           The result is also a reduced wordin the normal form of inverse
-           shortlex. We simply make it an inverse shortlex word by reversing
-           it, multiply s on the left and then reverse it back.
+           The result is also a reduced shortlex word.
+           We simply make it an inverse shortlex word first by reversing
+           it, then multiply s on the left and finally reverse it back.
         """
         word = reversed(word)
         return self._left_mult_invshortlex(s, word)[::-1]
 
     def multiply(self, s, word, right=True):
-        """Multiply a word (under shortlex order) by a generator s on the left
-           or right. The result is also a reduced word in the normal form of
-           shortlex. If multiply on the left then we progressively compute
-           sw = s(s1s2...sn) = (ss1)s2...sn = ((ss1)s2))...sn by multiplying
-           each si on the right.
+        """Multiply a shortlex word by a generator s on the left or right.
+           The result is also a reduced word in shortlex order. If
+           multiply on the left then we progressively compute
+
+               sw = s(s1s2...sn) = (ss1)s2...sn = ((ss1)s2))...sn
+
+           by multiplying each si on the right.
         """
         if right:
             return self._right_mult_shortlex(s, word)
