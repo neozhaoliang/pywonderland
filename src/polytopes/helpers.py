@@ -220,7 +220,7 @@ def pov_vector_list(vectors):
     """Convert a list of vectors to POV-Ray format, e.g.
        [(x, y, z), (a, b, c), ...] --> <x, y, z>, <a, b, c>, ...
     """
-    return ", ".join([pov_vector(v) for v in vectors])
+    return ", ".join(pov_vector(v) for v in vectors)
 
 
 def pov_array(arr):

@@ -48,7 +48,8 @@ class IntPolynomial(object):
     def __neg__(self):
         return IntPolynomial(-x for x in self)
 
-    def valid(self, g):
+    @staticmethod
+    def valid(g):
         """Check input for polynomial operations.
         """
         if not isinstance(g, (int, IntPolynomial)):

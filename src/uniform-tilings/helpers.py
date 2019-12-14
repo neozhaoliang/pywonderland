@@ -146,13 +146,12 @@ def project_hyperbolic(v):
 def get_geometry_type(pqr):
     """Get the geometry type.
     """
-    s = sum([Fraction(1, x) if x != -1 else 0 for x in pqr])
+    s = sum(Fraction(1, x) if x != -1 else 0 for x in pqr)
     if s > 1:
         return "spherical"
-    elif s == 1:
+    if s == 1:
         return "euclidean"
-    else:
-        return "hyperbolic"
+    return "hyperbolic"
 
 
 # -------------------------------
