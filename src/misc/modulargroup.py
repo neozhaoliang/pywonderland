@@ -166,7 +166,11 @@ class HyperbolicDrawing(cairo.Context):
         self.stroke()
 
 
-def main(width, height, depth, xlim=[-2, 2], ylim=[0, 2]):
+def main(width, height, depth, xlim=None, ylim=None):
+    if xlim is None:
+        xlim = [-2, 2]
+    if ylim is None:
+        ylim = [0, 2]
     surface = cairo.ImageSurface(cairo.FORMAT_RGB24, width, height)
     ctx = HyperbolicDrawing(surface)
     ctx.set_axis(xlim=xlim, ylim=ylim, background_color=(1, 1, 1))
