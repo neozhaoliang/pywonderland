@@ -121,13 +121,6 @@ def get_hyperbolic_mirrors(coxeter_diagram):
     return M
 
 
-def project_euclidean(v):
-    """Project a point in E^n to E^{n-1}.
-       It's projected to the plane z=1 (or w=1).
-    """
-    return np.array(v[:-1]) / v[-1]
-
-
 def project_spherical(v):
     """Project a point in S^n to S^{n-1}.
        This is the stereographic projection.
@@ -136,9 +129,9 @@ def project_spherical(v):
     return np.array(v[:-1]) / (1 + 1e-8 - v[-1])
 
 
-def project_hyperbolic(v):
+def project_poincare(v):
     """Project a point in H^n to H^{n-1}.
-       It's the projection from the hyperboloid to the disk.
+       It's the projection from hyperboloid to Poincare's disk.
     """
     return np.array([x.real for x in v[:-1]]) / (1 + v[-1].imag)
 
@@ -158,7 +151,7 @@ def get_geometry_type(pqr):
 # LaTeX formatting functions
 
 def export_latex_array(self, words, symbol=r"s", cols=4):
-    """Export a list words to latex array format.
+    r"""Export a list words to latex array format.
        `cols` is the number of columns of the output latex array.
 
        Example: words = [(0, 1), (1, 2, 3) ...]
@@ -193,47 +186,3 @@ def check_duplicate_face(f, l):
             return True
         f = f[-1:] + f[:-1]
     return False
-
-
-def pov_vector(v):
-    """Convert a vector to POV-Ray format. e.g. (x, y, z) --> <x, y, z>.
-    """
-    return "<{}>".format(", ".join(str(x) for x in v))
-
-
-def pov_vector_list(vectors):
-    """Convert a list of vectors to POV-Ray format, e.g.
-       [(x, y, z), (a, b, c), ...] --> <x, y, z>, <a, b, c>, ...
-    """
-    return ", ".join([pov_vector(v) for v in vectors])
-
-
-def pov_array(arr):
-    """Convert an array to POV-Ray format, e.g.
-       (0, 1, 2, 3) --> array[4] {0, 1, 2, 3}
-    """
-    return "array[{}] {{{}}}".format(len(arr), ", ".join(str(x) for x in arr))
-
-
-def get_circle(x0, y0, x1, y1):
-    """
-    compute the geodesic circle that passes through (x0,y0) and (x1,y1)
-    """
-
-    # return None if they are close enough or on the same diameter
-    t = 2 * (x0 * y1 - x1 * y0)
-    if abs(t) < 1e-4:
-        return x1, y1, None
-
-    r0 = 1 + x0 * x0 + y0 * y0
-    r1 = 1 + x1 * x1 + y1 * y1
-    cx = (y1 * r0 - y0 * r1) / t
-    cy = (x0 * r1 - x1 * r0) / t
-    r = np.sqrt(max(cx * cx + cy * cy - 1, 1e-6))
-    return cx, cy, r
-
-
-def hex_to_rgb(value):
-    """Hex value to (r, g, b) triple.
-    """
-    return [((value >> (8 * k)) & 255) / 255.0 for k in (2, 1, 0)]

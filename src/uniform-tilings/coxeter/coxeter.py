@@ -1,7 +1,7 @@
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Class for processing words in Coxeter groups
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Word processing in Coxeter groups
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 With this class you can:
 
