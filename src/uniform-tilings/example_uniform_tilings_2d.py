@@ -1,5 +1,3 @@
-import subprocess
-import os
 from tilings import Poincare2D
 
 
