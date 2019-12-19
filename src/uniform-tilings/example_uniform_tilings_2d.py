@@ -1,3 +1,5 @@
+import subprocess
+import os
 from tilings import Poincare2D
 
 
@@ -20,12 +22,6 @@ def main():
     maxcount = 50000
     T.build_geometry(depth, maxcount)
     T.render("2-3-13.svg", 800, checker=True, draw_polygon_edges=False)
-
-    T = Poincare2D((3, 3, 5), (-1, -1, 0))
-    depth = 40
-    maxcount = 30000
-    T.build_geometry(depth, maxcount)
-    T.render("truncated-3-3-5.svg", 800, draw_inner_lines=True)
 
     T = Poincare2D((3, 4, 3), (-1, 0, 0))
     depth = 40

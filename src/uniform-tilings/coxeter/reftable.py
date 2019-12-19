@@ -194,9 +194,7 @@ def get_reflection_table(cox_mat):
                         count += 1
                         queue.append(beta)
                         roots.append(beta)
-                        print("Current number of minimal roots: {}".format(len(roots)), end="\r")
 
-    print("\n{} minimal roots in total".format(len(roots)))
     # finally put all reflection information into a 2d array
     table = np.zeros((len(roots), rank)).astype(object)
     for alpha in roots:
