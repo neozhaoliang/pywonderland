@@ -39,6 +39,6 @@ script:
   - python run_coset_enumeration.py tc_examples/G8723.yaml
   # uniform tilings and Coxeter groups examples
   - cd ../uniform-tilings
-  - python example_compute_coxeter_automaton.py cox_examples/343.txt
+  - python example_uniform_tilings_2d.py
   # travis-ci cannot run glsl and ffmpeg examples, so omit grayscott,
   # mobius and lorenz examples.

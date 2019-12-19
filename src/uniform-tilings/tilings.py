@@ -201,7 +201,7 @@ class Poincare2D(Tiling2D):
         info += "faces: {}\n".format(self.num_faces)
         info += "states in the automaton: {}\n".format(self.G.dfa.num_states)
         info += "reflection table:\n{}\n".format(self.G.reftable)
-        info += "see {}_dfa.png for the automaton".format(pattern)
+        info += "the automaton is saved as {}_dfa.png".format(pattern)
         self.G.dfa.draw(pattern + "_dfa.png")
         return info
 
