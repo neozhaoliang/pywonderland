@@ -157,12 +157,13 @@ Each subdirectory in `/src/` is a single program (except that `glslhelpers` is a
 Here is a list of some algorithms implemented in this project:
 
 + [Domino shuffling algorithm](./src/aztec/aztec.py)
-+ [Hopcroft's DFA minimization algorithm](./src/hyperbolic-tilings/coxeter/automata.py)
++ [Hopcroft's DFA minimization algorithm](./src/uniform-tilings/coxeter/automata.py)
 + [Lempel–Ziv–Welch compression algorithm](./src/gifmaze/gifmaze/encoder.py)
 + [Propp-Wilson's coupling from the past algorithm](./src/cftp/cftp.py)
 + [Todd-Coxeter coset enumeration algorithm](./src/polytopes/todd_coxeter.py)
 + [Wilson's uniform spanning tree algorithm](./src/gifmaze/gifmaze/algorithms.py)
-+ [Casselman's minimal roots algorithm](./src/hyperbolic-tilings/coxeter/minroots.py)
++ [Casselman's minimal roots algorithm](./src/uniform-tilings/coxeter/reftable.py)
++ [Encoding and decoding algorithms for Gray code](./src/gifmaze/example_hilbert_curve.py)
 
 ## Dependencies
 

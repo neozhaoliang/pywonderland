@@ -13,12 +13,11 @@ Basically the program knows everything of a tiling before you draw it:
 2. It knows how to do multiplicaitons in the group.
 3. It knows how to generate words in the group.
 4. It knows how to find a set of coset representatives of a standard parabolic subgroup.
-5. It knows the stabilizing subgroup of the initial vertex, and its coset representatives, and the coset table of these representatives.
-6. It knows the stabilizing subgroup of an initial edge, and its coset representatives, and using orbit-stabilizer theorem to transform it to other edges.
-7. Simialr for the faces.
-8. All these computations above only use integer arithmetic, no floating error invovled.
-9. For triangle groups it computes the data quite fast.
-10. Finally draw the tiling.
+5. Then it computes the stabilizing subgroup of the initial vertex and its coset representatives, and uses orbit-stabilizing theorem to transform the initial vertex to get all other vertices.
+6. Simialr for edges and faces.
+7. All these computations above only use integer arithmetic, no floating error invovled.
+8. For triangle groups it computes the data quite fast.
+9. Finally draw the tiling.
 
 It's still a quite straight and dirty implementation so there's a long way to improve it.
 
@@ -28,6 +27,7 @@ TODO:
 2. snub, star, Catalan tilings.
 3. lots of more fancy features.
 4. a detailed doc explains the math.
+5. Escher tiling using a user input svg image.
 
 **Update 2019/12/19**: I find that there are some bugs in the Euclidean case, and since I have also decided to draw 2d spherical tilings in svg format, hence I temporarily removed the code for drawing Euclidean and spherical cases. I will add them back as soon as possible.
 
