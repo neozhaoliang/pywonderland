@@ -1,4 +1,3 @@
-from functools import partial
 from fractions import Fraction
 import numpy as np
 
@@ -7,25 +6,6 @@ def normalize(v):
     """Normalize a vector `v`.
     """
     return np.array(v) / np.sqrt(abs(np.dot(v, v)))
-
-
-def get_reflections(M, dists=None):
-    """Return the (affine) reflection transformations about a list of
-       mirrors with normal vectors as row vectors of the matrix `M`.
-       The distances of the mirrors to the origin are given by a second
-       list `dists`. In spherical and hyperbolic cases these distances
-       are all 0 and the reflections are usual linear transformations,
-       but in the euclidean case it may be non-zero and the reflections
-       may become affine translations. Here the normal of each mirror is
-       assumed to be an unit vector in the metric space.
-    """
-    def reflect(v, normal, dist):
-        return v - 2 * (np.dot(v, normal) + dist) * normal
-
-    if dists is None:
-        return [partial(reflect, normal=n, dist=0) for n in M]
-    else:
-        return [partial(reflect, normal=n, dist=d) for n, d in zip(M, dists)]
 
 
 def make_symmetry_matrix(upper_triangle):
@@ -50,12 +30,16 @@ def make_symmetry_matrix(upper_triangle):
     return np.array(M, dtype=np.int)
 
 
-def get_point_from_distance(M, d):
+def get_point_from_distance(M, d, normalized=True):
     """Given the normal vectors of the mirrors stored as row vectors in `M`
        and a tuple of non-negative floats `d`, compute the vector `v` whose
-       distance vector to the mirrors is `d` and return its normalized version.
+       distance vector to the mirrors is `d` and choose whether to return
+       its normalized version.
     """
-    return normalize(np.linalg.solve(M, d))
+    p = np.linalg.solve(M, d)
+    if normalized:
+        return normalize(p)
+    return p
 
 
 def get_coxeter_matrix(coxeter_diagram):
@@ -119,6 +103,13 @@ def get_hyperbolic_mirrors(coxeter_diagram):
     M[2, 1] = (C[2, 1] - M[2, 0]*M[1, 0]) / M[1, 1]
     M[2, 2] = np.sqrt(abs(M[2, 0]*M[2, 0] + M[2, 1]*M[2, 1] - 1)) * 1j
     return M
+
+
+def project_affine(v, level):
+    """Project a point in R^3 to a z=level plane.
+    """
+    x, y, z = v
+    return np.array([x, y]) / z * level
 
 
 def project_spherical(v):

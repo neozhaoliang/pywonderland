@@ -1,7 +1,29 @@
-from tilings import Poincare2D
+"""
+A few examples, you can use inkscape to convert the
+output svg to png format:
+
+    inkscape input.svg -z -d 300 -e output.png
+"""
+from tilings import Euclidean2D, Poincare2D
 
 
 def main():
+    T = Euclidean2D((6, 2, 3), (1, 0, 0))
+    T.build_geometry(60)
+    T.render("3-3-3.svg", 800, 640)
+
+    T = Euclidean2D((3, 3, 3), (1, 1, 1))
+    T.build_geometry(60)
+    T.render("omnitruncated-3-3-3.svg", 800, 640)
+
+    T = Euclidean2D((6, 2, 3), (1, 0, 1))
+    T.build_geometry(60)
+    T.render("bitruncated-6-2-3.svg", 800, 640)
+
+    T = Euclidean2D((4, 2, 4), (1, 1, 1))
+    T.build_geometry(60)
+    T.render("omnitruncated-4-2-4.svg", 800, 640)
+
     T = Poincare2D((3, 2, 7), (-1, 0, 0))
     depth = 40
     maxcount = 30000

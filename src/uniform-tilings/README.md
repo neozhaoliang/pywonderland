@@ -28,7 +28,3 @@ TODO:
 3. lots of more fancy features.
 4. a detailed doc explains the math.
 5. Escher tiling using a user input svg image.
-
-**Update 2019/12/19**: I find that there are some bugs in the Euclidean case, and since I have also decided to draw 2d spherical tilings in svg format, hence I temporarily removed the code for drawing Euclidean and spherical cases. I will add them back as soon as possible.
-
-Of course there are also a few minor bugs in the hyperbolic case, but you can still run the code to see the power of this new approach of drawing tilings.

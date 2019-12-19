@@ -1,4 +1,5 @@
 cairocffi
+colour
 drawSvg
 hyperbolic
 jupyter

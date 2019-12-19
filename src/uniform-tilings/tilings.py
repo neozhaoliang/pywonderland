@@ -3,16 +3,13 @@
 Generate uniform tilings via word processing in Coxeter groups
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can use inkscape to convert the output svg to png format:
-
-    inkscape input.svg -z -d 300 -e output.png
-
 :copyright (c) 2019 by Zhao Liang
 """
 import os
 from itertools import combinations
 from functools import partial
 import numpy as np
+import cairocffi as cairo
 
 # third-party module for drawing hyperbolic geodesic lines
 import drawSvg
@@ -20,10 +17,16 @@ from hyperbolic import euclid
 from hyperbolic.poincare.shapes import Polygon
 # process bar
 import tqdm
+# color conversions
+from colour import Color
 
 from coxeter import CoxeterGroup
 from dihedral import DihedralFace
 import helpers
+
+
+def dimmed(c):
+    return Color(hue=c.hue, saturation=c.saturation, luminance=c.luminance*0.6)
 
 
 class Tiling2D(object):
@@ -46,10 +49,10 @@ class Tiling2D(object):
         self.mirrors = self.get_mirrors(coxeter_diagram)
 
         # reflections (possibly affine) about the mirrors
-        self.reflections = self.get_reflections(init_dist)
+        self.reflections = self.get_reflections()
 
         # coordinates of the initial point
-        self.init_v = helpers.get_point_from_distance(self.mirrors, init_dist)
+        self.init_v = self.get_init_point(init_dist)
 
         # vertices of the fundamental triangle
         self.triangle_verts = self.get_fundamental_triangle_verts()
@@ -75,10 +78,10 @@ class Tiling2D(object):
     def vertex_at_mirrors(self, i, j):
         return 2 * (i + j) % 3
 
-    def get_mirrors(self, coxeter_diagram):
+    def get_init_point(self, init_dist):
         raise NotImplementedError
 
-    def get_reflections(self, init_dist):
+    def get_mirrors(self, coxeter_diagram):
         raise NotImplementedError
 
     def get_fundamental_triangle_verts(self):
@@ -158,10 +161,35 @@ class Tiling2D(object):
 
         self.num_faces = sum(len(L) for L in self.face_indices.values())
 
+    def get_reflections(self):
+        def reflect(v, normal):
+            return v - 2 * np.dot(v, normal) * normal
+
+        return [partial(reflect, normal=n) for n in self.mirrors]
+
     def transform(self, word, v):
         for w in reversed(word):
             v = self.reflections[w](v)
         return v
+
+    def get_info(self):
+        """Return some statistics of the tiling.
+        """
+        p = self.cox_mat[0][1]
+        q = self.cox_mat[0][2]
+        r = self.cox_mat[1][2]
+        pattern = "{}-{}-{}".format(p, q, r)
+        info = ""
+        info += "name: triangle group {}\n".format(pattern)
+        info += "cox_mat: {}\n".format(self.cox_mat)
+        info += "vertices: {}\n".format(self.num_vertices)
+        info += "edges: {}\n".format(self.num_edges)
+        info += "faces: {}\n".format(self.num_faces)
+        info += "states in the automaton: {}\n".format(self.G.dfa.num_states)
+        info += "reflection table:\n{}\n".format(self.G.reftable)
+        info += "the automaton is saved as {}_dfa.png".format(pattern)
+        self.G.dfa.draw(pattern + "_dfa.png")
+        return info
 
     def render(self, *arg, **kwargs):
         raise NotImplementedError
@@ -182,28 +210,8 @@ class Poincare2D(Tiling2D):
     def get_mirrors(self, coxeter_diagram):
         return helpers.get_hyperbolic_mirrors(coxeter_diagram)
 
-    def get_reflections(self, init_dist):
-        def reflect(v, normal):
-            return v - 2 * np.dot(v, normal) * normal
-
-        return [partial(reflect, normal=n) for n in self.mirrors]
-
-    def get_info(self):
-        p = self.cox_mat[0][1]
-        q = self.cox_mat[0][2]
-        r = self.cox_mat[1][2]
-        pattern = "{}-{}-{}".format(p, q, r)
-        info = ""
-        info += "name: triangle group {}\n".format(pattern)
-        info += "cox_mat: {}\n".format(self.cox_mat)
-        info += "vertices: {}\n".format(self.num_vertices)
-        info += "edges: {}\n".format(self.num_edges)
-        info += "faces: {}\n".format(self.num_faces)
-        info += "states in the automaton: {}\n".format(self.G.dfa.num_states)
-        info += "reflection table:\n{}\n".format(self.G.reftable)
-        info += "the automaton is saved as {}_dfa.png".format(pattern)
-        self.G.dfa.draw(pattern + "_dfa.png")
-        return info
+    def get_init_point(self, init_dist):
+        return helpers.get_point_from_distance(self.mirrors, init_dist)
 
     def render(self,
                output,
@@ -274,4 +282,96 @@ class Poincare2D(Tiling2D):
         print("{}KB svg file has been written to disk".format(size))
         pngname = os.path.splitext(output)[0] + ".png"
         d.rasterize(pngname)
+        print("=" * 40)
+
+
+class Euclidean2D(Tiling2D):
+
+    @property
+    def level(self):
+        """Return the z-component of the initial vertex.
+        """
+        return self.init_v[2]
+
+    def project(self, v):
+        return helpers.project_affine(v, self.level)
+
+    def get_init_point(self, init_dist):
+        return helpers.get_point_from_distance(self.mirrors, init_dist, False)
+
+    def get_fundamental_triangle_verts(self):
+        m0, m1, m2 = self.mirrors
+        A = np.cross(m1, m2)
+        B = np.cross(m0, m2)
+        C = np.cross(m0, m1)
+        return [p / p[-1] * self.level for p in [A, B, C]]
+
+    def get_mirrors(self, coxeter_diagram):
+        return helpers.get_spherical_or_affine_mirrors(coxeter_diagram)
+
+    def render(self,
+               output,
+               image_width,
+               image_height,
+               extent=30,
+               line_width=0.2,
+               face_colors=("thistle", "steelblue", "lightcoral")):
+        print("=" * 40)
+        print(self.get_info())
+
+        surface = cairo.SVGSurface(output, image_width, image_height)
+        ctx = cairo.Context(surface)
+        ctx.scale(image_height / extent, -image_height / extent)
+        ctx.translate(extent / 2, -extent / 2)
+        ctx.set_source_rgb(0, 0, 0)
+        ctx.paint()
+        ctx.set_line_width(line_width)
+        ctx.set_line_cap(cairo.LINE_CAP_ROUND)
+        ctx.set_line_join(cairo.LINE_JOIN_ROUND)
+
+        bar = tqdm.tqdm(desc="drawing polygons", total=self.num_faces)
+        for (i, j), flist in self.face_indices.items():
+            color1 = Color(face_colors[self.vertex_at_mirrors(i, j)])
+            color2 = dimmed(color1)
+            for face in flist:
+                domain1, domain2 = face.get_alternative_domains()
+                pts = [self.project(p) for p in face.coords]
+                domain1 = [[self.project(p) for p in D] for D in domain1]
+                domain2 = [[self.project(p) for p in D] for D in domain2]
+                for D in domain1:
+                    ctx.move_to(*D[0])
+                    for p in D[1:]:
+                        ctx.line_to(*p)
+                    ctx.close_path()
+                    ctx.set_source_rgb(*color1.rgb)
+                    ctx.fill_preserve()
+                    ctx.set_line_width(0.05)
+                    ctx.stroke()
+
+                for D in domain2:
+                    ctx.move_to(*D[0])
+                    for p in D[1:]:
+                        ctx.line_to(*p)
+                    ctx.close_path()
+                    ctx.set_source_rgb(*color2.rgb)
+                    ctx.fill_preserve()
+                    ctx.set_line_width(0.05)
+                    ctx.stroke()
+
+                ctx.set_line_width(line_width)
+                ctx.move_to(*pts[0])
+                for p in pts[1:]:
+                    ctx.line_to(*p)
+                ctx.close_path()
+                ctx.set_source_rgb(0.2, 0.2, 0.2)
+                ctx.stroke()
+
+                bar.update(1)
+
+        bar.close()
+
+        print("saving to svg...")
+        surface.finish()
+        size = os.path.getsize(output) >> 10
+        print("{}KB svg file has been written to disk".format(size))
         print("=" * 40)
