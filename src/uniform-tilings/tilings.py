@@ -315,6 +315,7 @@ class Euclidean2D(Tiling2D):
                image_height,
                extent=30,
                line_width=0.2,
+               show_vertices_labels=False,
                face_colors=("thistle", "steelblue", "lightcoral")):
         print("=" * 40)
         print(self.get_info())
@@ -323,6 +324,7 @@ class Euclidean2D(Tiling2D):
         ctx = cairo.Context(surface)
         ctx.scale(image_height / extent, -image_height / extent)
         ctx.translate(extent / 2, -extent / 2)
+        ctx.scale(1, -1)
         ctx.set_source_rgb(0, 0, 0)
         ctx.paint()
         ctx.set_line_width(line_width)
@@ -369,6 +371,17 @@ class Euclidean2D(Tiling2D):
                 bar.update(1)
 
         bar.close()
+
+        if show_vertices_labels:
+            ctx.set_source_rgb(*Color("papayawhip").rgb)
+            ctx.select_font_face("Serif", cairo.FONT_SLANT_NORMAL,
+                                 cairo.FONT_WEIGHT_BOLD)
+            ctx.set_font_size(0.7)
+            for i, p in enumerate(self.vertices_coords[:1000]):
+                x, y = self.project(p)
+                _, _, w, h, _, _ = ctx.text_extents(str(i))
+                ctx.move_to(x - w / 2, y + h / 2)
+                ctx.show_text(str(i))
 
         print("saving to svg...")
         surface.finish()

@@ -113,11 +113,9 @@ def project_affine(v, level):
 
 
 def project_spherical(v):
-    """Project a point in S^n to S^{n-1}.
-       This is the stereographic projection.
+    """Project a point on S^2 to R^2 along the z-axis.
     """
-    v = normalize(v)
-    return np.array(v[:-1]) / (1 + 1e-8 - v[-1])
+    return v[:2]
 
 
 def project_poincare(v):

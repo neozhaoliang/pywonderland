@@ -10,15 +10,17 @@ from tilings import Euclidean2D, Poincare2D
 def main():
     T = Euclidean2D((3, 3, 3), (1, 1, 1))
     T.build_geometry(60)
-    T.render("omnitruncated-3-3-3.svg", 800, 640)
+    T.render("omnitruncated-3-3-3.svg", 1200, 960)
 
     T = Euclidean2D((6, 2, 3), (1, 0, 1))
     T.build_geometry(60)
-    T.render("bitruncated-6-2-3.svg", 800, 640)
+    T.render("bitruncated-6-2-3.svg", 1200, 960,
+             show_vertices_labels=True,
+             face_colors=("#477984", "#EEAA4D", "#C03C44"))
 
     T = Euclidean2D((4, 2, 4), (1, 1, 1))
     T.build_geometry(60)
-    T.render("omnitruncated-4-2-4.svg", 800, 640)
+    T.render("omnitruncated-4-2-4.svg", 1200, 960)
 
     T = Poincare2D((3, 2, 7), (-1, 0, 0))
     depth = 40
