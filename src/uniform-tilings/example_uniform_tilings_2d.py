@@ -8,10 +8,6 @@ from tilings import Euclidean2D, Poincare2D
 
 
 def main():
-    T = Euclidean2D((6, 2, 3), (1, 0, 0))
-    T.build_geometry(60)
-    T.render("3-3-3.svg", 800, 640)
-
     T = Euclidean2D((3, 3, 3), (1, 1, 1))
     T.build_geometry(60)
     T.render("omnitruncated-3-3-3.svg", 800, 640)

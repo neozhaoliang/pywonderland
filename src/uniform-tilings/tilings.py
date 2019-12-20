@@ -345,7 +345,7 @@ class Euclidean2D(Tiling2D):
                     ctx.close_path()
                     ctx.set_source_rgb(*color1.rgb)
                     ctx.fill_preserve()
-                    ctx.set_line_width(0.05)
+                    ctx.set_line_width(0.01)
                     ctx.stroke()
 
                 for D in domain2:
@@ -355,7 +355,7 @@ class Euclidean2D(Tiling2D):
                     ctx.close_path()
                     ctx.set_source_rgb(*color2.rgb)
                     ctx.fill_preserve()
-                    ctx.set_line_width(0.05)
+                    ctx.set_line_width(0.01)
                     ctx.stroke()
 
                 ctx.set_line_width(line_width)
