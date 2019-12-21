@@ -4,6 +4,7 @@ output svg to png format:
 
     inkscape input.svg -z -d 300 -e output.png
 """
+from fractions import Fraction
 from tilings import Euclidean2D, Poincare2D
 
 
@@ -47,6 +48,11 @@ def main():
     T.build_geometry(depth, maxcount)
     T.render("3-4-3.svg", 800, checker=True, checker_colors=("white", "black"),
              draw_polygon_edges=False)
+
+    # a hyperbolic star tiling (7/2, 2, 7)
+    T = Poincare2D((Fraction(7, 2), 2, 7), (-1, 0, -1))
+    T.build_geometry(40)
+    T.render("7|2-2-7.svg", 800, show_vertices_labels=True)
 
 
 if __name__ == "__main__":

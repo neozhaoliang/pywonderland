@@ -112,12 +112,6 @@ def project_affine(v, level):
     return np.array([x, y]) / z * level
 
 
-def project_spherical(v):
-    """Project a point on S^2 to R^2 along the z-axis.
-    """
-    return v[:2]
-
-
 def project_poincare(v):
     """Project a point in H^n to H^{n-1}.
        It's the projection from hyperboloid to Poincare's disk.

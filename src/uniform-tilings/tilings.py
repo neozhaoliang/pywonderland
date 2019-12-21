@@ -32,6 +32,9 @@ def dimmed(c):
 class Tiling2D(object):
 
     def __init__(self, coxeter_diagram, init_dist):
+        if len(coxeter_diagram) != 3 or len(init_dist) != 3:
+            raise ValueError("Invalid input dimension")
+
         # Coxeter matrix and its rank
         self.cox_mat = helpers.make_symmetry_matrix(coxeter_diagram)
         self.rank = len(self.cox_mat)
@@ -229,7 +232,7 @@ class Poincare2D(Tiling2D):
         d = drawSvg.Drawing(2.05, 2.05, origin="center")
         d.draw(euclid.shapes.Circle(0, 0, 1), fill="silver")
 
-        bar = tqdm.tqdm(desc="drawing polygons", total=self.num_faces)
+        bar = tqdm.tqdm(desc="processing polygons", total=self.num_faces)
         for (i, j), flist in self.face_indices.items():
             if checker:
                 style1 = {"fill": checker_colors[0]}
@@ -240,7 +243,7 @@ class Poincare2D(Tiling2D):
                 style1 = {"fill": color}
                 style2 = {"fill": color, "opacity": 0.3}
 
-            for face in flist:
+            for k, face in enumerate(flist):
                 points = [self.project(p) for p in face.coords]
                 polygon = Polygon.fromVertices(points)
                 domain1, domain2 = face.get_alternative_domains()
@@ -331,7 +334,7 @@ class Euclidean2D(Tiling2D):
         ctx.set_line_cap(cairo.LINE_CAP_ROUND)
         ctx.set_line_join(cairo.LINE_JOIN_ROUND)
 
-        bar = tqdm.tqdm(desc="drawing polygons", total=self.num_faces)
+        bar = tqdm.tqdm(desc="processing polygons", total=self.num_faces)
         for (i, j), flist in self.face_indices.items():
             color1 = Color(face_colors[self.vertex_at_mirrors(i, j)])
             color2 = dimmed(color1)
