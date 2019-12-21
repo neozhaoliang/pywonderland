@@ -24,7 +24,7 @@ import numpy as np
 import cairocffi as cairo
 
 # third-party module for drawing hyperbolic geodesic lines
-import drawSvgd
+import drawSvg
 from hyperbolic import euclid
 from hyperbolic.poincare.shapes import Polygon
 # process bar
@@ -46,6 +46,8 @@ class Tiling2D(object):
     def __init__(self, coxeter_diagram, init_dist):
         if len(coxeter_diagram) != 3 or len(init_dist) != 3:
             raise ValueError("Invalid input dimension")
+
+        self.diagram = coxeter_diagram
 
         # Coxeter matrix and its rank
         self.cox_mat = helpers.make_symmetry_matrix(coxeter_diagram)
@@ -190,10 +192,7 @@ class Tiling2D(object):
     def get_info(self):
         """Return some statistics of the tiling.
         """
-        p = self.cox_mat[0][1]
-        q = self.cox_mat[0][2]
-        r = self.cox_mat[1][2]
-        pattern = "{}-{}-{}".format(p, q, r)
+        pattern = "{}-{}-{}".format(*self.diagram).replace("/", "|")
         info = ""
         info += "name: triangle group {}\n".format(pattern)
         info += "cox_mat: {}\n".format(self.cox_mat)
@@ -267,7 +266,7 @@ class Poincare2D(Tiling2D):
                     if checker:
                         d.draw(poly, hwidth=0.005, **style1)
                     if draw_inner_lines:
-                        d.draw(poly, fill="papayawhip", hwidth=0.02)
+                        d.draw(poly, fill="papayawhip", hwidth=0.015)
 
                 for D in domain2_2d:
                     poly = Polygon.fromVertices(D)
@@ -275,7 +274,7 @@ class Poincare2D(Tiling2D):
                     if checker:
                         d.draw(poly, hwidth=0.005, **style2)
                     if draw_inner_lines:
-                        d.draw(poly, fill="papayawhip", hwidth=0.02)
+                        d.draw(poly, fill="papayawhip", hwidth=0.015)
 
                 if draw_polygon_edges:
                     d.draw(polygon, fill="#666", hwidth=0.07)
@@ -287,8 +286,7 @@ class Poincare2D(Tiling2D):
         if show_vertices_labels:
             for i, p in enumerate(self.vertices_coords[:100]):
                 loc = self.project(p)
-                d.draw(drawSvg.Text(str(i), 0.05, *loc,
-                                    center=0.7, fill="yellow"))
+                d.draw(drawSvg.Text(str(i), 0.05, *loc, center=0.7, fill="yellow"))
 
         print("saving to svg...")
         d.setRenderSize(w=image_size)

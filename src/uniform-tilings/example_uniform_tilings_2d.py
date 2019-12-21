@@ -46,13 +46,18 @@ def main():
     depth = 40
     maxcount = 30000
     T.build_geometry(depth, maxcount)
-    T.render("3-4-3.svg", 800, checker=True, checker_colors=("white", "black"),
+    T.render("3-4-3.svg", 800,
+             checker=True,
+             checker_colors=("white", "black"),
              draw_polygon_edges=False)
 
     # a hyperbolic star tiling (7/2, 2, 7)
     T = Poincare2D((Fraction(7, 2), 2, 7), (-1, 0, -1))
     T.build_geometry(40)
-    T.render("7|2-2-7.svg", 800, show_vertices_labels=True)
+    T.render("bitruncated-7|2-2-7.svg", 800,
+             show_vertices_labels=True,
+             draw_inner_lines=True,
+             face_colors=("#C03C44", "#EEAA4D", "#477984"))
 
 
 if __name__ == "__main__":
