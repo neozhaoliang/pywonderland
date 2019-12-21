@@ -3,6 +3,18 @@
 Generate uniform tilings via word processing in Coxeter groups
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+This script draws various 2D uniform tilings in euclidean, spherical
+and hyperbolic (Poincaré disk model) spaces. The result is
+exported to svg format. I also implemented a `render()` method
+for each type of tiling to illustrate the usage.
+
+Note: For star tilings different polygons may have overlapping
+part in common, in my default implementaiton of the `render`
+function the last rendered polygon will hide the region it
+shares with other polygons, so the result may not look correct
+in this case. This can be remedied by implementing another rendering
+function for these star tilings.
+
 :copyright (c) 2019 by Zhao Liang
 """
 import os
@@ -12,7 +24,7 @@ import numpy as np
 import cairocffi as cairo
 
 # third-party module for drawing hyperbolic geodesic lines
-import drawSvg
+import drawSvgd
 from hyperbolic import euclid
 from hyperbolic.poincare.shapes import Polygon
 # process bar
