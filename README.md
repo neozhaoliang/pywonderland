@@ -121,21 +121,30 @@ Here is *a very small portion* of examples that this project can do:
 </p>
 
 
-+ [Uniform tilings](./src/hyperbolic-tilings/example_Euclidean_uniform_tilings.py)
++ [Uniform tilings](./src/uniform-tilings/example_uniform_tilings_2d.py)
 
 
 <p align="center">
-<a href="https://imgur.com/TFTR5Oo"><img src="https://i.imgur.com/TFTR5Oo.png" width="600"/></a>
+<a href="https://imgur.com/k5Prvkx"><img src="https://i.imgur.com/k5Prvkx.jpg" width="600"/></a>
 </p>
 
 
 <p align="center">
-<a href="https://imgur.com/YQ3CZrO"><img src="https://imgur.com/YQ3CZrO.png" width="600"/></a>
+<a href="https://imgur.com/bwXoFBc"><img src="https://i.imgur.com/bwXoFBc.jpg" width="600"/></a>
 </p>
 
 
 <p align="center">
-<a href="https://imgur.com/NtPeZDb"><img src="https://imgur.com/NtPeZDb.png" width="600"/></a>
+<a href="https://imgur.com/uK6jBmA"><img src="https://i.imgur.com/uK6jBmA.jpg" width="600"/></a>
+</p>
+
+
+<p align="center">
+<a href="https://imgur.com/NtPeZDb"><img src="https://i.imgur.com/NtPeZDb.png" width="600"/></a>
+</p>
+
+<p align="center">
+<a href="https://imgur.com/TBpYJnoc"><img src="https://i.imgur.com/TBpYJno.jpg" width="600"/></a>
 </p>
 
 
