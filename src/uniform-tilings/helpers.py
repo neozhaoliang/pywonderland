@@ -92,7 +92,7 @@ def get_spherical_or_affine_mirrors(coxeter_diagram):
 
 
 def get_hyperbolic_mirrors(coxeter_diagram):
-    """Get reflection mirrors for the hyperbolic case.
+    """Get reflection mirrors for the 2D hyperbolic case.
     """
     C = -np.cos(np.pi / make_symmetry_matrix(coxeter_diagram).astype(np.float))
     M = np.zeros_like(C).astype(np.complex)
@@ -102,6 +102,24 @@ def get_hyperbolic_mirrors(coxeter_diagram):
     M[2, 0] = C[2, 0]
     M[2, 1] = (C[2, 1] - M[2, 0]*M[1, 0]) / M[1, 1]
     M[2, 2] = np.sqrt(abs(M[2, 0]*M[2, 0] + M[2, 1]*M[2, 1] - 1)) * 1j
+    return M
+
+
+def get_hyperbolic_honeycomb_mirrors(coxeter_diagram):
+    """Get reflection mirrors for the 3D hyperbolic honeycomb case.
+    """
+    C = -np.cos(np.pi / make_symmetry_matrix(coxeter_diagram).astype(np.float))
+    M = np.zeros_like(C).astype(np.complex)
+    M[0, 0] = 1
+    M[1, 0] = C[1, 0]
+    M[1, 1] = np.sqrt(1 - M[1, 0]*M[1, 0])
+    M[2, 0] = C[2, 0]
+    M[2, 1] = (C[2, 1] - M[2, 0]*M[1, 0]) / M[1, 1]
+    M[2, 2] = np.sqrt(abs(1 - M[2, 0]*M[2, 0] - M[2, 1]*M[2, 1]))
+    M[3, 0] = C[3, 0]
+    M[3, 1] = (C[3, 1] - M[3, 0]*M[1, 0]) / M[1, 1]
+    M[3, 2] = (C[3, 2] - M[3, 0]*M[2, 0] - M[3, 1]*M[2, 1]) / M[2, 2]
+    M[3, 3] = np.sqrt(abs(1 - M[3, 0]*M[3, 0] - M[3, 1]*M[3, 1] - M[3, 2]*M[3, 2])) * 1j
     return M
 
 

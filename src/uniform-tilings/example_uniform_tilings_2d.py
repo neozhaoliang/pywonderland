@@ -5,7 +5,7 @@ output svg to png format:
     inkscape input.svg -z -d 300 -e output.png
 """
 from fractions import Fraction
-from tilings import Euclidean2D, Poincare2D
+from tiling import Euclidean2D, Poincare2D
 
 
 def main():
