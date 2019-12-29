@@ -401,3 +401,28 @@ class Euclidean2D(Tiling2D):
         size = os.path.getsize(output) >> 10
         print("{}KB svg file has been written to disk".format(size))
         print("=" * 40)
+
+
+class Spherical2D(Tiling2D):
+
+    def project(self, v):
+        """keep v untouched here since we want to draw a 3d plot of the
+           tiling, for 4d polychora it should be stereographic projection.
+        """
+        return v
+
+    def get_init_point(self, init_dist):
+        return helpers.get_point_from_distance(self.mirrors, init_dist)
+
+    def get_fundamental_triangle_verts(self):
+        M = np.eye(3)
+        return [helpers.get_point_from_distance(self.mirrors, d) for d in M]
+
+    def get_mirrors(self, coxeter_diagram):
+        return helpers.get_spherical_or_affine_mirrors(coxeter_diagram)
+
+    def render(self, output, image_size,
+               face_colors=("#477984", "#EEAA4D", "#74C3F2")):
+        """Need to find out how to draw 3d plots in SVG format.
+        """
+        pass
