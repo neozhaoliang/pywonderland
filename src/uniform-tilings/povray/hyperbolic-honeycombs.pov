@@ -63,6 +63,8 @@ background { MidnightBlue }
 // unit ball, this arc has a constant hyperbolic radius hyper_radius
 #macro HyperbolicEdge(p1, p2)
   #local cross = vlength(vcross(p1, p2));
+  // if p1 and p2 are colliner then connect them with
+  // linearly interpolated spheres with constant hyperbolic radius
   #if (cross < 1e-6)
     sphere_sweep {
       cubic_spline
@@ -74,6 +76,11 @@ background { MidnightBlue }
       texture { edge_tex }
     }
   #else
+    // else we find the center and radius of the geodesic arc
+    // connnets p1 and p2, this requires three different points
+    // on the circle. Since we know this circle is orthogonal
+    // to the unit ball hence the inversion of p1 (or p2) is also
+    // on the circle and can be used as the third point.
     #local p3 = inversion(p1);
     #local v1 = p2 - p1;
     #local v2 = p3 - p1;
