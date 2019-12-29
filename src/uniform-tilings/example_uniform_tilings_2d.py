@@ -1,8 +1,14 @@
 """
-A few examples, you can use inkscape to convert the
-output svg to png format:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A few 2d uniform tiling examples
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+you can use inkscape to convert the output svg to png format:
 
     inkscape input.svg -z -d 300 -e output.png
+
+Currently only euclidean and hyperbolic cases are implemented,
+spherical case will be added later.
 """
 from fractions import Fraction
 from tiling import Euclidean2D, Poincare2D
@@ -58,6 +64,12 @@ def main():
              show_vertices_labels=True,
              draw_inner_lines=True,
              face_colors=("#C03C44", "#EEAA4D", "#477984"))
+
+    T = Poincare2D((8, 6, 3), (0, 0, -1))
+    depth = 40
+    maxcount = 50000
+    T.build_geometry(depth, maxcount)
+    T.render("3-6-8.svg", 800)
 
 
 if __name__ == "__main__":
