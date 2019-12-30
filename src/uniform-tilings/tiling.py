@@ -119,15 +119,20 @@ class Tiling2D(object):
         H = tuple(i for i, x in enumerate(self.active) if not x)
         # coset representatives of the vertex-stabilizing subgroup
         reps = set(self.word_generator(parabolic=H))
+        # sort the words in shortlex order
         self.vwords = self.G.sort_words(reps)
+        # build the coset table for these cosets
         self.vtable = self.G.get_coset_table(self.vwords, H)
         self.num_vertices = len(self.vwords)
+        # apply each coset representative to the initial vertex
         self.vertices_coords = [self.transform(w, self.init_v) for w in self.vwords]
 
     def get_edges(self):
+        """Compute the indices of the edges.
+        """
         for i in self.gens:
             if self.active[i]:
-                elist = []
+                elist = set()
                 H = (i,)  # edge-stabilizing subgroup
                 reps = set(self.word_generator(parabolic=H))
                 reps = self.G.sort_words(reps)
@@ -135,14 +140,18 @@ class Tiling2D(object):
                     v1 = self.G.move(self.vtable, 0, word)
                     v2 = self.G.move(self.vtable, 0, word + (i,))
                     if v1 is not None and v2 is not None:
-                        if (v1, v2) not in elist and (v2, v1) not in elist:
-                            elist.append((v1, v2))
+                        if v1 < v2:
+                            v1, v2 = v2, v1
+                        if (v1, v2) not in elist:
+                            elist.add((v1, v2))
 
                 self.edge_indices[i] = elist
 
         self.num_edges = sum(len(L) for L in self.edge_indices.values())
 
     def get_faces(self):
+        """Compute the indices of the faces (and other information we will need).
+        """
         for i, j in combinations(self.gens, 2):
             c0 = self.triangle_verts[self.vertex_at_mirrors(i, j)]
             f0 = []

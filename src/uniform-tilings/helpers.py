@@ -148,6 +148,33 @@ def get_geometry_type(pqr):
     return "hyperbolic"
 
 
+def is_degenerate(cox_mat, active):
+    """Check if a spherical polyhedra is degenerated.
+    """
+    p, q, r = cox_mat[0, 1], cox_mat[0, 2], cox_mat[1, 2]
+    m0, m1, m2 = active
+    if not any(active):
+        return True
+    else:
+        if p > 2 and r > 2:
+            return False
+        elif p == 2:
+            if not m0:
+                return True
+            else:
+                if r > 2:
+                    return not any([m1, m2])
+                else:
+                    return not all([m1, m2])
+        else:
+            if not m2:
+                return True
+            elif not any([m0, m1]):
+                return True
+            else:
+                return False
+
+
 # -------------------------------
 # LaTeX formatting functions
 
@@ -187,3 +214,16 @@ def check_duplicate_face(f, l):
             return True
         f = f[-1:] + f[:-1]
     return False
+
+
+def pov_vector(v):
+    """Convert a vector to POV-Ray format. e.g. (x, y, z) --> <x, y, z>.
+    """
+    return "<{}>".format(", ".join(str(x) for x in v))
+
+
+def pov_vector_list(vectors):
+    """Convert a list of vectors to POV-Ray format, e.g.
+       [(x, y, z), (a, b, c), ...] --> <x, y, z>, <a, b, c>, ...
+    """
+    return ", ".join(pov_vector(v) for v in vectors)
