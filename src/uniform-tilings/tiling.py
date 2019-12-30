@@ -108,7 +108,7 @@ class Tiling2D(object):
         """Postpone the actual computations to this method.
         """
         self.G.init()
-        self.words = tuple(self.G.traverse(depth, maxcount))
+        self.word_generator = partial(self.G.traverse, depth=depth, maxcount=maxcount)
         self.get_vertices()
         self.get_edges()
         self.get_faces()
@@ -118,7 +118,7 @@ class Tiling2D(object):
         # generators of the vertex-stabilizing subgroup
         H = tuple(i for i, x in enumerate(self.active) if not x)
         # coset representatives of the vertex-stabilizing subgroup
-        reps = set(self.G.get_coset_representative(w, H) for w in self.words)
+        reps = set(self.word_generator(parabolic=H))
         self.vwords = self.G.sort_words(reps)
         self.vtable = self.G.get_coset_table(self.vwords, H)
         self.num_vertices = len(self.vwords)
@@ -129,7 +129,7 @@ class Tiling2D(object):
             if self.active[i]:
                 elist = []
                 H = (i,)  # edge-stabilizing subgroup
-                reps = set(self.G.get_coset_representative(w, H) for w in self.words)
+                reps = set(self.word_generator(parabolic=H))
                 reps = self.G.sort_words(reps)
                 for word in reps:
                     v1 = self.G.move(self.vtable, 0, word)
@@ -163,7 +163,7 @@ class Tiling2D(object):
             else:
                 continue
 
-            reps = set(self.G.get_coset_representative(w, H) for w in self.words)
+            reps = set(self.word_generator(parabolic=H))
             reps = self.G.sort_words(reps)
             flist = []
             for word in reps:

@@ -74,7 +74,7 @@ class CoxeterGroup(object):
 
         return r"\begin{{array}}{{{}}}{}\end{{array}}".format("l" * cols, latex)
 
-    def traverse(self, depth=None, maxcount=20000):
+    def traverse(self, depth=None, maxcount=20000, parabolic=(), right=False):
         """Traverse the automaton and yield the words along the
            way up to a given depth. If depth is set to `None` then
            it will try to traverse up to a maximum number of words.
@@ -86,7 +86,7 @@ class CoxeterGroup(object):
         Q = deque([((), 0, self.dfa.start)])
         while Q:
             word, steps, state = Q.popleft()
-            yield word
+            yield self.get_coset_representative(word, parabolic, right)
             count += 1
             if count >= maxcount:
                 break
