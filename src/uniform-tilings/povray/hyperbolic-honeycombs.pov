@@ -20,7 +20,7 @@ background { MidnightBlue }
 // radius of a geodesic arc in hyperbolic metric
 #declare hyper_radius = 0.09;
 // number of spheres used in sphere_sweep
-#declare num_segments = 50;
+#declare num_segments = 15;
 
 #declare edge_finish = finish {
   ambient 0.5

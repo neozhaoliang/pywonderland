@@ -88,5 +88,5 @@ ENV/
 # Rope project settings
 .ropeproject
 
-
+*-data.inc
 src/**/*.py.bak

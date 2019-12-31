@@ -140,7 +140,7 @@ class Tiling2D(object):
                     v1 = self.G.move(self.vtable, 0, word)
                     v2 = self.G.move(self.vtable, 0, word + (i,))
                     if v1 is not None and v2 is not None:
-                        if v1 < v2:
+                        if v1 > v2:
                             v1, v2 = v2, v1
                         if (v1, v2) not in elist:
                             elist.add((v1, v2))
