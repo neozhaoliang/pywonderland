@@ -23,8 +23,7 @@ It's still a quite straight and dirty implementation so there's a long way to im
 
 TODO:
 
-1. 3d hyperbolic honeycombs.
-2. snub and Catalan tilings.
-3. lots of more fancy features.
-4. a detailed doc explains the math.
-5. Escher tiling using a user input svg image.
+1. snub and Catalan tilings.
+2. lots of more fancy features.
+3. a detailed doc explains the math.
+4. Escher tiling using a user input svg image.

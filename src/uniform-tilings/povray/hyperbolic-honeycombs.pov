@@ -12,26 +12,24 @@ by Zhao Liang 2019/12/25
 
 global_settings {
     assumed_gamma 2.2
-    max_trace_level 8
+    max_trace_level 10
 }
 
-background { MidnightBlue }
+background { SkyBlue }
 
 // radius of a geodesic arc in hyperbolic metric
-#declare hyper_radius = 0.09;
+#declare hyper_radius = 0.04;
 // number of spheres used in sphere_sweep
-#declare num_segments = 15;
+#declare num_segments = 30;
 
 #declare edge_finish = finish {
   ambient 0.5
   diffuse 0.5
-  reflection 0
   specular .5
-  roughness 0.1
 }
 
 #declare edge_tex = texture {
-  pigment { Silver }
+  pigment { Pink }
   finish { edge_finish }
 };
 
@@ -62,7 +60,7 @@ background { MidnightBlue }
 // the hyperbolic geodesic arc connects two points p1, p2 in the
 // unit ball, this arc has a constant hyperbolic radius hyper_radius
 #macro HyperbolicEdge(p1, p2)
-  #local cross = vlength(vcross(p1, p2));
+  #local cross = vlength(vcross(vnormalize(p1), vnormalize(p2)));
   // if p1 and p2 are colliner then connect them with
   // linearly interpolated spheres with constant hyperbolic radius
   #if (cross < 1e-6)
@@ -100,7 +98,6 @@ background { MidnightBlue }
         #local q2 = vnormalize(q1) * rad + center;
         q2, get_hyperbolic_rad(q2, hyper_radius)
       #end
-      tolerance 1e-2
       texture { edge_tex }
     }
   #end
@@ -117,8 +114,6 @@ union {
         finish {
           ambient 0.5
           diffuse 0.5
-          reflection 0.1
-          roughness 0.03
           specular 0.5 }
       }
     }
@@ -126,18 +121,13 @@ union {
 }
 
 camera {
-  location <1, 1, 1> * 0.4
-  look_at <1, 1.2, 1.2> * (-1)
-  up z
+  location <0, 0, 0>
+  look_at <0, 0, -1>
+  up y
   right x*image_width/image_height
 }
 
 light_source {
-  <1, 1, 1> * 0.2
+  <0, 0, 0>
   color White
-  area_light
-  x, z
-  5, 5
-  adaptive 1
-  jitter
 }
