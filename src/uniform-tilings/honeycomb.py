@@ -166,16 +166,19 @@ class Honeycomb(object):
                     result.append(edge)
         return result
 
-    def export_edge(self, fobj, edge):
+    def export_edge(self, fobj, edge, eye, viewdir):
         """Export the data of an edge to POV-Ray .inc file."""
         p1 = self.project(edge[0])
         p2 = self.project(edge[1])
-        fobj.write("HyperbolicEdge({}, {})\n".format(
-            helpers.pov_vector(p1),
-            helpers.pov_vector(p2)))
+        if np.dot(p1 - eye, viewdir) > 0.5 or np.dot(p2 - eye, viewdir) > 0.5:
+            fobj.write("HyperbolicEdge({}, {})\n".format(
+                helpers.pov_vector(p1),
+                helpers.pov_vector(p2)))
 
     def generate_povray_data(self, depth=100, maxcount=50000,
-                             filename="./povray/honeycomb-data.inc"):
+                             filename="./povray/honeycomb-data.inc",
+                             eye=(0, 0, 0.5),
+                             lookat=(0, 0, 0)):
         self.G.init()
         self.word_generator = partial(self.G.traverse, depth=depth, maxcount=maxcount)
         init_edges = self.collect_fundamental_cell_edges()
@@ -183,9 +186,14 @@ class Honeycomb(object):
         vcount = 0
         ecount = 0
         vertices = set()
+        eye = np.array(eye)
+        lookat = np.array(lookat)
+        viewdir = helpers.normalize(lookat - eye)
         with open(filename, "w") as f:
+            f.write("#declare camera_loc = {};\n".format(helpers.pov_vector(eye)))
+            f.write("#declare lookat = {};\n".format(helpers.pov_vector(lookat)))
             for edge in init_edges:
-                self.export_edge(f, edge)
+                self.export_edge(f, edge, eye, viewdir)
                 for v in edge:
                     if v not in vertices:
                         vertices.add(v)
@@ -195,7 +203,7 @@ class Honeycomb(object):
                 for edge in init_edges:
                     edge = [self.transform(word, v) for v in edge]
                     if self.is_new_edge(edge):
-                        self.export_edge(f, edge)
+                        self.export_edge(f, edge, eye, viewdir)
                         ecount += 1
                         for v in edge:
                             if v not in vertices:

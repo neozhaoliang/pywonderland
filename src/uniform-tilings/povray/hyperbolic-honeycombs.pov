@@ -15,21 +15,28 @@ global_settings {
     max_trace_level 10
 }
 
-background { SkyBlue }
+background { BlueViolet }
 
 // radius of a geodesic arc in hyperbolic metric
-#declare hyper_radius = 0.04;
+#declare hyper_radius = 0.07;
 // number of spheres used in sphere_sweep
 #declare num_segments = 30;
 
 #declare edge_finish = finish {
+  metallic
   ambient 0.5
   diffuse 0.5
-  specular .5
+  specular 0.5
+  brilliance 6
+  phong 0.8
+  phong_size 20
+  roughness 0.001
 }
 
+#declare vertex_color = SlateBlue;
+
 #declare edge_tex = texture {
-  pigment { Pink }
+  pigment { Silver }
   finish { edge_finish }
 };
 
@@ -110,7 +117,7 @@ union {
     sphere {
       q, get_hyperbolic_rad(q, hyper_radius*2.5)
       texture{
-        pigment{ color Orange }
+        pigment{ color vertex_color }
         finish {
           ambient 0.5
           diffuse 0.5
@@ -121,13 +128,18 @@ union {
 }
 
 camera {
-  location <0, 0, 0>
-  look_at <0, 0, -1>
+  location <0, 0, 0.5>
+  look_at <0, 0, 0>
   up y
   right x*image_width/image_height
 }
 
 light_source {
-  <0, 0, 0>
+  <0, 0, 0.3>
   color White
+  area_light
+  x*0.7, y*0.7,
+  3, 3
+  jitter
+  adaptive 1
 }
