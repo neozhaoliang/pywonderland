@@ -148,6 +148,10 @@ Here is *a very small portion* of examples that this project can do:
 </p>
 
 
+<p align="center">
+<a href="https://imgur.com/sUsPKH7"><img src="https://i.imgur.com/sUsPKH7.png" width="600"/></a>
+</p>
+
 
 + [Möbius transformations in hyperbolic 3-space](./src/mobius/Mobius_in_H3space.py)
 
