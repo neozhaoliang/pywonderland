@@ -130,14 +130,14 @@ union {
 }
 
 camera {
-  location <0, 0, 0.55>
+  location camera_loc
   look_at lookat
   up y
   right x*image_width/image_height
 }
 
 light_source {
-  <0, 0, 0.55>
+  camera_loc
   color White
   area_light
   x*0.7, y*0.7,
