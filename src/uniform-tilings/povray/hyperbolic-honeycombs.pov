@@ -3,6 +3,8 @@
 Main scene file for rendering 3D hyperbolic honeycombs 
 ------------------------------------------------------
 
+This is the example scene for the regular 3-5-3 honeycomb
+
 by Zhao Liang 2019/12/25
 
 */
@@ -15,25 +17,25 @@ global_settings {
     max_trace_level 10
 }
 
-background { MidnightBlue }
+background { LightBlue }
 
 // radius of a geodesic arc in hyperbolic metric
-#declare hyper_radius = 0.09;
+#declare hyper_radius = 0.035;
 // number of spheres used in sphere_sweep
 #declare num_segments = 20;
 
 #declare edge_finish = finish {
   metallic
-  ambient 0.5
-  diffuse 0.5
+  ambient 0.3
+  diffuse 0.7
   specular 0.5
   brilliance 6
-  phong 0.8
-  phong_size 20
-  roughness 0.001
+  phong 0.6
+  phong_size 70
+  roughness 0.1
 }
 
-#declare vertex_color = Orange;
+#declare vertex_color = MediumVioletRed;
 
 #declare edge_tex = texture {
   pigment { MediumSeaGreen }
@@ -112,34 +114,39 @@ background { MidnightBlue }
 
 union {
   #include "honeycomb-data.inc"
+  
   #for (k, 0, num_vertices-1)
     #local q = vertices[k];
     sphere {
-      q, get_hyperbolic_rad(q, hyper_radius*2.5)
+      q, get_hyperbolic_rad(q, hyper_radius*3)
       texture{
         pigment{ color vertex_color }
         finish {
-          ambient 0.5
-          diffuse 0.5
-          specular 0.5 }
+          edge_finish }
       }
     }
   #end
+
 }
 
 camera {
-  location camera_loc
+  location <0, 0, 0.55>
   look_at lookat
   up y
   right x*image_width/image_height
 }
 
 light_source {
-  <0, 0, 0.3>
+  <0, 0, 0.55>
   color White
   area_light
   x*0.7, y*0.7,
   3, 3
   jitter
   adaptive 1
+}
+
+light_source {
+  <0, 1, 0.5>
+  color White*1.3
 }
