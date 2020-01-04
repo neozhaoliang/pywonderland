@@ -306,9 +306,8 @@ class Snub24Cell(Polychora):
 
     def __init__(self):
         coxeter_diagram = (3, 2, 2, 3, 3, 2)
-        coxeter_matrix = helpers.make_symmetry_matrix(coxeter_diagram)
-        mirrors = helpers.get_mirrors(coxeter_diagram)
-        super().__init__(coxeter_matrix, mirrors, (1, 1, 1, 1), extra_relations=())
+        active = (1, 1, 1, 1)
+        super().__init__(coxeter_diagram, active, extra_relations=())
         self.symmetry_gens = tuple(range(6))
         self.symmetry_rels = ((0,) * 3, (2,) * 3, (4,) * 3,
                               (0, 2) * 2, (0, 4) * 2, (3, 4) * 2,

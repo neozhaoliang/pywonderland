@@ -17,146 +17,20 @@
 
 ## About this repo
 
-Math is beautiful, but to truly enjoy it one has to walk a long and painful way learning lots of boring stuff before he could see the full landscape. I hope this repo could help those people without a strong math background get some intuitive understanding of the beauty and elegance of math. The topics are chosen largely due to my personal taste:
+The purpose of this project is to show the beauty of math with python. It consists of several independent sub-projects. The topics are chosen largely due to my personal taste:
 
 1. They must produce appealing results.
 2. There must be some non-trivial math behind them.
 3. The code should be as simple as possible.
 
-I'll use only popular python libs and build all math stuff by hand (tools like `sage`, `sympy`, `mathemetica` will not be used here).
+I'll use only popular python libs and build all math stuff by hand (tools like `sage`, `sympy`, `mathemetica` will not be used here). Also I only maintain the code for `python >= 3.5`.
 
 The website for the docs is still under construction and will be released soon.
 
-**This repository will be always under construction since there are too many interesting things in math that can be shown by code.** Pull requests, issues, questions, and suggestions are all welcomed!
-
-**NB:** I will only maintain the code for `python >= 3.5`.
-
-
-## Examples
-
-Here is *a very small portion* of examples that this project can do:
-
-+ [Wilson's uniform spanning tree algorithm animation](./src/gifmaze/example_maze_animations.py)
+A few examples:
 
 <p align="center">
-<a href="https://imgur.com/ptSqlDl"><img src="https://i.imgur.com/ptSqlDl.gif"/></a>
-</p>
-
-+ [Hilbert's curve animation](./src/gifmaze/example_hilbert_curve.py)
-
-<p align="center">
-<a href="https://imgur.com/gEO7AMR"><img src="https://i.imgur.com/gEO7AMR.gif" width="600"/></a>
-</p>
-
-+ [Domino shuffling algorithm animation](./src/aztec/run_domino_shuffling_animation.py)
-
-<p align="center">
-<a href="https://imgur.com/BWUBjto"><img src="https://i.imgur.com/BWUBjto.gif"/></a>
-</p>
-
-+ [Raymarching fractals](./src/fractal3d/fractal3d.py)
-
-<p align="center">
-<a href="https://imgur.com/yca2GAj"><img src="https://i.imgur.com/yca2GAj.png" width="600"/></a>
-</p>
-
-<p align="center">
-<a href="https://imgur.com/Tts3ZUd"><img src="https://i.imgur.com/Tts3ZUd.png" width="600"/></a>
-</p>
-
-<p align="center">
-<a href="https://imgur.com/O9Q3VOr"><img src="https://i.imgur.com/O9Q3VOr.png" width="600"/></a>
-</p>
-
-+ [Hopf fibration](./src/hopf/hopf_fibration.ipynb)
-
-<p align="center">
-<a href="https://imgur.com/hJJeone"><img src="https://i.imgur.com/hJJeone.png" width="600"/></a>
-</p>
-
-+ [Aperiodic tilings](./src/aperiodic-tilings)
-
-<p align="center">
-<a href="https://imgur.com/oJ5N06Z"><img src="https://i.imgur.com/oJ5N06Z.png" width="600"/></a>
-</p>
-
-<p align="center">
-<a href="https://imgur.com/oLJQBU2"><img src="https://i.imgur.com/oLJQBU2.png" width="600"/></a>
-</p>
-
-
-+ [Langton's ant animation](./src/gifmaze/example_langton_ant.py)
-
-<p align="center">
-<a href="https://imgur.com/XwIg4QL"><img src="https://i.imgur.com/XwIg4QL.gif"/></a>
-</p>
-
-
-+ [Reaction-diffusion simulation](./src/grayscott/main.py)
-
-<p align="center">
-<a href="https://imgur.com/3dPrFa6"><img src="https://i.imgur.com/3dPrFa6.png" width="600"/></a>
-</p>
-
-<p align="center">
-<a href="https://imgur.com/3fklRDM"><img src="https://i.imgur.com/3fklRDM.png" width="600"/></a>
-</p>
-
-+ [Uniform polytopes](./src/polytopes)
-
-<p align="center">
-<a href="https://imgur.com/CpfGucn"><img src="https://i.imgur.com/CpfGucn.png"/></a>
-</p>
-
-<p align="center">
-<a href="https://imgur.com/pM1gePd"><img src="https://i.imgur.com/pM1gePd.png"/></a>
-</p>
-
-<p align="center">
-<a href="https://imgur.com/fr69m1j"><img src="https://i.imgur.com/fr69m1j.gif"/></a>
-</p>
-
-<p align="center">
-<a href="https://imgur.com/qeyPqMZ"><img src="https://imgur.com/qeyPqMZ.png"/></a>
-</p>
-
-
-+ [Uniform tilings](./src/uniform-tilings/example_uniform_tilings_2d.py)
-
-
-<p align="center">
-<a href="https://imgur.com/k5Prvkx"><img src="https://i.imgur.com/k5Prvkx.jpg" width="600"/></a>
-</p>
-
-
-<p align="center">
-<a href="https://imgur.com/bwXoFBc"><img src="https://i.imgur.com/bwXoFBc.jpg" width="600"/></a>
-</p>
-
-
-<p align="center">
-<a href="https://imgur.com/uK6jBmA"><img src="https://i.imgur.com/uK6jBmA.jpg" width="600"/></a>
-</p>
-
-
-<p align="center">
-<a href="https://imgur.com/NtPeZDb"><img src="https://i.imgur.com/NtPeZDb.png" width="600"/></a>
-</p>
-
-<p align="center">
-<a href="https://imgur.com/TBpYJnoc"><img src="https://i.imgur.com/TBpYJno.jpg" width="600"/></a>
-</p>
-
-
-<p align="center">
-<a href="https://imgur.com/HaAI8ae"><img src="https://i.imgur.com/HaAI8ae.png" width="600"/></a>
-</p>
-
-
-+ [Möbius transformations in hyperbolic 3-space](./src/mobius/Mobius_in_H3space.py)
-
-<p align="center">
-<a href="https://imgur.com/U1XgWkc"><img src="https://i.imgur.com/U1XgWkc.png" width="600"/></a>
+<img src="./gallery.png" width="800">
 </p>
 
 
