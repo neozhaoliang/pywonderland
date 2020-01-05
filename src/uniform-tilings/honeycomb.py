@@ -166,14 +166,11 @@ class Honeycomb(object):
                     result.append(edge)
         return result
 
-    def export_edge(self, fobj, edge, eye, viewdir):
+    def export_edge(self, fobj, p1, p2):
         """Export the data of an edge to POV-Ray .inc file."""
-        p1 = self.project(edge[0])
-        p2 = self.project(edge[1])
-        if np.dot(p1 - eye, viewdir) > 0.5 or np.dot(p2 - eye, viewdir) > 0.5:
-            fobj.write("HyperbolicEdge({}, {})\n".format(
-                helpers.pov_vector(p1),
-                helpers.pov_vector(p2)))
+        fobj.write("HyperbolicEdge({}, {})\n".format(
+            helpers.pov_vector(p1),
+            helpers.pov_vector(p2)))
 
     def generate_povray_data(self, depth=100, maxcount=50000,
                              filename="./povray/honeycomb-data.inc",
@@ -193,27 +190,35 @@ class Honeycomb(object):
             f.write("#declare camera_loc = {};\n".format(helpers.pov_vector(eye)))
             f.write("#declare lookat = {};\n".format(helpers.pov_vector(lookat)))
             for edge in init_edges:
-                self.export_edge(f, edge, eye, viewdir)
-                for v in edge:
-                    if v not in vertices:
-                        vertices.add(v)
-                        vcount += 1
+                p1 = self.project(edge[0])
+                p2 = self.project(edge[1])
+                if np.dot(p1 - eye, viewdir) > 0.5 or np.dot(p2 - eye, viewdir) > 0.5:
+                    self.export_edge(f, p1, p2)
+                    ecount += 1
+                    for v in [p1, p2]:
+                        v = vround(v)
+                        if v not in vertices:
+                            vertices.add(v)
+                            vcount += 1
 
             for word in self.word_generator():
                 for edge in init_edges:
                     edge = [self.transform(word, v) for v in edge]
                     if self.is_new_edge(edge):
-                        self.export_edge(f, edge, eye, viewdir)
-                        ecount += 1
-                        for v in edge:
-                            if v not in vertices:
-                                vertices.add(v)
-                                vcount += 1
+                        p1 = self.project(edge[0])
+                        p2 = self.project(edge[1])
+                        if np.dot(p1 - eye, viewdir) > 0.5 or np.dot(p2 - eye, viewdir) > 0.5:
+                            self.export_edge(f, p1, p2)
+                            ecount += 1
+                            for v in [p1, p2]:
+                                v = vround(v)
+                                if v not in vertices:
+                                    vertices.add(v)
+                                    vcount += 1
                 bar.update(1)
             bar.close()
             verts = "#declare num_vertices = {};\n"
             verts_coords = "#declare vertices = array[{}]{{{}}};\n"
-            coords = [self.project(v) for v in vertices]
             print("{} vertices and {} edges generated".format(vcount, ecount))
             f.write(verts.format(vcount))
-            f.write(verts_coords.format(vcount, helpers.pov_vector_list(coords)))
+            f.write(verts_coords.format(vcount, helpers.pov_vector_list(vertices)))

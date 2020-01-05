@@ -149,7 +149,9 @@ def get_geometry_type(pqr):
 
 
 def is_degenerate(cox_mat, active):
-    """Check if a spherical polyhedra is degenerated.
+    """
+    Check if a 3d polyhedra defined by a Coxeter diagram is degenerate.
+    Here the diagram is like *-- p --*-- r --* (so q is always 2).
     """
     p, q, r = cox_mat[0, 1], cox_mat[0, 2], cox_mat[1, 2]
     m0, m1, m2 = active

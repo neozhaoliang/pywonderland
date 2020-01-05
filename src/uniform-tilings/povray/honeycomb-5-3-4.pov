@@ -3,6 +3,8 @@
 Main scene file for rendering 3D hyperbolic honeycombs 
 ------------------------------------------------------
 
+This is the example scene for the regular 5-3-4 honeycomb
+
 by Zhao Liang 2019/12/25
 
 */
