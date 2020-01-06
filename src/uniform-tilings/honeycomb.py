@@ -2,6 +2,8 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 3d hyperbolic honeycombs in Poincaré's ball model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ideal and hyperideal cases are missing, should be added later.
 """
 from functools import partial
 from itertools import combinations
@@ -114,6 +116,9 @@ class Honeycomb(object):
 
         self.edge_hash_set = set()
 
+        self.num_vertices = 0
+        self.num_edges = 0
+
     def get_reflections(self):
         def reflect(v, normal):
             return v - 2 * np.dot(v, normal) * normal
@@ -180,45 +185,39 @@ class Honeycomb(object):
         self.word_generator = partial(self.G.traverse, depth=depth, maxcount=maxcount)
         init_edges = self.collect_fundamental_cell_edges()
         bar = tqdm.tqdm(desc="processing edges", total=maxcount)
-        vcount = 0
-        ecount = 0
         vertices = set()
         eye = np.array(eye)
         lookat = np.array(lookat)
         viewdir = helpers.normalize(lookat - eye)
+
+        def add_new_edge(edge):
+            p1 = self.project(edge[0])
+            p2 = self.project(edge[1])
+            if np.dot(p1 - eye, viewdir) > 0.5 or np.dot(p2 - eye, viewdir) > 0.5:
+                self.export_edge(f, p1, p2)
+                self.num_edges += 1
+                for v in [p1, p2]:
+                    v = vround(v)
+                    if v not in vertices:
+                        vertices.add(v)
+                        self.num_vertices += 1
+
         with open(filename, "w") as f:
             f.write("#declare camera_loc = {};\n".format(helpers.pov_vector(eye)))
             f.write("#declare lookat = {};\n".format(helpers.pov_vector(lookat)))
             for edge in init_edges:
-                p1 = self.project(edge[0])
-                p2 = self.project(edge[1])
-                if np.dot(p1 - eye, viewdir) > 0.5 or np.dot(p2 - eye, viewdir) > 0.5:
-                    self.export_edge(f, p1, p2)
-                    ecount += 1
-                    for v in [p1, p2]:
-                        v = vround(v)
-                        if v not in vertices:
-                            vertices.add(v)
-                            vcount += 1
+                add_new_edge(edge)
 
             for word in self.word_generator():
                 for edge in init_edges:
                     edge = [self.transform(word, v) for v in edge]
                     if self.is_new_edge(edge):
-                        p1 = self.project(edge[0])
-                        p2 = self.project(edge[1])
-                        if np.dot(p1 - eye, viewdir) > 0.5 or np.dot(p2 - eye, viewdir) > 0.5:
-                            self.export_edge(f, p1, p2)
-                            ecount += 1
-                            for v in [p1, p2]:
-                                v = vround(v)
-                                if v not in vertices:
-                                    vertices.add(v)
-                                    vcount += 1
+                        add_new_edge(edge)
+
                 bar.update(1)
             bar.close()
             verts = "#declare num_vertices = {};\n"
             verts_coords = "#declare vertices = array[{}]{{{}}};\n"
-            print("{} vertices and {} edges generated".format(vcount, ecount))
-            f.write(verts.format(vcount))
-            f.write(verts_coords.format(vcount, helpers.pov_vector_list(vertices)))
+            print("{} vertices and {} edges generated".format(self.num_vertices, self.num_edges))
+            f.write(verts.format(self.num_vertices))
+            f.write(verts_coords.format(self.num_vertices, helpers.pov_vector_list(vertices)))

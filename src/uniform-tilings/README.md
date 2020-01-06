@@ -5,21 +5,11 @@ This is a very first version of a very complicated program: draw uniform Euclide
 1. Render 2d tilings in svg format.
 2. Render 3d tilings in POV-Ray.
 
-I have finished the math stuff (most difficult part in the code) and attached a few examples for illustrating the procedure. You can run the example_*.py scripts to see the results.
+**Implemented features**:
 
-Basically the program knows everything of a tiling before you draw it:
+1. 2d uniform Euclidean tilings.
+2. 2d/3d uniform hyperbolic tilings in Poincare's disk/ball.
 
-1. It firstly builds the Coxeter group of the tiling.
-2. It knows how to do multiplicaitons in the group.
-3. It knows how to generate words in the group.
-4. It knows how to find a set of coset representatives of a standard parabolic subgroup.
-5. Then it computes the stabilizing subgroup of the initial vertex and its coset representatives, and uses orbit-stabilizing theorem to transform the initial vertex to get all other vertices.
-6. Simialr for edges and faces.
-7. All these computations above only use integer arithmetic, no floating error invovled.
-8. For triangle groups it computes the data quite fast.
-9. Finally draw the tiling.
-
-It's still a quite straight and dirty implementation so there's a long way to improve it.
 
 TODO:
 
@@ -27,3 +17,4 @@ TODO:
 2. lots of more fancy features.
 3. a detailed doc explains the math.
 4. Escher tiling using a user input svg image.
+5. Honeycombs with ideal and hyperideal vertices.

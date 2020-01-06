@@ -103,9 +103,11 @@ background { LightBlue }
       cubic_spline
       num_segments + 1
       #for (k, 0, num_segments)
-        #local q1 = (p1 + k/num_segments * (p2 - p1)) - center;
-        #local q2 = vnormalize(q1) * rad + center;
-        q2, get_hyperbolic_rad(q2, hyper_radius)
+        #local theta = acos(vdot(p1-center, p2-center) / (rad*rad));
+        #local theta2 = k / num_segments * theta;
+        #local ax = vcross(p1-center, p2-center);
+        #local point = vaxis_rotate(p1-center, ax, theta2/pi*180) + center;
+        point, get_hyperbolic_rad(point, hyper_radius)
       #end
       texture { edge_tex }
     }
