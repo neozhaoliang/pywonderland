@@ -37,6 +37,14 @@ def proj3d(v):
     return np.array([x, y, z]) / (1 + 1e-8 - w)  # avoid divide by zero
 
 
+def proj4d(v):
+    """Stereographic projection of a 5d vector with pole at (0, 0, 0, 0, 1).
+    """
+    v = normalize(v)
+    x, y, z, w, t = v
+    return np.array([x, y, z, w]) / (1.2 - t)  # avoid divide by zero
+
+
 def get_face_normal(face):
     """Get the normal vector (point outward) of a face.
     """
@@ -145,8 +153,15 @@ def make_symmetry_matrix(upper_triangle):
                 [a12, 1, a23, a24],
                 [a13, a23, 1, a34],
                 [a14, a24, a34, 1]]
+    elif len(upper_triangle) == 10:
+        a12, a13, a14, a15, a23, a24, a25, a34, a35, a45 = upper_triangle
+        return [[1, a12, a13, a14, a15],
+                [a12, 1, a23, a24, a25],
+                [a13, a23, 1, a34, a35],
+                [a14, a24, a34, 1, a45],
+                [a15, a25, a35, a45, 1]]
     else:
-        raise ValueError("Three or six inputs are expected.")
+        raise ValueError("The input diagram must have 3 or 6 or 10 entries.")
 
 
 def get_coxeter_matrix(coxeter_diagram):
@@ -198,11 +213,19 @@ for a complete list of valid Coxeter diagrams.")
     M[2, 0] = C[0, 2]
     M[2, 1] = (C[1, 2] - M[1, 0]*M[2, 0]) / M[1, 1]
     M[2, 2] = np.sqrt(1 - M[2, 0]*M[2, 0] - M[2, 1]*M[2, 1])
-    if len(coxeter_matrix) == 4:
+
+    if len(coxeter_matrix) > 3:
         M[3, 0] = C[0, 3]
         M[3, 1] = (C[1, 3] - M[1, 0]*M[3, 0]) / M[1, 1]
         M[3, 2] = (C[2, 3] - M[2, 0]*M[3, 0] - M[2, 1]*M[3, 1]) / M[2, 2]
-        M[3, 3] = np.sqrt(1 - M[3, 0]*M[3, 0] - M[3, 1]*M[3, 1] - M[3, 2]*M[3, 2])
+        M[3, 3] = np.sqrt(1 - np.dot(M[3, :3], M[3, :3]))
+
+        if len(coxeter_matrix) == 5:
+            M[4, 0] = C[4, 0]
+            M[4, 1] = (C[4, 1] - M[1, 0]*M[4, 0]) / M[1, 1]
+            M[4, 2] = (C[4, 2] - M[2, 0]*M[4, 0] - M[2, 1]*M[4, 1]) / M[2, 2]
+            M[4, 3] = (C[4, 3] - M[3, 0]*M[4, 0] - M[3, 1]*M[4, 1] - M[3, 2]*M[4, 2]) / M[3, 3]
+            M[4, 4] = np.sqrt(1 - np.dot(M[4, :4], M[4, :4]))
     return M
 
 

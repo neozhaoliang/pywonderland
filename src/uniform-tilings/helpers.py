@@ -149,32 +149,42 @@ def get_geometry_type(pqr):
 
 
 def is_degenerate(cox_mat, active):
-    """
-    Check if a 3d polyhedra defined by a Coxeter diagram is degenerate.
-    Here the diagram is like *-- p --*-- r --* (so q is always 2).
+    """Check if a 3d tiling defined by a triangle group
+       (p, q, r) is degenerate.
     """
     p, q, r = cox_mat[0, 1], cox_mat[0, 2], cox_mat[1, 2]
     m0, m1, m2 = active
+
+    # if no mirrors are active then it's degenerate
     if not any(active):
         return True
-    else:
-        if p > 2 and r > 2:
+    # if p, q, r are all equal to 2 they must be all active
+    if (p == 2 and q == 2 and r == 2):
+        if not all(active):
+            return True
+        else:
             return False
-        elif p == 2:
+    # so at least one of p, q, r is > 2 and at least one mirror is active
+    else:
+        # if at least two of p, q, r are > 2 then it's not degenerate
+        if ((p > 2 and q > 2) or (p > 2 and r > 2) or (q > 2 and r > 2)):
+            return False
+        # so exactly two of p, q, r are equal to 2
+        elif (p == 2 and q == 2):
             if not m0:
                 return True
             else:
-                if r > 2:
-                    return not any([m1, m2])
-                else:
-                    return not all([m1, m2])
+                return not any([m1, m2])
+        elif (p == 2 and r == 2):
+            if not m1:
+                return True
+            else:
+                return not any([m0, m2])
         else:
             if not m2:
                 return True
-            elif not any([m0, m1]):
-                return True
             else:
-                return False
+                return not any([m0, m1])
 
 
 # -------------------------------

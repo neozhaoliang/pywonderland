@@ -459,3 +459,11 @@ class Catalan3D(object):
                         break
 
             self.face_indices.append(tuple(new_face))
+
+
+class Polytope5D(BasePolytope):
+
+    def __init__(self, coxeter_diagram, init_dist, extra_relations=()):
+        if len(coxeter_diagram) != 10 and len(init_dist) != 5:
+            raise ValueError("wrong input dimensions")
+        super().__init__(coxeter_diagram, init_dist, extra_relations)
