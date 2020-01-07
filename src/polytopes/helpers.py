@@ -42,7 +42,7 @@ def proj4d(v):
     """
     v = normalize(v)
     x, y, z, w, t = v
-    return np.array([x, y, z, w]) / (1.2 - t)  # avoid divide by zero
+    return np.array([x, y, z, w]) / (1.3 - t)  # avoid divide by zero
 
 
 def get_face_normal(face):

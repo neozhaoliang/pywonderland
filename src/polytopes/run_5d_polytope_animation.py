@@ -1,9 +1,9 @@
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Make animations of rotating 5d polychoron
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Make animations of rotating 5d uniform polytopes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This script computes the data of a given polychora and writes it
+This script computes the data of a given 5d polytope and writes it
 into a POV-Ray .inc file, then automatically calls POV-Ray
 to render the frames and finally calls FFmpeg to convert the frames to
 a mp4 movie. You need to have POV-Ray and FFmpeg installed and
@@ -13,7 +13,6 @@ set the paths to their executables in `POV_EXE` and `FFMPEG_EXE`.
 """
 import subprocess
 import os
-from fractions import Fraction
 from models import Polytope5D
 import helpers
 
@@ -22,7 +21,7 @@ IMAGE_DIR = "5drotation_frames"           # directory to save the frames
 POV_EXE = "povray"                        # povray command
 FFMPEG_EXE = "ffmpeg"                     # ffmpeg command
 SCENE_FILE = "5drotation_animation.pov"   # scene file to render
-FRAMES = 120                                # number of frames (120 is quite good)
+FRAMES = 1                                # number of frames (120 is quite good)
 IMAGE_SIZE = 500                          # image size
 
 # POV-Ray command line options
