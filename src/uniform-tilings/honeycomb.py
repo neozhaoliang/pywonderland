@@ -3,7 +3,11 @@
 3d hyperbolic honeycombs in Poincaré's ball model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Ideal and hyperideal cases are missing, should be added later.
+Note for ideal and hyperideal cases you must make
+sure (p, q, r) are ordered so that (p, q) form a
+finite spherical polyhedra, this is due to our
+construction of the reflection mirrors. For example
+(6, 3, 3) won't work, but (3, 3, 6) does.
 """
 from functools import partial
 from itertools import combinations
