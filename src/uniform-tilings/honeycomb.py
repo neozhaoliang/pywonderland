@@ -47,9 +47,9 @@ class Cell(object):
         self.edge_coords = []
         self.num_edges = None
 
-    def build_geometry(self):
+    def build_geometry(self, depth, maxcount):
         self.G.init()
-        self.words = tuple(self.G.traverse())
+        self.word_generator = partial(self.G.traverse, depth=depth, maxcount=maxcount)
         self.get_vertices()
         self.get_edges()
         return self
@@ -63,7 +63,7 @@ class Cell(object):
         return helpers.project_poincare(v)
 
     def get_vertices(self):
-        for word in self.words:
+        for word in self.word_generator():
             v = self.transform(word, self.v0)
             if v not in self.vertices_coords:
                 self.vertices_coords.append(v)
@@ -78,7 +78,7 @@ class Cell(object):
         edgehash = set()
         for i, active in enumerate(self.active):
             if active:
-                for word in self.words:
+                for word in self.word_generator():
                     p1 = self.transform(word, self.v0)
                     p2 = self.transform(word + (i,), self.v0)
                     q = centroid((p1, p2))
@@ -116,8 +116,6 @@ class Honeycomb(object):
         # coordinates of the initial point
         self.init_v = self.get_init_point(init_dist)
 
-        self.fundamental_cells = self.get_fundamental_cells()
-
         self.edge_hash_set = set()
 
         self.num_vertices = 0
@@ -143,7 +141,7 @@ class Honeycomb(object):
     def get_mirrors(self, coxeter_diagram):
         return helpers.get_hyperbolic_honeycomb_mirrors(coxeter_diagram)
 
-    def get_fundamental_cells(self):
+    def get_fundamental_cells(self, depth=None, maxcount=20000):
         """
         Generate the fundamental cells of the tiling, these cells
         are centered at the vertices of the fundamental tetrahedron
@@ -156,7 +154,7 @@ class Honeycomb(object):
             refs = [self.reflections[k] for k in triple]
             active = [self.active[k] for k in triple]
             if not helpers.is_degenerate(cox_mat, active):
-                C = Cell(cox_mat, self.init_v, active, refs).build_geometry()
+                C = Cell(cox_mat, self.init_v, active, refs).build_geometry(depth, maxcount)
                 result[triple] = C
         return result
 
@@ -182,11 +180,13 @@ class Honeycomb(object):
             helpers.pov_vector(p2)))
 
     def generate_povray_data(self, depth=100, maxcount=50000,
+                             cell_depth=None, cell_edges=10000,
                              filename="./povray/honeycomb-data.inc",
                              eye=(0, 0, 0.5),
                              lookat=(0, 0, 0)):
         self.G.init()
         self.word_generator = partial(self.G.traverse, depth=depth, maxcount=maxcount)
+        self.fundamental_cells = self.get_fundamental_cells(cell_depth, cell_edges)
         init_edges = self.collect_fundamental_cell_edges()
         bar = tqdm.tqdm(desc="processing edges", total=maxcount)
         vertices = set()
