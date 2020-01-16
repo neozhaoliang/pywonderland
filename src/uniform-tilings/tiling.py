@@ -26,7 +26,8 @@ import cairocffi as cairo
 # third-party module for drawing hyperbolic geodesic lines
 import drawSvg
 from hyperbolic import euclid
-from hyperbolic.poincare.shapes import Polygon
+from hyperbolic.poincare.shapes import Polygon, Point
+
 # process bar
 import tqdm
 # color conversions
@@ -35,6 +36,15 @@ from colour import Color
 from coxeter import CoxeterGroup
 from dihedral import DihedralFace
 import helpers
+
+
+def get_euclidean_radius(P, hrad):
+    """Compute the Euclidean radius of the circle centered at
+       a point P with hyperbolic radius hrad.
+    """
+    r1 = np.tanh((P.hr + hrad) / 2)
+    r2 = np.tanh((P.hr - hrad) / 2)
+    return (r1 - r2) / 2
 
 
 def dimmed(c):
@@ -50,7 +60,7 @@ class Tiling2D(object):
         self.diagram = coxeter_diagram
 
         # Coxeter matrix and its rank
-        self.cox_mat = helpers.make_symmetry_matrix(coxeter_diagram)
+        self.cox_mat = helpers.get_coxeter_matrix(coxeter_diagram)
         self.rank = len(self.cox_mat)
 
         # generators of the symmetry group
@@ -174,14 +184,14 @@ class Tiling2D(object):
 
             reps = set(self.word_generator(parabolic=H))
             reps = self.G.sort_words(reps)
-            flist = []
+            flist = set()
             for word in reps:
                 f = tuple(self.G.move(self.vtable, v, word) for v in f0)
-                if None not in f and not helpers.check_duplicate_face(f, flist):
+                if None not in f and set(f) not in flist:
                     center = self.transform(word, c0)
                     coords = [self.vertices_coords[k] for k in f]
                     face = DihedralFace(word, f, center, coords, type)
-                    flist.append(face)
+                    flist.add(face)
 
             self.face_indices[(i, j)] = flist
 
@@ -269,6 +279,7 @@ class Poincare2D(Tiling2D):
                 domain1, domain2 = face.get_alternative_domains()
                 domain1_2d = [[self.project(p) for p in D] for D in domain1]
                 domain2_2d = [[self.project(p) for p in D] for D in domain2]
+
                 for D in domain1_2d:
                     poly = Polygon.fromVertices(D)
                     d.draw(poly, **style1)
@@ -286,16 +297,19 @@ class Poincare2D(Tiling2D):
                         d.draw(poly, fill="papayawhip", hwidth=0.015)
 
                 if draw_polygon_edges:
-                    d.draw(polygon, fill="#666", hwidth=0.07)
+                    d.draw(polygon, hwidth=0.07, fill="#666")
 
                 bar.update(1)
 
         bar.close()
 
         if show_vertices_labels:
-            for i, p in enumerate(self.vertices_coords[:100]):
+            for i, p in enumerate(self.vertices_coords):
                 loc = self.project(p)
-                d.draw(drawSvg.Text(str(i), 0.05, *loc, center=0.7, fill="yellow"))
+                P = Point(*loc)
+                d.draw(P, hradius=0.1, fill="darkolivegreen")
+                hsize = get_euclidean_radius(P, hrad=0.13)
+                d.draw(drawSvg.Text(str(i), hsize, *loc, center=0.7, fill="white"))
 
         print("saving to svg...")
         d.setRenderSize(w=image_size)

@@ -27,7 +27,7 @@ def make_symmetry_matrix(upper_triangle):
     else:
         raise ValueError("Three or six inputs are expected.")
 
-    return np.array(M, dtype=np.int)
+    return np.array(M)
 
 
 def get_point_from_distance(M, d, normalized=True):
@@ -62,7 +62,7 @@ def get_coxeter_matrix(coxeter_diagram):
        matrix with a convex one.
     """
     upper_triangle = [x.numerator for x in coxeter_diagram]
-    return make_symmetry_matrix(upper_triangle)
+    return make_symmetry_matrix(upper_triangle).astype(np.int)
 
 
 def get_spherical_or_affine_mirrors(coxeter_diagram):

@@ -57,19 +57,12 @@ def main():
              checker_colors=("white", "black"),
              draw_polygon_edges=False)
 
-    # a hyperbolic star tiling (7/2, 2, 7)
-    T = Poincare2D((Fraction(7, 2), 2, 7), (-1, 0, -1))
-    T.build_geometry(40)
-    T.render("bitruncated-7|2-2-7.svg", 800,
-             show_vertices_labels=True,
-             draw_inner_lines=True,
-             face_colors=("#C03C44", "#EEAA4D", "#477984"))
-
-    T = Poincare2D((8, 6, 3), (0, 0, -1))
+    T = Poincare2D((2, 4, 6), (-1, -1, -1))
     depth = 40
     maxcount = 50000
     T.build_geometry(depth, maxcount)
-    T.render("3-6-8.svg", 800)
+    T.render("2-4-6.svg", 800, show_vertices_labels=True,
+             face_colors=("#477984", "pink", "#EEAA4D"))
 
 
 if __name__ == "__main__":
