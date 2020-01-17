@@ -38,13 +38,15 @@ from dihedral import DihedralFace
 import helpers
 
 
-def get_euclidean_radius(P, hrad):
-    """Compute the Euclidean radius of the circle centered at
-       a point P with hyperbolic radius hrad.
+def get_euclidean_center_radius(P, hrad):
+    """Compute the Euclidean center and radius of the circle
+       centered at a point P with hyperbolic radius hrad.
     """
     r1 = np.tanh((P.hr + hrad) / 2)
     r2 = np.tanh((P.hr - hrad) / 2)
-    return (r1 - r2) / 2
+    R = (r1 + r2) / 2
+    r = (r1 - r2) / 2
+    return R * np.cos(P.theta), R * np.sin(P.theta), r
 
 
 def dimmed(c):
@@ -308,8 +310,8 @@ class Poincare2D(Tiling2D):
                 loc = self.project(p)
                 P = Point(*loc)
                 d.draw(P, hradius=0.1, fill="darkolivegreen")
-                hsize = get_euclidean_radius(P, hrad=0.13)
-                d.draw(drawSvg.Text(str(i), hsize, *loc, center=0.7, fill="white"))
+                x, y, r = get_euclidean_center_radius(P, hrad=0.13)
+                d.draw(drawSvg.Text(str(i), r, x, y, center=0.7, fill="white"))
 
         print("saving to svg...")
         d.setRenderSize(w=image_size)
