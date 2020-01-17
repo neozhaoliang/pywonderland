@@ -52,13 +52,18 @@ background { LightBlue }
     2*atanh(X)
 #end
 
-// get the euclidean radius of a sphere centered
+// get the euclidean center and radius of a sphere centered
 // at a point p and has hyperbolic radius HR
-#macro get_hyperbolic_rad(p, HR)
+#macro get_euclidean_center_rad(p, HR)
   #local R = vlength(p);
   #local r1 = h2e(e2h(R) + HR);
   #local r2 = h2e(e2h(R) - HR);
-  (r1-r2)/2
+  #local dir = vnormalize(p);
+  #local dist = (r1 + r2) / 2;
+  #local erad = (r1 - r2) / 2;
+  #local result = array[4] {
+    dist*dir.x, dist*dir.y, dist*dir.z, erad };
+  result
 #end
 
 // inversion of a point p about the unit ball
@@ -78,7 +83,8 @@ background { LightBlue }
       num_segments + 1
       #for (k, 0, num_segments)
         #local q1 = (p1 + k/num_segments * (p2 - p1));
-        q1, get_hyperbolic_rad(q1, hyper_radius)
+        #local arr = get_euclidean_center_rad(q1, hyper_radius);
+        <arr[0], arr[1], arr[2]>, arr[3]
       #end
       texture { edge_tex }
     }
@@ -107,7 +113,8 @@ background { LightBlue }
         #local theta2 = k / num_segments * theta;
         #local ax = vcross(p1-center, p2-center);
         #local point = vaxis_rotate(p1-center, ax, theta2/pi*180) + center;
-        point, get_hyperbolic_rad(point, hyper_radius)
+        #local arr = get_euclidean_center_rad(point, hyper_radius);
+        <arr[0], arr[1], arr[2]>, arr[3]
       #end
       texture { edge_tex }
     }
@@ -120,7 +127,8 @@ union {
   #for (k, 0, num_vertices-1)
     #local q = vertices[k];
     sphere {
-      q, get_hyperbolic_rad(q, hyper_radius*3)
+      #local arr = get_euclidean_center_rad(q, hyper_radius*3);
+      <arr[0], arr[1], arr[2]>, arr[3]
       texture{
         pigment{ color vertex_color }
         finish {
