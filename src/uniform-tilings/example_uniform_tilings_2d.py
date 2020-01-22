@@ -11,7 +11,7 @@ Currently only euclidean and hyperbolic cases are implemented,
 spherical case will be added later.
 """
 from fractions import Fraction
-from tiling import Euclidean2D, Poincare2D
+from tiling import Euclidean2D, Poincare2D, Spherical2D
 
 
 def main():
@@ -52,6 +52,10 @@ def main():
              draw_labelled_edges=True, draw_inner_lines=True,
              line_width=0.05, vertex_size=0.07,
              face_colors=("#EEAA4D", "#477984", "#C03C44"))
+
+    T = Spherical2D((5, 2, 3), (1, 1, 1))
+    T.build_geometry()
+    T.render("omnitruncated-5-2-3.png", 600)
 
 
 if __name__ == "__main__":

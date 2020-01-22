@@ -477,7 +477,46 @@ class Spherical2D(Tiling2D):
     def get_mirrors(self, coxeter_diagram):
         return helpers.get_spherical_or_affine_mirrors(coxeter_diagram)
 
-    def render(self):
+    def render(self, output, image_size):
         """Need to find out how to draw 3d plots in SVG format.
         """
-        pass
+        import subprocess
+
+        pov_string = """
+#declare num_vertices = {};
+#declare vertices = array[{}]{{{}}};
+
+{}
+        """
+        EDGE_MACRO = "Edge({}, {}, {})\n"
+        FACE_MACRO = "Face({}, {}, {})\n"
+        with open("./povray/polyhedra-data.inc", "w") as f:
+            f.write(pov_string.format(
+                self.num_vertices,
+                self.num_vertices,
+                helpers.pov_vector_list(self.vertices_coords),
+                "".join(EDGE_MACRO.format(k, i1, i2) for k, elist in self.edge_indices.items()
+                        for i1, i2 in elist)))
+            for (i, j), flist in self.face_indices.items():
+                k = self.vertex_at_mirrors(i, j)
+                for face in flist:
+                    domain1, domain2 = face.get_alternative_domains()
+                    for D in domain1:
+                        f.write(FACE_MACRO.format(
+                            k,
+                            0,
+                            "array[{}]{{{}}}".format(len(D), helpers.pov_vector_list(D))
+                        ))
+                    for D in domain2:
+                        f.write(FACE_MACRO.format(
+                            k,
+                            1,
+                            "array[{}]{{{}}}".format(len(D), helpers.pov_vector_list(D))
+                        ))
+        subprocess.check_call(
+            "cd povray && " +
+            "povray polyhedra.pov " +
+            "+W{} +H{} +A0.001 +R4 ".format(image_size, image_size) +
+            "+O../{}".format(output),
+            shell=True
+        )
