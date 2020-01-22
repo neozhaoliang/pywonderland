@@ -26,7 +26,7 @@ import cairocffi as cairo
 # third-party module for drawing hyperbolic geodesic lines
 import drawSvg
 from hyperbolic import euclid
-from hyperbolic.poincare.shapes import Polygon, Point
+from hyperbolic.poincare.shapes import Polygon, Point, Line
 
 # process bar
 import tqdm
@@ -51,6 +51,17 @@ def get_euclidean_center_radius(P, hrad):
 
 def dimmed(c):
     return Color(hue=c.hue, saturation=c.saturation, luminance=c.luminance*0.6)
+
+
+def divide_line(hwidth, k):
+    ewidth = np.tanh(hwidth / 2)
+    if k == 1:
+        x = 2 * np.arctanh(ewidth / 6)
+        return x
+    if k == 2:
+        x1 = 2 * np.arctanh(ewidth / 10)
+        x2 = 2 * np.arctanh(ewidth / 10 * 3)
+        return x1, x2
 
 
 class Tiling2D(object):
@@ -255,6 +266,8 @@ class Poincare2D(Tiling2D):
                draw_alternative_domains=True,
                draw_polygon_edges=True,
                draw_inner_lines=False,
+               draw_labelled_edges=False,
+               line_width=0.07,
                checker=False,
                checker_colors=("#1E7344", "#EAF78D"),
                face_colors=("lightcoral", "mistyrose", "steelblue")):
@@ -299,11 +312,25 @@ class Poincare2D(Tiling2D):
                         d.draw(poly, fill="papayawhip", hwidth=0.015)
 
                 if draw_polygon_edges:
-                    d.draw(polygon, hwidth=0.07, fill="#666")
+                    d.draw(polygon, hwidth=line_width, fill="darkolivegreen")
 
                 bar.update(1)
 
         bar.close()
+        if draw_labelled_edges:
+            for k, elist in self.edge_indices.items():
+                if k != 0:
+                    for i, j in elist:
+                        p = self.project(self.vertices_coords[i])
+                        q = self.project(self.vertices_coords[j])
+                        hl = Line.fromPoints(p[0], p[1], q[0], q[1], segment=True)
+                        if k == 1:
+                            x = divide_line(line_width, 1)
+                            d.draw(hl, hwidth=(-x, x), fill="papayawhip")
+                        if k == 2:
+                            x1, x2 = divide_line(line_width, 2)
+                            d.draw(hl, hwidth=(x1, x2), fill="papayawhip")
+                            d.draw(hl, hwidth=(-x2, -x1), fill="papayawhip")
 
         if show_vertices_labels:
             for i, p in enumerate(self.vertices_coords):
@@ -318,8 +345,6 @@ class Poincare2D(Tiling2D):
         d.saveSvg(output)
         size = os.path.getsize(output) >> 10
         print("{}KB svg file has been written to disk".format(size))
-        pngname = os.path.splitext(output)[0] + ".png"
-        d.rasterize(pngname)
         print("=" * 40)
 
 
