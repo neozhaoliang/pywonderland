@@ -54,6 +54,8 @@ def dimmed(c):
 
 
 def divide_line(hwidth, k):
+    """Compute line strips for drawing edges of different types.
+    """
     ewidth = np.tanh(hwidth / 2)
     if k == 1:
         x = 2 * np.arctanh(ewidth / 6)
@@ -267,11 +269,15 @@ class Poincare2D(Tiling2D):
                draw_polygon_edges=True,
                draw_inner_lines=False,
                draw_labelled_edges=False,
+               vertex_size=0.1,
                line_width=0.07,
                checker=False,
                checker_colors=("#1E7344", "#EAF78D"),
                face_colors=("lightcoral", "mistyrose", "steelblue")):
-
+        """
+        An example drawing function shows how to draw hyperbolic patterns
+        with this program.
+        """
         print("=" * 40)
         print(self.get_info())
         d = drawSvg.Drawing(2.05, 2.05, origin="center")
@@ -336,8 +342,8 @@ class Poincare2D(Tiling2D):
             for i, p in enumerate(self.vertices_coords):
                 loc = self.project(p)
                 P = Point(*loc)
-                d.draw(P, hradius=0.1, fill="darkolivegreen")
-                x, y, r = get_euclidean_center_radius(P, hrad=0.13)
+                d.draw(P, hradius=vertex_size, fill="darkolivegreen")
+                x, y, r = get_euclidean_center_radius(P, hrad=vertex_size*1.3)
                 d.draw(drawSvg.Text(str(i), r, x, y, center=0.7, fill="white"))
 
         print("saving to svg...")
@@ -471,8 +477,7 @@ class Spherical2D(Tiling2D):
     def get_mirrors(self, coxeter_diagram):
         return helpers.get_spherical_or_affine_mirrors(coxeter_diagram)
 
-    def render(self, output, image_size,
-               face_colors=("#477984", "#EEAA4D", "#74C3F2")):
+    def render(self):
         """Need to find out how to draw 3d plots in SVG format.
         """
         pass

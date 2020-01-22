@@ -44,12 +44,14 @@ def main():
     T.build_geometry(depth, maxcount)
     T.render("2-3-13.svg", 800, checker=True, draw_polygon_edges=False)
 
-    T = Poincare2D((2, 4, 6), (-1, -1, -1))
+    T = Poincare2D((7, 2, 3), (-1, -1, -1))
     depth = 40
-    maxcount = 30000
+    maxcount = 50000
     T.build_geometry(depth, maxcount)
-    T.render("2-4-6.svg", 800, show_vertices_labels=True,
-             face_colors=("#477984", "pink", "#EEAA4D"))
+    T.render("omnitruncated-7-2-3.svg", 800, show_vertices_labels=True,
+             draw_labelled_edges=True, draw_inner_lines=True,
+             line_width=0.05, vertex_size=0.07,
+             face_colors=("#EEAA4D", "#477984", "#C03C44"))
 
 
 if __name__ == "__main__":
