@@ -53,9 +53,10 @@ def main():
              line_width=0.05, vertex_size=0.07,
              face_colors=("#EEAA4D", "#477984", "#C03C44"))
 
-    T = Spherical2D((5, 2, 3), (1, 1, 1))
-    T.build_geometry()
-    T.render("omnitruncated-5-2-3.png", 600)
+    # travis can't run povray test, uncomment below to run spherical example.
+    # T = Spherical2D((5, 2, 3), (1, 1, 1))
+    # T.build_geometry()
+    # T.render("omnitruncated-5-2-3.png", 600)
 
 
 if __name__ == "__main__":

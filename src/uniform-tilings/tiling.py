@@ -3,17 +3,28 @@
 Generate uniform tilings via word processing in Coxeter groups
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This script draws various 2D uniform tilings in euclidean, spherical
-and hyperbolic (Poincaré disk model) spaces. The result is
-exported to svg format. I also implemented a `render()` method
-for each type of tiling to illustrate the usage.
+This script draws various uniform tilings in euclidean, spherical
+and hyperbolic (Poincaré disk model) spaces. The result is exported
+to svg format or POV-Ray (depending on the scene is 2d or not).
+I implemented a `render()` method for each type of tiling to illustrate
+the usage.
 
-Note: For star tilings different polygons may have overlapping
-part in common, in my default implementaiton of the `render`
-function the last rendered polygon will hide the region it
-shares with other polygons, so the result may not look correct
-in this case. This can be remedied by implementing another rendering
-function for these star tilings.
+Spherical, Euclidean, Hyperbolic tilings all can be realized as the
+intersection of a hypersurface with the cells of the Tit's cone of
+the corresponding Coxeter group.
+
+1. For spherical tilings the Coxeter group is finite, the hypersurface
+is the (n-1)-dimensional unit sphere and the Tit's cone is the whole space R^n.
+
+2. For Euclidean tilings the Coxeter group is affine, the hypersurface
+can be chosen as the plane z=c and the Tit's cone is the upper half space z>0.
+
+3. For hyperbolic tilings the Coxeter group is hyperbolic, the hypersurface
+is the hyperboloid and the Tit's cone is a strict convex cone in z>0.
+
+The coxeter matrix determines the type of tiling, the angles between the
+mirrors, the quadratic formon the space, the reflections about the mirrors
+that preserve this quadratic form.
 
 :copyright (c) 2019 by Zhao Liang
 """
@@ -41,6 +52,7 @@ import helpers
 def get_euclidean_center_radius(P, hrad):
     """Compute the Euclidean center and radius of the circle
        centered at a point P with hyperbolic radius hrad.
+       P is an instance of `Point` from the hyperbolic module.
     """
     r1 = np.tanh((P.hr + hrad) / 2)
     r2 = np.tanh((P.hr - hrad) / 2)
@@ -67,6 +79,10 @@ def divide_line(hwidth, k):
 
 
 class Tiling2D(object):
+
+    """
+    Base class for all three types of tilings.
+    """
 
     def __init__(self, coxeter_diagram, init_dist):
         if len(coxeter_diagram) != 3 or len(init_dist) != 3:
@@ -153,7 +169,16 @@ class Tiling2D(object):
         self.vertices_coords = [self.transform(w, self.init_v) for w in self.vwords]
 
     def get_edges(self):
-        """Compute the indices of the edges.
+        """
+        Compute the indices of the edges.
+        Steps:
+          1. Use a generator to yield a list L of words in the group.
+          2. Compute the coset representatives of the edge stabilizing
+             subgroup for words in L and remove duplicates. (So each
+             remaining representative maps to different edges)
+          3. Apply each coset representative to the ends of an initial edge
+             to get the transformed edge.
+          4. Find the indices of the resulting edge in L.
         """
         for i in self.gens:
             if self.active[i]:
@@ -178,11 +203,20 @@ class Tiling2D(object):
         """Compute the indices of the faces (and other information we will need).
         """
         for i, j in combinations(self.gens, 2):
+            # this is the center of the initial face,
+            # it's a vertex of the fundamental triangle.
             c0 = self.triangle_verts[self.vertex_at_mirrors(i, j)]
+            # a list holds the vertices of the initial face.
             f0 = []
             m = self.cox_mat[i][j]
+            # this is the stabilizing subgroup of the initial face f0.
             H = (i, j)
+            # type indicates if this face is regular (0) or truncated (1).
+            # it's truncated if and only if both mirrors are active.
             type = 0
+
+            # compute the words (may not be in normal form) for the
+            # vertices of the initial face
             if self.active[i] and self.active[j]:
                 type = 1
                 for k in range(m):
@@ -197,11 +231,21 @@ class Tiling2D(object):
             else:
                 continue
 
+            # compute coset representatives of the initial face,
+            # each word in the result set maps f0 to a different face.
             reps = set(self.word_generator(parabolic=H))
+            # sort the faces in shortlex order.
             reps = self.G.sort_words(reps)
+            # a set holds faces, we use a set here because though a word w
+            # in H stabilizes f0, it may change cyclically rotate f0 to another
+            # different ordered tuple.
             flist = set()
             for word in reps:
+                # compute the indices of the vertices of the transformed face
                 f = tuple(self.G.move(self.vtable, v, word) for v in f0)
+                # check if `None` is in f (in this case f contains some
+                # vertex that is not in the vertices list) or there already has
+                # a rotated version of f in the set.
                 if None not in f and set(f) not in flist:
                     center = self.transform(word, c0)
                     coords = [self.vertices_coords[k] for k in f]
@@ -281,9 +325,12 @@ class Poincare2D(Tiling2D):
         print("=" * 40)
         print(self.get_info())
         d = drawSvg.Drawing(2.05, 2.05, origin="center")
+        # draw background unit circle
         d.draw(euclid.shapes.Circle(0, 0, 1), fill="silver")
 
         bar = tqdm.tqdm(desc="processing polygons", total=self.num_faces)
+
+        # draw the faces
         for (i, j), flist in self.face_indices.items():
             if checker:
                 style1 = {"fill": checker_colors[0]}
@@ -295,12 +342,15 @@ class Poincare2D(Tiling2D):
                 style2 = {"fill": color, "opacity": 0.3}
 
             for k, face in enumerate(flist):
+                # coords of the vertices of this face
                 points = [self.project(p) for p in face.coords]
                 polygon = Polygon.fromVertices(points)
+                # compute the alternate domains
                 domain1, domain2 = face.get_alternative_domains()
                 domain1_2d = [[self.project(p) for p in D] for D in domain1]
                 domain2_2d = [[self.project(p) for p in D] for D in domain2]
 
+                # draw domains of even reflections
                 for D in domain1_2d:
                     poly = Polygon.fromVertices(D)
                     d.draw(poly, **style1)
@@ -308,7 +358,7 @@ class Poincare2D(Tiling2D):
                         d.draw(poly, hwidth=0.005, **style1)
                     if draw_inner_lines:
                         d.draw(poly, fill="papayawhip", hwidth=0.015)
-
+                # draw domains of odd reflections
                 for D in domain2_2d:
                     poly = Polygon.fromVertices(D)
                     d.draw(poly, **style2)
@@ -316,13 +366,15 @@ class Poincare2D(Tiling2D):
                         d.draw(poly, hwidth=0.005, **style2)
                     if draw_inner_lines:
                         d.draw(poly, fill="papayawhip", hwidth=0.015)
-
+                # outmost polygon contours
                 if draw_polygon_edges:
                     d.draw(polygon, hwidth=line_width, fill="darkolivegreen")
 
                 bar.update(1)
 
         bar.close()
+
+        # draw the edges with white strips
         if draw_labelled_edges:
             for k, elist in self.edge_indices.items():
                 if k != 0:
@@ -338,6 +390,7 @@ class Poincare2D(Tiling2D):
                             d.draw(hl, hwidth=(x1, x2), fill="papayawhip")
                             d.draw(hl, hwidth=(-x2, -x1), fill="papayawhip")
 
+        # draw vertices with labels
         if show_vertices_labels:
             for i, p in enumerate(self.vertices_coords):
                 loc = self.project(p)
