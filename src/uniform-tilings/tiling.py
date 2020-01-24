@@ -495,12 +495,15 @@ class Euclidean2D(Tiling2D):
         bar.close()
 
         if show_vertices_labels:
-            ctx.set_source_rgb(*Color("papayawhip").rgb)
-            ctx.select_font_face("Serif", cairo.FONT_SLANT_NORMAL,
-                                 cairo.FONT_WEIGHT_BOLD)
             ctx.set_font_size(0.7)
             for i, p in enumerate(self.vertices_coords[:1000]):
                 x, y = self.project(p)
+                ctx.arc(x, y, 0.5, 0, 2 * np.pi)
+                ctx.set_source_rgb(*Color("darkolivegreen").rgb)
+                ctx.fill()
+                ctx.set_source_rgb(*Color("papayawhip").rgb)
+                ctx.select_font_face("Serif", cairo.FONT_SLANT_NORMAL,
+                                     cairo.FONT_WEIGHT_BOLD)
                 _, _, w, h, _, _ = ctx.text_extents(str(i))
                 ctx.move_to(x - w / 2, y + h / 2)
                 ctx.show_text(str(i))
