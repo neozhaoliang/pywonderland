@@ -6,7 +6,7 @@ import subprocess
 import os
 
 
-command = "inkscape -z -d 300 {} -e {}.png"
+command = "inkscape -z {} -e {}.png"
 
 for svg in glob.glob("*.svg"):
     fname = os.path.basename(svg).split(".")[0]

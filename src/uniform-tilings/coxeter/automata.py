@@ -25,7 +25,7 @@ class DFAState(object):
         self.transitions = dict()
 
     def __str__(self):
-        return str(self.subset)
+        return "{}: {{{}}}".format(self.index, ", ".join(str(x) for x in self.subset))
 
     __repr__ = __str__
 
@@ -42,7 +42,7 @@ class DFAState(object):
             return
         found.add(self)
         shape = "doublecircle" if self.accept else "circle"
-        G.add_node(self.index, shape=shape, color=color)
+        G.add_node(self.index, shape=shape, color=color, label=str(self))
         for symbol, target in self.all_transitions():
             target.draw(G, found)
             G.add_edge(self.index, target.index, label=symbol)
@@ -129,7 +129,7 @@ class Hopcroft(object):
 
         def aux(subset):
             state = next(iter(subset))
-            dfa_state = DFAState(state.accept)
+            dfa_state = DFAState(state.subset, state.accept)
             result_dfa[subset] = dfa_state
 
             for symbol, target in state.transitions.items():
