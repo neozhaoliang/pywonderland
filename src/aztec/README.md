@@ -11,5 +11,3 @@ To make a gif animation of domino shuffling algorithm up to 30 rounds, run
 ``` bash        
 python run_domino_shuffling_animation.py
 ```
-
-The full doc is [here](https://neozhaoliang.github.io/aztec/).

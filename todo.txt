@@ -1,0 +1,10 @@
+a long list of projects to do in the next two or three years ...
+
+1. knots.
+2. shader animations of polyhedral, euclidean, hyperbolic tilings with gears.
+3. 3d hyperbolic honeycombs in shaders.
+4. Escher circle limits in svg format.
+5. shader animation of aperiodic tilings using de Bruijn's approach.
+6. hyperbolic tilings in paper-cut and laser-cut.
+7. rewrite Mobius transformations on hyperbolic 3d space.
+8. replace hyperbolic drawing lib.

@@ -18,3 +18,5 @@ TODO:
 3. a detailed doc explains the math.
 4. Escher tiling using a user input svg image.
 5. Honeycombs with ideal and hyperideal vertices.
+
+The doc is [here](http://pywonderland.com/uniform-tilings/).
