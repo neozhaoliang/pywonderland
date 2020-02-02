@@ -102,7 +102,7 @@ class BasePolytope(object):
         """
         for i, active in enumerate(self.active):
             if active:  # if there are edges of type i
-                egens = [(i,)]  # generators of the stabilizing subgroup that fixes the base edge.
+                egens = [(i,)] + self.get_orthogonal_mirrors((i,))
                 etable = CosetTable(self.symmetry_gens, self.symmetry_rels, egens)
                 etable.run()
                 words = etable.get_words()  # get word representations of the edges
@@ -110,9 +110,7 @@ class BasePolytope(object):
                 for word in words:
                     v1 = self.move(0, word)
                     v2 = self.move(0, (i,) + word)
-                    # avoid duplicates
-                    if (v1, v2) not in elist and (v2, v1) not in elist:
-                        elist.append((v1, v2))
+                    elist.append((v1, v2))
 
                 self.edge_indices.append(elist)
                 self.edge_coords.append([(self.vertex_coords[x], self.vertex_coords[y])
@@ -130,7 +128,7 @@ class BasePolytope(object):
         for i, j in combinations(self.symmetry_gens, 2):
             f0 = []
             m = self.coxeter_matrix[i][j]
-            fgens = [(i,), (j,)]
+            fgens = [(i,), (j,)] + self.get_orthogonal_mirrors([i, j])
             if self.active[i] and self.active[j]:
                 for k in range(m):
                     # rotate the base edge m times to get the base f,
@@ -149,8 +147,7 @@ class BasePolytope(object):
             flist = []
             for word in words:
                 f = tuple(self.move(v, word) for v in f0)
-                if not helpers.check_duplicate_face(f, flist):
-                    flist.append(f)
+                flist.append(f)
 
             self.face_indices.append(flist)
             self.face_coords.append([tuple(self.vertex_coords[x] for x in face)
@@ -172,6 +169,19 @@ class BasePolytope(object):
         for w in word:
             vertex = self.vtable[vertex][w]
         return vertex
+
+    def get_orthogonal_mirrors(self, subgens):
+        """
+        :param subgens: a list of generators, e.g. [0, 1]
+
+        Given a list of generators, return the generators that commute
+        with all of them.
+        """
+        result = []
+        for s in self.symmetry_gens:
+            if all(self.coxeter_matrix[x][s] == 2 for x in subgens):
+                result.append((s,))
+        return result
 
     def get_latex_format(self, symbol=r"\rho", cols=3, snub=False):
         """Return the words of the vertices in latex format.
