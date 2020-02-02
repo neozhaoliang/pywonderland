@@ -88,56 +88,6 @@ def get_sphere_info(points):
     return False, center, radius, face_size
 
 
-def check_duplicate_face(f, l):
-    """Check if a face `f` is already in the list `l`.
-       We need this function here because when some rotation r fixes a
-       face f = (v1, v2, ..., v_k), r maps f as an ordered tuple to
-       (v_k, v_1, ..., v_{k-1}) or (v_2, ..., v_k, v_1) where they all
-       represent the same face.
-    """
-    for _ in range(len(f)):
-        if f in l or f[::-1] in l:
-            return True
-        f = f[-1:] + f[:-1]
-    return False
-
-
-def has_edge(e, f):
-    """Check if an edge `e` is in a face `f`.
-
-       Example:
-       >>> e = (0, 1)
-       >>> f = (1, 2, 3, 0)
-       >>> has_edge(e, f)
-       >>> True  # because 0, 1 are adjacent in f (first and last)
-    """
-    for pair in zip(f, f[1:] + (f[0],)):
-        if e == pair or e == pair[::-1]:
-            return True
-    return False
-
-
-def has_common_edge(f1, f2):
-    """Check if two faces `f1` and `f2` have an edge in common.
-    """
-    for e1 in zip(f1, f1[1:] + (f1[0],)):
-        if has_edge(e1, f2):
-            return True
-    return False
-
-
-def find_face_by_edge(e, face_list):
-    """Find the pair of faces in `face_list` that has `e` as a common edge.
-    """
-    result = []
-    for i, face in enumerate(face_list):
-        if has_edge(e, face):
-            result.append(i)
-        if len(result) == 2:
-            return tuple(result)
-    return None
-
-
 def make_symmetry_matrix(upper_triangle):
     """Given three or six integers/rationals, fill them into a
        3x3 (or 4x4) symmetric matrix.

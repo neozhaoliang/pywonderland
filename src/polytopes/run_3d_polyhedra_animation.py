@@ -14,7 +14,7 @@ set the paths to their executables in `POV_EXE` and `FFMPEG_EXE`.
 import subprocess
 import os
 from fractions import Fraction
-from models import Polyhedra, Snub, Catalan3D
+from models import Polyhedra, Snub
 import helpers
 
 
@@ -73,20 +73,11 @@ def write_to_pov(P):
 
     :param P: a polytope instance.
     """
-    if isinstance(P, Catalan3D):
-        vert_macros = "\n".join(VERT_MACRO.format(i, v + sum(len(vlist) for vlist in P.vertex_coords[:i]))
-                                for i, vlist in enumerate(P.vertex_coords)
-                                for v in range(len(vlist)))
-        face_macros = "\n".join(FACE_MACRO.format(0, len(face), helpers.pov_array(face))
-                                for face in P.face_indices)
-        vertex_coords = helpers.pov_vector_list(P.vertex_coords_flatten)
-    else:
-        vert_macros = "\n".join(VERT_MACRO.format(0, i) for i in range(P.num_vertices))
-        face_macros = "\n".join(FACE_MACRO.format(i, len(face), helpers.pov_array(face))
-                                for i, flist in enumerate(P.face_indices)
-                                for face in flist)
-        vertex_coords = helpers.pov_vector_list(P.vertex_coords)
-
+    vert_macros = "\n".join(VERT_MACRO.format(0, i) for i in range(P.num_vertices))
+    face_macros = "\n".join(FACE_MACRO.format(i, len(face), helpers.pov_array(face))
+                            for i, flist in enumerate(P.face_indices)
+                            for face in flist)
+    vertex_coords = helpers.pov_vector_list(P.vertex_coords)
     edge_macros = "\n".join(EDGE_MACRO.format(i, e[0], e[1])
                             for i, elist in enumerate(P.edge_indices)
                             for e in elist)
@@ -105,7 +96,6 @@ def anim(coxeter_diagram,
          trunc_type,
          description="polyhedra",
          snub=False,
-         catalan=False,
          extra_relations=()):
     """Call POV-Ray to render the frames and FFmpeg to generate the movie.
     """
@@ -113,9 +103,6 @@ def anim(coxeter_diagram,
         P = Snub(coxeter_diagram, trunc_type)
     else:
         P = Polyhedra(coxeter_diagram, trunc_type, extra_relations)
-
-    if catalan:
-        P = Catalan3D(P)
 
     P.build_geometry()
     write_to_pov(P)
@@ -179,23 +166,6 @@ def main():
          extra_relations=((0, 1, 2, 1) * 3,), description="truncated-great-dodecahedron")
     """
     anim((3, 2, Fraction(5, 2)), (1, 0, 0), description="great-icosahedron")
-
-    """
-    # Catalan solids
-    anim((3, 2, 3), (1, 1, 0), catalan=True, description="triakis-tetrahedron")
-    anim((4, 2, 3), (0, 1, 0), catalan=True, description="rhombic-dodecahedron")
-    anim((4, 2, 3), (1, 1, 0), catalan=True, description="triakis-octahedron")
-    anim((4, 2, 3), (0, 1, 1), catalan=True, description="tetrakis-hexahedron")
-    anim((4, 2, 3), (1, 0, 1), catalan=True, description="deltoidal-icositetrahedron")
-    anim((4, 2, 3), (1, 1, 1), catalan=True, description="disdyakis-dodecahedron")
-    anim((5, 2, 3), (0, 1, 0), catalan=True, description="rhombic-triacontahedron")
-    anim((5, 2, 3), (1, 1, 0), catalan=True, description="triakis-icosahedron")
-    anim((5, 2, 3), (0, 1, 1), catalan=True, description="pentakis-dodecahedron")
-    anim((5, 2, 3), (1, 0, 1), catalan=True, description="deltoidal-hexecontahedron")
-    anim((5, 2, 3), (1, 1, 1), catalan=True, description="disdyakis-triacontahedron")
-    anim((4, 2, 3), (1, 1, 1), snub=True, catalan=True, description="pentagonal-icositetrahedron")
-    """
-    anim((5, 2, 3), (1, 1, 1), snub=True, catalan=True, description="pentagonal-hexecontahedron")
 
 
 if __name__ == "__main__":
