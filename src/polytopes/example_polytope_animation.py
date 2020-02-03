@@ -25,6 +25,8 @@ IMAGE_SIZE = 500                     # image size
 SUPERSAMPLING_LEVEL = 3              # supersampling level
 DATAFILE_NAME = "polytope-data.inc"  # export data to this file
 
+data_file = os.path.join(os.getcwd(), "povray", DATAFILE_NAME)
+
 if not os.path.exists(IMAGE_DIR):
     os.makedirs(IMAGE_DIR)
 
@@ -47,7 +49,6 @@ FFMPEG_COMMAND = " cd {} && ".format(IMAGE_DIR) + \
                  " -crf 18 -c:v libx264" + \
                  " ../{}.mp4"
 
-
 POV_TEMPLATE = """
 #declare vertices = {};
 
@@ -55,8 +56,6 @@ POV_TEMPLATE = """
 
 #declare faces = {};
 """
-
-data_file = os.path.join(os.getcwd(), "povray", DATAFILE_NAME)
 
 
 def anim(coxeter_diagram,
@@ -86,15 +85,18 @@ def anim(coxeter_diagram,
         raise ValueError("Invalid Coxeter diagram: {}".format(coxeter_diagram))
 
     P.build_geometry()
-    vert, edge, face = P.get_povray_data()
+    # POV-Ray does not support 5d vectors well, so project the vertices in python
+    if isinstance(P, models.Polytope5D):
+        P.proj4d()
+    vert_data, edge_data, face_data = P.get_povray_data()
     with open(data_file, "w") as f:
-        f.write(POV_TEMPLATE.format(vert, edge, face))
+        f.write(POV_TEMPLATE.format(vert_data, edge_data, face_data))
 
     subprocess.call(POV_COMMAND.format(scene_file, description), shell=True)
     subprocess.call(FFMPEG_COMMAND.format(description, description), shell=True)
 
 
-def snub24cell(description="snub-24cell"):
+def snub24cell(description="snub-24-cell"):
     """
     Handle the special case snub 24-cell.
     """
@@ -147,7 +149,7 @@ def main():
     anim((3, 2, Fraction(5, 2)), (1, 0, 0), description="great-icosahedron")
 
     # 5-cell family, symmetry group A_4
-    anim((3, 2, 2, 3, 2, 3), (1, 0, 0, 0), "5-cell")
+    anim((3, 2, 2, 3, 2, 3), (1, 0, 0, 0), description="5-cell")
     anim((3, 2, 2, 3, 2, 3), (1, 1, 0, 0), description="truncated-5-cell")
     anim((3, 2, 2, 3, 2, 3), (0, 1, 0, 0), description="rectified-5-cell")
     anim((3, 2, 2, 3, 2, 3), (0, 1, 1, 0), description="bitruncated-5-cell")
@@ -198,6 +200,9 @@ def main():
     anim((Fraction(5, 2), 2, 2, 5, 2, Fraction(5, 2)), (1, 0, 0, 0),
          extra_relations=((0, 1, 2, 1)*3, (1, 2, 3, 2)*3),
          description="grand-stellated-120-cell")
+
+    # and 5d polytopes
+    anim((4, 2, 2, 2, 3, 2, 2, 3, 2, 3), (1, 0, 0, 0, 0), description="5-cube")
 
 
 if __name__ == "__main__":

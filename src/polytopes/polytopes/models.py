@@ -412,6 +412,13 @@ class Polytope5D(BasePolytope):
             raise ValueError("Length error: the input coxeter_diagram must have length 10 and init_dist has length 5")
         super().__init__(coxeter_diagram, init_dist, extra_relations)
 
+    def proj4d(self, pole=1.3):
+        """
+        Stereographic project vertices to 4d.
+        """
+        self.vertices_coords = [v[:4] / (1.3 - v[-1]) for v in self.vertices_coords]
+        return self
+
 
 class Snub24Cell(Polychora):
 
