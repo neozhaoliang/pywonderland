@@ -28,7 +28,8 @@ def pov_index_array1d(arr1d):
     """
     Convert a 1d array to POV-Ray string, e.g. (1, 2, 3) --> 1, 2, 3
     """
-    return "{{{}}}".format(to_string(arr1d, sep=" "))
+    n = len(arr1d)
+    return "array[{}] {{{}}}".format(n, to_string(arr1d, sep=" "))
 
 
 def pov_index_array2d(arr2d):
@@ -41,7 +42,7 @@ def pov_index_array2d(arr2d):
     return "array[{}][{}] {{\n{}}}".format(
         dim1,
         dim2,
-        to_string(pov_index_array1d(arr) for arr in arr2d))
+        to_string("{{{}}}".format(to_string(arr, sep=" ")) for arr in arr2d))
 
 
 def pov_index_array3d(arr3d):
