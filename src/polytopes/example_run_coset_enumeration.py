@@ -9,7 +9,7 @@ from a .yaml file and computes its coset table.
 
 Example usage:
 
-    python run_coset_enumeration.py filename [-std] [-o output]
+    python example_run_coset_enumeration.py filename [-std] [-o output]
 
     filename: required, the .yaml file to be parsed.
         -std: optional, if added then the output table is standardized.
@@ -20,7 +20,7 @@ Example usage:
 import sys
 import argparse
 import yaml
-from todd_coxeter import CosetTable
+from polytopes.todd_coxeter import CosetTable
 
 
 def get_symbols(wordslist):

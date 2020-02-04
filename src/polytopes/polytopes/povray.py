@@ -3,15 +3,20 @@ Some POV-Ray stuff.
 """
 
 
-def to_string(arr, sep="\n"):
-    return ",{}".format(sep).join(str(x) for x in arr)
+def concat(arr, sep=",\n", border=None):
+    """
+    Concatenate items in an array using seperator `sep`.
+    """
+    if border is None:
+        return sep.join(str(x) for x in arr)
+    return border.format(sep.join(str(x) for x in arr))
 
 
 def pov_vector(v):
     """
     Convert a vector to POV-Ray format. e.g. (x, y, z) --> <x, y, z>.
     """
-    return "<{}>".format(to_string(v, sep=" "))
+    return concat(v, sep=", ", border="<{}>")
 
 
 def pov_vector_array(vectors):
@@ -22,14 +27,16 @@ def pov_vector_array(vectors):
     n = len(vectors)
     return "array[{}]{{\n{}}}".format(
         n,
-        to_string(pov_vector(v) for v in vectors))
+        concat(pov_vector(v) for v in vectors))
+
 
 def pov_index_array1d(arr1d):
     """
-    Convert a 1d array to POV-Ray string, e.g. (1, 2, 3) --> 1, 2, 3
+    Convert a 1d array to POV-Ray string, e.g.
+    (1, 2, 3) --> array[3] {1, 2, 3}
     """
     n = len(arr1d)
-    return "array[{}] {{{}}}".format(n, to_string(arr1d, sep=" "))
+    return "array[{}] {{\n{}}}".format(n, concat(arr1d, sep=", "))
 
 
 def pov_index_array2d(arr2d):
@@ -42,7 +49,7 @@ def pov_index_array2d(arr2d):
     return "array[{}][{}] {{\n{}}}".format(
         dim1,
         dim2,
-        to_string("{{{}}}".format(to_string(arr, sep=" ")) for arr in arr2d))
+        concat(concat(arr, sep=", ", border="{{{}}}") for arr in arr2d))
 
 
 def pov_index_array3d(arr3d):
@@ -52,10 +59,13 @@ def pov_index_array3d(arr3d):
     n = len(arr3d)
     return "array[{}] {{\n{}}}".format(
         n,
-        to_string(pov_index_array2d(arr2d) for arr2d in arr3d))
+        concat(pov_index_array2d(arr2d) for arr2d in arr3d))
 
 
 def export_polytope_data(P):
+    """
+    Return the data of a polytope `P` in POV-Ray format.
+    """
     vert_data = pov_vector_array(P.vertices_coords)
     edge_data = pov_index_array3d(P.edge_indices)
     face_data = pov_index_array3d(P.face_indices)

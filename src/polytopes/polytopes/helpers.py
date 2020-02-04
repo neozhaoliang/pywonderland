@@ -135,5 +135,5 @@ for a complete list of valid Coxeter diagrams.")
         M[4, 2] = (C[4, 2] - M[2, 0]*M[4, 0] - M[2, 1]*M[4, 1]) / M[2, 2]
         M[4, 3] = (C[4, 3] - M[3, 0]*M[4, 0] - M[3, 1]*M[4, 1] - M[3, 2]*M[4, 2]) / M[3, 3]
         M[4, 4] = np.sqrt(1 - np.dot(M[4, :4], M[4, :4]))
-    
+
     return M

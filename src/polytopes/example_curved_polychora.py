@@ -4,10 +4,6 @@
 Render curved 4d polychoron examples
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This script draws uniform polychoron whose vertices lie
-on the unit sphere S^3 by using stereographic projection
-to map them into 3d space.
-
 :copyright (c) 2018 by Zhao Liang.
 """
 import os
@@ -19,7 +15,6 @@ from polytopes.povray import pov_vector, pov_index_array1d
 
 IMAGE_DIR = "polychora_frames"        # directory to save the frames
 POV_EXE = "povray"                    # POV-Ray exe binary
-FFMPEG_EXE = "ffmpeg"                 # ffmpeg command
 SCENE_FILE = "polychora_curved.pov"   # the main scene file
 IMAGE_SIZE = 600                      # image size in pixels
 FRAMES = 1                            # number of frames
@@ -103,6 +98,12 @@ def draw(coxeter_diagram,
          face_max=3.0,
          face_min=0.5,
          use_area_light=False):
+    """
+    Export data to povray .inc file and call the rendering process.
+    :param face_index: a list controls which types of faces are shown.
+    :param face_max: only faces smaller than this threshold are shown.
+    :param face_min: only faces larger than this threshold are shown.
+    """
     P = Polychora(coxeter_diagram, trunc_type, extra_relations)
     P.build_geometry()
     vert_data, edge_data, face_data = P.get_povray_data()
