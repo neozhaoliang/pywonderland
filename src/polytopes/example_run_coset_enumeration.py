@@ -12,7 +12,7 @@ Example usage:
     python example_run_coset_enumeration.py filename [-std] [-o output]
 
     filename: required, the .yaml file to be parsed.
-        -std: optional, if added then the output table is standardized.
+        -std: optional, if added then the output table is standard.
           -o: optional, output filename, the default is sys.stdout.
 
 :copyright (c) 2015 by Zhao Liang.

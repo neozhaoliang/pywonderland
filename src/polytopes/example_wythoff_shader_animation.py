@@ -3,7 +3,7 @@
 Real time animation of Wythoff construction with pyglet and glsl
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Code adapted from Matt Zucker's excellent shadertoy program at
+Code exported from Matt Zucker's excellent shadertoy program at
 
     "https://www.shadertoy.com/view/Md3yRB"
 
@@ -20,8 +20,8 @@ Some notes:
    method, it runs slower but gives better result. I also deleted some redundant code
    (for example the usage of iChannel1 in BufferA and BufferB) from Matt's version.
 
-3. This program uses two invisible "frame buffers" for rendering the UI and the polyhedra,
-   and finally put them together in a third main shader.
+3. This program uses two invisible "frame buffers" to render the gui and the polyhedra,
+   and combines them together in a third main shader.
 
 Press "Enter" to save screenshots and "Esc" to escape.
 """
