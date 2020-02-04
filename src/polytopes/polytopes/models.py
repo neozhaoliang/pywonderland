@@ -414,6 +414,13 @@ class Snub24Cell(Polychora):
            G = <r, s, t | r^3 = s^3 = t^3 = (rs)^2 = (rt)^2 = (s^-1 t)^2 = 1>
 
     where r = ρ0ρ1, s = ρ1ρ2, t = ρ1ρ3.
+    Coxeter-Dynkin diagram:
+    
+        ρ0    ρ1   ρ2  
+        •-----•-----•
+              |
+              •
+             ρ3
     """
 
     def __init__(self):
