@@ -40,6 +40,7 @@ POV_COMMAND = " cd povray && " + \
               " +O../{}/".format(IMAGE_DIR) + "{}"
 
 POV_TEMPLATE = """
+#declare bg_color = {};
 #declare vertex_size = {};
 #declare edge_size = {};
 #declare camera_loc = {};
@@ -89,7 +90,8 @@ def draw(coxeter_diagram,
          trunc_type,
          extra_relations=(),
          description="polychora",
-         camera_loc=(0, 0, 180),
+         bg_color="SkyBlue",
+         camera_loc=(0, 0, 30),
          rotation=(0, 0, 0),
          vertex_size=0.04,
          edge_size=0.02,
@@ -109,6 +111,7 @@ def draw(coxeter_diagram,
     vert_data, edge_data, face_data = P.get_povray_data()
     with open(data_file, "w") as f:
         f.write(POV_TEMPLATE.format(
+            bg_color,
             vertex_size,
             edge_size,
             pov_vector(camera_loc),
@@ -147,11 +150,23 @@ def main():
          edge_size=0.04, size_func=1)
 
     draw((3, 2, 2, 3, 2, 5), (1, 0, 0, 0), description="600-cell",
-         camera_loc=(0, 0, 25), vertex_size=0.12, edge_size=0.04,
-         size_func=2, face_max=4.0, face_min=3.0)
+         bg_color="White", camera_loc=(0, 0, 25), vertex_size=0.12,
+         edge_size=0.04, size_func=2, face_max=4.0, face_min=3.0)
 
     draw((5, 2, 2, 3, 2, 3), (1, 0, 0, 1), description="runcinated-120-cell",
          camera_loc=(0, 0, 18), vertex_size=0.028, edge_size=0.014, face_min=20)
+
+    # this is the settings I used to render the movie at
+    # http://pywonderland.com/polytopes/rectified-grand-stellated-120-cell.mp4
+    # (the parameters are not exactly the same but very similar)
+    # take quite a while to render.
+    """
+    draw((Fraction(5, 2), 2, 2, 5, 2, Fraction(5, 2)), (0, 1, 0, 0),
+         extra_relations=((0, 1, 2, 1)*3, (1, 2, 3, 2)*3),
+         description="rectified-grand-stellated-120-cell",
+         size_func=1, vertex_size=0.06, edge_size=0.03,
+         use_area_light=1, face_max=0.0, camera_loc=(0, 0, 20))
+    """
 
 
 if __name__ == "__main__":

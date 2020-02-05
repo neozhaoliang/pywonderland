@@ -22,7 +22,7 @@ POV_EXE = "povray"                   # povray command
 FFMPEG_EXE = "ffmpeg"                # ffmpeg command
 FRAMES = 1                           # number of frames (120 is quite good)
 IMAGE_SIZE = 500                     # image size
-SUPERSAMPLING_LEVEL = 3              # supersampling level
+SUPERSAMPLING_LEVEL = 1              # supersampling level
 DATAFILE_NAME = "polytope-data.inc"  # export data to this file
 
 data_file = os.path.join(os.getcwd(), "povray", DATAFILE_NAME)
@@ -111,14 +111,12 @@ def snub24cell(description="snub-24-cell"):
 
 
 def main():
-    """
     # Platonic solids
     anim((3, 2, 3), (1, 0, 0), description="tetrahedron")
     anim((4, 2, 3), (1, 0, 0), description="cube")
     anim((3, 2, 4), (1, 0, 0), description="octahedron")
     anim((5, 2, 3), (1, 0, 0), description="dodecahedron")
     anim((3, 2, 5), (1, 0, 0), description="icosahedron")
-
     # Archimedian solids
     anim((3, 2, 3), (1, 1, 0), description="truncated-tetrahedron")
     anim((4, 2, 3), (1, 1, 0), description="truncated-cube")
@@ -133,11 +131,9 @@ def main():
     anim((5, 2, 3), (1, 1, 1), description="truncated-icosidodecahedron")
     anim((4, 2, 3), (1, 1, 1), snub=True, description="snub-cube")
     anim((5, 2, 3), (1, 1, 1), snub=True, description="snub-dodecahedron")
-
     # prism and antiprism
     anim((7, 2, 2), (1, 0, 1), description="7-prism")
     anim((8, 2, 2), (1, 1, 1), snub=True, description="8-antiprism")
-
     # Kepler-Poinsot solids
     anim((5, 2, Fraction(5, 2)), (1, 0, 0),
          extra_relations=((0, 1, 2, 1) * 3,),
@@ -147,7 +143,6 @@ def main():
          description="small-stellated-dodecahedron")
     anim((3, 2, Fraction(5, 2)), (0, 0, 1), description="great-stellated-dodecahedron")
     anim((3, 2, Fraction(5, 2)), (1, 0, 0), description="great-icosahedron")
-
     # 5-cell family, symmetry group A_4
     anim((3, 2, 2, 3, 2, 3), (1, 0, 0, 0), description="5-cell")
     anim((3, 2, 2, 3, 2, 3), (1, 1, 0, 0), description="truncated-5-cell")
@@ -169,7 +164,6 @@ def main():
     anim((3, 2, 2, 4, 2, 3), (1, 0, 0, 0), description="24-cell")
     anim((3, 2, 2, 4, 2, 3), (1, 0, 1, 0), description="cantellated-24-cell")
     snub24cell()
-
     # 120-cell family, symmetry group H_4
     anim((5, 2, 2, 3, 2, 3), (1, 0, 0, 0), description="120-cell")
 
@@ -196,13 +190,12 @@ def main():
     anim((5, 2, 2, 3, 2, Fraction(5, 2)), (1, 0, 0, 0),
          extra_relations=((0, 1, 2, 3, 2, 1)*3,),
          description="grand-120-cell")
-    """
     anim((Fraction(5, 2), 2, 2, 5, 2, Fraction(5, 2)), (1, 0, 0, 0),
          extra_relations=((0, 1, 2, 1)*3, (1, 2, 3, 2)*3),
          description="grand-stellated-120-cell")
 
     # and 5d polytopes
-    anim((4, 2, 2, 2, 3, 2, 2, 3, 2, 3), (1, 0, 0, 0, 0), description="5-cube")
+    anim((4, 2, 2, 2, 3, 2, 2, 3, 2, 3), (1, 0, 0, 0, 0), description="5d-cube")
 
 
 if __name__ == "__main__":

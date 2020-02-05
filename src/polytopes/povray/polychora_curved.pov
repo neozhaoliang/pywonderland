@@ -21,7 +21,7 @@ global_settings {
   max_trace_level 8
 }
 
-background { color White }
+background { color bg_color }
 
 #declare num_segments = 30;
 #declare face_transmit = 0.7;
@@ -63,8 +63,8 @@ background { color White }
   ambient 0.5
   diffuse 0.5
   reflection 0.1
-  specular 1
-  roughness 0.005
+  specular 0.4
+  roughness 0.003
   irid { 0.3 thickness 0.2 turbulence 0.05 }
   conserve_energy
 }
@@ -197,20 +197,25 @@ camera {
   up y
 }
 
+light_source {
+  <-1, 1, 2> * 200
+  color rgb 1
+}
+
+light_source {
+  <1, 3, 1> * 200
+  color rgb 1
+}
+
 #if (use_area_light)
   light_source {
-    camera_loc * 0.9
+    camera_loc * 0.25
     color rgb 1
     area_light
-    x*10, y*10
+    x*5, y*5
     3, 3
     adaptive 1
     orient
     jitter
-  }
-#else
-  light_source {
-    <-1, 1, 2> * 200
-    color rgb 1
   }
 #end
