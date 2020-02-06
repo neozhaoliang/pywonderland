@@ -68,8 +68,8 @@ POV_TEMPLATE = """
 
 #macro choose_face(i, face_size)
   #local chosen = false;
-  #for (ind, 0, dimension_size(faces, 1) - 1)
-    #if (i = ind)
+  #for (ind, 0, dimension_size(face_index, 1) - 1)
+    #if (i = face_index[ind])
       #if (face_size > face_min & face_size < face_max)
         #local chosen = true;
       #end
