@@ -186,6 +186,7 @@ union {
       BubbleFace(i, nsides, points)
     #end
   #end
+  scale 20
   rotate obj_rotation
 }
 

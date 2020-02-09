@@ -12,12 +12,10 @@ def generate_text_mask(size, text, fontfile, fontsize):
     Important: this mask must preserve the connectivity of the graph,
     otherwise the program will not terminate.
 
-    Parameters
-    ----------
-    :size:  size of the image.
-    :text:  a string to be embedded in the image.
-    :fontfile:  path to your .ttf font file.
-    :fontsize:  size of the font.
+    :param size: size of the image.
+    :param text: a string to be embedded in the image.
+    :param fontfile: path to your .ttf font file.
+    :param fontsize: size of the font.
     """
     img = Image.new('L', size, 'white')
     draw = ImageDraw.Draw(img)

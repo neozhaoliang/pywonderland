@@ -24,12 +24,10 @@ def render_with_cairo(az, imgsize, extent, filename):
     Draw current tiling of `az` (possibly have holes)
     to a png image with cairo.
 
-    Parameters
-    ----------
-    :az:  an instance of the AztecDiamond class.
-    :imgsize:  image size in pixels, e.g. size = 600 means 600x600.
-    :extent:  range of the axis: [-extent, extent] x [-extent, extent]
-    :filename:  output filename, must be a .png image.
+    :param az: an instance of the AztecDiamond class.
+    :param imgsize: image size in pixels, e.g. size = 600 means 600x600.
+    :param extent: range of the axis: [-extent, extent] x [-extent, extent]
+    :param filename: output filename, must be a .png image.
     """
     import cairocffi as cairo
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, imgsize, imgsize)
@@ -104,7 +102,8 @@ def render_with_matplotlib(az, imgsize, extent, filename):
 
 
 def render(program, *args, **kwargs):
-    """`program` must be either `cairo` or `matplotlib`.
+    """
+    :param program: must be either cairo or matplotlib.
     """
     if program == 'cairo':
         render_with_cairo(*args, **kwargs)

@@ -53,16 +53,18 @@ ALL_SPECIES = {"unstable":             [0.210, 0.105, 0.018, 0.051],
 
 
 def htmlcolors_to_rgba(colors):
-    """colors: a 1d list of 5 html colors of the format "#RRGGBBAA".
-           return a 1d list of 20 floats in range [0, 1].
+    """
+    :param colors: a 1d list of 5 html colors of the format "#RRGGBBAA".
+        return a 1d list of 20 floats in range [0, 1].
     """
     return [int(x, 16) / 255.0 for s in colors \
             for x in (s[1:3], s[3:5], s[5:7], s[7:])]
 
 
 def rgba_to_htmlcolors(colors):
-    """colors: a 1d list of length 20 floats in range [0, 1].
-           return a 1d list of 5 html colors of the format "#RRGGBBAA".
+    """
+    :param colors: a 1d list of length 20 floats in range [0, 1].
+        return a 1d list of 5 html colors of the format "#RRGGBBAA".
     """
     hexcolors = [("{:02x}".format(int(255 * x))).upper() for x in colors]
     return ["#{}{}{}{}".format(*hexcolors[4*i: 4*i+4]) for i in range(5)]
@@ -71,9 +73,9 @@ def rgba_to_htmlcolors(colors):
 def parse(params):
     """
     params: a string of the format "species: color1 ... color5"
-            where `species` is the name of the pattern and
-            color1-color5 are html colors of the format `#RRGGBBAA`.
-            return `species` and a 1d list of 20 floats in range [0, 1].
+        where `species` is the name of the pattern and
+        color1-color5 are html colors of the format `#RRGGBBAA`.
+        return `species` and a 1d list of 20 floats in range [0, 1].
     """
     species = (params.split(":")[0]).strip()
     colors = re.findall("#[0-9|A-Z]{8}", params)
@@ -81,6 +83,7 @@ def parse(params):
 
 
 class GrayScott(pyglet.window.Window):
+
     """
     ----------------------------------------------------------
     | This simulation uses mouse and keyboard to control the |
@@ -113,14 +116,14 @@ class GrayScott(pyglet.window.Window):
         """
         Parameters
         ----------
-        :width & height:  size of the window in pixels.
-        :scale:  scaling factor of the texture.
-        :conf:  line number of the config in the file (`config.txt`).
-        :mask:  a user-specified image that is used to control the growth of the pattern.
-        :flip:  flip the white/black pixels in the mask image, only meaningful if there is a mask image.
-        :video:  whether the video is turned on or off.
-        :sample_rate:  sample a frame from the animation every these frames.
-        :video_rate:  frames per second of the video.
+        :width & height: size of the window in pixels.
+        :scale: scaling factor of the texture.
+        :conf: line number of the config in the file (`config.txt`).
+        :mask: a user-specified image that is used to control the growth of the pattern.
+        :flip: flip the white/black pixels in the mask image, only meaningful if there is a mask image.
+        :video: whether the video is turned on or off.
+        :sample_rate: sample a frame from the animation every these frames.
+        :video_rate: frames per second of the video.
         """
         pyglet.window.Window.__init__(self,
                                       width,
@@ -224,7 +227,8 @@ class GrayScott(pyglet.window.Window):
             self.write_video_frame()
 
     def on_key_press(self, symbol, modifiers):
-        """Keyboard interface.
+        """
+        Keyboard interface.
         """
         if symbol == key.ENTER:
             self.save_screenshot()
@@ -296,7 +300,8 @@ class GrayScott(pyglet.window.Window):
             return
 
     def write_video_frame(self):
-        """Read frame data from buffer and write it to the video.
+        """
+        Read frame data from buffer and write it to the video.
         """
         data = self.buffer.get_image_data().get_data("RGBA", -4 * self.width)
         self.ffmpeg_pipe.write(data)

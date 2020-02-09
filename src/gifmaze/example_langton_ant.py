@@ -21,11 +21,13 @@ margin = 6
 
 
 class Ant(object):
-    """The rule:
-       1. At a white square, turn 90° right, flip the color of the square,
-          move forward one unit.
-       2. At a black square, turn 90° left, flip the color of the square,
-          move forward one unit.
+
+    """
+    The rule:
+    1. At a white square, turn 90° right, flip the color of the square,
+       move forward one unit.
+    2. At a black square, turn 90° left, flip the color of the square,
+       move forward one unit.
     """
 
     DIRECTIONS = [(-1, 0), (0, 1), (1, 0), (0, -1)]

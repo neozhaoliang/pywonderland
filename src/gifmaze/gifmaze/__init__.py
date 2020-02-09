@@ -9,13 +9,11 @@ def create_animation_for_size(width, height, cell_size,
     A helper function for creating an animation embedded at the center
     of the image window.
 
-    parameters
-    ----------
-    :width & height:  size of the maze.
-    :cell_size:  size of the cells in pixels.
-    :linewidth:  size of the walls between adjacent cells in pixels.
-    :margin:  margin padded at the boundary of the window.
-    :kwargs:  can be `cell_init`, `wall_init`, `bg_color`.
+    :param width & height: size of the maze.
+    :param cell_size: size of the cells in pixels.
+    :param linewidth: size of the walls between adjacent cells in pixels.
+    :param margin: margin padded at the boundary of the window.
+    :param kwargs: can be `cell_init`, `wall_init`, `bg_color`.
     """
     cell_init = kwargs.get("cell_init", 0)
     wall_init = kwargs.get("wall_init", 0)

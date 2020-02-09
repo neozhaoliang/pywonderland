@@ -24,21 +24,24 @@ from .gifmaze import Maze
 
 
 def wilson(maze, encode_func, speed=50, root=(0, 0)):
-    """Maze generation using Wilson's uniform spanning tree algorithm.
+    """
+    Maze generation using Wilson's uniform spanning tree algorithm.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Wilson's algorithm")
 
     def add_to_path(path, cell):
-        """Add a cell to the path of current random walk.
-           Note `path` is modified inside this function.
+        """
+        Add a cell to the path of current random walk.
+        Note `path` is modified inside this function.
         """
         maze.mark_cell(cell, Maze.PATH)
         maze.mark_space(path[-1], cell, Maze.PATH)
         path.append(cell)
 
     def erase_loop(path, cell):
-        """When a cell is visited twice then a loop is created, erase it.
-           Note this function returns a new version of the path.
+        """
+        When a cell is visited twice then a loop is created, erase it.
+        Note this function returns a new version of the path.
         """
         index = path.index(cell)
         # erase the loop
@@ -141,7 +144,8 @@ def bfs(maze, encode_func, speed=20, start=None, end=None):
 
 
 def random_dfs(maze, encode_func, speed=10, start=(0, 0)):
-    """Maze generation using random depth-first search.
+    """
+    Maze generation using random depth-first search.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running random depth first search")
 
@@ -172,7 +176,8 @@ def random_dfs(maze, encode_func, speed=10, start=(0, 0)):
 
 
 def dfs(maze, encode_func, speed=20, start=None, end=None):
-    """Solve a maze using depth-first search.
+    """
+    Solve a maze using depth-first search.
     """
     if start is None:
         start = (0, 0)
@@ -220,7 +225,8 @@ def dfs(maze, encode_func, speed=20, start=None, end=None):
 
 
 def prim(maze, encode_func, speed=30, start=(0, 0)):
-    """Maze generation using Prim's algorithm.
+    """
+    Maze generation using Prim's algorithm.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Prim's algorithm")
 
@@ -251,7 +257,8 @@ def prim(maze, encode_func, speed=30, start=(0, 0)):
 
 
 def kruskal(maze, encode_func, speed=30):
-    """Maze generation using Kruskal's algorithm.
+    """
+    Maze generation using Kruskal's algorithm.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Kruskal's algorithm")
 

@@ -18,7 +18,8 @@ margin = 6
 
 
 def example1():
-    """The most simple maze animation example.
+    """
+    The most simple maze animation example.
     """
     maze, surface, anim = create_animation_for_size(width, height, cell_size, lw, margin)
     surface.set_palette([0, 0, 0, 255, 255, 255])
@@ -29,7 +30,8 @@ def example1():
 
 
 def example2():
-    """This example shows how to use a mask image in the maze.
+    """
+    This example shows how to use a mask image in the maze.
     """
     _, surface, anim = create_animation_for_size(width, height, cell_size, lw, margin)
     surface.set_palette([0, 0, 0, 255, 255, 255])
@@ -42,8 +44,9 @@ def example2():
 
 
 def example3():
-    """This example shows how to insert a background image at the beginning
-       of the gif file while the animation is running.
+    """
+    This example shows how to insert a background image at the beginning
+    of the gif file while the animation is running.
     """
     maze, surface, anim = create_animation_for_size(width, height, cell_size, lw, margin)
     surface.set_palette([0, 0, 0,
@@ -61,7 +64,8 @@ def example3():
 
 
 def example4():
-    """This example shows how to embed the animation into a background image.
+    """
+    This example shows how to embed the animation into a background image.
     """
     surface = GIFSurface.from_image("./resources/bg.png")
     palette = [38, 92, 66,     # wall color, the same with the blackboard's

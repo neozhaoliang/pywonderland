@@ -143,7 +143,8 @@ class Wythoff(pyglet.window.Window):
         self._frame_count += 1
 
     def on_key_press(self, symbol, modifiers):
-        """Keyboard interface.
+        """
+        Keyboard interface.
         """
         if symbol == key.ENTER:
             self.save_screenshot()
@@ -157,7 +158,8 @@ class Wythoff(pyglet.window.Window):
                 self.shaderA.uniformf("iMouse", x, y, x, y)
 
     def on_mouse_release(self, x, y, button, modifiers):
-        """Don't forget reset 'iMouse' when mouse is released.
+        """
+        Don't forget reset 'iMouse' when mouse is released.
         """
         with self.shaderA:
             self.shaderA.uniformf("iMouse", 0, 0, 0, 0)

@@ -22,7 +22,8 @@ margin = 4
 
 
 def parse(filename):
-    """Read data from a .cells file.
+    """
+    Read data from a .cells file.
     """
     seed = []
     with open(filename, "r") as f:
@@ -50,7 +51,8 @@ def parse(filename):
 
 
 def evolve(grid):
-    """Evolve the grid one step.
+    """
+    Evolve the grid one step.
     """
     G = grid.astype(np.int)
     N = np.zeros_like(G)
@@ -63,17 +65,11 @@ def evolve(grid):
 
 def main(seed_file, grid_size, offsets, cutoff, frames):
     """
-    parameters
-    ----------
-    :seed_file: the pattern file.
-
-    :grid_size: (width, height) of the grid in the life world.
-
-    :offsets: (left, top) position of the initial pattern with respect to the grid.
-
-    :cutoff: cutoff of the image relative to the actual grid.
-
-    :frames: number of frames in the animation.
+    :param seed_file: the pattern file.
+    :param grid_size: (width, height) of the grid in the life world.
+    :param offsets: (left, top) position of the initial pattern with respect to the grid.
+    :param cutoff: cutoff of the image relative to the actual grid.
+    :param frames: number of frames in the animation.
     """
     seed = np.array(parse(seed_file), dtype=np.bool)
     grid = np.zeros(grid_size).astype(np.bool)

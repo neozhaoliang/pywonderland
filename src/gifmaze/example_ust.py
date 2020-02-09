@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 
 
 def grid_graph(*size):
-    """Return a grid graph stored in a dict.
+    """
+    Return a grid graph stored in a dict.
     """
     def neighbors(v):
         neighborhood = []

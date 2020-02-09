@@ -24,7 +24,8 @@ from polytopes.todd_coxeter import CosetTable
 
 
 def get_symbols(wordslist):
-    """Collect the set of letters from a list of strings.
+    """
+    Collect the set of letters from a list of strings.
     """
     symbols = []
     for word in wordslist:
@@ -38,20 +39,23 @@ def get_symbols(wordslist):
 
 
 def char2int(symbols, c):
-    """Find the integer in the generator list that represents a symbol `c`.
+    """
+    Find the integer in the generator list that represents a symbol `c`.
     """
     ind = symbols.index(c.lower())
     return 2 * ind if c.islower() else 2 * ind + 1
 
 
 def word2int(symbols, wordslist):
-    """Map a list of words to the list of their integer representations.
+    """
+    Map a list of words to the list of their integer representations.
     """
     return tuple(tuple(char2int(symbols, c) for c in word)
                  for word in wordslist)
 
 
 class FpGroup(object):
+
     """
     Finitely presented group by defining relations between its generators.
     """
@@ -95,7 +99,8 @@ class FpGroup(object):
         self.coset_table.run(standard)
 
     def print_table(self, outfile):
-        """pretty print the table.
+        """
+        pretty print the table.
         """
         f = sys.stdout if outfile is None else open(outfile, "w")
         f.write("       ")
