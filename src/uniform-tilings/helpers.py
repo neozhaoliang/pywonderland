@@ -214,20 +214,6 @@ def export_latex_array(self, words, symbol=r"s", cols=4):
     return r"\begin{{array}}\n{{{}}}{}\n\end{{array}}".format("l" * cols, latex)
 
 
-def check_duplicate_face(f, l):
-    """Check if a face `f` is already in the list `l`.
-       We need this function here because when some rotation r fixes a
-       face f = (v1, v2, ..., v_k), r maps f as an ordered tuple to
-       (v_k, v_1, ..., v_{k-1}) or (v_2, ..., v_k, v_1) where they all
-       represent the same face.
-    """
-    for _ in range(len(f)):
-        if f in l or f[::-1] in l:
-            return True
-        f = f[-1:] + f[:-1]
-    return False
-
-
 def pov_vector(v):
     """Convert a vector to POV-Ray format. e.g. (x, y, z) --> <x, y, z>.
     """

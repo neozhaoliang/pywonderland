@@ -153,6 +153,7 @@ class Tiling2D(object):
         self.get_vertices()
         self.get_edges()
         self.get_faces()
+        print(self.num_vertices, self.num_edges, self.num_faces)
         return self
 
     def get_vertices(self):
@@ -182,18 +183,15 @@ class Tiling2D(object):
         """
         for i in self.gens:
             if self.active[i]:
-                elist = set()
-                H = (i,)  # edge-stabilizing subgroup
+                elist = []
+                H = (i,) + self.get_orthogonal_stabilizing_mirrors((i,))
                 reps = set(self.word_generator(parabolic=H))
                 reps = self.G.sort_words(reps)
                 for word in reps:
                     v1 = self.G.move(self.vtable, 0, word)
                     v2 = self.G.move(self.vtable, 0, word + (i,))
                     if v1 is not None and v2 is not None:
-                        if v1 > v2:
-                            v1, v2 = v2, v1
-                        if (v1, v2) not in elist:
-                            elist.add((v1, v2))
+                        elist.append((v1, v2))
 
                 self.edge_indices[i] = elist
 
@@ -210,7 +208,7 @@ class Tiling2D(object):
             f0 = []
             m = self.cox_mat[i][j]
             # this is the stabilizing subgroup of the initial face f0.
-            H = (i, j)
+            H = (i, j) + self.get_orthogonal_stabilizing_mirrors((i, j))
             # type indicates if this face is regular (0) or truncated (1).
             # it's truncated if and only if both mirrors are active.
             type = 0
@@ -239,18 +237,18 @@ class Tiling2D(object):
             # a set holds faces, we use a set here because though a word w
             # in H stabilizes f0, it may change cyclically rotate f0 to another
             # different ordered tuple.
-            flist = set()
+            flist = []
             for word in reps:
                 # compute the indices of the vertices of the transformed face
                 f = tuple(self.G.move(self.vtable, v, word) for v in f0)
                 # check if `None` is in f (in this case f contains some
                 # vertex that is not in the vertices list) or there already has
                 # a rotated version of f in the set.
-                if None not in f and set(f) not in flist:
+                if None not in f:
                     center = self.transform(word, c0)
                     coords = [self.vertices_coords[k] for k in f]
                     face = DihedralFace(word, f, center, coords, type)
-                    flist.add(face)
+                    flist.append(face)
 
             self.face_indices[(i, j)] = flist
 
@@ -266,6 +264,22 @@ class Tiling2D(object):
         for w in reversed(word):
             v = self.reflections[w](v)
         return v
+
+    def get_orthogonal_stabilizing_mirrors(self, subgens):
+        """
+        :param subgens: a list of generators, e.g. [0, 1]
+
+        Given a list of generators in `subgens`, return the generators that
+        commute with all of those in `subgens` and fix the initial vertex.
+        """
+        result = []
+        for s in self.gens:
+            # check commutativity
+            if all(self.cox_mat[x][s] == 2 for x in subgens):
+                # check if it fixes v0
+                if not self.active[s]:
+                    result.append(s)
+        return tuple(result)
 
     def get_info(self):
         """Return some statistics of the tiling.

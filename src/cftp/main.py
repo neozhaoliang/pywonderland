@@ -44,6 +44,8 @@ def main(hexagon_size, imgsize):
     # paint background
     ctx.set_source_rgb(1, 1, 1)
     ctx.paint()
+    ctx.set_line_cap(cairo.LINE_CAP_ROUND)
+    ctx.set_line_join(cairo.LINE_JOIN_ROUND)
 
     T = LozengeTiling(hexagon_size)
     sample = run_cftp(T)

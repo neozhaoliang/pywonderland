@@ -41,7 +41,7 @@ def parse(filename):
                 seed.append(row)
 
         # 2. make it a 2d rectangular array
-        num_cols = max([len(row) for row in seed])
+        num_cols = max(len(row) for row in seed)
         for row in seed:
             if len(row) < num_cols:
                 row.extend([0] * (num_cols - len(row)))

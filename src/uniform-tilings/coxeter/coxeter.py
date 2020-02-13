@@ -48,10 +48,10 @@ class CoxeterGroup(object):
         """Return a presentation of this group in latex format.
         """
         latex = r"$$\langle {} \, |\, {}={}=1\rangle.$$"
-        generators = ",".join(["s_{{{}}}".format(i) for i in range(self.rank)])
-        involutions = "=".join(["s^2_{{{}}}".format(i) for i in range(self.rank)])
-        relations = "=".join(["(s_{{{}}}s_{{{}}})^{}".format(i, j, self.cox_mat[i][j])
-                              for i, j in combinations(range(self.rank), 2)])
+        generators = ",".join("s_{{{}}}".format(i) for i in range(self.rank))
+        involutions = "=".join("s^2_{{{}}}".format(i) for i in range(self.rank))
+        relations = "=".join("(s_{{{}}}s_{{{}}})^{}".format(i, j, self.cox_mat[i][j])
+                              for i, j in combinations(range(self.rank), 2))
         return latex.format(generators, involutions, relations)
 
     @staticmethod
