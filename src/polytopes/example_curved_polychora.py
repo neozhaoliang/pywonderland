@@ -185,7 +185,7 @@ def main():
          extra_relations=((0, 1, 2, 1)*3, (1, 2, 3, 2)*3),
          description="rectified-grand-stellated-120-cell",
          size_func=1, vertex_size=0.06, edge_size=0.03,
-         use_area_light=1, face_max=0.0, camera_loc=(0, 0, 200))
+         use_area_light=1, face_max=0.0, camera_loc=(0, 0, 400))
 
 
 if __name__ == "__main__":
