@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
+r"""
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Perfectly random lozenge tiling of a hexagon using
 Propp-Wilson's "coupling from the past" algorithm
@@ -99,6 +99,7 @@ def run_cftp(mc):
 
 
 class LozengeTiling(object):
+
     """
     This class builds the "monotone" Markov chain structure on the set
     of lozenge tilings of an (a x b x c) hexagon. A tiling is represented
@@ -114,9 +115,10 @@ class LozengeTiling(object):
 
     @property
     def min_max_states(self):
-        """Return the minimum and maximum tilings. From a bird's view, the minimum
-           tiling is the one that correspondes to a room filled full of boxes and
-           the maximum tiling is the one that correspondes to an empty room.
+        """
+        Return the minimum and maximum tilings. From a bird's view, the minimum
+        tiling is the one that correspondes to a room filled full of boxes and
+        the maximum tiling is the one that correspondes to an empty room.
         """
         a, b, c = self.size
         # min state that all paths move downward and then upward.
@@ -130,7 +132,8 @@ class LozengeTiling(object):
         return s0, s1
 
     def new_random_update(self):
-        """Return a new update operation.
+        """
+        Return a new update operation.
         """
         a, b, c = self.size
         return (random.randint(1, c),  # a random path
