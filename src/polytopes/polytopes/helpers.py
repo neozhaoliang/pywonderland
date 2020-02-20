@@ -74,10 +74,10 @@ def get_coxeter_matrix(coxeter_diagram):
     Get the Coxeter matrix from a given coxeter_diagram.
     The Coxeter matrix is square and entries are all integers,
     it describes the relations between the generators of the
-    symmetry group. Here is the math: suppose two mirrors m_i, m_j
+    symmetry group. Here is the math: suppose two mirrors mᵢ, mⱼ
     form an angle p/q where p,q are coprime integers, then the two
-    generator reflections about these two mirrors r_i, r_j satisfy
-    (r_ir_j)^p = 1.
+    generator reflections about these two mirrors rᵢ, rⱼ satisfy
+    (rᵢrⱼ)^p = 1.
 
     Example:
     >>> coxeter_diagram = (3, 2, Fraction(5, 2))
