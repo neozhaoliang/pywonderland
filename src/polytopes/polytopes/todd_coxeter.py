@@ -29,10 +29,13 @@ class CosetTable(object):
         """
         :param gens: a 1D list of integers that represents the generators,
             e.g. [0, 1, 2] for [a, b, c]
+
         :param rels: a 2D list of integers that represents the relators R,
             e.g. [[0, 0], [1, 1, 1], [0, 2]*3] for a^2 = b^3 = (ac)^3 = 1
+
         :param subgens: a 2D list of integers that represents the subgroup generators,
             e.g. [[0, 2]] for < ac >.
+
         :param coxeter: whether this is a Coxeter group. If false then the inverse of
             the generators are also included as generators, else they are not.
 
@@ -67,21 +70,26 @@ class CosetTable(object):
         return len(self.table)
 
     def is_alive(self, coset):
-        """Check if a coset is alive."""
+        """
+        Check if a coset is alive.
+        """
         return self.p[coset] == coset
 
     def is_defined(self, coset, x):
-        """Check if an entry is defined."""
+        """
+        Check if an entry is defined.
+        """
         return self[coset][x] is not None
 
     def undefine(self, coset, x):
         self[coset][x] = None
 
     def define(self, coset, x):
-        """To define a new coset we need to:
-            1. Append a new empty row to the table.
-            2. Fill the two entries.
-            3. Add this new coset to `p`.
+        """
+        To define a new coset we need to:
+        1. Append a new empty row to the table.
+        2. Fill the two entries.
+        3. Add this new coset to `p`.
         """
         n = len(self.table)
         self.table.append([None] * len(self.A))
@@ -90,8 +98,9 @@ class CosetTable(object):
         self.p.append(n)
 
     def rep(self, coset):
-        """Find the minimal equivalent representative of a given coset and
-           modify `p` along the way.
+        """
+        Find the minimal equivalent representative of a given coset and
+        modify `p` along the way.
         """
         m = coset
         while m != self.p[m]:
@@ -104,8 +113,9 @@ class CosetTable(object):
         return m
 
     def merge(self, coset1, coset2):
-        """Merge two equivalent cosets. The larger one is declared
-           to "dead" and is added to the queue `q` to be processed later on.
+        """
+        Merge two equivalent cosets. The larger one is declared to "dead"
+        and is added to the queue `q` to be processed later on.
         """
         s = self.rep(coset1)
         t = self.rep(coset2)
@@ -211,7 +221,8 @@ class CosetTable(object):
                         # so we also copy the information at (f, y) to (f1, y).
 
     def hlt(self):
-        """Run the HLT strategy (Haselgrove, Leech and Trotter).
+        """
+        Run the HLT strategy (Haselgrove, Leech and Trotter).
         """
         for word in self.H:
             self.scan_and_fill(0, word)
@@ -230,8 +241,9 @@ class CosetTable(object):
             current += 1
 
     def compress(self):
-        """Delete all dead cosets in the table. The live cosets are
-           renumbered and their entries are also updated.
+        """
+        Delete all dead cosets in the table. The live cosets are renumbered and
+        their entries are also updated.
         """
         ind = -1
         for coset in range(len(self)):
@@ -250,9 +262,9 @@ class CosetTable(object):
         self.table = self.table[:len(self.p)]
 
     def swap(self, k, l):
-        """Swap two live cosets in the table. It's called in the
-           `standardize()` method after the table is compressed,
-           but it also works for non-compressed table.
+        """
+        Swap two live cosets in the table. It's called in the `standardize()` method
+        after the table is compressed, but it also works for non-compressed table.
         """
         for x in self.A:
             # swap the two rows k and l.
@@ -267,7 +279,8 @@ class CosetTable(object):
                         self[coset][x] = k
 
     def standardize(self):
-        """Rearrange the cosets in the table to a standard form.
+        """
+        Rearrange the cosets in the table to a standard form.
         """
         # the next coset we want to encounter in the table.
         next_coset = 1
@@ -288,8 +301,9 @@ class CosetTable(object):
             self.standardize()
 
     def get_words(self):
-        """Return the list of all words in this table. This method
-           must be called when the table is already compressed.
+        """
+        Return the list of all words in this table. This method must be called
+        when the table is already compressed.
         """
         from collections import deque
 

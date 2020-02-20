@@ -72,12 +72,10 @@ def make_symmetry_matrix(upper_triangle):
 def get_coxeter_matrix(coxeter_diagram):
     """
     Get the Coxeter matrix from a given coxeter_diagram.
-    The Coxeter matrix is square and entries are all integers,
-    it describes the relations between the generators of the
-    symmetry group. Here is the math: suppose two mirrors mᵢ, mⱼ
-    form an angle p/q where p,q are coprime integers, then the two
-    generator reflections about these two mirrors rᵢ, rⱼ satisfy
-    (rᵢrⱼ)^p = 1.
+    The Coxeter matrix is square and entries are all integers, it describes the
+    relations between the generators of the symmetry group. Here is the math:
+    suppose two mirrors mᵢ, mⱼ form an angle p/q where p,q are coprime integers,
+    then the two generator reflections about these two mirrors rᵢ, rⱼ satisfy (rᵢrⱼ)^p = 1.
 
     Example:
     >>> coxeter_diagram = (3, 2, Fraction(5, 2))
@@ -96,10 +94,9 @@ def get_coxeter_matrix(coxeter_diagram):
 
 def get_mirrors(coxeter_diagram):
     """
-    Given three or six or ten integers/rationals that represent
-    the angles between the mirrors (a rational p means the
-    angle is π/p), return a square matrix whose rows
-    are the normal vectors of the mirrors.
+    Given three or six or ten integers/rationals that represent the angles between
+    the mirrors (a rational p means the angle is π/p), return a square matrix whose
+    rows are the normal vectors of the mirrors.
     """
     # error handling function when the input coxeter matrix is invalid.
     def err_handler(err_type, flag):
