@@ -65,11 +65,7 @@ class AlgebraicInteger(object):
     __iadd__ = __radd__ = __add__
 
     def __sub__(self, beta):
-        if isinstance(beta, int):
-            return AlgebraicInteger(self.base, self.poly - beta)
-        if isinstance(beta, AlgebraicInteger):
-            return AlgebraicInteger(self.base, self.poly - beta.poly)
-        raise ValueError("type {} not supported for algebraic integer arithmetic".format(type(beta)))
+        return self + (-beta)
 
     __isub__ = __sub__
 
