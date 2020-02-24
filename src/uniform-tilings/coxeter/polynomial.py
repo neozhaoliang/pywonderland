@@ -10,10 +10,11 @@ from .integer import decompose
 
 class IntPolynomial(object):
 
-    """An `IntPolynomial` is a polynomial with integer coefficients. It's
-       represented by a tuple of integers and can be initialized either by
-       an integer or by an iterable that can be converted to a tuple of
-       integers. Note trailing zeros are discarded at the initializing stage.
+    """
+    A class for handling arithmetic of polynomials with integer coefficients.
+    A polynomial is represented by a tuple of integers and can be initialized
+    either by an integer or by an iterable that yields a tuple of integers.
+    Note trailing zeros are discarded at the initializing stage.
     """
 
     def __init__(self, coef=0):
@@ -25,13 +26,14 @@ class IntPolynomial(object):
         self.D = len(self.coef) - 1
 
     @staticmethod
-    def discard_trailing_zeros(a):
-        """Discard traling zeros in an array `a`.
+    def discard_trailing_zeros(arr):
         """
-        i = len(a) - 1
-        while (i > 0 and a[i] == 0):
+        Discard traling zeros in an array.
+        """
+        i = len(arr) - 1
+        while (i > 0 and arr[i] == 0):
             i -= 1
-        return a[:i+1]
+        return arr[:i+1]
 
     def __str__(self):
         return "IntPolynomial" + str(self.coef)
@@ -40,8 +42,8 @@ class IntPolynomial(object):
         return self.coef[items]
 
     def __bool__(self):
-        """Check whether this is a zero polynomial. Note a non-zero constant
-           is not a zero polynomial.
+        """
+        Check whether this polynomial is zero.
         """
         return self.D > 0 or self[0] != 0
 
@@ -50,23 +52,25 @@ class IntPolynomial(object):
 
     @staticmethod
     def valid(g):
-        """Check input for polynomial operations.
+        """
+        Check input for polynomial operations.
         """
         if not isinstance(g, (int, IntPolynomial)):
-            raise ValueError("Only integers and IntPolynomials are allowed for polynomial operations.")
+            raise ValueError("type {} not supported for polynomial operations".format(type(g)))
         if isinstance(g, int):
             g = IntPolynomial(g)
         return g
 
-    def __add__(self, g):
-        """Add a polynomial or an integer.
+    def __add__(self, g):  # f + g
+        """
+        Addition with another polynomial or an integer.
         """
         g = self.valid(g)
         return IntPolynomial(x + y for x, y in lzip(self, g, fillvalue=0))
 
     __iadd__ = __radd__ = __add__
 
-    def __sub__(self, g):
+    def __sub__(self, g):  # f - g
         g = self.valid(g)
         return IntPolynomial(x - y for x, y in lzip(self, g, fillvalue=0))
 
@@ -75,12 +79,12 @@ class IntPolynomial(object):
     def __rsub__(self, g):
         return -self + g
 
-    def __eq__(self, g):
+    def __eq__(self, g):  # f == g
         if not isinstance(g, (int, IntPolynomial)):
             return False
         return not bool(self - g)
 
-    def __mul__(self, g):
+    def __mul__(self, g):  # f * g
         g = self.valid(g)
         d1, d2 = self.D, g.D
         h = [0] * (d1 + d2 + 1)
@@ -93,7 +97,8 @@ class IntPolynomial(object):
 
     @classmethod
     def monomial(cls, n, a):
-        """Return the monomial a*x**n.
+        """
+        Return the monomial a*x^n.
         """
         coef = [0] * (n + 1)
         coef[n] = a
@@ -140,7 +145,7 @@ class IntPolynomial(object):
         \mu(d) = 1 iff d is a product of even number of different primes.
         \mu(d) = -1 iff d is a product of odd number of different primes.
 
-        Examples:
+        Example:
         >>> f = IntPolynomial.cyclotomic(8)
         >>> f
         >>> IntPolynomial(1, 0, 0, 1)
