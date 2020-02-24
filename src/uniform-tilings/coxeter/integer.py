@@ -14,9 +14,9 @@ def lcm(m, n):
 
 
 def decompose(n):
-    """Decompose an integer `n` into a product of primes.
-       The result is stored in a dict {prime: exponent}.
-       This function is used for generating cyclotomic polynomials.
+    """
+    Decompose an integer into a product of primes. The result is stored in a
+    dict {p: e}. This function is used for generating cyclotomic polynomials.
     """
     n = abs(n)
     primes = defaultdict(int)

@@ -13,7 +13,7 @@ class IntPolynomial(object):
     """
     A class for handling arithmetic of polynomials with integer coefficients.
     A polynomial is represented by a tuple of integers and can be initialized
-    either by an integer or by an iterable that yields a tuple of integers.
+    either by an integer or by an iterable that can yield a tuple of integers.
     Note trailing zeros are discarded at the initializing stage.
     """
 
