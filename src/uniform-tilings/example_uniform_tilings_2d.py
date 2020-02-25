@@ -53,6 +53,14 @@ def main():
              line_width=0.05, vertex_size=0.07,
              face_colors=("#EEAA4D", "#477984", "#C03C44"))
 
+    T = Poincare2D((4, 3, 3), (-1, 0, 0))
+    depth = 30
+    maxcount = 30000
+    T.build_geometry(depth, maxcount)
+    T.render("regular-4-3-3.svg", 800, show_vertices_labels=True,
+             draw_labelled_edges=True, draw_inner_lines=True,
+             line_width=0.07, vertex_size=0.13)
+
     # travis can't run povray test, uncomment below to run spherical example.
     # T = Spherical2D((5, 2, 3), (1, 1, 1))
     # T.build_geometry()

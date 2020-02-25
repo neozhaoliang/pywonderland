@@ -63,6 +63,8 @@ class CoxeterGroup(object):
         >>> G = CoxeterGroup(cox_mat)
         """
         self.cox_mat = np.array(cox_mat, dtype=np.int)
+        self.check_coxeter_matrix(self.cox_mat)
+
         self.rank = len(cox_mat)
         self.gens = tuple(range(self.rank))
         self.m, self.phix = self.get_cyclotomic_field()
@@ -70,13 +72,6 @@ class CoxeterGroup(object):
         self.reftable = None  # reflection table of minimal roots
         self.dfa = None  # automaton for shortlex language
         self.minroots = None  # minimal roots
-
-    def get_cyclotomic_field(self):
-        m = 2
-        for k in 2 * self.cox_mat.ravel():
-            m = lcm(m, k)
-        p = IntPolynomial.cyclotomic(m)
-        return (m, p)
 
     def init(self):
         """
@@ -87,6 +82,18 @@ class CoxeterGroup(object):
         self.get_reflection_table()
         self.get_automaton()
         return self
+
+    @staticmethod
+    def check_coxeter_matrix(M):
+        if not ((M == M.T).all() and (np.diag(M) == 1).all()):
+            raise ValueError("Invalid Coxeter matrix: {}".format(M))
+
+    def get_cyclotomic_field(self):
+        m = 2
+        for k in 2 * self.cox_mat.ravel():
+            m = lcm(m, k)
+        p = IntPolynomial.cyclotomic(m)
+        return (m, p)
 
     def get_latex_presentation(self):
         """
@@ -287,7 +294,7 @@ class CoxeterGroup(object):
         """
         T = [[None] * self.rank for _ in range(len(words))]
         for i, word in enumerate(words):
-            for j in range(self.rank):
+            for j in self.gens:
                 if T[i][j] is None:
                     next_word = self.multiply(j, word, right=False)
                     next_word = self.get_coset_representative(next_word, parabolic)
@@ -324,8 +331,7 @@ class CoxeterGroup(object):
         C = np.zeros_like(M).astype(object)
 
         # diagonal entries
-        for i in range(n):
-            C[i][i] = AlgebraicInteger(p, 2)
+        np.fill_diagonal(C, AlgebraicInteger(p, 2))
 
         # non-diagonal entries
         for i in range(n):
