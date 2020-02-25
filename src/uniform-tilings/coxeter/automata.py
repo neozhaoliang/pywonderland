@@ -8,16 +8,14 @@ Reference for dfa minimization:
     "Describing an algorithm by Hopcroft", David Gries.
 
 """
-from collections import deque
-import numpy as np
-import pygraphviz
 
 
 class DFAState(object):
 
     def __init__(self, subset, accept=True):
-        """`subset`: a set of integers which specifies a subset of the minimal roots,
-           stored in a frozenset.
+        """
+        :param subset: a set of integers represents a subset of the minimal roots,
+            stored in a frozenset.
         """
         self.subset = subset
         self.accept = accept
@@ -42,7 +40,9 @@ class DFAState(object):
             return
         found.add(self)
         shape = "doublecircle" if self.accept else "circle"
-        G.add_node(self.index, shape=shape, color=color, label=str(self))
+        # if you want to see which subset of minimal roots this node represents,
+        # change label to str(self) below.
+        G.add_node(self.index, shape=shape, color=color, label=str(self.index))
         for symbol, target in self.all_transitions():
             target.draw(G, found)
             G.add_edge(self.index, target.index, label=symbol)
@@ -51,16 +51,19 @@ class DFAState(object):
 class DFA(object):
 
     def __init__(self, start, sigma):
-        """`start`: the starting state of the DFA. Unreachable states from this
-           start will be automatically discarded.
-           `sigma`: the tuple of symbols.
+        """
+        :param start: the starting state of the DFA. Unreachable states from this
+            start will be automatically discarded.
+
+        :param sigma: the tuple of symbols.
         """
         self.start = start
         self.sigma = sigma
         self.num_states = self.reindex(self.start, 0)
 
     def reindex(self, state, next_index):
-        """Reindex the states in the automaton.
+        """
+        Reindex the states in the automaton.
         """
         if state.index is None:
             state.index = next_index
@@ -70,8 +73,11 @@ class DFA(object):
         return next_index
 
     def draw(self, filename, program="dot"):
-        """Use graphviz to draw this automaton.
         """
+        Use graphviz to draw this automaton.
+        """
+        import pygraphviz
+
         G = pygraphviz.AGraph(strict=False, directed=True, rankdir="LR")
         self.start.draw(G, set(), color="red")
         G.draw(filename, prog=program)
@@ -83,7 +89,8 @@ class DFA(object):
 
 class Hopcroft(object):
 
-    """Minimize a DFA using Hopcroft's algorithm.
+    """
+    Minimize a DFA using Hopcroft's algorithm.
     """
 
     def __init__(self, dfa):
@@ -144,7 +151,8 @@ class Hopcroft(object):
         return DFA(aux(initial_subset), self.sigma)
 
     def initial_partition(self):
-        """Partition all the states into accepted and non-accepted subsets.
+        """
+        Partition all the states into accepted and non-accepted subsets.
         """
         s1 = set()
         s2 = set()
@@ -165,8 +173,9 @@ class Hopcroft(object):
         return {frozenset(s1)}
 
     def split(self, S, c, B):
-        """Try to split set S into two subsets {s1, s2} by a pair (B, c).
-           If not splitted then return None.
+        """
+        Try to split set S into two subsets {s₁, s₂} by a pair (B, c).
+        If S is not splitted then return None.
         """
         s1 = set()
         s2 = set()
@@ -181,81 +190,9 @@ class Hopcroft(object):
         return None
 
     def current_partition_containing(self, state):
-        """Return the subset that contains the given state in current partition.
+        """
+        Return the subset that contains the given state in current partition.
         """
         for p in self.P:
             if state in p:
                 return p
-
-
-def get_automaton(reftable, type="shortlex"):
-    """Construct the automaton that recognizes the language of a Coxeter group.
-    """
-    if type not in ["shortlex", "reduced"]:
-        raise ValueError("Unknown type of automaton, must be 'reduced' or 'shortlex'")
-
-    table = np.asarray(reftable, dtype=object)
-    rank = table.shape[1]
-
-    def subset_transition(S, i):
-        r"""`S` is a subset of the set of minimal roots, this function computes
-           the transition of S by the simple reflection s_i in the automaton.
-           The transition rule for the automaton of "reduced words" is:
-           for s_i ∉ S,
-
-                   s_i
-                S -----> {s_i} ∪ (s_i(S) ∩ Σ)
-
-            where Σ is the set of minimal roots.
-            For the automaton of "normal forms" the transition rule is
-
-                   s_i
-                S -----> {s_i} ∪ (s_i(S) ∪ {s_i(α_j), j<i}) ∩ Σ
-        """
-        if i in S:
-            return None
-
-        result = set([i])
-        for j in S:
-            k = table[j][i]
-            if k is not None:
-                result.add(k)
-
-        if type == "shortlex":
-            for j in range(i):
-                k = table[j][i]
-                if k is not None:
-                    result.add(k)
-
-        return frozenset(result)
-
-    start = DFAState(frozenset())
-    queue = deque([start])
-    states = [start]
-
-    # this is just a breadth-first search of the automaton.
-    while queue:
-        S = queue.popleft()
-        for i in range(rank):
-            # if the transition of S by i is unknown
-            if i not in S.transitions:
-                # compute the transition
-                t = subset_transition(S.subset, i)
-                if t is not None:
-                    # so t is a subset in the automaton, have we seen it yet?
-                    found = False
-                    for T in states:
-                        # we have seen t before, simply add the transition
-                        if t == T.subset:
-                            S.add_transition(i, T)
-                            found = True
-                            break
-
-                    if not found:
-                        # t is a new subset, create a new state for it.
-                        T = DFAState(t)
-                        S.add_transition(i, T)
-                        queue.append(T)
-                        states.append(T)
-    # return the minimized dfa
-    return DFA(start, tuple(range(rank))).minimize()

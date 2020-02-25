@@ -15,21 +15,23 @@ class AlgebraicInteger(object):
 
     """
     An algebraic integer is a root of an irreducible monic polynomial with
-    integer coefficients. It's represented by two `IntPolynomial`s　`base`
+    integer coefficients. It's represented by two `IntPolynomial`s: `base`
     and `poly`: `base` is an irreducible monic polynomial determines the
     algebraic number field F (F = Q(α) and α is any root of `base`) that
     our `AlgebraicInteger`s lie in. In this program `base` is always a
     cyclotomic polynomial, so α is a primitive n-th root of unity and the
     ring of algebraic integers in F equals Z[α] (see any textbook on algebraic
     number theory). Any algebraic integer in Z[α] can be represented by a
-    second `IntPolynomial` `poly`.
+    second polynomial `poly`.
     """
 
     def __init__(self, base, p):
-        """`
-        base` is an instance of `IntPolynomial`, it must be irreducible and
-        monic. But we do not check it here since we will always use a cyclotomic
-        polynomial for it. `p` can be either an integer of an instance of `IntPolynomial`.
+        """
+        :param base: an instance of `IntPolynomial`, it must be irreducible and
+            monic. But we do not check it here since we will always use a cyclotomic
+            polynomial for it.
+
+        :param p: an integer or an instance of `IntPolynomial`.
         """
         self.base = base
         if isinstance(p, int):
@@ -41,7 +43,7 @@ class AlgebraicInteger(object):
 
     def __hash__(self):
         """
-        The hash of an `AlgebraicInteger` is simply the hash of its coefficients.
+        The hash of an algebraic integer is simply the hash of its coefficients.
         """
         return hash(self.poly.coef)
 
@@ -62,12 +64,8 @@ class AlgebraicInteger(object):
             return AlgebraicInteger(self.base, self.poly + beta.poly)
         raise ValueError("type {} not supported for algebraic integer arithmetic".format(type(beta)))
 
-    __iadd__ = __radd__ = __add__
-
     def __sub__(self, beta):
         return self + (-beta)
-
-    __isub__ = __sub__
 
     def __rsub__(self, beta):
         return -self + beta
@@ -78,5 +76,9 @@ class AlgebraicInteger(object):
         if isinstance(beta, AlgebraicInteger):
             return AlgebraicInteger(self.base, self.poly * beta.poly)
         raise ValueError("type {} not supported for algebraic integer arithmetic".format(type(beta)))
+
+    __isub__ = __sub__
+
+    __iadd__ = __radd__ = __add__
 
     __imul__ = __rmul__ = __mul__

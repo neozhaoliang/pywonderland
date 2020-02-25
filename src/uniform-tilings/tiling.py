@@ -153,7 +153,6 @@ class Tiling2D(object):
         self.get_vertices()
         self.get_edges()
         self.get_faces()
-        print(self.num_vertices, self.num_edges, self.num_faces)
         return self
 
     def get_vertices(self):
