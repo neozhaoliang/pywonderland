@@ -6,7 +6,7 @@ sudo apt-get install \
      imagemagick \
      graphviz \
      python3-tk \
-     libffi-dev \
-     libgraphviz-dev
+     libgraphviz-dev \
+     python3-cairocffi
 
 pip install -r requirements.txt

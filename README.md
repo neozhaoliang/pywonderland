@@ -62,13 +62,11 @@ Or you can install the python libs by pip:
 pip install -r requirements.txt
 ```
 
-A few exceptions are: `cairocffi` also requires `libffi-dev` and `pygraphviz` also requires `libgraphviz-dev`:
+Note `pygraphviz` also requires `libgraphviz-dev`:
 
 ```
-sudo apt-get install libffi-dev libgraphviz-dev
+sudo apt-get install libgraphviz-dev
 ```
-
-I had some problems installing `cairocffi` on Ubuntu 18.04 and I'm not sure how to fix them, so you can install `cairo` instead if you are working on a Ubuntu 18.04 system.
 
 Open source softwares:
 
