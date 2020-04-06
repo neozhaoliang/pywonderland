@@ -1,3 +1,4 @@
+cairo
 cairocffi
 colour
 drawSvg
