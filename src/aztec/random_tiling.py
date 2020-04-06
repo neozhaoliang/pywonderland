@@ -29,7 +29,11 @@ def render_with_cairo(az, imgsize, extent, filename):
     :param extent: range of the axis: [-extent, extent] x [-extent, extent]
     :param filename: output filename, must be a .png image.
     """
-    import cairocffi as cairo
+    try:
+        import cairocffi as cairo
+    except ImportError:
+        import cairo
+
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, imgsize, imgsize)
     surface.set_fallback_resolution(100, 100)
     ctx = cairo.Context(surface)

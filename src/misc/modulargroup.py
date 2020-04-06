@@ -40,7 +40,11 @@ reference: see the essay by Bill Casselman
 """
 import collections
 import cmath
-import cairocffi as cairo
+
+try:
+    import cairocffi as cairo
+except ImportError:
+    import cairo
 
 
 # A fundamental domain for the action of the modular group

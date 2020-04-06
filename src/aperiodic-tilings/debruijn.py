@@ -33,8 +33,12 @@ Some params you can tweak with:
 :copyright: by Zhao Liang, 2018.
 """
 import itertools
-import cairocffi as cairo
 import numpy as np
+
+try:
+    import cairocffi as cairo
+except ImportError:
+    import cairo
 
 
 IMAGE_SIZE = (800, 800)

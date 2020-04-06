@@ -5,7 +5,11 @@ Draw Penrose P3 tiling using substitution rules
 """
 import math
 import cmath
-import cairocffi as cairo
+
+try:
+    import cairocffi as cairo
+except ImportError:
+    import cairo
 
 
 IMAGE_SIZE = (800, 800)

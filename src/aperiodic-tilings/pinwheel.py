@@ -3,7 +3,10 @@
 Pinwheel Tiling
 ~~~~~~~~~~~~~~~
 """
-import cairocffi as cairo
+try:
+    import cairocffi as cairo
+except ImportError:
+    import cairo
 
 
 IMAGE_SIZE = (800, 400)

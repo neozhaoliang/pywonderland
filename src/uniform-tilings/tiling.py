@@ -23,7 +23,7 @@ can be chosen as the plane z=c and the Tit's cone is the upper half space z>0.
 is the hyperboloid and the Tit's cone is a strict convex cone in z>0.
 
 The coxeter matrix determines the type of tiling, the angles between the
-mirrors, the quadratic formon the space, the reflections about the mirrors
+mirrors, the quadratic form on the space, the reflections about the mirrors
 that preserve this quadratic form.
 
 :copyright (c) 2019 by Zhao Liang
@@ -32,7 +32,11 @@ import os
 from itertools import combinations
 from functools import partial
 import numpy as np
-import cairocffi as cairo
+
+try:
+    import cairocffi as cairo
+except ImportError:
+    import cairo
 
 # third-party module for drawing hyperbolic geodesic lines
 import drawSvg

@@ -10,7 +10,11 @@ By default this will sample a random lozenge tiling of a
 20x20x20 hexagon from uniform distribution.
 
 """
-import cairocffi as cairo
+try:
+    import cairocffi as cairo
+except ImportError:
+    import cairo
+
 from cftp import LozengeTiling, run_cftp
 
 

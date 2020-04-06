@@ -11,8 +11,12 @@ For a detailed discussion of the math see Humphreys's book
 
 """
 from itertools import product, combinations
-import cairocffi as cairo
 import numpy as np
+
+try:
+    import cairocffi as cairo
+except ImportError:
+    import cairo
 
 
 COLORS = [(0.894, 0.102, 0.11),

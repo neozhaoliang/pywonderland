@@ -5,7 +5,11 @@ A Simple Random Fractal Tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 import numpy as np
-import cairocffi as cairo
+
+try:
+    import cairocffi as cairo
+except ImportError:
+    import cairo
 
 
 ITERATIONS = 16  # total number of iterations
