@@ -24,6 +24,7 @@ Reference for the GIF89a specification:
 
 """
 from struct import pack
+from collections import OrderedDict
 
 
 __all__ = ['screen_descriptor', 'loop_control_block', 'graphics_control_block',
@@ -89,18 +90,17 @@ def parse_image(img):
     `img` must be an instance of `PIL.Image.Image` class and has .gif format.
     """
     data = list(img.getdata())
-    colors = []
+    colors = OrderedDict()
     indices = []
     count = 0
 
     for c in data:
         if c not in colors:
-            colors.append(c)
+            colors[c] = count
             indices.append(count)
             count += 1
         else:
-            i = colors.index(c)
-            indices.append(i)
+            indices.append(colors[c])
 
     palette = []
     for c in colors:
