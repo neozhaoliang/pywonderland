@@ -23,7 +23,9 @@ The purpose of this project is to show the beauty of math with python. It consis
 2. There must be some non-trivial math behind them.
 3. The code should be as simple as possible.
 
-I'll use only popular python libs and build all math stuff by hand (tools like `sage`, `sympy`, `mathemetica` will not be used here). Also I only maintain the code for `python >= 3.5`.
+I'll use only popular python libs and build all math stuff by hand (tools like `sage`, `sympy`, `mathemetica` will not be used here). Also I only maintain the code for `python >= 3.6`.
+
+**Note**: Python3.5 is deprecated now because it's a bit tricky to install latest numba on Ubuntu for python3.5.
 
 The website for the docs is still under construction and will be released soon.
 

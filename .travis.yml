@@ -3,7 +3,6 @@ sudo: required
 before_install:
   - sudo apt-get install povray imagemagick graphviz libffi-dev libgraphviz-dev
 python:
-  - "3.5"
   - "3.6"
 install:
   - pip install -r requirements.txt
