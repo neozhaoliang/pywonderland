@@ -11,8 +11,8 @@ class Shader(object):
         """
         Parameters
         ----------
-        :vert_files:  a list of files that contain the vertex shader.
-        :frag_files:  a list of files that contain the fragment shader.
+        :vert_files:  a list of files that contain the vertex shader code.
+        :frag_files:  a list of files that contain the fragment shader code
         """
         self.program = gl.glCreateProgram()
         self.compile_and_attach_shader(vert_files, gl.GL_VERTEX_SHADER)
@@ -23,22 +23,22 @@ class Shader(object):
         """
         Parameters
         ----------
-        :shader_files:  a list of the shader files.
+        :shader_files:  a list of shader files.
         :shader_type:  `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`.
 
         Main steps to compile and attach a shader:
         1. glCreateShader:
-                create a shader of given type.
+            create a shader of given type.
         2. glShaderSource:
-                load source code into the shader.
+            load source code into the shader.
         3. glCompileShader:
-                compile the shader.
+            compile the shader.
         4. glGetShaderiv:
-                retrieve the compile status.
+            retrieve the compiling status.
         5. glGetShaderInfoLog:
-                print the error info if compiling failed.
+            print the error info if compiling failed.
         6. glAttachShader:
-                attach the shader to our program if compiling succeeded.
+            attach the shader to our program if compiling succeeded.
         """
         src = []
         for src_f in shader_files:
@@ -50,12 +50,17 @@ class Shader(object):
 
         # 2. load source code into the shader
         src_p = (ct.c_char_p * len(src))(*src)
-        gl.glShaderSource(shader, len(src), ct.cast(ct.pointer(src_p), ct.POINTER(ct.POINTER(ct.c_char))), None)
+        gl.glShaderSource(
+            shader,
+            len(src),
+            ct.cast(ct.pointer(src_p), ct.POINTER(ct.POINTER(ct.c_char))),
+            None
+        )
 
         # 3. compile the shader
         gl.glCompileShader(shader)
 
-        # 4. retrieve the compile status
+        # 4. retrieve the compiling status
         compile_status = gl.GLint(0)
         gl.glGetShaderiv(shader, gl.GL_COMPILE_STATUS, ct.byref(compile_status))
 
@@ -76,11 +81,11 @@ class Shader(object):
         """
         Main steps to link the program:
         1. glLinkProgram:
-                linke the shaders in the program to create an executable
+            link the shaders to create an executable
         2. glGetProgramiv:
-                retrieve the link status
+            retrieve the link status
         3. glGetProgramInfoLog:
-                print the error log if link failed
+            print the error log if link failed
         """
         gl.glLinkProgram(self.program)
 

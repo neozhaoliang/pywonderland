@@ -4,7 +4,7 @@ import pyglet.gl as gl
 
 
 class FrameBuffer(object):
-    """A very simple helper class for handling the frame buffer object (fbo).
+    """A simple helper class for handling the frame buffer object (fbo).
     """
 
     def __init__(self):
