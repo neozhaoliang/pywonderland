@@ -1,6 +1,6 @@
 colour
 drawSvg
-hyperbolic
+hyperbolic >= 1.2.0
 jupyter
 matplotlib
 numba

@@ -7,6 +7,7 @@ sudo apt-get install \
      graphviz \
      python3-tk \
      libgraphviz-dev \
-     python3-cairocffi
+     python3-cairocffi \
+     inkscape
 
 pip install -r requirements.txt

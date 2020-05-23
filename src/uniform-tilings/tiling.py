@@ -42,6 +42,7 @@ except ImportError:
 import drawSvg
 from hyperbolic import euclid
 from hyperbolic.poincare.shapes import Polygon, Point, Line
+from hyperbolic.poincare import Transform
 
 # process bar
 import tqdm
@@ -593,3 +594,98 @@ class Spherical2D(Tiling2D):
             "+O../{}".format(output),
             shell=True
         )
+
+
+class UpperHalfPlane(Poincare2D):
+
+    def render(self,
+               output,
+               image_size,
+               show_vertices=False,
+               draw_alternative_domains=True,
+               draw_polygon_edges=True,
+               draw_inner_lines=False,
+               draw_labelled_edges=False,
+               vertex_size=0.1,
+               line_width=0.07,
+               checker=False,
+               checker_colors=("#1E7344", "#EAF78D"),
+               face_colors=("lightcoral", "mistyrose", "steelblue")):
+        trans = Transform.merge(Transform.diskToHalf(), Transform.translation((-0.00001,0)))
+        d = drawSvg.Drawing(12, 4, origin=(-6, 0))
+        d.append(drawSvg.Rectangle(-10, -10, 20, 20, fill='silver'))
+
+        bar = tqdm.tqdm(desc="processing polygons", total=self.num_faces)
+
+        # draw the faces
+        for (i, j), flist in self.face_indices.items():
+            if checker:
+                style1 = {"fill": checker_colors[0]}
+                style2 = {"fill": checker_colors[1]}
+            else:
+                vertex_index = self.vertex_at_mirrors(i, j)
+                color = face_colors[vertex_index]
+                style1 = {"fill": color}
+                style2 = {"fill": color, "opacity": 0.3}
+
+            for k, face in enumerate(flist):
+                # coords of the vertices of this face
+                points = [self.project(p) for p in face.coords]
+                polygon = Polygon.fromVertices(points)
+                # compute the alternate domains
+                domain1, domain2 = face.get_alternative_domains()
+                domain1_2d = [[self.project(p) for p in D] for D in domain1]
+                domain2_2d = [[self.project(p) for p in D] for D in domain2]
+
+                # draw domains of even reflections
+                for D in domain1_2d:
+                    poly = Polygon.fromVertices(D)
+                    d.draw(poly, transform=trans, **style1)
+                    if checker:
+                        d.draw(poly, transform=trans, hwidth=0.005, **style1)
+                    if draw_inner_lines:
+                        d.draw(poly, transform=trans, fill="papayawhip", hwidth=0.015)
+                # draw domains of odd reflections
+                for D in domain2_2d:
+                    poly = Polygon.fromVertices(D)
+                    d.draw(poly, transform=trans, **style2)
+                    if checker:
+                        d.draw(poly, transform=trans, hwidth=0.001, **style2)
+                    if draw_inner_lines:
+                        d.draw(poly, transform=trans, fill="papayawhip", hwidth=0.005)
+                # outmost polygon contours
+                if draw_polygon_edges:
+                    d.draw(polygon, transform=trans, hwidth=line_width, fill="darkolivegreen")
+
+                bar.update(1)
+
+        bar.close()
+
+        # draw the edges with white strips
+        if draw_labelled_edges:
+            for k, elist in self.edge_indices.items():
+                if k != 0:
+                    for i, j in elist:
+                        p = self.project(self.vertices_coords[i])
+                        q = self.project(self.vertices_coords[j])
+                        hl = Line.fromPoints(p[0], p[1], q[0], q[1], segment=True)
+                        if k == 1:
+                            x = divide_line(line_width, 1)
+                            d.draw(hl, transform=trans, hwidth=(-x, x), fill="papayawhip")
+                        if k == 2:
+                            x1, x2 = divide_line(line_width, 2)
+                            d.draw(hl, transform=trans, hwidth=(x1, x2), fill="papayawhip")
+                            d.draw(hl, transform=trans, hwidth=(-x2, -x1), fill="papayawhip")
+
+        # draw vertices with labels
+        if show_vertices:
+            for i, p in enumerate(self.vertices_coords):
+                loc = self.project(p)
+                P = Point(*loc)
+                d.draw(P, transform=trans, hradius=vertex_size, fill="darkolivegreen")
+
+        d.setRenderSize(w=image_size[0], h=image_size[1])
+        d.saveSvg(output)
+        size = os.path.getsize(output) >> 10
+        print("{}KB svg file has been written to disk".format(size))
+        print("=" * 40)

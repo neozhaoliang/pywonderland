@@ -88,11 +88,12 @@ Open source softwares required:
 + `FFmpeg` (for saving animations to video files)
 + `POV-Ray` (for generating high quality raytracing results)
 + `graphviz` (for drawing automata of Coxeter groups)
++ `Inkscape` (optional, for convering large svg files to png)
 
 They can all be installed via command-line:
 
 ```
-sudo apt-get install python3-tk imagemagick ffmpeg povray graphviz
+sudo apt-get install python3-tk imagemagick ffmpeg povray graphviz inkscape
 ```
 
 
