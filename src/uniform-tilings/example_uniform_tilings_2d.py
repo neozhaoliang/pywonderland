@@ -61,25 +61,16 @@ def main():
              draw_labelled_edges=True, draw_inner_lines=True,
              line_width=0.07, vertex_size=0.13)
 
-    T = UpperHalfPlane((6, 4, 3), (-1, 0, 0))
-    depth = 40
-    maxcount = 40000
-    T.build_geometry(depth, maxcount)
-    T.render("upper-half-plane-6-4-3.svg", (800, 400),
-             show_vertices=True,
-             draw_labelled_edges=True, draw_inner_lines=True,
-             line_width=0.05, vertex_size=0.08)
-
-
     # travis can't run povray test, uncomment below to run spherical example.
     # T = Spherical2D((5, 2, 3), (1, 1, 1))
     # T.build_geometry()
     # T.render("omnitruncated-5-2-3.png", 600)
 
+    T = UpperHalfPlane((4, 3, 3), (-1, -1, -1))
     depth = 40
     maxcount = 40000
     T.build_geometry(depth, maxcount)
-    T.render("uhp-6-4-3.svg", (1200, 400),
+    T.render("uhp-4-3-3.svg", (1200, 400),
              show_vertices=True, draw_labelled_edges=True,
              draw_inner_lines=True,
              face_colors=("#477984", "#EEAA4D", "#C03C44"),
