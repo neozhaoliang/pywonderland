@@ -68,10 +68,10 @@ def main():
 
     T = UpperHalfPlane((4, 3, 3), (-1, -1, -1))
     depth = 40
-    maxcount = 40000
+    maxcount = 50000
     T.build_geometry(depth, maxcount)
-    T.render("uhp-4-3-3.svg", (1200, 400),
-             show_vertices=True, draw_labelled_edges=True,
+    T.render("uhp-4-3-3.svg", (1600, 800),
+             show_vertices_labels=True, draw_labelled_edges=True,
              draw_inner_lines=True,
              face_colors=("#477984", "#EEAA4D", "#C03C44"),
              line_width=0.05, vertex_size=0.08)

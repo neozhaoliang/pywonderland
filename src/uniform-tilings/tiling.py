@@ -55,9 +55,10 @@ import helpers
 
 
 def get_euclidean_center_radius(P, hrad):
-    """Compute the Euclidean center and radius of the circle
-       centered at a point P with hyperbolic radius hrad.
-       P is an instance of `Point` from the hyperbolic module.
+    """
+    Compute the Euclidean center and radius of the circle
+    centered at a point P with hyperbolic radius hrad.
+    P is an instance of `Point` from the hyperbolic module.
     """
     r1 = np.tanh((P.hr + hrad) / 2)
     r2 = np.tanh((P.hr - hrad) / 2)
@@ -66,12 +67,25 @@ def get_euclidean_center_radius(P, hrad):
     return R * np.cos(P.theta), R * np.sin(P.theta), r
 
 
+def get_euclidean_center_radius_uhp(xy, hrad):
+    """
+    Compute the Euclidean center and radius of the circle
+    centered at a point xy=(x, y) with hyperbolic radius hrad
+    in the upper half plane.
+    """
+    x, y = xy
+    y1 = y * np.exp(hrad)
+    y2 = y / np.exp(hrad)
+    return x, (y1 + y2) / 2, (y1 - y2) / 2
+
+
 def dimmed(c):
     return Color(hue=c.hue, saturation=c.saturation, luminance=c.luminance*0.6)
 
 
 def divide_line(hwidth, k):
-    """Compute line strips for drawing edges of different types.
+    """
+    Compute line strips for drawing edges of different types.
     """
     ewidth = np.tanh(hwidth / 2)
     if k == 1:
@@ -601,7 +615,7 @@ class UpperHalfPlane(Poincare2D):
     def render(self,
                output,
                image_size,
-               show_vertices=False,
+               show_vertices_labels=False,
                draw_alternative_domains=True,
                draw_polygon_edges=True,
                draw_inner_lines=False,
@@ -612,8 +626,8 @@ class UpperHalfPlane(Poincare2D):
                checker_colors=("#1E7344", "#EAF78D"),
                face_colors=("lightcoral", "mistyrose", "steelblue")):
         trans = Transform.merge(Transform.diskToHalf(), Transform.translation((-0.00001,0)))
-        d = drawSvg.Drawing(12, 4, origin=(-6, 0))
-        d.append(drawSvg.Rectangle(-10, -10, 20, 20, fill='silver'))
+        d = drawSvg.Drawing(12, 6, origin=(-6, 0))
+        d.append(drawSvg.Rectangle(-10, -10, 20, 20, fill="silver"))
 
         bar = tqdm.tqdm(desc="processing polygons", total=self.num_faces)
 
@@ -678,12 +692,16 @@ class UpperHalfPlane(Poincare2D):
                             d.draw(hl, transform=trans, hwidth=(-x2, -x1), fill="papayawhip")
 
         # draw vertices with labels
-        if show_vertices:
+        if show_vertices_labels:
             for i, p in enumerate(self.vertices_coords):
                 loc = self.project(p)
                 P = Point(*loc)
                 d.draw(P, transform=trans, hradius=vertex_size, fill="darkolivegreen")
+                Q = trans.applyToTuple(P)
+                x_, y_, r_ = get_euclidean_center_radius_uhp(Q, vertex_size)
+                d.append(drawSvg.Text(str(i), r_, x_, y_, center=0.7, fill="white"))
 
+        d.append(drawSvg.Rectangle(-20, 0, 40, 0.02, fill="#000"))
         d.setRenderSize(w=image_size[0], h=image_size[1])
         d.saveSvg(output)
         size = os.path.getsize(output) >> 10
