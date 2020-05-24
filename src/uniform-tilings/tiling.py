@@ -664,9 +664,9 @@ class UpperHalfPlane(Poincare2D):
                     poly = Polygon.fromVertices(D)
                     d.draw(poly, transform=trans, **style2)
                     if checker:
-                        d.draw(poly, transform=trans, hwidth=0.001, **style2)
+                        d.draw(poly, transform=trans, hwidth=0.005, **style2)
                     if draw_inner_lines:
-                        d.draw(poly, transform=trans, fill="papayawhip", hwidth=0.005)
+                        d.draw(poly, transform=trans, fill="papayawhip", hwidth=0.015)
                 # outmost polygon contours
                 if draw_polygon_edges:
                     d.draw(polygon, transform=trans, hwidth=line_width, fill="darkolivegreen")
