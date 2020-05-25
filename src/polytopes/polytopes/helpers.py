@@ -45,28 +45,16 @@ def make_symmetry_matrix(upper_triangle):
     """
     Make a symmetric matrix from a list of integers/rationals.
     """
-    length = len(upper_triangle)
-    if length not in (3, 6, 10):
-        raise ValueError("the length of the coxeter diagram must be 3 or 6 or 10.")
-
-    if length == 3:
-        a12, a13, a23 = upper_triangle
-        return [[1, a12, a13],
-                [a12, 1, a23],
-                [a13, a23, 1]]
-    if length == 6:
-        a12, a13, a14, a23, a24, a34 = upper_triangle
-        return [[1, a12, a13, a14],
-                [a12, 1, a23, a24],
-                [a13, a23, 1, a34],
-                [a14, a24, a34, 1]]
-    if length == 10:
-        a12, a13, a14, a15, a23, a24, a25, a34, a35, a45 = upper_triangle
-        return [[1, a12, a13, a14, a15],
-                [a12, 1, a23, a24, a25],
-                [a13, a23, 1, a34, a35],
-                [a14, a24, a34, 1, a45],
-                [a15, a25, a35, a45, 1]]
+    n = int((2 * len(upper_triangle)) ** 0.5) + 1
+    if len(upper_triangle) != (n*n - n) / 2:
+        raise ValueError("Invalid input sequence")
+    ind = 0
+    cox_mat = np.eye(n, dtype="object")
+    for row in range(n - 1):
+        for col in range(row + 1, n):
+            cox_mat[row][col] = cox_mat[col][row] = upper_triangle[ind]
+            ind += 1
+    return cox_mat
 
 
 def get_coxeter_matrix(coxeter_diagram):
@@ -112,25 +100,11 @@ for a complete list of valid Coxeter diagrams.")
     coxeter_matrix = np.array(make_symmetry_matrix(coxeter_diagram)).astype(np.float)
     C = -np.cos(np.pi / coxeter_matrix)
     M = np.zeros_like(C)
-
+    n = len(M)
     M[0, 0] = 1
-    M[1, 0] = C[0, 1]
-    M[1, 1] = np.sqrt(1 - M[1, 0]*M[1, 0])
-    M[2, 0] = C[0, 2]
-    M[2, 1] = (C[1, 2] - M[1, 0]*M[2, 0]) / M[1, 1]
-    M[2, 2] = np.sqrt(1 - M[2, 0]*M[2, 0] - M[2, 1]*M[2, 1])
-
-    if len(coxeter_matrix) > 3:
-        M[3, 0] = C[0, 3]
-        M[3, 1] = (C[1, 3] - M[1, 0]*M[3, 0]) / M[1, 1]
-        M[3, 2] = (C[2, 3] - M[2, 0]*M[3, 0] - M[2, 1]*M[3, 1]) / M[2, 2]
-        M[3, 3] = np.sqrt(1 - np.dot(M[3, :3], M[3, :3]))
-
-    if len(coxeter_matrix) == 5:
-        M[4, 0] = C[4, 0]
-        M[4, 1] = (C[4, 1] - M[1, 0]*M[4, 0]) / M[1, 1]
-        M[4, 2] = (C[4, 2] - M[2, 0]*M[4, 0] - M[2, 1]*M[4, 1]) / M[2, 2]
-        M[4, 3] = (C[4, 3] - M[3, 0]*M[4, 0] - M[3, 1]*M[4, 1] - M[3, 2]*M[4, 2]) / M[3, 3]
-        M[4, 4] = np.sqrt(1 - np.dot(M[4, :4], M[4, :4]))
+    for i in range(1, n):
+        for j in range(i):
+            M[i, j] = (C[i, j] - np.dot(M[j, :j], M[i, :j])) / M[j, j]
+        M[i, i] = np.sqrt(1 - np.dot(M[i, :i], M[i, :i]))
 
     return M
