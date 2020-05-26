@@ -34,11 +34,10 @@ def get_init_point(M, d):
 
 def proj3d(v):
     """
-    Stereographic projection of a 4d vector with pole at (0, 0, 0, 1).
+    Stereographic projection a 4d vector to 3d.
     """
     v = normalize(v)
-    x, y, z, w = v
-    return np.array([x, y, z]) / (1 + 1e-8 - w)  # avoid divide by zero
+    return v[:-1] / (1 + 1e-8 - v[-1])  # avoid divide by zero
 
 
 def make_symmetry_matrix(upper_triangle):
@@ -82,9 +81,10 @@ def get_coxeter_matrix(coxeter_diagram):
 
 def get_mirrors(coxeter_diagram):
     """
-    Given three or six or ten integers/rationals that represent the angles between
+    Given a Coxter diagram consists of integers/rationals that represent the angles between
     the mirrors (a rational p means the angle is π/p), return a square matrix whose
-    rows are the normal vectors of the mirrors.
+    rows are the normal vectors of the mirrors. This matrix is not unique, here we use a
+    lower triangle one to simplify the computations.
     """
     # error handling function when the input coxeter matrix is invalid.
     def err_handler(err_type, flag):
@@ -101,10 +101,13 @@ for a complete list of valid Coxeter diagrams.")
     C = -np.cos(np.pi / coxeter_matrix)
     M = np.zeros_like(C)
     n = len(M)
+    # the first normal vector is simply (1, 0, ...)
     M[0, 0] = 1
+    # in the i-th row, the j-th entry can be computed via the (j, j) entry.
     for i in range(1, n):
         for j in range(i):
             M[i, j] = (C[i, j] - np.dot(M[j, :j], M[i, :j])) / M[j, j]
+        # the (i, i) entry is used to normalize this vector
         M[i, i] = np.sqrt(1 - np.dot(M[i, :i], M[i, :i]))
 
     return M
