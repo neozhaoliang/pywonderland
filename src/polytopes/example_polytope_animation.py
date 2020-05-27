@@ -85,6 +85,7 @@ def anim(coxeter_diagram,
         raise ValueError("Invalid Coxeter diagram: {}".format(coxeter_diagram))
 
     P.build_geometry()
+
     # POV-Ray does not support 5d vectors well, so project the vertices in python
     if isinstance(P, models.Polytope5D):
         P.proj4d()
@@ -94,6 +95,7 @@ def anim(coxeter_diagram,
 
     subprocess.call(POV_COMMAND.format(scene_file, description), shell=True)
     subprocess.call(FFMPEG_COMMAND.format(description, description), shell=True)
+    return P
 
 
 def snub24cell(description="snub-24-cell"):
@@ -108,6 +110,7 @@ def snub24cell(description="snub-24-cell"):
     scene_file = "polytope_animation.pov"
     subprocess.call(POV_COMMAND.format(scene_file, description), shell=True)
     subprocess.call(FFMPEG_COMMAND.format(description, description), shell=True)
+    return P
 
 
 def main():
@@ -168,7 +171,8 @@ def main():
     anim((5, 2, 2, 3, 2, 3), (1, 0, 0, 0), description="120-cell")
 
     # 600-cell family, dual to 120-cell
-    anim((3, 2, 2, 3, 2, 5), (1, 0, 0, 0), description="600-cell")
+    P = anim((3, 2, 2, 3, 2, 5), (1, 0, 0, 0), description="600-cell")
+    P.draw_on_coxeter_plane(nodes1=(0, 2), nodes2=(1, 3), svgpath="600-cell.svg")
 
     # 4d prism and duoprism
     anim((5, 2, 2, 3, 2, 2), (1, 1, 0, 1),
@@ -190,12 +194,15 @@ def main():
     anim((5, 2, 2, 3, 2, Fraction(5, 2)), (1, 0, 0, 0),
          extra_relations=((0, 1, 2, 3, 2, 1)*3,),
          description="grand-120-cell")
-    anim((Fraction(5, 2), 2, 2, 5, 2, Fraction(5, 2)), (1, 0, 0, 0),
-         extra_relations=((0, 1, 2, 1)*3, (1, 2, 3, 2)*3),
-         description="grand-stellated-120-cell")
+    P = anim((Fraction(5, 2), 2, 2, 5, 2, Fraction(5, 2)), (1, 0, 0, 0),
+             extra_relations=((0, 1, 2, 1)*3, (1, 2, 3, 2)*3),
+             description="grand-stellated-120-cell")
+    P.draw_on_coxeter_plane(nodes1=(0, 2), nodes2=(1, 3),
+                            svgpath="grand-stellated-120-cell.svg")
 
     # and 5d polytopes
-    anim((4, 2, 2, 2, 3, 2, 2, 3, 2, 3), (1, 0, 0, 0, 0), description="5d-cube")
+    P = anim((4, 2, 2, 2, 3, 2, 2, 3, 2, 3), (1, 0, 0, 0, 0), description="5d-cube")
+    P.draw_on_coxeter_plane(nodes1=(0, 2, 4), nodes2=(1, 3), svgpath="5-cube.svg")
 
 
 if __name__ == "__main__":

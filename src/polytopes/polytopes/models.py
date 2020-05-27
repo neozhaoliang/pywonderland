@@ -12,6 +12,7 @@ import numpy as np
 from . import helpers
 from .todd_coxeter import CosetTable
 from .povray import export_polytope_data
+from .coxeter_plane import draw_on_coxeter_plane
 
 
 class BasePolytope(object):
@@ -244,6 +245,9 @@ class BasePolytope(object):
 
     def get_povray_data(self):
         return export_polytope_data(self)
+
+    def draw_on_coxeter_plane(self, *args, **kwargs):
+        draw_on_coxeter_plane(self, *args, **kwargs)
 
 
 class Polyhedra(BasePolytope):
