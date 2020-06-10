@@ -76,8 +76,7 @@ window.addEventListener( 'load', function() {
     var geometry = new THREE.Geometry();
     
     // create the renderer and attach it to the DOM
-    renderer = new THREE.WebGLRenderer({
-    });
+    renderer = new THREE.WebGLRenderer();
     renderer.setSize(canvasSize, canvasSize);
     renderer.setPixelRatio( window.devicePixelRatio );
     
@@ -89,7 +88,7 @@ window.addEventListener( 'load', function() {
     controls.maxDistance = 10 ;
     controls.minDistance = 1.01 ;
     controls.autoRotate = true ;
-
+    
     window.addEventListener('resize', () => {
         camera.aspect = 1;
         camera.updateProjectionMatrix();
@@ -100,8 +99,7 @@ window.addEventListener( 'load', function() {
 } );
 
 let frame = 0 ;
-function render() {
-    
+function render() {   
     requestAnimationFrame( render );
     renderer.render( scene, camera );
     controls.update() ;
@@ -113,4 +111,3 @@ function render() {
     uniforms.u_time.value = Date.now()-start ;  
     uniforms.u_zoom.value = 5/distance ;
 }
-
