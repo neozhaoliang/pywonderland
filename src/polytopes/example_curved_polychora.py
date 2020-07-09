@@ -185,7 +185,7 @@ def main():
          camera_loc=(0, 0, 360), vertex_size=0.028, edge_size=0.014, face_min=20)
 
     # this is the settings I used to render the movie at
-    # http://pywonderland.com/polytopes/rectified-grand-stellated-120-cell.mp4
+    # http://pywonderland.com/images/cn/polytopes/rectified-grand-stellated-120-cell.mp4
     # (the parameters are not exactly the same but very similar)
     # take quite a while to render.
     draw((Fraction(5, 2), 2, 2, 5, 2, Fraction(5, 2)), (0, 1, 0, 0),
