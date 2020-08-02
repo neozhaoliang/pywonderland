@@ -51,7 +51,7 @@ A few examples:
 
 ## How to use
 
-All projects here are implemented in a read-to-use manner for new comers. That is you can simply run the examples without tweaking any parameters once you have the dependencies installed correctly. Each subdirectory in `src/` is a single program (except that `glslhelpers` is a helper module for running glsl programs and `misc` is a collection of independent scripts), any file named `main.py`, `run_*.py`, `example_*.py` is an executable script that gives some output.
+All projects here are implemented in a ready-to-use manner for new comers. That is you can simply run the examples without tweaking any parameters once you have the dependencies installed correctly. Each subdirectory in `src/` is a single program (except that `glslhelpers` is a helper module for running glsl programs and `misc` is a collection of independent scripts), any file named `main.py`, `run_*.py`, `example_*.py` is an executable script that gives some output.
 
 
 ## List of algorithms

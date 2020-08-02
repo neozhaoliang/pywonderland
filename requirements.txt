@@ -11,4 +11,5 @@ pyglet
 pygraphviz
 pyyaml
 scipy
+taichi
 tqdm
