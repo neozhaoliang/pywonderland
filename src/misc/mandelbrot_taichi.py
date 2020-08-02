@@ -13,7 +13,7 @@ import numpy as np
 
 ti.init(debug=False, arch=ti.gpu)
 
-WIDTH, HEIGHT = 1200, 600
+WIDTH, HEIGHT = 800, 480
 ymin, ymax = -1, 1
 xmin, xmax = -WIDTH / HEIGHT, WIDTH/ HEIGHT
 pixels = ti.Vector(3, dt=ti.f32, shape=(WIDTH, HEIGHT))
@@ -119,7 +119,6 @@ def main():
     while True:
         while gui.get_event(ti.GUI.PRESS):
             e = gui.event
-            print(e.key)
             if e.key == ti.GUI.ESCAPE:
                 exit(0)
             elif e.key == "p":
