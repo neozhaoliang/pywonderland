@@ -49,10 +49,9 @@ def mix(x, y, a):
     """
     Mix two vectors `x` and `y` weighted by a real number `a`.
     """
-    return ti.Vector([
-        x[0] * (1.0 - a) + y[0] * a,
-        x[1] * (1.0 - a) + y[1] * a,
-        x[2] * (1.0 - a) + y[2] * a])
+    return ti.Vector([x[0] * (1.0 - a) + y[0] * a,
+                      x[1] * (1.0 - a) + y[1] * a,
+                      x[2] * (1.0 - a) + y[2] * a])
 
 
 @ti.func
