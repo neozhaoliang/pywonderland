@@ -204,6 +204,13 @@ def main():
     P = anim((4, 2, 2, 2, 3, 2, 2, 3, 2, 3), (1, 0, 0, 0, 0), description="5d-cube")
     P.draw_on_coxeter_plane(nodes1=(0, 2, 4), nodes2=(1, 3), svgpath="5-cube.svg")
 
+    # some star polyhedron
+    anim((Fraction(3, 2), 3, 3), (1, 0, 1), description="octahemioctahedron",
+         extra_relations=((0, 1, 2, 1)*2,))
+    anim((Fraction(3, 2), 5, 5), (1, 0, 1), description="small-dodecicosidodecahedron",
+         extra_relations=((0, 1, 2, 1)*2,))
+    anim((Fraction(3, 2), 4, 4), (1, 0, 1), description="small-cubicuboctahedron",
+         extra_relations=((0, 1, 2, 1)*2,))
 
 if __name__ == "__main__":
     main()
