@@ -30,6 +30,7 @@ sys.path.append("../glslhelpers")
 
 import time
 import argparse
+import subprocess
 
 import pyglet
 pyglet.options["debug_gl"] = False
@@ -41,12 +42,22 @@ from framebuffer import FrameBuffer
 from texture import create_image_texture
 
 
+FFMPEG_EXE = "ffmpeg"
 FONT_TEXTURE = "../glslhelpers/textures/font.png"
 
 
 class Wythoff(pyglet.window.Window):
 
-    def __init__(self, width, height, aa=1):
+    """
+    User interface:
+      1. use mouse click to play with the ui.
+      2. press `Enter` to save screenshots.
+      3. press `Ctrl+v` to start saving video and `Ctrl+v` again to stop.
+      4. press `Esc` to exit.
+    """
+
+    def __init__(self, width, height, aa=1,
+                 video_rate=16, sample_rate=4):
         """
         :param width and height: size of the window in pixels.
 
@@ -60,9 +71,12 @@ class Wythoff(pyglet.window.Window):
                                       resizable=True,
                                       visible=False,
                                       vsync=False)
+        self.video_rate = video_rate
+        self.video_on = False
+        self.sample_rate = sample_rate
         self._start_time = time.clock()
         self._frame_count = 0  # count number of frames rendered so far
-        self._speed = 1  # control speed of the animation
+        self._speed = 4  # control speed of the animation
         self.aa = aa
         # shader A draws the UI
         self.shaderA = Shader(["./glsl/wythoff.vert"], ["./glsl/common.frag",
@@ -140,6 +154,9 @@ class Wythoff(pyglet.window.Window):
             self.shaderC.uniformf("iTime", now)
             gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
 
+        if self.video_on and (self._frame_count % self.sample_rate == 0):
+            self.write_video_frame()
+
         self._frame_count += 1
 
     def on_key_press(self, symbol, modifiers):
@@ -151,6 +168,9 @@ class Wythoff(pyglet.window.Window):
 
         if symbol == key.ESCAPE:
             pyglet.app.exit()
+
+        if symbol == key.V and (modifiers & key.LCTRL):
+            self.switch_video()
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button & pyglet.window.mouse.LEFT:
@@ -175,7 +195,35 @@ class Wythoff(pyglet.window.Window):
 
     def save_screenshot(self):
         image_buffer = pyglet.image.get_buffer_manager().get_color_buffer()
-        image_buffer.save("screenshoot.png")
+        image_buffer.save("screenshot.png")
+
+    def switch_video(self):
+        self.video_on = not self.video_on
+        if self.video_on:
+            self.ffmpeg_pipe = self.create_new_pipe()
+            print("> Writing to video...\n")
+        else:
+            self.ffmpeg_pipe.close()
+            print("> The video is closed.\n")
+
+    def write_video_frame(self):
+        data = pyglet.image.get_buffer_manager().get_color_buffer().get_image_data().get_data("RGBA", -4 * self.width)
+        self.ffmpeg_pipe.write(data)
+
+    def create_new_pipe(self):
+        ffmpeg = subprocess.Popen((FFMPEG_EXE,
+                                   "-threads", "0",
+                                   "-loglevel", "panic",
+                                   "-r", "%d" % self.video_rate,
+                                   "-f", "rawvideo",
+                                   "-pix_fmt", "rgba",
+                                   "-s", "%dx%d" % (self.width, self.height),
+                                   "-i", "-",
+                                   "-c:v", "libx264",
+                                   "-crf", "20",
+                                   "-y",  "test.mp4"
+                                  ), stdin=subprocess.PIPE)
+        return ffmpeg.stdin
 
     def run(self, fps=None):
         self.set_visible(True)
@@ -190,11 +238,17 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-size", metavar="s", type=str,
                         default="800x480", help="window size in pixels")
-    parser.add_argument("-aa", type=int, default=1,
+    parser.add_argument("-aa", type=int, default=2,
                         help="antialiasing level")
+    parser.add_argument("-video_rate", type=int, default=16,
+                        help="fps of the video")
+    parser.add_argument("-sample_rate", type=int, default=4,
+                        help="how often a frame is sampled and ouput to video")
     args = parser.parse_args()
     w, h = [int(x) for x in args.size.split("x")]
-    app = Wythoff(width=w, height=h, aa=args.aa)
+    app = Wythoff(width=w, height=h, aa=args.aa,
+                  video_rate=args.video_rate, sample_rate=args.sample_rate)
+    print(app.__doc__)
     app.run()
 
 
