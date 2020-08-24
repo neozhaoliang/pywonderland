@@ -68,7 +68,7 @@ def anim(coxeter_diagram,
     """
     if len(coxeter_diagram) == 3:
         if snub:
-            P = models.Snub(coxeter_diagram)
+            P = models.Snub(coxeter_diagram, extra_relations=extra_relations)
         else:
             P = models.Polyhedra(coxeter_diagram, trunc_type, extra_relations)
         scene_file = "polyhedra_animation.pov"
@@ -211,7 +211,7 @@ def main():
          extra_relations=((0, 1, 2, 1)*2,))
     anim((Fraction(3, 2), 4, 4), (1, 0, 1), description="small-cubicuboctahedron",
          extra_relations=((0, 1, 2, 1)*2,))
-    anim((Fraction(5, 3), 3, 5), (0, 1, 0), description="ditrigonal-dodecadodecahedron",
+    anim((Fraction(5, 2), 2, 5), (1, 1, 1), description="ditrigonal-dodecadodecahedron", snub=True,
          extra_relations=((0, 1, 2, 1)*2,))
 
 if __name__ == "__main__":

@@ -275,8 +275,8 @@ class Snub(Polyhedra):
     transform the initial vertex to get all vertices.
     """
 
-    def __init__(self, coxeter_diagram, init_dist=(1.0, 1.0, 1.0)):
-        super().__init__(coxeter_diagram, init_dist, extra_relations=())
+    def __init__(self, coxeter_diagram, init_dist=(1.0, 1.0, 1.0), extra_relations=()):
+        super().__init__(coxeter_diagram, init_dist, extra_relations)
         # the representaion is not in the form of a Coxeter group,
         # we must overwrite the relations.
 
@@ -293,6 +293,20 @@ class Snub(Polyhedra):
                               (2,) * self.coxeter_matrix[1][2],
                               (0, 2) * self.coxeter_matrix[0][2],
                               (0, 1), (2, 3))
+        # map the extra_relations expressed by reflections
+        # into relations by (r, s).
+        for extra_rel in extra_relations:
+            snub_rel = []
+            for x, y in zip(extra_rel[:-1:2], extra_rel[1::2]):
+                snub_rel.extend({
+                    (0, 1): [0],
+                    (0, 2): [0, 2],
+                    (1, 0): [1],
+                    (1, 2): [2],
+                    (2, 0): [2, 0],
+                    (2, 1): [3]
+                }[(x, y)])
+            self.symmetry_rels += (tuple(snub_rel),)
 
         # order of the generator rotations {rotation: order}
         # {r: p, s: q, rs: 2}
