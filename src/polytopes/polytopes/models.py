@@ -42,7 +42,7 @@ class BasePolytope(object):
         # Coxeter matrix of the symmetry group
         self.coxeter_matrix = helpers.get_coxeter_matrix(coxeter_diagram)
 
-        # reflectiom mirrors stored as row vectors in a matrix
+        # reflection mirrors stored as row vectors in a matrix
         self.mirrors = helpers.get_mirrors(coxeter_diagram)
 
         # reflection transformations about the mirrors

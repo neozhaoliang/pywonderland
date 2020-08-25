@@ -55,18 +55,6 @@ background { Black }
 
 #declare rvs = Vertices(2*clock*pi, 0, 2*clock*pi);
 
-#macro Face(ind, indices)
-  #local num = dimension_size(indices, 1);
-  polygon {
-    num+1
-    #for (k, 0, num-1)
-      rvs[indices[k]]
-    #end
-    rvs[indices[0]]
-    texture { NBglass finish { reflection 0 } }
-  }
-#end
-
 union {
   #for (ind, 0, nvertices-1)
     sphere {
