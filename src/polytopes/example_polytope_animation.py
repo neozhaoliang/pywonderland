@@ -213,7 +213,4 @@ def main():
          extra_relations=((0, 1, 2, 1)*2,))
 
 if __name__ == "__main__":
-    anim((3, 2, 2, 5, 2, Fraction(5, 2)), (1, 0, 0, 0),
-         extra_relations=((1, 2, 3, 2)*3,),
-         description="icosahedral-120-cell")
-    anim((Fraction(5, 3), 3, 2, 5, 2, 2), (0, 1, 0, 1), description="ditrigonal-dodecadodecahedron", extra_relations=((0, 1, 2, 1)*2,))
+    main()
