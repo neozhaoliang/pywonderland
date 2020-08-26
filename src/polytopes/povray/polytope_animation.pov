@@ -101,14 +101,28 @@ union {
     #local nfaces = dimension_size(face_list, 1);
     #local nsides = dimension_size(face_list, 2);
     #for (j, 0, nfaces-1)
-      polygon {
-        nsides + 1,
-        #for (ind, 0, nsides-1)
-          rvs[face_list[j][ind]]
+      #if (nsides = 3)
+        triangle {
+          rvs[face_list[j][0]],
+          rvs[face_list[j][1]],
+          rvs[face_list[j][2]]
+          texture { NBglass finish { reflection 0 }}
+        }
+      #else
+        #local center = <0, 0, 0>;
+        #for (k ,0, nsides-1)
+          #local center = center + rvs[face_list[j][k]];
         #end
-        rvs[face_list[j][0]]
-        texture { NBglass finish { reflection 0 } }
-      }
+        #local center = center / nsides;
+        #for (ind, 0, nsides-1)
+          triangle {
+            center,
+            rvs[face_list[j][ind]],
+            rvs[face_list[j][mod(ind+1, nsides)]]
+            texture { NBglass finish { reflection 0 }}
+          }
+        #end
+      #end
     #end
   #end
   scale 4
