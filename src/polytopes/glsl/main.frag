@@ -18,7 +18,7 @@ vec2 dline_seg(vec2 p, vec2 a, vec2 b) {
     vec2 n = normalize(vec2(-ba.y, ba.x));
     vec2 pa = p-a;
     float u = clamp(dot(pa, ba)/dot(ba, ba), 0., 1.);
-    return vec2(dot(a, n) - dot(p, n), length(p-mix(a,b,u)));
+    return vec2(dot(a-p, n), length(p-mix(a,b,u)));
 }
 
 //////////////////////////////////////////////////////////////////////

@@ -188,12 +188,15 @@ def main():
     anim((3, 2, 2, 5, 2, Fraction(5, 2)), (1, 0, 0, 0),
          extra_relations=((1, 2, 3, 2)*3,),
          description="icosahedral-120-cell")
+
     anim((5, 2, 2, Fraction(5, 2), 2, 5), (1, 0, 0, 0),
          extra_relations=((0, 1, 2, 1)*3, (1, 2, 3, 2)*3),
          description="great-120-cell")
+
     anim((5, 2, 2, 3, 2, Fraction(5, 2)), (1, 0, 0, 0),
          extra_relations=((0, 1, 2, 3, 2, 1)*3,),
          description="grand-120-cell")
+
     P = anim((Fraction(5, 2), 2, 2, 5, 2, Fraction(5, 2)), (1, 0, 0, 0),
              extra_relations=((0, 1, 2, 1)*3, (1, 2, 3, 2)*3),
              description="grand-stellated-120-cell")
@@ -205,12 +208,22 @@ def main():
     P.draw_on_coxeter_plane(nodes1=(0, 2, 4), nodes2=(1, 3), svgpath="5-cube.svg")
 
     # some star polyhedron
-    anim((Fraction(3, 2), 3, 3), (1, 0, 1), description="octahemioctahedron",
+    anim((Fraction(3, 2), 3, 3), (1, 0, 1),
+         description="octahemioctahedron",
          extra_relations=((0, 1, 2, 1)*2,))
-    anim((Fraction(3, 2), 5, 5), (1, 0, 1), description="small-dodecicosidodecahedron",
+
+    anim((Fraction(3, 2), 5, 5), (1, 0, 1),
+         description="small-dodecicosidodecahedron",
          extra_relations=((0, 1, 2, 1)*2,))
-    anim((Fraction(3, 2), 4, 4), (1, 0, 1), description="small-cubicuboctahedron",
+
+    anim((Fraction(3, 2), 4, 4), (1, 0, 1),
+         description="small-cubicuboctahedron",
          extra_relations=((0, 1, 2, 1)*2,))
+
+    anim((Fraction(5, 3), 3, 5), (0, 1, 0),
+         description="ditrigonal-dodecadodecahedron",
+         extra_relations=((0, 1, 2, 1)*2,))
+
 
 if __name__ == "__main__":
     main()

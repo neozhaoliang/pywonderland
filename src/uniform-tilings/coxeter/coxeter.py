@@ -12,7 +12,7 @@ With this class you can:
    (i.e. affine and hyperbolic groups) the table is generated up to a given depth.
 
 Important: always be aware of left and right cosets when computing coset representatives, in this
-program we use the left convention: x for xH (assume x = s₁s₂...sₙ is a shortlex word).
+program we use the left convention: x for xH (assuming x = s₁s₂...sₙ is a shortlex word).
 """
 from collections import deque
 from itertools import combinations

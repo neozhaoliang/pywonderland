@@ -17,7 +17,7 @@
 
 ## About this repo
 
-The purpose of this project is to show the beauty of math with python. It consists of several mutually independent subprojects with each one illustrates a special object/algorithm in math. The current list is:
+The purpose of this project is to show the beauty of math with python. It consists of several independent subprojects with each one illustrates a special object/algorithm in math. The current list is:
 
 + [Aperiodic tilings](./src/aperiodic-tilings) like Penrose tiling, Ammann-Beenker tiling, etc.
 + Triology on perfectly random sampling algorithms. See
