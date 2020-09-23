@@ -170,6 +170,10 @@ class HyperbolicDrawing(cairo.Context):
         self.stroke()
 
 
+z = 1.32*1j
+FUND_HEX = [z, A(z), A(C(z)), A(C(A(z))), A(C(A(C(z)))), A(C(A(C(A(z)))))]
+
+
 def main(width, height, depth, xlim=None, ylim=None):
     if xlim is None:
         xlim = [-2, 2]
@@ -198,6 +202,32 @@ def main(width, height, depth, xlim=None, ylim=None):
         ctx.render_domain(triangle, facecolor=fc_color, linewidth=0.04/(len(word)+1))
 
     surface.write_to_png('modulargroup.png')
+
+    surface = cairo.ImageSurface(cairo.FORMAT_RGB24, width, height)
+    ctx = HyperbolicDrawing(surface)
+    ctx.set_axis(xlim=xlim, ylim=ylim, background_color=(1, 1, 1))
+    ctx.set_line_join(2)
+    # draw the x-axis
+    ctx.move_to(xlim[0], 0)
+    ctx.line_to(xlim[1], 0)
+    ctx.set_source_rgb(0, 0, 0)
+    ctx.set_line_width(0.03)
+    ctx.stroke()
+
+    for word, _, hexagon in traverse(depth, FUND_HEX):
+        if len(word) <= 2:
+            linewidth = 0.02
+        else:
+            linewidth = 0.04 / (len(word) + 1)
+        ctx.render_domain(hexagon, facecolor=(1, 0.5, 0.75),
+                          edgecolor=(0, 0, 0), linewidth=linewidth)
+
+    for word, _, triangle in traverse(depth, FUND_DOMAIN):
+        ctx.render_domain(triangle, facecolor=None,
+                          edgecolor=(0.5, 0.5, 0.75),
+                          linewidth=0.02/(1 + len(word)))
+
+    surface.write_to_png('cayley_graph.png')
 
 
 if __name__ == '__main__':
