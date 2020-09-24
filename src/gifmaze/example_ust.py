@@ -1,6 +1,20 @@
-# * coding: utf8 *
 """
-This short script illustrates how Wilson's algorithm works.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Count and draw the leaves of an uniform spanning tree
+on the 2D square grid
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Question: let G be the nxn square grid graph and T be
+a random spanning tree of G chosen from the uniform distribution,
+then for a vertex v, what's the probability that v is a
+leaf of T?
+
+Answer: as n approaches infinity, the probability has limit
+
+    8*(π-2)/π³ ≈ 0.2945449182075
+
+This script samples an uniform random spanning T from an nxn
+grid and counts/draws the number of leaves of T.
 """
 import random
 from itertools import product
@@ -24,37 +38,47 @@ def grid_graph(*size):
     return {v: neighbors(v) for v in product(*map(range, size))}
 
 
-width, height = 48, 36
-G = grid_graph(width, height)
-root = random.choice(list(G.keys()))  # choose any vertex as the root.
-tree = set([root])  # initially the tree contains only the root.
-parent = dict()  # remember the latest step.
+def main(width, height):
+    G = grid_graph(width, height)
+    root = random.choice(list(G.keys()))  # choose any vertex as the root.
+    tree = set([root])  # initially the tree contains only the root.
+    parent = dict()  # remember the latest step.
 
-for vertex in G:
-    v = vertex
-    while v not in tree:
-        neighbor = random.choice(G[v])
-        parent[v] = neighbor
-        v = neighbor
-    # can you see how the loops are erased in the above code?
-    v = vertex
-    while v not in tree:
-        tree.add(v)
-        v = parent[v]
+    for vertex in G:
+        v = vertex
+        while v not in tree:
+            neighbor = random.choice(G[v])
+            parent[v] = neighbor
+            v = neighbor
+            # can you see how the loops are erased in the above code?
 
-fig = plt.figure(figsize=(4.8, 3.6), dpi=100)
-ax = fig.add_axes([0, 0, 1, 1], aspect=1)
-ax.axis('off')
-ax.axis([-1, width, -1, height])
+        v = vertex
+        while v not in tree:
+            tree.add(v)
+            v = parent[v]
 
-# draw the edges.
-for key, item in parent.items():
-    a, b = key
-    x, y = item
-    ax.plot([a, x], [b, y], 'k', lw=3)
+    fig = plt.figure(figsize=(width // 10, height//10), dpi=100)
+    ax = fig.add_axes([0, 0, 1, 1], aspect=1)
+    ax.axis('off')
+    ax.axis([-1, width, -1, height])
 
-# draw the root.
-x, y = root
-ax.plot(x, y, 'ro', ms=7)
-fig.canvas.set_window_title("uniform spanning tree example")
-plt.show()
+    leaves = set([node for node in G.keys() if node not in parent.values()])
+
+    # draw the edges.
+    for key, item in parent.items():
+        a, b = key
+        x, y = item
+        ax.plot([a, x], [b, y], 'k', lw=3)
+
+    # draw the leaves
+    for x, y in leaves:
+        ax.plot([x], [y], 'bo', ms=4)
+
+    n = len(G)
+    m = len(leaves)
+    print("leaves/all = {}/{} = {}".format(m, n, m/n))
+    fig.savefig("ust_leaves.png")
+
+
+if __name__ == "__main__":
+    main(80, 80)
