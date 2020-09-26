@@ -59,7 +59,7 @@ class Hilbert(object):
         coords = list(coords)
         m = self.log2(max(coords)) + 1
         digits = []
-        for i in range(m):
+        for _ in range(m):
             digit = 0
             for bit in range(self.n - 1, -1, -1):
                 digit = (digit << 1) | (coords[bit] & 1)

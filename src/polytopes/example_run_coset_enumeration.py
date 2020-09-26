@@ -127,7 +127,7 @@ def main():
     args = parser.parse_args()
 
     with open(args.filename, "r") as f:
-        data = yaml.load(f)
+        data = yaml.safe_load(f)
         rels = data["relators"]
         subg = data["subgroup-generators"]
         name = data["name"]

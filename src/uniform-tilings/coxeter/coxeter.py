@@ -467,7 +467,6 @@ class CoxeterGroup(object):
             raise ValueError("Unknown type of automaton, must be 'reduced' or 'shortlex'")
 
         table = self.reftable
-        n = self.rank
 
         def subset_transition(S, i):
             """

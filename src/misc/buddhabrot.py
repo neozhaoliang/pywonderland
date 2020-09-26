@@ -39,7 +39,7 @@ def escape(c):
         return False
 
     z = 0
-    for i in range(ITERATIONS):
+    for _ in range(ITERATIONS):
         z = z*z + c
         if z.real * z.real + z.imag * z.imag > ESCAPE_RADIUS:
             return True
