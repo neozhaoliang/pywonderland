@@ -57,7 +57,7 @@ def htmlcolors_to_rgba(colors):
     :param colors: a 1d list of 5 html colors of the format "#RRGGBBAA".
         return a 1d list of 20 floats in range [0, 1].
     """
-    return [int(x, 16) / 255.0 for s in colors \
+    return [int(x, 16) / 255.0 for s in colors
             for x in (s[1:3], s[3:5], s[5:7], s[7:])]
 
 

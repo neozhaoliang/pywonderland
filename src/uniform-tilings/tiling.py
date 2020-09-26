@@ -86,12 +86,13 @@ def dimmed(c):
 def divide_line(hwidth, k):
     """
     Compute line strips for drawing edges of different types.
+    k must be either 1 or 2.
     """
     ewidth = np.tanh(hwidth / 2)
     if k == 1:
         x = 2 * np.arctanh(ewidth / 6)
         return x
-    if k == 2:
+    else:
         x1 = 2 * np.arctanh(ewidth / 10)
         x2 = 2 * np.arctanh(ewidth / 10 * 3)
         return x1, x2
@@ -625,7 +626,7 @@ class UpperHalfPlane(Poincare2D):
                checker=False,
                checker_colors=("#1E7344", "#EAF78D"),
                face_colors=("lightcoral", "mistyrose", "steelblue")):
-        trans = Transform.merge(Transform.diskToHalf(), Transform.translation((-0.00001,0)))
+        trans = Transform.merge(Transform.diskToHalf(), Transform.translation((-0.00001, 0)))
         d = drawSvg.Drawing(12, 6, origin=(-6, 0))
         d.append(drawSvg.Rectangle(-10, -10, 20, 20, fill="silver"))
 

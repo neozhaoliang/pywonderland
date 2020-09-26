@@ -205,7 +205,7 @@ def lzw_compress(input_data, mcl):
     # output the clear code
     stream.encode_bits(clear_code, code_length)
 
-    pattern = tuple()
+    pattern = ()
     for c in input_data:
         pattern += (c,)
         if pattern not in code_table:

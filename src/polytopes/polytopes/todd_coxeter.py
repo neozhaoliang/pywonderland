@@ -309,7 +309,7 @@ class CosetTable(object):
 
         gens = self.A if self.coxeter else self.A[::2]
         result = [None] * len(self)
-        result[0] = tuple()
+        result[0] = ()
         q = deque([0])
         while q:
             coset = q.popleft()

@@ -146,11 +146,11 @@ class LozengeTiling(object):
         k, j, dy = u
         # try to push up
         if dy == 1:
-            if (s[k][j - 1] == s[k][j] < s[k][j + 1] < s[k + 1][j]):
+            if s[k][j - 1] == s[k][j] < s[k][j + 1] < s[k + 1][j]:
                 s[k][j] += 1
         # try to push down
         else:
-            if (s[k - 1][j] < s[k][j - 1] < s[k][j] == s[k][j + 1]):
+            if s[k - 1][j] < s[k][j - 1] < s[k][j] == s[k][j + 1]:
                 s[k][j] -= 1
 
     def get_tiles(self, s):

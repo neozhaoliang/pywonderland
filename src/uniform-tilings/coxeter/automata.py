@@ -20,7 +20,7 @@ class DFAState(object):
         self.subset = subset
         self.accept = accept
         self.index = None
-        self.transitions = dict()
+        self.transitions = {}
 
     def __str__(self):
         return "{}: {{{}}}".format(self.index, ", ".join(str(x) for x in self.subset))
@@ -132,7 +132,7 @@ class Hopcroft(object):
                                 W.add(s2)
         # now self.P is our final partition
         # let's make it a DFA
-        result_dfa = dict()
+        result_dfa = {}
 
         def aux(subset):
             state = next(iter(subset))

@@ -41,8 +41,8 @@ def grid_graph(*size):
 def main(width, height):
     G = grid_graph(width, height)
     root = random.choice(list(G.keys()))  # choose any vertex as the root.
-    tree = set([root])  # initially the tree contains only the root.
-    parent = dict()  # remember the latest step.
+    tree = {root}  # initially the tree contains only the root.
+    parent = {}  # remember the latest step.
 
     for vertex in G:
         v = vertex
@@ -62,7 +62,7 @@ def main(width, height):
     ax.axis('off')
     ax.axis([-1, width, -1, height])
 
-    leaves = set([node for node in G.keys() if node not in parent.values()])
+    leaves = {node for node in G.keys() if node not in parent.values()}
 
     # draw the edges.
     for key, item in parent.items():

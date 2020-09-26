@@ -15,7 +15,7 @@ ti.init(debug=False, arch=ti.gpu)
 
 WIDTH, HEIGHT = 800, 480
 ymin, ymax = -1, 1
-xmin, xmax = -WIDTH / HEIGHT, WIDTH/ HEIGHT
+xmin, xmax = -WIDTH / HEIGHT, WIDTH / HEIGHT
 pixels = ti.Vector(3, dt=ti.f32, shape=(WIDTH, HEIGHT))
 ox, oy = np.mgrid[xmin: xmax: WIDTH*1j, ymin: ymax: HEIGHT*1j]
 grid = ti.Vector(2, dt=ti.f32, shape=(WIDTH, HEIGHT))
@@ -80,14 +80,14 @@ def get_color(z, timef32):
         co = 0.0
         w = ti.Vector([0.5, 0.0])
         for _ in range(256):
-            if (ti.dot(w, w) > 1024.0):
+            if ti.dot(w, w) > 1024:
                 break
             w = cmul(cc, cmul(w, cadd(1.0, -w)))
             co += 1.0
 
         sco = co + 1.0 - log2(0.5 * (log2(ti.dot(cc, cc)) + log2(ti.dot(w, w))))
         col = 0.5 + 0.5 * ti.cos(3.0 + sco * 0.1 + ti.Vector([0.0, 0.5, 1.0]))
-        if (co > 255.5):
+        if co > 255.5:
             col = ti.Vector([0.0, 0.0, 0.0])
 
     if ti.abs(cc.x - 1.0) < 3.0:
@@ -100,7 +100,7 @@ def get_color(z, timef32):
             x = cc[0] * (1.0 - x) * x
             col = col + mix(col,
                             ti.Vector([1.0, 1.0, 0.0]),
-                            0.15 + 0.85 * ti.pow(clamp(ti.abs(sc.x + 1.0) *0.4, 0.0, 1.0), 4.0)) \
+                            0.15 + 0.85 * ti.pow(clamp(ti.abs(sc.x + 1.0) * 0.4, 0.0, 1.0), 4.0)) \
                             * al * 0.06 * ti.exp(-15000.0 * (cc.y - x) * (cc.y - x))
 
     return col

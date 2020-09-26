@@ -170,10 +170,7 @@ def is_degenerate(cox_mat, active):
         return True
     # if p, q, r are all equal to 2 they must be all active
     if (p == 2 and q == 2 and r == 2):
-        if not all(active):
-            return True
-        else:
-            return False
+        return not all(active):
     # so at least one of p, q, r is > 2 and at least one mirror is active
     else:
         # if at least two of p, q, r are > 2 then it's not degenerate

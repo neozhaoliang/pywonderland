@@ -12,8 +12,6 @@ import sys
 sys.path.append("../glslhelpers")
 
 import time
-import ctypes
-from PIL import Image
 
 import pyglet
 pyglet.options["debug_gl"] = False

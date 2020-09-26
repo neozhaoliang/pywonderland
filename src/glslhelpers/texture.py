@@ -2,7 +2,6 @@
 Helper functions for creating textures from images or numpy arrays.
 """
 import ctypes as ct
-import numpy as np
 from PIL import Image
 import pyglet
 import pyglet.gl as gl

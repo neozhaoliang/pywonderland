@@ -13,7 +13,6 @@ import sys
 sys.path.append("../glslhelpers")
 
 import time
-import subprocess
 import argparse
 
 import pyglet

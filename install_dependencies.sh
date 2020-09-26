@@ -10,4 +10,4 @@ sudo apt-get install \
      python3-cairocffi \
      inkscape
 
-pip install -r requirements.txt
+sudo pip3 install -r requirements.txt

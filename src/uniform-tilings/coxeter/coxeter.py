@@ -261,7 +261,7 @@ class CoxeterGroup(object):
         given word and H is a standard parabolic subgroup.
         """
         if len(word) == 0:
-            return tuple()
+            return ()
 
         while True:
             w = word
