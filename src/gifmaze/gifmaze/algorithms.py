@@ -302,3 +302,70 @@ def kruskal(maze, encode_func, speed=30):
         yield encode_func(maze)
 
     bar.close()
+
+
+def astar(maze, encode_func, speed, start=None, end=None):
+    """
+    Solving a maze by A* search.
+    """
+    if start is None:
+        start = (0, 0)
+    if end is None:
+        end = (maze.width - 1, maze.height - 1)
+
+    def manhattan(cellA, cellB):
+        """
+        The Manhattan distance between two cells.
+        """
+        xA, yA = cellA
+        xB, yB = cellB
+        return abs(xA - xB) + abs(yA - yB)
+
+    def euclidean(cellA, cellB):
+        """
+        The Euclidean distance between two cells.
+        """
+        xA, yA = cellA
+        xB, yB = cellB
+        return ((xA - yA) * (xA - yA) + (xB - yB) * (xB - yB))**0.5
+
+    bar = tqdm(total=len(maze.cells) - 1, desc="Solving maze by A*")
+    came_from = {start: start}
+    visited = set([start])
+    queue = [(0, start)]
+    heapq.heapify(queue)
+    maze.mark_cell(start, Maze.FILL)
+    while len(queue) > 0:
+        dist, current = heapq.heappop(queue)
+        if current == end:
+            break
+
+        parent = came_from[current]
+        maze.mark_cell(current, Maze.FILL)
+        maze.mark_space(parent, current, Maze.FILL)
+        bar.update(1)
+
+        for child in maze.get_neighbors(current):
+            if (child not in visited) and (not maze.barrier(current, child)) :
+                came_from[child] = current
+                dist = 0.2 * euclidean(child, start) + 0.8 * manhattan(child, end)
+                heapq.heappush(queue, (dist, child))
+                visited.add(child)
+
+        if maze.num_changes >= speed:
+            yield encode_func(maze)
+
+    if maze.num_changes > 0:
+        yield encode_func(maze)
+
+    # retrieve the path
+    path = [end]
+    v = end
+    while v != start:
+        v = came_from[v]
+        path.append(v)
+
+    maze.mark_path(path, Maze.PATH)
+    yield encode_func(maze)
+
+    bar.close()

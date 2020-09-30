@@ -6,9 +6,6 @@ A few 2d uniform tiling examples
 you can use inkscape to convert the output svg to png format:
 
     inkscape input.svg -z -d 300 -e output.png
-
-Currently only euclidean and hyperbolic cases are implemented,
-spherical case will be added later.
 """
 from fractions import Fraction
 from tiling import Euclidean2D, Poincare2D, Spherical2D, UpperHalfPlane

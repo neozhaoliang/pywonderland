@@ -106,9 +106,12 @@ def traverse(length, start_domain):
 
 
 class HyperbolicDrawing(cairo.Context):
-    """A quick extension of the `cairo.Context` class for drawing hyperbolic
+
+    """
+    A quick extension of the `cairo.Context` class for drawing hyperbolic
     objects in the Poincare upper plane.
     """
+
     def set_axis(self, **kwargs):
         surface = self.get_target()
         width = surface.get_width()

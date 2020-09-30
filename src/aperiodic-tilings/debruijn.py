@@ -127,3 +127,9 @@ with open("./povray/data.inc", "w") as f:
                 ))
 
 surface.finish()
+
+try:
+    import subprocess
+    subprocess.call("convert debruijn.svg +shade 20x20 -modulate 200 debruijn.png", shell=True)
+except ImportError:
+    print("Adding shading effect to image failed, `convert` command not found")
