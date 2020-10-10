@@ -331,7 +331,7 @@ def astar(maze, encode_func, speed, start=None, end=None):
 
     bar = tqdm(total=len(maze.cells) - 1, desc="Solving maze by A*")
     came_from = {start: start}
-    visited = set([start])
+    visited = {start}
     queue = [(0, start)]
     heapq.heapify(queue)
     maze.mark_cell(start, Maze.FILL)
@@ -346,7 +346,7 @@ def astar(maze, encode_func, speed, start=None, end=None):
         bar.update(1)
 
         for child in maze.get_neighbors(current):
-            if (child not in visited) and (not maze.barrier(current, child)) :
+            if (child not in visited) and (not maze.barrier(current, child)):
                 came_from[child] = current
                 dist = 0.2 * euclidean(child, start) + 0.8 * manhattan(child, end)
                 heapq.heappush(queue, (dist, child))

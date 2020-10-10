@@ -6,7 +6,6 @@ matplotlib
 numba
 numpy
 pillow
-pycairo
 pyglet
 pygraphviz
 pyyaml

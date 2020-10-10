@@ -76,8 +76,8 @@ def main(width, height):
 
     n = len(G)
     m = len(leaves)
-    print("leaves/all = {}/{} = {}".format(m, n, m/n))
-    fig.savefig("ust_leaves.png")
+    print("leaves/allnodes = {}/{} = {}".format(m, n, m/n))
+    fig.savefig("ust-leaves-{}-{}.png".format(m, n))
 
 
 if __name__ == "__main__":
