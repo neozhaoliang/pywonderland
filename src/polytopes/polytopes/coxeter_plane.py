@@ -1,15 +1,12 @@
-import numpy as np
 import cairocffi as cairo
+import numpy as np
+
 from . import helpers
 
 
-def draw_on_coxeter_plane(P,
-                          nodes1,
-                          nodes2,
-                          svgpath=None,
-                          image_size=600,
-                          linewidth=0.0012,
-                          markersize=0.015):
+def draw_on_coxeter_plane(
+    P, nodes1, nodes2, svgpath=None, image_size=600, linewidth=0.0012, markersize=0.015
+):
     """
     Project the vertices of a polytope `P` to its Coxeter plane
     and draw the pattern to a svg image.
@@ -40,7 +37,7 @@ def draw_on_coxeter_plane(P,
     extent = 0.99
     surface = cairo.SVGSurface(svgpath, image_size, image_size)
     ctx = cairo.Context(surface)
-    ctx.scale(image_size / (extent*2.0), -image_size / (extent*2.0))
+    ctx.scale(image_size / (extent * 2.0), -image_size / (extent * 2.0))
     ctx.translate(extent, -extent)
     ctx.set_source_rgb(1, 1, 1)
     ctx.paint()
@@ -60,7 +57,7 @@ def draw_on_coxeter_plane(P,
     # draw the vertices as circles
     ctx.set_line_width(linewidth * 2)
     for x, y in vertices_2d:
-        ctx.arc(x, y, markersize, 0, 2*np.pi)
+        ctx.arc(x, y, markersize, 0, 2 * np.pi)
         ctx.set_source_rgb(1, 0, 0)
         ctx.fill_preserve()
         ctx.set_source_rgb(0, 0, 0)

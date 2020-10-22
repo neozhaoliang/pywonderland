@@ -11,9 +11,10 @@ construction of the reflection mirrors. For example
 """
 from functools import partial
 from itertools import combinations
+
+import helpers
 import numpy as np
 import tqdm
-import helpers
 from coxeter import CoxeterGroup
 
 
@@ -89,7 +90,6 @@ class Cell(object):
 
 
 class Honeycomb(object):
-
     def __init__(self, coxeter_diagram, init_dist):
         if len(coxeter_diagram) != 6 or len(init_dist) != 4:
             raise ValueError("Invalid input dimension")
@@ -154,7 +154,9 @@ class Honeycomb(object):
             refs = [self.reflections[k] for k in triple]
             active = [self.active[k] for k in triple]
             if not helpers.is_degenerate(cox_mat, active):
-                C = Cell(cox_mat, self.init_v, active, refs).build_geometry(depth, maxcount)
+                C = Cell(cox_mat, self.init_v, active, refs).build_geometry(
+                    depth, maxcount
+                )
                 result[triple] = C
         return result
 
@@ -175,15 +177,22 @@ class Honeycomb(object):
 
     def export_edge(self, fobj, p1, p2):
         """Export the data of an edge to POV-Ray .inc file."""
-        fobj.write("HyperbolicEdge({}, {})\n".format(
-            helpers.pov_vector(p1),
-            helpers.pov_vector(p2)))
+        fobj.write(
+            "HyperbolicEdge({}, {})\n".format(
+                helpers.pov_vector(p1), helpers.pov_vector(p2)
+            )
+        )
 
-    def generate_povray_data(self, depth=100, maxcount=50000,
-                             cell_depth=None, cell_edges=10000,
-                             filename="./povray/honeycomb-data.inc",
-                             eye=(0, 0, 0.5),
-                             lookat=(0, 0, 0)):
+    def generate_povray_data(
+        self,
+        depth=100,
+        maxcount=50000,
+        cell_depth=None,
+        cell_edges=10000,
+        filename="./povray/honeycomb-data.inc",
+        eye=(0, 0, 0.5),
+        lookat=(0, 0, 0),
+    ):
         self.G.init()
         self.word_generator = partial(self.G.traverse, depth=depth, maxcount=maxcount)
         self.fundamental_cells = self.get_fundamental_cells(cell_depth, cell_edges)
@@ -222,6 +231,14 @@ class Honeycomb(object):
             bar.close()
             verts = "#declare num_vertices = {};\n"
             verts_coords = "#declare vertices = array[{}]{{{}}};\n"
-            print("{} vertices and {} edges generated".format(self.num_vertices, self.num_edges))
+            print(
+                "{} vertices and {} edges generated".format(
+                    self.num_vertices, self.num_edges
+                )
+            )
             f.write(verts.format(self.num_vertices))
-            f.write(verts_coords.format(self.num_vertices, helpers.pov_vector_list(vertices)))
+            f.write(
+                verts_coords.format(
+                    self.num_vertices, helpers.pov_vector_list(vertices)
+                )
+            )

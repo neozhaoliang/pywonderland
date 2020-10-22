@@ -16,13 +16,14 @@ program we use the left convention: x for xH (assuming x = s₁s₂...sₙ is a 
 """
 from collections import deque
 from itertools import combinations
+
 import numpy as np
 
+from .algebraic import AlgebraicInteger
+from .automata import DFA, DFAState
 from .integer import lcm
 from .polynomial import IntPolynomial
-from .algebraic import AlgebraicInteger
 from .root import Root
-from .automata import DFA, DFAState
 
 
 class CoxeterGroup(object):
@@ -102,8 +103,10 @@ class CoxeterGroup(object):
         latex = r"$$\langle {} \, |\, {}={}=1\rangle.$$"
         gens = ",".join("s_{{{}}}".format(i) for i in self.gens)
         invs = "=".join("s^2_{{{}}}".format(i) for i in self.gens)
-        rels = "=".join("(s_{{{}}}s_{{{}}})^{}".format(i, j, self.cox_mat[i][j])
-                        for i, j in combinations(self.gens, 2))
+        rels = "=".join(
+            "(s_{{{}}}s_{{{}}})^{}".format(i, j, self.cox_mat[i][j])
+            for i, j in combinations(self.gens, 2)
+        )
         return latex.format(gens, invs, rels)
 
     @staticmethod
@@ -113,6 +116,7 @@ class CoxeterGroup(object):
 
         :param cols: number of columns of the output latex array.
         """
+
         def to_latex(word):
             if len(word) > 0:
                 return "".join(symbol + "_{{{}}}".format(i) for i in word)
@@ -194,15 +198,15 @@ class CoxeterGroup(object):
         for i, s_i in enumerate(word):
             mu = self.reftable[mu][s_i]
             if mu is None:
-                return word[:k+1] + (t,) + word[k+1:]
+                return word[: k + 1] + (t,) + word[k + 1 :]
             elif mu < 0:
-                return word[:i] + word[i+1:]
+                return word[:i] + word[i + 1 :]
             elif mu < s_i:
                 t = mu
                 k = i
             else:
                 continue
-        return word[:k+1] + (t,) + word[k+1:]
+        return word[: k + 1] + (t,) + word[k + 1 :]
 
     def _right_mult_shortlex(self, s, word):
         """
@@ -392,7 +396,7 @@ class CoxeterGroup(object):
         mset = 0
         for k in M.ravel():
             if k > 2:
-                mset |= (1 << k)
+                mset |= 1 << k
 
         # a root is in the queue if and only if its coords are known but its reflections are not.
         queue = deque()
@@ -403,7 +407,10 @@ class CoxeterGroup(object):
 
         # generate all simple roots
         for i in range(n):
-            coords = [AlgebraicInteger(p, 0) if k != i else AlgebraicInteger(p, 1) for k in range(n)]
+            coords = [
+                AlgebraicInteger(p, 0) if k != i else AlgebraicInteger(p, 1)
+                for k in range(n)
+            ]
             s = Root(coords=coords, index=count, mat=R[i])
             s.reflections = [None if k != i else MINUS for k in range(n)]
             queue.append(s)
@@ -464,7 +471,9 @@ class CoxeterGroup(object):
         Construct the automaton that recognizes the language of a Coxeter group.
         """
         if type not in ["shortlex", "reduced"]:
-            raise ValueError("Unknown type of automaton, must be 'reduced' or 'shortlex'")
+            raise ValueError(
+                "Unknown type of automaton, must be 'reduced' or 'shortlex'"
+            )
 
         table = self.reftable
 

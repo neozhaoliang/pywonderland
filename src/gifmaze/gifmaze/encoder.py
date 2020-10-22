@@ -23,12 +23,19 @@ Reference for the GIF89a specification:
     http://giflib.sourceforge.net/whatsinagif/index.html
 
 """
-from struct import pack
 from collections import OrderedDict
+from struct import pack
 
-
-__all__ = ['screen_descriptor', 'loop_control_block', 'graphics_control_block',
-           'image_descriptor', 'rectangle', 'pause', 'parse_image', 'lzw_compress']
+__all__ = [
+    "screen_descriptor",
+    "loop_control_block",
+    "graphics_control_block",
+    "image_descriptor",
+    "rectangle",
+    "pause",
+    "parse_image",
+    "lzw_compress",
+]
 
 
 def screen_descriptor(width, height, color_depth):
@@ -36,14 +43,14 @@ def screen_descriptor(width, height, color_depth):
     This block specifies both the size of the image and its global color table.
     """
     byte = 0b10000000 | (color_depth - 1) | (color_depth - 1) << 4
-    return pack('<6s2H3B', b'GIF89a', width, height, byte, 0, 0)
+    return pack("<6s2H3B", b"GIF89a", width, height, byte, 0, 0)
 
 
 def loop_control_block(loop):
     """
     This block specifies the number of loops (0 means loop infinitely).
     """
-    return pack('<3B8s3s2BHB', 0x21, 0xFF, 11, b'NETSCAPE', b'2.0', 3, 1, loop, 0)
+    return pack("<3B8s3s2BHB", 0x21, 0xFF, 11, b"NETSCAPE", b"2.0", 3, 1, loop, 0)
 
 
 def graphics_control_block(delay, trans_index=None):
@@ -62,7 +69,7 @@ def image_descriptor(left, top, width, height, byte=0):
     This block specifies the position of the coming frame (relative to the window)
     and whether it has a local color table or not.
     """
-    return pack('<B4HB', 0x2C, left, top, width, height, byte)
+    return pack("<B4HB", 0x2C, left, top, width, height, byte)
 
 
 def rectangle(left, top, width, height, color):
@@ -143,7 +150,7 @@ class DataBlock(object):
         for digit in reversed(string):
             if len(self._bitstream) * 8 == self._nbits:
                 self._bitstream.append(0)
-            if digit == '1':
+            if digit == "1":
                 self._bitstream[-1] |= 1 << (self._nbits % 8)
             self._nbits += 1
 
@@ -194,7 +201,7 @@ def lzw_compress(input_data, mcl):
     Therefore the actual smallest code length that will be used is one more
     than `mcl`.
     """
-    clear_code = (1 << mcl)
+    clear_code = 1 << mcl
     end_code = clear_code + 1
     max_codes = 4096
 
@@ -216,7 +223,7 @@ def lzw_compress(input_data, mcl):
             pattern = (c,)  # suffix becomes the current pattern
 
             next_code += 1
-            if next_code == 2**code_length + 1:
+            if next_code == 2 ** code_length + 1:
                 code_length += 1
 
             if next_code == max_codes:

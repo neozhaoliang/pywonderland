@@ -3,8 +3,8 @@
 Ammann-Beenker tiling by squares and lozenges
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
-import math
 import cmath
+import math
 
 try:
     import cairocffi as cairo

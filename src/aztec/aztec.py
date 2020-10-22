@@ -44,7 +44,7 @@ class AztecDiamond(object):
 
         self.cells = []
         for j in range(-n, n):
-            k = min(n+1+j, n-j)
+            k = min(n + 1 + j, n - j)
             for i in range(-k, k):
                 self.cells.append((i, j))
 
@@ -55,7 +55,7 @@ class AztecDiamond(object):
         """
         Return the 2x2 block with its bottom-left cell at (i, j).
         """
-        return [(i, j), (i+1, j), (i, j+1), (i+1, j+1)]
+        return [(i, j), (i + 1, j), (i, j + 1), (i + 1, j + 1)]
 
     def is_black(self, i, j):
         """
@@ -68,7 +68,9 @@ class AztecDiamond(object):
         """
         Check whether a block is filled by dominoes of given orientations.
         """
-        return all(self.tile[cell] == fill for cell, fill in zip(self.block(i, j), dominoes))
+        return all(
+            self.tile[cell] == fill for cell, fill in zip(self.block(i, j), dominoes)
+        )
 
     def fill(self, i, j, dominoes):
         """
@@ -84,9 +86,10 @@ class AztecDiamond(object):
         """
         for i, j in self.cells:
             try:
-                if (self.check(i, j, ['n', 'n', 's', 's'])
-                        or self.check(i, j, ['e', 'w', 'e', 'w'])):
-                    self.fill(i, j, [None]*4)
+                if self.check(i, j, ["n", "n", "s", "s"]) or self.check(
+                    i, j, ["e", "w", "e", "w"]
+                ):
+                    self.fill(i, j, [None] * 4)
             except KeyError:
                 pass
         return self
@@ -97,14 +100,14 @@ class AztecDiamond(object):
         """
         new_board = AztecDiamond(self.order + 1)
         for (i, j) in self.cells:
-            if self.tile[(i, j)] == 'n':
-                new_board.tile[(i, j+1)] = 'n'
-            if self.tile[(i, j)] == 's':
-                new_board.tile[(i, j-1)] = 's'
-            if self.tile[(i, j)] == 'w':
-                new_board.tile[(i-1, j)] = 'w'
-            if self.tile[(i, j)] == 'e':
-                new_board.tile[(i+1, j)] = 'e'
+            if self.tile[(i, j)] == "n":
+                new_board.tile[(i, j + 1)] = "n"
+            if self.tile[(i, j)] == "s":
+                new_board.tile[(i, j - 1)] = "s"
+            if self.tile[(i, j)] == "w":
+                new_board.tile[(i - 1, j)] = "w"
+            if self.tile[(i, j)] == "e":
+                new_board.tile[(i + 1, j)] = "e"
         return new_board
 
     def create(self):
@@ -116,11 +119,11 @@ class AztecDiamond(object):
         """
         for i, j in self.cells:
             try:
-                if self.check(i, j, [None]*4):
+                if self.check(i, j, [None] * 4):
                     if random.random() > 0.5:
-                        self.fill(i, j, ['s', 's', 'n', 'n'])
+                        self.fill(i, j, ["s", "s", "n", "n"])
                     else:
-                        self.fill(i, j, ['w', 'e', 'w', 'e'])
+                        self.fill(i, j, ["w", "e", "w", "e"])
             except KeyError:
                 pass
         return self

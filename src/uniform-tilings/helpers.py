@@ -1,4 +1,5 @@
 from fractions import Fraction
+
 import numpy as np
 
 
@@ -16,15 +17,15 @@ def make_symmetry_matrix(upper_triangle):
     """
     if len(upper_triangle) == 3:
         a12, a13, a23 = upper_triangle
-        M = [[1, a12, a13],
-             [a12, 1, a23],
-             [a13, a23, 1]]
+        M = [[1, a12, a13], [a12, 1, a23], [a13, a23, 1]]
     elif len(upper_triangle) == 6:
         a12, a13, a14, a23, a24, a34 = upper_triangle
-        M = [[1, a12, a13, a14],
-             [a12, 1, a23, a24],
-             [a13, a23, 1, a34],
-             [a14, a24, a34, 1]]
+        M = [
+            [1, a12, a13, a14],
+            [a12, 1, a23, a24],
+            [a13, a23, 1, a34],
+            [a14, a24, a34, 1],
+        ]
     else:
         raise ValueError("Three or six inputs are expected.")
 
@@ -83,15 +84,17 @@ def get_spherical_or_affine_mirrors(coxeter_diagram):
 
     M[0, 0] = 1
     M[1, 0] = C[0, 1]
-    M[1, 1] = np.sqrt(1 - M[1, 0]*M[1, 0])
+    M[1, 1] = np.sqrt(1 - M[1, 0] * M[1, 0])
     M[2, 0] = C[0, 2]
-    M[2, 1] = (C[1, 2] - M[1, 0]*M[2, 0]) / M[1, 1]
-    M[2, 2] = np.sqrt(abs(1 - M[2, 0]*M[2, 0] - M[2, 1]*M[2, 1]))
+    M[2, 1] = (C[1, 2] - M[1, 0] * M[2, 0]) / M[1, 1]
+    M[2, 2] = np.sqrt(abs(1 - M[2, 0] * M[2, 0] - M[2, 1] * M[2, 1]))
     if len(coxeter_matrix) == 4:
         M[3, 0] = C[0, 3]
-        M[3, 1] = (C[1, 3] - M[1, 0]*M[3, 0]) / M[1, 1]
-        M[3, 2] = (C[2, 3] - M[2, 0]*M[3, 0] - M[2, 1]*M[3, 1]) / M[2, 2]
-        M[3, 3] = np.sqrt(abs(1 - M[3, 0]*M[3, 0] - M[3, 1]*M[3, 1] - M[3, 2]*M[3, 2]))
+        M[3, 1] = (C[1, 3] - M[1, 0] * M[3, 0]) / M[1, 1]
+        M[3, 2] = (C[2, 3] - M[2, 0] * M[3, 0] - M[2, 1] * M[3, 1]) / M[2, 2]
+        M[3, 3] = np.sqrt(
+            abs(1 - M[3, 0] * M[3, 0] - M[3, 1] * M[3, 1] - M[3, 2] * M[3, 2])
+        )
     return M
 
 
@@ -103,10 +106,10 @@ def get_hyperbolic_mirrors(coxeter_diagram):
     M = np.zeros_like(C).astype(np.complex)
     M[0, 0] = 1
     M[1, 0] = C[1, 0]
-    M[1, 1] = np.sqrt(1 - M[1, 0]*M[1, 0])
+    M[1, 1] = np.sqrt(1 - M[1, 0] * M[1, 0])
     M[2, 0] = C[2, 0]
-    M[2, 1] = (C[2, 1] - M[2, 0]*M[1, 0]) / M[1, 1]
-    M[2, 2] = np.sqrt(abs(M[2, 0]*M[2, 0] + M[2, 1]*M[2, 1] - 1)) * 1j
+    M[2, 1] = (C[2, 1] - M[2, 0] * M[1, 0]) / M[1, 1]
+    M[2, 2] = np.sqrt(abs(M[2, 0] * M[2, 0] + M[2, 1] * M[2, 1] - 1)) * 1j
     return M
 
 
@@ -118,14 +121,16 @@ def get_hyperbolic_honeycomb_mirrors(coxeter_diagram):
     M = np.zeros_like(C).astype(np.complex)
     M[0, 0] = 1
     M[1, 0] = C[1, 0]
-    M[1, 1] = np.sqrt(1 - M[1, 0]*M[1, 0])
+    M[1, 1] = np.sqrt(1 - M[1, 0] * M[1, 0])
     M[2, 0] = C[2, 0]
-    M[2, 1] = (C[2, 1] - M[2, 0]*M[1, 0]) / M[1, 1]
-    M[2, 2] = np.sqrt(abs(1 - M[2, 0]*M[2, 0] - M[2, 1]*M[2, 1]))
+    M[2, 1] = (C[2, 1] - M[2, 0] * M[1, 0]) / M[1, 1]
+    M[2, 2] = np.sqrt(abs(1 - M[2, 0] * M[2, 0] - M[2, 1] * M[2, 1]))
     M[3, 0] = C[3, 0]
-    M[3, 1] = (C[3, 1] - M[3, 0]*M[1, 0]) / M[1, 1]
-    M[3, 2] = (C[3, 2] - M[3, 0]*M[2, 0] - M[3, 1]*M[2, 1]) / M[2, 2]
-    M[3, 3] = np.sqrt(abs(1 - M[3, 0]*M[3, 0] - M[3, 1]*M[3, 1] - M[3, 2]*M[3, 2])) * 1j
+    M[3, 1] = (C[3, 1] - M[3, 0] * M[1, 0]) / M[1, 1]
+    M[3, 2] = (C[3, 2] - M[3, 0] * M[2, 0] - M[3, 1] * M[2, 1]) / M[2, 2]
+    M[3, 3] = (
+        np.sqrt(abs(1 - M[3, 0] * M[3, 0] - M[3, 1] * M[3, 1] - M[3, 2] * M[3, 2])) * 1j
+    )
     return M
 
 
@@ -169,20 +174,20 @@ def is_degenerate(cox_mat, active):
     if not any(active):
         return True
     # if p, q, r are all equal to 2 they must be all active
-    if (p == 2 and q == 2 and r == 2):
+    if p == 2 and q == 2 and r == 2:
         return not all(active)
     # so at least one of p, q, r is > 2 and at least one mirror is active
     else:
         # if at least two of p, q, r are > 2 then it's not degenerate
-        if ((p > 2 and q > 2) or (p > 2 and r > 2) or (q > 2 and r > 2)):
+        if (p > 2 and q > 2) or (p > 2 and r > 2) or (q > 2 and r > 2):
             return False
         # so exactly two of p, q, r are equal to 2
-        elif (p == 2 and q == 2):
+        elif p == 2 and q == 2:
             if not m0:
                 return True
             else:
                 return not any([m1, m2])
-        elif (p == 2 and r == 2):
+        elif p == 2 and r == 2:
             if not m1:
                 return True
             else:
@@ -197,6 +202,7 @@ def is_degenerate(cox_mat, active):
 # -------------------------------
 # LaTeX formatting functions
 
+
 def export_latex_array(self, words, symbol=r"s", cols=4):
     r"""
     Export a list words to latex array format.
@@ -208,6 +214,7 @@ def export_latex_array(self, words, symbol=r"s", cols=4):
             ...
             \end{array}
     """
+
     def to_latex(word):
         return "".join(symbol + "_{{{}}}".format(i) for i in word)
 

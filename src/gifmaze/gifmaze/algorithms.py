@@ -19,7 +19,9 @@ import heapq
 import random
 from collections import deque
 from operator import itemgetter
+
 from tqdm import tqdm
+
 from .gifmaze import Maze
 
 
@@ -47,7 +49,7 @@ def wilson(maze, encode_func, speed=50, root=(0, 0)):
         # erase the loop
         maze.mark_path(path[index:], Maze.WALL)
         maze.mark_cell(path[index], Maze.PATH)
-        return path[:index+1]
+        return path[: index + 1]
 
     # initially the tree contains only the root.
     maze.mark_cell(root, Maze.TREE)
@@ -264,8 +266,12 @@ def kruskal(maze, encode_func, speed=30):
 
     parent = {v: v for v in maze.cells}
     rank = {v: 0 for v in maze.cells}
-    edges = [(random.random(), u, v) for u in maze.cells
-             for v in maze.get_neighbors(u) if u < v]
+    edges = [
+        (random.random(), u, v)
+        for u in maze.cells
+        for v in maze.get_neighbors(u)
+        if u < v
+    ]
 
     def find(v):
         """find the root of the subtree that v belongs to."""
@@ -327,7 +333,7 @@ def astar(maze, encode_func, speed, start=None, end=None):
         """
         xA, yA = cellA
         xB, yB = cellB
-        return ((xA - yA) * (xA - yA) + (xB - yB) * (xB - yB))**0.5
+        return ((xA - yA) * (xA - yA) + (xB - yB) * (xB - yB)) ** 0.5
 
     bar = tqdm(total=len(maze.cells) - 1, desc="Solving maze by A*")
     came_from = {start: start}

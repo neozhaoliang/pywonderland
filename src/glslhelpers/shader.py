@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import ctypes as ct
+
 import pyglet.gl as gl
 
 
@@ -54,7 +55,7 @@ class Shader(object):
             shader,
             len(src),
             ct.cast(ct.pointer(src_p), ct.POINTER(ct.POINTER(ct.c_char))),
-            None
+            None,
         )
 
         # 3. compile the shader
@@ -94,7 +95,9 @@ class Shader(object):
 
         if not link_status:
             info_length = gl.GLint(0)
-            gl.glGetProgramiv(self.program, gl.GL_INFO_LOG_LENGTH, ct.byref(info_length))
+            gl.glGetProgramiv(
+                self.program, gl.GL_INFO_LOG_LENGTH, ct.byref(info_length)
+            )
             error_info = ct.create_string_buffer(info_length.value)
             gl.glGetProgramInfoLog(self.program, info_length, None, error_info)
             print(error_info.value)
@@ -114,21 +117,15 @@ class Shader(object):
 
     def uniformi(self, name, *data):
         location = gl.glGetUniformLocation(self.program, name.encode("ascii"))
-        {
-            1: gl.glUniform1i,
-            2: gl.glUniform2i,
-            3: gl.glUniform3i,
-            4: gl.glUniform4i
-        }[len(data)](location, *data)
+        {1: gl.glUniform1i, 2: gl.glUniform2i, 3: gl.glUniform3i, 4: gl.glUniform4i}[
+            len(data)
+        ](location, *data)
 
     def uniformf(self, name, *data):
         location = gl.glGetUniformLocation(self.program, name.encode("ascii"))
-        {
-            1: gl.glUniform1f,
-            2: gl.glUniform2f,
-            3: gl.glUniform3f,
-            4: gl.glUniform4f
-        }[len(data)](location, *data)
+        {1: gl.glUniform1f, 2: gl.glUniform2f, 3: gl.glUniform3f, 4: gl.glUniform4f}[
+            len(data)
+        ](location, *data)
 
     def uniformfv(self, name, size, data):
         data_ctype = (gl.GLfloat * len(data))(*data)
@@ -137,7 +134,7 @@ class Shader(object):
             1: gl.glUniform1fv,
             2: gl.glUniform2fv,
             3: gl.glUniform3fv,
-            4: gl.glUniform4fv
+            4: gl.glUniform4fv,
         }[len(data) // size](location, size, data_ctype)
 
     def vertex_attrib(self, name, data, size=2, stride=0, offset=0):
@@ -157,10 +154,14 @@ class Shader(object):
         vbo_id = gl.GLuint(0)
         gl.glGenBuffers(1, ct.byref(vbo_id))
         gl.glBindBuffer(gl.GL_ARRAY_BUFFER, vbo_id)
-        gl.glBufferData(gl.GL_ARRAY_BUFFER, ct.sizeof(data_ctype), data_ctype, gl.GL_STATIC_DRAW)
+        gl.glBufferData(
+            gl.GL_ARRAY_BUFFER, ct.sizeof(data_ctype), data_ctype, gl.GL_STATIC_DRAW
+        )
 
         location = gl.glGetAttribLocation(self.program, name.encode("ascii"))
         gl.glEnableVertexAttribArray(location)
-        gl.glVertexAttribPointer(location, size, gl.GL_FLOAT, gl.GL_FALSE, stride, ct.c_void_p(offset))
+        gl.glVertexAttribPointer(
+            location, size, gl.GL_FLOAT, gl.GL_FALSE, stride, ct.c_void_p(offset)
+        )
         gl.glBindBuffer(gl.GL_ARRAY_BUFFER, 0)
         return vbo_id

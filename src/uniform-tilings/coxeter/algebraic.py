@@ -62,7 +62,9 @@ class AlgebraicInteger(object):
             return AlgebraicInteger(self.base, self.poly + beta)
         if isinstance(beta, AlgebraicInteger):
             return AlgebraicInteger(self.base, self.poly + beta.poly)
-        raise ValueError("type {} not supported for algebraic integer arithmetic".format(type(beta)))
+        raise ValueError(
+            "type {} not supported for algebraic integer arithmetic".format(type(beta))
+        )
 
     def __sub__(self, beta):
         return self + (-beta)
@@ -75,7 +77,9 @@ class AlgebraicInteger(object):
             return AlgebraicInteger(self.base, self.poly * beta)
         if isinstance(beta, AlgebraicInteger):
             return AlgebraicInteger(self.base, self.poly * beta.poly)
-        raise ValueError("type {} not supported for algebraic integer arithmetic".format(type(beta)))
+        raise ValueError(
+            "type {} not supported for algebraic integer arithmetic".format(type(beta))
+        )
 
     __isub__ = __sub__
 

@@ -34,20 +34,20 @@ Live demos on shadertoy:
 :copyright (c) 2019 by Zhao Liang.
 """
 import sys
+
 sys.path.append("../glslhelpers")
 
-import time
 import argparse
 import pathlib
-
+import time
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
 
 import pyglet
+
 pyglet.options["debug_gl"] = False
 import pyglet.gl as gl
 import pyglet.window.key as key
-
 from shader import Shader
 
 
@@ -56,16 +56,17 @@ def load():
     """
     root = tk.Tk()
     root.withdraw()
-    filename = askopenfilename(initialdir="./glsl",
-                               initialfile="pseudoKleinian.frag",
-                               filetypes=[("Fragment Shader Files", "*.frag")],
-                               title="Choose a fragment shader file")
+    filename = askopenfilename(
+        initialdir="./glsl",
+        initialfile="pseudoKleinian.frag",
+        filetypes=[("Fragment Shader Files", "*.frag")],
+        title="Choose a fragment shader file",
+    )
     root.quit()
     return filename
 
 
 class Fractal3D(pyglet.window.Window):
-
     def __init__(self, width, height, scene_file, AA=4):
         """
         :param width and height: size of the window in pixels.
@@ -74,13 +75,15 @@ class Fractal3D(pyglet.window.Window):
 
         :param AA: antialiasing level, AA=4 is good enough (but also slow).
         """
-        pyglet.window.Window.__init__(self,
-                                      width,
-                                      height,
-                                      caption="Fractal3D",
-                                      resizable=True,
-                                      visible=False,
-                                      vsync=False)
+        pyglet.window.Window.__init__(
+            self,
+            width,
+            height,
+            caption="Fractal3D",
+            resizable=True,
+            visible=False,
+            vsync=False,
+        )
         self._start_time = time.clock()
         self.AA = AA
         self.shader = Shader(["./glsl/fractal3d.vert"], [scene_file])
@@ -127,18 +130,19 @@ class Fractal3D(pyglet.window.Window):
         if fps is None:
             pyglet.clock.schedule(lambda dt: None)
         else:
-            pyglet.clock.schedule_interval(lambda dt: None, 1.0/fps)
+            pyglet.clock.schedule_interval(lambda dt: None, 1.0 / fps)
         pyglet.app.run()
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-size", metavar="s", type=str,
-                        default="800x480", help="window size in pixels")
-    parser.add_argument("-aa", type=int, default=4,
-                        help="antialiasing depth")
-    parser.add_argument("-file", metavar="f", type=str,
-                        default=None, help="scene file name")
+    parser.add_argument(
+        "-size", metavar="s", type=str, default="800x480", help="window size in pixels"
+    )
+    parser.add_argument("-aa", type=int, default=4, help="antialiasing depth")
+    parser.add_argument(
+        "-file", metavar="f", type=str, default=None, help="scene file name"
+    )
     args = parser.parse_args()
     w, h = [int(x) for x in args.size.split("x")]
     scene_file = args.file if args.file is not None else load()

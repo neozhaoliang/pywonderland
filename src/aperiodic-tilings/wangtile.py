@@ -9,20 +9,22 @@ Code exported from srtuss's shadertoy project at
 
 """
 import sys
+
 sys.path.append("../glslhelpers")
 
 import time
 
 import pyglet
+
 pyglet.options["debug_gl"] = False
 import pyglet.gl as gl
 import pyglet.window.key as key
-
 from shader import Shader
 from texture import create_cubemap_texture
 
-
-CUBEMAP_IMAGES = ["../glslhelpers/textures/st_peters_blurred{}.png".format(i) for i in range(6)]
+CUBEMAP_IMAGES = [
+    "../glslhelpers/textures/st_peters_blurred{}.png".format(i) for i in range(6)
+]
 
 
 class WangTile(pyglet.window.Window):
@@ -38,13 +40,15 @@ class WangTile(pyglet.window.Window):
 
         :param zoom: zoom factor of the scene.
         """
-        pyglet.window.Window.__init__(self,
-                                      width,
-                                      height,
-                                      caption="Wang-Tile",
-                                      resizable=True,
-                                      visible=False,
-                                      vsync=False)
+        pyglet.window.Window.__init__(
+            self,
+            width,
+            height,
+            caption="Wang-Tile",
+            resizable=True,
+            visible=False,
+            vsync=False,
+        )
         self._start_time = time.clock()
         self.shader = Shader(["./glsl/wang.vert"], ["./glsl/wang.frag"])
 
@@ -82,7 +86,7 @@ class WangTile(pyglet.window.Window):
         if fps is None:
             pyglet.clock.schedule(lambda dt: None)
         else:
-            pyglet.clock.schedule_interval(lambda dt: None, 1.0/fps)
+            pyglet.clock.schedule_interval(lambda dt: None, 1.0 / fps)
         pyglet.app.run()
 
 

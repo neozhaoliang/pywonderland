@@ -10,7 +10,8 @@ For a detailed discussion of the math see Humphreys's book
     "Reflection Groups and Coxeter Groups", section 17, chapter 3.
 
 """
-from itertools import product, combinations
+from itertools import combinations, product
+
 import numpy as np
 
 try:
@@ -19,14 +20,16 @@ except ImportError:
     import cairo
 
 
-COLORS = [(0.894, 0.102, 0.11),
-          (0.216, 0.494, 0.72),
-          (0.302, 0.686, 0.29),
-          (0.596, 0.306, 0.639),
-          (1.0, 0.5, 0),
-          (1.0, 1.0, 0.2),
-          (0.65, 0.337, 0.157),
-          (0.97, 0.506, 0.75)]
+COLORS = [
+    (0.894, 0.102, 0.11),
+    (0.216, 0.494, 0.72),
+    (0.302, 0.686, 0.29),
+    (0.596, 0.306, 0.639),
+    (1.0, 0.5, 0),
+    (1.0, 1.0, 0.2),
+    (0.65, 0.337, 0.157),
+    (0.97, 0.506, 0.75),
+]
 
 
 # --- step one: compute all roots and edges ---
@@ -56,22 +59,26 @@ roots = np.array(roots).astype(np.int)
 # two roots are connected if and only if they form an angle of pi/3.
 edges = []
 for i, r in enumerate(roots):
-    for j, s in enumerate(roots[i+1:], i+1):
-        if np.sum((r - s)**2) == 8:
+    for j, s in enumerate(roots[i + 1 :], i + 1):
+        if np.sum((r - s) ** 2) == 8:
             edges.append([i, j])
 
 
 # --- Step two: compute a basis of the Coxeter plane ---
 
 # A set of simple roots listed by rows of 'delta'
-delta = np.array([[1, -1, 0, 0, 0, 0, 0, 0],
-                  [0, 1, -1, 0, 0, 0, 0, 0],
-                  [0, 0, 1, -1, 0, 0, 0, 0],
-                  [0, 0, 0, 1, -1, 0, 0, 0],
-                  [0, 0, 0, 0, 1, -1, 0, 0],
-                  [0, 0, 0, 0, 0, 1, 1, 0],
-                  [-.5, -.5, -.5, -.5, -.5, -.5, -.5, -.5],
-                  [0, 0, 0, 0, 0, 1, -1, 0]])
+delta = np.array(
+    [
+        [1, -1, 0, 0, 0, 0, 0, 0],
+        [0, 1, -1, 0, 0, 0, 0, 0],
+        [0, 0, 1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 1, -1, 0, 0, 0],
+        [0, 0, 0, 0, 1, -1, 0, 0],
+        [0, 0, 0, 0, 0, 1, 1, 0],
+        [-0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5],
+        [0, 0, 0, 0, 0, 1, -1, 0],
+    ]
+)
 
 # Dynkin diagram of E8:
 # 1---2---3---4---5---6---7
@@ -116,7 +123,7 @@ vertex_colors = np.zeros((len(roots), 3))
 modulus = np.linalg.norm(roots_2d, axis=1)
 ind_array = modulus.argsort()
 for i in range(8):
-    for j in ind_array[30*i: 30*(i+1)]:
+    for j in ind_array[30 * i : 30 * (i + 1)]:
         vertex_colors[j] = COLORS[i]
 
 
@@ -129,7 +136,7 @@ markersize = 0.05
 
 surface = cairo.ImageSurface(cairo.FORMAT_RGB24, image_size, image_size)
 ctx = cairo.Context(surface)
-ctx.scale(image_size/(extent*2.0), -image_size/(extent*2.0))
+ctx.scale(image_size / (extent * 2.0), -image_size / (extent * 2.0))
 ctx.translate(extent, -extent)
 ctx.set_source_rgb(1, 1, 1)
 ctx.paint()
@@ -148,9 +155,9 @@ for i in range(len(roots)):
     color = vertex_colors[i]
     grad = cairo.RadialGradient(x, y, 0.0001, x, y, markersize)
     grad.add_color_stop_rgb(0, *color)
-    grad.add_color_stop_rgb(1, *color/2)
+    grad.add_color_stop_rgb(1, *color / 2)
     ctx.set_source(grad)
-    ctx.arc(x, y, markersize, 0, 2*np.pi)
+    ctx.arc(x, y, markersize, 0, 2 * np.pi)
     ctx.fill()
 
-surface.write_to_png('E8.png')
+surface.write_to_png("E8.png")

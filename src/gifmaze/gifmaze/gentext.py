@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from PIL import Image, ImageFont, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 
 def generate_text_mask(size, text, fontfile, fontsize):
@@ -17,10 +17,10 @@ def generate_text_mask(size, text, fontfile, fontsize):
     :param fontfile: path to your .ttf font file.
     :param fontsize: size of the font.
     """
-    img = Image.new('L', size, 'white')
+    img = Image.new("L", size, "white")
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype(fontfile, fontsize)
     size_w, size_h = font.getsize(text)
     xy = (size[0] - size_w) // 2, size[1] // 2 - 5 * size_h // 8
-    draw.text(xy, text, 'black', font)
+    draw.text(xy, text, "black", font)
     return img

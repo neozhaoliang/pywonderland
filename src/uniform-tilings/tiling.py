@@ -29,8 +29,9 @@ that preserve this quadratic form.
 :copyright (c) 2019 by Zhao Liang
 """
 import os
-from itertools import combinations
 from functools import partial
+from itertools import combinations
+
 import numpy as np
 
 try:
@@ -40,18 +41,18 @@ except ImportError:
 
 # third-party module for drawing hyperbolic geodesic lines
 import drawSvg
-from hyperbolic import euclid
-from hyperbolic.poincare.shapes import Polygon, Point, Line
-from hyperbolic.poincare import Transform
+import helpers
 
 # process bar
 import tqdm
+
 # color conversions
 from colour import Color
-
 from coxeter import CoxeterGroup
 from dihedral import DihedralFace
-import helpers
+from hyperbolic import euclid
+from hyperbolic.poincare import Transform
+from hyperbolic.poincare.shapes import Line, Point, Polygon
 
 
 def get_euclidean_center_radius(P, hrad):
@@ -80,7 +81,7 @@ def get_euclidean_center_radius_uhp(xy, hrad):
 
 
 def dimmed(c):
-    return Color(hue=c.hue, saturation=c.saturation, luminance=c.luminance*0.6)
+    return Color(hue=c.hue, saturation=c.saturation, luminance=c.luminance * 0.6)
 
 
 def divide_line(hwidth, k):
@@ -338,19 +339,21 @@ class Poincare2D(Tiling2D):
     def get_init_point(self, init_dist):
         return helpers.get_point_from_distance(self.mirrors, init_dist)
 
-    def render(self,
-               output,
-               image_size,
-               show_vertices_labels=False,
-               draw_alternative_domains=True,
-               draw_polygon_edges=True,
-               draw_inner_lines=False,
-               draw_labelled_edges=False,
-               vertex_size=0.1,
-               line_width=0.07,
-               checker=False,
-               checker_colors=("#1E7344", "#EAF78D"),
-               face_colors=("lightcoral", "mistyrose", "steelblue")):
+    def render(
+        self,
+        output,
+        image_size,
+        show_vertices_labels=False,
+        draw_alternative_domains=True,
+        draw_polygon_edges=True,
+        draw_inner_lines=False,
+        draw_labelled_edges=False,
+        vertex_size=0.1,
+        line_width=0.07,
+        checker=False,
+        checker_colors=("#1E7344", "#EAF78D"),
+        face_colors=("lightcoral", "mistyrose", "steelblue"),
+    ):
         """
         An example drawing function shows how to draw hyperbolic patterns
         with this program.
@@ -429,7 +432,7 @@ class Poincare2D(Tiling2D):
                 loc = self.project(p)
                 P = Point(*loc)
                 d.draw(P, hradius=vertex_size, fill="darkolivegreen")
-                x, y, r = get_euclidean_center_radius(P, hrad=vertex_size*1.3)
+                x, y, r = get_euclidean_center_radius(P, hrad=vertex_size * 1.3)
                 d.draw(drawSvg.Text(str(i), r, x, y, center=0.7, fill="white"))
 
         print("saving to svg...")
@@ -441,7 +444,6 @@ class Poincare2D(Tiling2D):
 
 
 class Euclidean2D(Tiling2D):
-
     @property
     def level(self):
         """Return the z-component of the initial vertex.
@@ -464,14 +466,16 @@ class Euclidean2D(Tiling2D):
     def get_mirrors(self, coxeter_diagram):
         return helpers.get_spherical_or_affine_mirrors(coxeter_diagram)
 
-    def render(self,
-               output,
-               image_width,
-               image_height,
-               extent=30,
-               line_width=0.2,
-               show_vertices_labels=False,
-               face_colors=("thistle", "steelblue", "lightcoral")):
+    def render(
+        self,
+        output,
+        image_width,
+        image_height,
+        extent=30,
+        line_width=0.2,
+        show_vertices_labels=False,
+        face_colors=("thistle", "steelblue", "lightcoral"),
+    ):
         print("=" * 40)
         print(self.get_info())
 
@@ -535,8 +539,9 @@ class Euclidean2D(Tiling2D):
                 ctx.set_source_rgb(*Color("darkolivegreen").rgb)
                 ctx.fill()
                 ctx.set_source_rgb(*Color("papayawhip").rgb)
-                ctx.select_font_face("Serif", cairo.FONT_SLANT_NORMAL,
-                                     cairo.FONT_WEIGHT_BOLD)
+                ctx.select_font_face(
+                    "Serif", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD
+                )
                 _, _, w, h, _, _ = ctx.text_extents(str(i))
                 ctx.move_to(x - w / 2, y + h / 2)
                 ctx.show_text(str(i))
@@ -549,7 +554,6 @@ class Euclidean2D(Tiling2D):
 
 
 class Spherical2D(Tiling2D):
-
     def project(self, v):
         """keep v untouched here since we want to draw a 3d plot of the
            tiling, for 4d polychora it should be stereographic projection.
@@ -580,53 +584,70 @@ class Spherical2D(Tiling2D):
         EDGE_MACRO = "Edge({}, {}, {})\n"
         FACE_MACRO = "Face({}, {}, {})\n"
         with open("./povray/polyhedra-data.inc", "w") as f:
-            f.write(pov_string.format(
-                self.num_vertices,
-                self.num_vertices,
-                helpers.pov_vector_list(self.vertices_coords),
-                "".join(EDGE_MACRO.format(k, i1, i2) for k, elist in self.edge_indices.items()
-                        for i1, i2 in elist)))
+            f.write(
+                pov_string.format(
+                    self.num_vertices,
+                    self.num_vertices,
+                    helpers.pov_vector_list(self.vertices_coords),
+                    "".join(
+                        EDGE_MACRO.format(k, i1, i2)
+                        for k, elist in self.edge_indices.items()
+                        for i1, i2 in elist
+                    ),
+                )
+            )
             for (i, j), flist in self.face_indices.items():
                 k = self.vertex_at_mirrors(i, j)
                 for face in flist:
                     domain1, domain2 = face.get_alternative_domains()
                     for D in domain1:
-                        f.write(FACE_MACRO.format(
-                            k,
-                            0,
-                            "array[{}]{{{}}}".format(len(D), helpers.pov_vector_list(D))
-                        ))
+                        f.write(
+                            FACE_MACRO.format(
+                                k,
+                                0,
+                                "array[{}]{{{}}}".format(
+                                    len(D), helpers.pov_vector_list(D)
+                                ),
+                            )
+                        )
                     for D in domain2:
-                        f.write(FACE_MACRO.format(
-                            k,
-                            1,
-                            "array[{}]{{{}}}".format(len(D), helpers.pov_vector_list(D))
-                        ))
+                        f.write(
+                            FACE_MACRO.format(
+                                k,
+                                1,
+                                "array[{}]{{{}}}".format(
+                                    len(D), helpers.pov_vector_list(D)
+                                ),
+                            )
+                        )
         subprocess.check_call(
-            "cd povray && " +
-            "povray polyhedra.pov " +
-            "+W{} +H{} +A0.001 +R4 ".format(image_size, image_size) +
-            "+O../{}".format(output),
-            shell=True
+            "cd povray && "
+            + "povray polyhedra.pov "
+            + "+W{} +H{} +A0.001 +R4 ".format(image_size, image_size)
+            + "+O../{}".format(output),
+            shell=True,
         )
 
 
 class UpperHalfPlane(Poincare2D):
-
-    def render(self,
-               output,
-               image_size,
-               show_vertices_labels=False,
-               draw_alternative_domains=True,
-               draw_polygon_edges=True,
-               draw_inner_lines=False,
-               draw_labelled_edges=False,
-               vertex_size=0.1,
-               line_width=0.07,
-               checker=False,
-               checker_colors=("#1E7344", "#EAF78D"),
-               face_colors=("lightcoral", "mistyrose", "steelblue")):
-        trans = Transform.merge(Transform.diskToHalf(), Transform.translation((-0.00001, 0)))
+    def render(
+        self,
+        output,
+        image_size,
+        show_vertices_labels=False,
+        draw_alternative_domains=True,
+        draw_polygon_edges=True,
+        draw_inner_lines=False,
+        draw_labelled_edges=False,
+        vertex_size=0.1,
+        line_width=0.07,
+        checker=False,
+        checker_colors=("#1E7344", "#EAF78D"),
+        face_colors=("lightcoral", "mistyrose", "steelblue"),
+    ):
+        trans = Transform.merge(
+            Transform.diskToHalf(), Transform.translation((-0.00001, 0))
+        )
         d = drawSvg.Drawing(12, 6, origin=(-6, 0))
         d.append(drawSvg.Rectangle(-10, -10, 20, 20, fill="silver"))
 
@@ -670,7 +691,12 @@ class UpperHalfPlane(Poincare2D):
                         d.draw(poly, transform=trans, fill="papayawhip", hwidth=0.015)
                 # outmost polygon contours
                 if draw_polygon_edges:
-                    d.draw(polygon, transform=trans, hwidth=line_width, fill="darkolivegreen")
+                    d.draw(
+                        polygon,
+                        transform=trans,
+                        hwidth=line_width,
+                        fill="darkolivegreen",
+                    )
 
                 bar.update(1)
 
@@ -686,11 +712,20 @@ class UpperHalfPlane(Poincare2D):
                         hl = Line.fromPoints(p[0], p[1], q[0], q[1], segment=True)
                         if k == 1:
                             x = divide_line(line_width, 1)
-                            d.draw(hl, transform=trans, hwidth=(-x, x), fill="papayawhip")
+                            d.draw(
+                                hl, transform=trans, hwidth=(-x, x), fill="papayawhip"
+                            )
                         if k == 2:
                             x1, x2 = divide_line(line_width, 2)
-                            d.draw(hl, transform=trans, hwidth=(x1, x2), fill="papayawhip")
-                            d.draw(hl, transform=trans, hwidth=(-x2, -x1), fill="papayawhip")
+                            d.draw(
+                                hl, transform=trans, hwidth=(x1, x2), fill="papayawhip"
+                            )
+                            d.draw(
+                                hl,
+                                transform=trans,
+                                hwidth=(-x2, -x1),
+                                fill="papayawhip",
+                            )
 
         # draw vertices with labels
         if show_vertices_labels:

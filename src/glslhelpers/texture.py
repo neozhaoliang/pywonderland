@@ -2,20 +2,31 @@
 Helper functions for creating textures from images or numpy arrays.
 """
 import ctypes as ct
-from PIL import Image
+
 import pyglet
 import pyglet.gl as gl
+from PIL import Image
 
 
 def create_texture_from_ndarray(array):
     """Create a 2D texture from a numpy ndarray.
     """
     height, width = array.shape[:2]
-    texture = pyglet.image.Texture.create_for_size(gl.GL_TEXTURE_2D, width, height,
-                                                   gl.GL_RGBA32F_ARB)
+    texture = pyglet.image.Texture.create_for_size(
+        gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F_ARB
+    )
     gl.glBindTexture(texture.target, texture.id)
-    gl.glTexImage2D(texture.target, texture.level, gl.GL_RGBA32F_ARB,
-                    width, height, 0, gl.GL_RGBA, gl.GL_FLOAT, array.ctypes.data)
+    gl.glTexImage2D(
+        texture.target,
+        texture.level,
+        gl.GL_RGBA32F_ARB,
+        width,
+        height,
+        0,
+        gl.GL_RGBA,
+        gl.GL_FLOAT,
+        array.ctypes.data,
+    )
     gl.glTexParameteri(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_WRAP_S, gl.GL_CLAMP_TO_EDGE)
     gl.glTexParameteri(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_WRAP_T, gl.GL_CLAMP_TO_EDGE)
     gl.glBindTexture(texture.target, 0)
@@ -34,8 +45,17 @@ def create_image_texture(imgfile):
     gl.glTexParameteri(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_MAG_FILTER, gl.GL_LINEAR)
     gl.glTexParameteri(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_WRAP_S, gl.GL_CLAMP_TO_EDGE)
     gl.glTexParameteri(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_WRAP_T, gl.GL_CLAMP_TO_EDGE)
-    gl.glTexImage2D(gl.GL_TEXTURE_2D, 0, gl.GL_RGBA,
-                    image.width, image.height, 0, gl.GL_RGBA, gl.GL_UNSIGNED_BYTE, data)
+    gl.glTexImage2D(
+        gl.GL_TEXTURE_2D,
+        0,
+        gl.GL_RGBA,
+        image.width,
+        image.height,
+        0,
+        gl.GL_RGBA,
+        gl.GL_UNSIGNED_BYTE,
+        data,
+    )
     gl.glBindTexture(tex, 0)
     return tex
 
@@ -53,10 +73,18 @@ def create_cubemap_texture(imgfiles):
     # bind it to `GL_TEXTURE_CUBE_MAP` and set the filter and wrap mode
     gl.glBindTexture(gl.GL_TEXTURE_CUBE_MAP, cubemap)
     gl.glTexParameteri(gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_MAG_FILTER, gl.GL_LINEAR)
-    gl.glTexParameteri(gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_MIN_FILTER, gl.GL_LINEAR_MIPMAP_LINEAR)
-    gl.glTexParameteri(gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_WRAP_S, gl.GL_CLAMP_TO_EDGE)
-    gl.glTexParameteri(gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_WRAP_T, gl.GL_CLAMP_TO_EDGE)
-    gl.glTexParameteri(gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_WRAP_R, gl.GL_CLAMP_TO_EDGE)
+    gl.glTexParameteri(
+        gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_MIN_FILTER, gl.GL_LINEAR_MIPMAP_LINEAR
+    )
+    gl.glTexParameteri(
+        gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_WRAP_S, gl.GL_CLAMP_TO_EDGE
+    )
+    gl.glTexParameteri(
+        gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_WRAP_T, gl.GL_CLAMP_TO_EDGE
+    )
+    gl.glTexParameteri(
+        gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_WRAP_R, gl.GL_CLAMP_TO_EDGE
+    )
 
     faces = [Image.open(img) for img in imgfiles]
     # set the faces of the cubemap texture
@@ -67,8 +95,17 @@ def create_cubemap_texture(imgfiles):
         except TypeError:
             data = face.tobytes("raw", "RGBA", 0, -1)
 
-        gl.glTexImage2D(gl.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, gl.GL_RGBA,
-                        width, height, 0, gl.GL_RGBA, gl.GL_UNSIGNED_BYTE, data)
+        gl.glTexImage2D(
+            gl.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+            0,
+            gl.GL_RGBA,
+            width,
+            height,
+            0,
+            gl.GL_RGBA,
+            gl.GL_UNSIGNED_BYTE,
+            data,
+        )
 
     gl.glGenerateMipmap(gl.GL_TEXTURE_CUBE_MAP)
     gl.glBindTexture(gl.GL_TEXTURE_CUBE_MAP, 0)

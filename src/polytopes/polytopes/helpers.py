@@ -3,6 +3,7 @@
 Some helper functions for building the geometry.
 """
 import sys
+
 import numpy as np
 
 
@@ -45,7 +46,7 @@ def make_symmetry_matrix(upper_triangle):
     Make a symmetric matrix from a list of integers/rationals.
     """
     n = int((2 * len(upper_triangle)) ** 0.5) + 1
-    if len(upper_triangle) != (n*n - n) / 2:
+    if len(upper_triangle) != (n * n - n) / 2:
         raise ValueError("Invalid input sequence")
     ind = 0
     cox_mat = np.eye(n, dtype="object")
@@ -88,10 +89,12 @@ def get_mirrors(coxeter_diagram):
     """
     # error handling function when the input coxeter matrix is invalid.
     def err_handler(err_type, flag):
-        print("Invalid input Coxeter diagram. This diagram does not give a finite \
+        print(
+            "Invalid input Coxeter diagram. This diagram does not give a finite \
 symmetry group of an uniform polytope. See \
 https://en.wikipedia.org/wiki/Coxeter_group#Symmetry_groups_of_regular_polytopes \
-for a complete list of valid Coxeter diagrams.")
+for a complete list of valid Coxeter diagrams."
+        )
         sys.exit(1)
 
     np.seterrcall(err_handler)

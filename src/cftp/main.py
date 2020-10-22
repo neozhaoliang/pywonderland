@@ -17,13 +17,12 @@ except ImportError:
 
 from cftp import LozengeTiling, run_cftp
 
-
 TOP_COLOR = (0.89, 0.1, 0.11)
 LEFT_COLOR = (1, 0.5, 0)
 RIGHT_COLOR = (0.21, 0.5, 0.7)
 EDGE_COLOR = (0, 0, 0)
 LINE_WIDTH = 0.12
-HALFSQRT3 = 0.5 * 3**0.5
+HALFSQRT3 = 0.5 * 3 ** 0.5
 
 
 def square_to_hex(verts):

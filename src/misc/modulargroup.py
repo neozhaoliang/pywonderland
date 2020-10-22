@@ -38,8 +38,8 @@ reference: see the essay by Bill Casselman
     "https://www.math.ubc.ca/~cass/research/pdf/Automata.pdf"
 
 """
-import collections
 import cmath
+import collections
 
 try:
     import cairocffi as cairo
@@ -49,7 +49,7 @@ except ImportError:
 
 # A fundamental domain for the action of the modular group
 # on the upper plane.
-FUND_DOMAIN = [cmath.exp(cmath.pi*1j/3), cmath.exp(cmath.pi*2j/3), None]
+FUND_DOMAIN = [cmath.exp(cmath.pi * 1j / 3), cmath.exp(cmath.pi * 2j / 3), None]
 
 # The automaton that generates all words in the modular group,
 # 0 is the starting state, each element g correspondes to a unique
@@ -58,25 +58,27 @@ FUND_DOMAIN = [cmath.exp(cmath.pi*1j/3), cmath.exp(cmath.pi*2j/3), None]
 # correspondes to the element "ACAA" because the first step takes 0 to 1 is
 # labelled by "A", the second step takes 1 to 3 is labelled by "C",
 # the third step takes 3 to 4 is labelled by "A", ...
-AUTOMATON = {0: {'A': 1, 'B': 2, 'C': 3},
-             1: {'A': 1, 'C': 3},
-             2: {'B': 2, 'C': 3},
-             3: {'A': 4, 'B': 5},
-             4: {'A': 8},
-             5: {'B': 6},
-             6: {'B': 2, 'C': 7},
-             7: {'A': 4},
-             8: {'A': 1, 'C': 9},
-             9: {'B': 5}}
+AUTOMATON = {
+    0: {"A": 1, "B": 2, "C": 3},
+    1: {"A": 1, "C": 3},
+    2: {"B": 2, "C": 3},
+    3: {"A": 4, "B": 5},
+    4: {"A": 8},
+    5: {"B": 6},
+    6: {"B": 2, "C": 7},
+    7: {"A": 4},
+    8: {"A": 1, "C": 9},
+    9: {"B": 5},
+}
 
 
 # None means 'infinity'
 def A(z):
-    return None if z is None else z+1
+    return None if z is None else z + 1
 
 
 def B(z):
-    return None if z is None else z-1
+    return None if z is None else z - 1
 
 
 def C(z):
@@ -85,17 +87,17 @@ def C(z):
     elif z == 0j:
         return None
     else:
-        return -1/z
+        return -1 / z
 
 
 def transform(symbol, domain):
     # A domain is specified by a list of comlex numbers on its boundary.
-    func = {'A': A, 'B': B, 'C': C}[symbol]
+    func = {"A": A, "B": B, "C": C}[symbol]
     return [func(z) for z in domain]
 
 
 def traverse(length, start_domain):
-    queue = collections.deque([('', 0, start_domain)])
+    queue = collections.deque([("", 0, start_domain)])
     while queue:
         word, state, domain = queue.popleft()
         yield word, state, domain
@@ -117,16 +119,15 @@ class HyperbolicDrawing(cairo.Context):
         width = surface.get_width()
         height = surface.get_height()
 
-        xlim = kwargs.get('xlim', [-2, 2])
+        xlim = kwargs.get("xlim", [-2, 2])
         x_min, x_max = xlim
-        ylim = kwargs.get('ylim', [0, 2])
+        ylim = kwargs.get("ylim", [0, 2])
         y_min, y_max = ylim
 
-        self.scale(width * 1.0 / (x_max - x_min),
-                   height * 1.0 / (y_min - y_max))
+        self.scale(width * 1.0 / (x_max - x_min), height * 1.0 / (y_min - y_max))
         self.translate(abs(x_min), -y_max)
 
-        bg_color = kwargs.get('background_color', (1, 1, 1))
+        bg_color = kwargs.get("background_color", (1, 1, 1))
         self.set_source_rgb(*bg_color)
         self.paint()
 
@@ -139,9 +140,9 @@ class HyperbolicDrawing(cairo.Context):
 
         else:
             center = 0.5 * (x0 + x1) + 0.5 * (y0 + y1) * dy / dx
-            theta0 = cmath.phase(x0 - center + y0*1j)
-            theta1 = cmath.phase(x1 - center + y1*1j)
-            r = abs(x0 - center + y0*1j)
+            theta0 = cmath.phase(x0 - center + y0 * 1j)
+            theta1 = cmath.phase(x1 - center + y1 * 1j)
+            r = abs(x0 - center + y0 * 1j)
 
             # we must ensure that the arc ends at (x1, y1)
             if x0 < x1:
@@ -149,15 +150,16 @@ class HyperbolicDrawing(cairo.Context):
             else:
                 self.arc(center, 0, r, theta0, theta1)
 
-    def render_domain(self, domain, facecolor=None,
-                      edgecolor=(0, 0, 0), linewidth=0.01):
+    def render_domain(
+        self, domain, facecolor=None, edgecolor=(0, 0, 0), linewidth=0.01
+    ):
         # The points defining the domain may contain the infinity (None).
         # In this program the infinity always appear at the end,
         # we use 10000 as infinity when drawing lines.
         x0, y0 = domain[0].real, domain[0].imag
         if domain[-1] is None:
             x1 = domain[-2].real
-            domain = domain[:-1] + [x1 + 10000*1j, x0 + 10000*1j]
+            domain = domain[:-1] + [x1 + 10000 * 1j, x0 + 10000 * 1j]
 
         self.move_to(x0, y0)
         for z in domain[1:]:
@@ -173,7 +175,7 @@ class HyperbolicDrawing(cairo.Context):
         self.stroke()
 
 
-z = 1.32*1j
+z = 1.32 * 1j
 FUND_HEX = [z, A(z), A(C(z)), A(C(A(z))), A(C(A(C(z)))), A(C(A(C(A(z)))))]
 
 
@@ -195,16 +197,18 @@ def main(width, height, depth, xlim=None, ylim=None):
 
     for word, _, triangle in traverse(depth, FUND_DOMAIN):
         if word:
-            if word[0] == 'C':
+            if word[0] == "C":
                 fc_color = (1, 0.5, 0.75)
             else:
                 fc_color = None
         else:
             fc_color = (0.5, 0.5, 0.5)
 
-        ctx.render_domain(triangle, facecolor=fc_color, linewidth=0.04/(len(word)+1))
+        ctx.render_domain(
+            triangle, facecolor=fc_color, linewidth=0.04 / (len(word) + 1)
+        )
 
-    surface.write_to_png('modulargroup.png')
+    surface.write_to_png("modulargroup.png")
 
     surface = cairo.ImageSurface(cairo.FORMAT_RGB24, width, height)
     ctx = HyperbolicDrawing(surface)
@@ -222,16 +226,20 @@ def main(width, height, depth, xlim=None, ylim=None):
             linewidth = 0.02
         else:
             linewidth = 0.04 / (len(word) + 1)
-        ctx.render_domain(hexagon, facecolor=(1, 0.5, 0.75),
-                          edgecolor=(0, 0, 0), linewidth=linewidth)
+        ctx.render_domain(
+            hexagon, facecolor=(1, 0.5, 0.75), edgecolor=(0, 0, 0), linewidth=linewidth
+        )
 
     for word, _, triangle in traverse(depth, FUND_DOMAIN):
-        ctx.render_domain(triangle, facecolor=None,
-                          edgecolor=(0.5, 0.5, 0.75),
-                          linewidth=0.02/(1 + len(word)))
+        ctx.render_domain(
+            triangle,
+            facecolor=None,
+            edgecolor=(0.5, 0.5, 0.75),
+            linewidth=0.02 / (1 + len(word)),
+        )
 
-    surface.write_to_png('cayley_graph.png')
+    surface.write_to_png("cayley_graph.png")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(width=800, height=400, depth=15)

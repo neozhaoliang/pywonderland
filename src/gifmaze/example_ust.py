@@ -18,6 +18,7 @@ grid and counts/draws the number of leaves of T.
 """
 import random
 from itertools import product
+
 import matplotlib.pyplot as plt
 
 
@@ -25,6 +26,7 @@ def grid_graph(*size):
     """
     Return a grid graph stored in a dict.
     """
+
     def neighbors(v):
         neighborhood = []
         for i in range(len(size)):
@@ -57,9 +59,9 @@ def main(width, height):
             tree.add(v)
             v = parent[v]
 
-    fig = plt.figure(figsize=(width // 10, height//10), dpi=100)
+    fig = plt.figure(figsize=(width // 10, height // 10), dpi=100)
     ax = fig.add_axes([0, 0, 1, 1], aspect=1)
-    ax.axis('off')
+    ax.axis("off")
     ax.axis([-1, width, -1, height])
 
     leaves = {node for node in G.keys() if node not in parent.values()}
@@ -68,15 +70,15 @@ def main(width, height):
     for key, item in parent.items():
         a, b = key
         x, y = item
-        ax.plot([a, x], [b, y], 'k', lw=3)
+        ax.plot([a, x], [b, y], "k", lw=3)
 
     # draw the leaves
     for x, y in leaves:
-        ax.plot([x], [y], 'bo', ms=4)
+        ax.plot([x], [y], "bo", ms=4)
 
     n = len(G)
     m = len(leaves)
-    print("leaves/allnodes = {}/{} = {}".format(m, n, m/n))
+    print("leaves/allnodes = {}/{} = {}".format(m, n, m / n))
     fig.savefig("ust-leaves-{}-{}.png".format(m, n))
 
 

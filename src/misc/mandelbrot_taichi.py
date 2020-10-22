@@ -7,9 +7,8 @@ Adapted from iq's shadertoy work at "https://www.shadertoy.com/view/XdSXWt"
 
 Press `s` to save screenshot and `ESCAPE` to exit.
 """
-import taichi as ti
 import numpy as np
-
+import taichi as ti
 
 ti.init(debug=False, arch=ti.gpu)
 
@@ -17,7 +16,7 @@ WIDTH, HEIGHT = 800, 480
 ymin, ymax = -1, 1
 xmin, xmax = -WIDTH / HEIGHT, WIDTH / HEIGHT
 pixels = ti.Vector(3, dt=ti.f32, shape=(WIDTH, HEIGHT))
-ox, oy = np.mgrid[xmin: xmax: WIDTH*1j, ymin: ymax: HEIGHT*1j]
+ox, oy = np.mgrid[xmin : xmax : WIDTH * 1j, ymin : ymax : HEIGHT * 1j]
 grid = ti.Vector(2, dt=ti.f32, shape=(WIDTH, HEIGHT))
 grid.from_numpy(np.stack((ox, oy), axis=2))
 
@@ -40,8 +39,7 @@ def cmul(a, b):
     """
     Multiply two complex numbers `a` and `b`.
     """
-    return ti.Vector([a[0] * b[0] - a[1] * b[1],
-                      a[0] * b[1] + a[1] * b[0]])
+    return ti.Vector([a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]])
 
 
 @ti.func
@@ -49,9 +47,13 @@ def mix(x, y, a):
     """
     Mix two vectors `x` and `y` weighted by a real number `a`.
     """
-    return ti.Vector([x[0] * (1.0 - a) + y[0] * a,
-                      x[1] * (1.0 - a) + y[1] * a,
-                      x[2] * (1.0 - a) + y[2] * a])
+    return ti.Vector(
+        [
+            x[0] * (1.0 - a) + y[0] * a,
+            x[1] * (1.0 - a) + y[1] * a,
+            x[2] * (1.0 - a) + y[2] * a,
+        ]
+    )
 
 
 @ti.func
@@ -71,9 +73,12 @@ def get_color(z, timef32):
     coa = ti.cos(0.1 * (1.0 - zoo) * timef32)
     sia = ti.sin(0.1 * (1.0 - zoo) * timef32)
     zoo = ti.pow(zoo, 8.0)
-    xy = ti.Vector([z[0] * coa - z[1] * sia,
-                    z[0] * sia + z[1] * coa])
-    cc = ti.Vector([1.0, 0.0]) + smoothstep(1.0, 0.5, zoo) * ti.Vector([0.24814, 0.7369]) + xy * zoo * 2.0
+    xy = ti.Vector([z[0] * coa - z[1] * sia, z[0] * sia + z[1] * coa])
+    cc = (
+        ti.Vector([1.0, 0.0])
+        + smoothstep(1.0, 0.5, zoo) * ti.Vector([0.24814, 0.7369])
+        + xy * zoo * 2.0
+    )
     col = ti.Vector([0.0, 0.0, 0.0])
     sc = ti.Vector([ti.abs(cc[0] - 1.0) - 1.0, cc[1]])
     if ti.dot(sc, sc) >= 1.0:
@@ -98,12 +103,14 @@ def get_color(z, timef32):
             x = cc[0] * (1.0 - x) * x
         for _ in range(200):
             x = cc[0] * (1.0 - x) * x
-            col = col + mix(col,
-                            ti.Vector([1.0, 1.0, 0.0]),
-                            0.15 + 0.85 * ti.pow(clamp(ti.abs(sc.x + 1.0) * 0.4, 0.0, 1.0), 4.0)) \
-                            * al * 0.06 * ti.exp(-15000.0 * (cc.y - x) * (cc.y - x))
+            col = col + mix(
+                col,
+                ti.Vector([1.0, 1.0, 0.0]),
+                0.15 + 0.85 * ti.pow(clamp(ti.abs(sc.x + 1.0) * 0.4, 0.0, 1.0), 4.0),
+            ) * al * 0.06 * ti.exp(-15000.0 * (cc.y - x) * (cc.y - x))
 
     return col
+
 
 @ti.kernel
 def render(t: ti.f32):

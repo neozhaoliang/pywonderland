@@ -14,22 +14,23 @@ For how to use mouse and keyboard to play with the simulation see the doc below.
 from __future__ import division
 
 import sys
+
 sys.path.append("../glslhelpers")
 
 import argparse
+import re
 import subprocess
 import time
-import re
-from PIL import Image
-import numpy as np
 
+import numpy as np
 import pyglet
+from PIL import Image
+
 pyglet.options["debug_gl"] = False
 import pyglet.gl as gl
 import pyglet.window.key as key
-
-from shader import Shader
 from framebuffer import FrameBuffer
+from shader import Shader
 from texture import create_texture_from_ndarray
 
 # windows users need to add the directory that contains
@@ -38,18 +39,19 @@ FFMPEG_EXE = "ffmpeg"
 
 
 # species: [Du, Dv, feed, kill]
-ALL_SPECIES = {"unstable":             [0.210, 0.105, 0.018, 0.051],
-               "coral":                [0.160, 0.080, 0.060, 0.062],
-               "fingerprint":          [0.190, 0.050, 0.060, 0.062],
-               "bacteria":             [0.140, 0.060, 0.035, 0.065],
-               "worms":                [0.160, 0.080, 0.050, 0.065],
-               "zebrafish":            [0.160, 0.080, 0.035, 0.060],
-               "net":                  [0.210, 0.105, 0.039, 0.058],
-               "worms and loops":      [0.210, 0.105, 0.082, 0.060],
-               "waves":                [0.210, 0.105, 0.014, 0.045],
-               "moving spots":         [0.210, 0.105, 0.014, 0.054],
-               "pulsating solitons":   [0.210, 0.105, 0.025, 0.060],
-              }
+ALL_SPECIES = {
+    "unstable": [0.210, 0.105, 0.018, 0.051],
+    "coral": [0.160, 0.080, 0.060, 0.062],
+    "fingerprint": [0.190, 0.050, 0.060, 0.062],
+    "bacteria": [0.140, 0.060, 0.035, 0.065],
+    "worms": [0.160, 0.080, 0.050, 0.065],
+    "zebrafish": [0.160, 0.080, 0.035, 0.060],
+    "net": [0.210, 0.105, 0.039, 0.058],
+    "worms and loops": [0.210, 0.105, 0.082, 0.060],
+    "waves": [0.210, 0.105, 0.014, 0.045],
+    "moving spots": [0.210, 0.105, 0.014, 0.054],
+    "pulsating solitons": [0.210, 0.105, 0.025, 0.060],
+}
 
 
 def htmlcolors_to_rgba(colors):
@@ -57,8 +59,7 @@ def htmlcolors_to_rgba(colors):
     :param colors: a 1d list of 5 html colors of the format "#RRGGBBAA".
         return a 1d list of 20 floats in range [0, 1].
     """
-    return [int(x, 16) / 255.0 for s in colors
-            for x in (s[1:3], s[3:5], s[5:7], s[7:])]
+    return [int(x, 16) / 255.0 for s in colors for x in (s[1:3], s[3:5], s[5:7], s[7:])]
 
 
 def rgba_to_htmlcolors(colors):
@@ -67,7 +68,7 @@ def rgba_to_htmlcolors(colors):
         return a 1d list of 5 html colors of the format "#RRGGBBAA".
     """
     hexcolors = [("{:02x}".format(int(255 * x))).upper() for x in colors]
-    return ["#{}{}{}{}".format(*hexcolors[4*i: 4*i+4]) for i in range(5)]
+    return ["#{}{}{}{}".format(*hexcolors[4 * i : 4 * i + 4]) for i in range(5)]
 
 
 def parse(params):
@@ -103,16 +104,18 @@ class GrayScott(pyglet.window.Window):
     ----------------------------------------------------------
     """
 
-    def __init__(self,
-                 width,
-                 height,
-                 scale=1.5,
-                 conf=1,
-                 mask=None,
-                 flip=False,
-                 video=False,
-                 sample_rate=None,
-                 video_rate=None):
+    def __init__(
+        self,
+        width,
+        height,
+        scale=1.5,
+        conf=1,
+        mask=None,
+        flip=False,
+        video=False,
+        sample_rate=None,
+        video_rate=None,
+    ):
         """
         Parameters
         ----------
@@ -125,16 +128,20 @@ class GrayScott(pyglet.window.Window):
         :sample_rate: sample a frame from the animation every these frames.
         :video_rate: frames per second of the video.
         """
-        pyglet.window.Window.__init__(self,
-                                      width,
-                                      height,
-                                      caption="GrayScott Simulation",
-                                      resizable=True,
-                                      visible=False,
-                                      vsync=False)
+        pyglet.window.Window.__init__(
+            self,
+            width,
+            height,
+            caption="GrayScott Simulation",
+            resizable=True,
+            visible=False,
+            vsync=False,
+        )
 
         # use two shaders, one for doing the computations and one for rendering to the screen.
-        self.reaction_shader = Shader(["./glsl/reaction.vert"], ["./glsl/reaction.frag"])
+        self.reaction_shader = Shader(
+            ["./glsl/reaction.vert"], ["./glsl/reaction.frag"]
+        )
         self.render_shader = Shader(["./glsl/render.vert"], ["./glsl/render.frag"])
         self.tex_width, self.tex_height = int(width / scale), int(height / scale)
 
@@ -159,7 +166,9 @@ class GrayScott(pyglet.window.Window):
         # create the mask_texture
         mask_grid = np.ones_like(uv_grid)
         if mask is not None:
-            img = Image.open(mask).convert("L").resize((self.tex_width, self.tex_height))
+            img = (
+                Image.open(mask).convert("L").resize((self.tex_width, self.tex_height))
+            )
             img = (np.asarray(img) / 255.0).astype(np.float32)
             if flip:
                 img = 1.0 - img
@@ -185,7 +194,9 @@ class GrayScott(pyglet.window.Window):
             self.reaction_shader.vertex_attrib("texcoord", [0, 0, 1, 0, 0, 1, 1, 1])
             self.reaction_shader.uniformi("uv_texture", 0)
             self.reaction_shader.uniformi("mask_texture", 1)
-            self.reaction_shader.uniformf("iResolution", self.tex_width, self.tex_height, 0)
+            self.reaction_shader.uniformf(
+                "iResolution", self.tex_width, self.tex_height, 0
+            )
             self.reaction_shader.uniformf("iMouse", -1, -1)
             self.reaction_shader.uniformf("params", *ALL_SPECIES[self.species])
 
@@ -274,7 +285,9 @@ class GrayScott(pyglet.window.Window):
 
     def save_config(self):
         with open("config.txt", "a+") as f:
-            f.write(self.species + ": " + " ".join(rgba_to_htmlcolors(self.palette)) + "\n")
+            f.write(
+                self.species + ": " + " ".join(rgba_to_htmlcolors(self.palette)) + "\n"
+            )
             print("> Config saved.\n")
 
     def load_config(self, k):
@@ -343,18 +356,32 @@ class GrayScott(pyglet.window.Window):
             print("> The video is closed.\n")
 
     def create_new_pipe(self):
-        ffmpeg = subprocess.Popen((FFMPEG_EXE,
-                                   "-threads", "0",
-                                   "-loglevel", "panic",
-                                   "-r", "%d" % self.video_rate,
-                                   "-f", "rawvideo",
-                                   "-pix_fmt", "rgba",
-                                   "-s", "%dx%d" % (self.width, self.height),
-                                   "-i", "-",
-                                   "-c:v", "libx264",
-                                   "-crf", "20",
-                                   "-y", self.species + ".mp4"
-                                  ), stdin=subprocess.PIPE)
+        ffmpeg = subprocess.Popen(
+            (
+                FFMPEG_EXE,
+                "-threads",
+                "0",
+                "-loglevel",
+                "panic",
+                "-r",
+                "%d" % self.video_rate,
+                "-f",
+                "rawvideo",
+                "-pix_fmt",
+                "rgba",
+                "-s",
+                "%dx%d" % (self.width, self.height),
+                "-i",
+                "-",
+                "-c:v",
+                "libx264",
+                "-crf",
+                "20",
+                "-y",
+                self.species + ".mp4",
+            ),
+            stdin=subprocess.PIPE,
+        )
         return ffmpeg.stdin
 
     def run(self, fps=None):
@@ -362,44 +389,67 @@ class GrayScott(pyglet.window.Window):
         if fps is None:
             pyglet.clock.schedule(lambda dt: None)
         else:
-            pyglet.clock.schedule_interval(lambda dt: None, 1.0/fps)
+            pyglet.clock.schedule_interval(lambda dt: None, 1.0 / fps)
         pyglet.app.run()
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-size", type=str, default="640x480",
-                        help="width and height of the window")
-    parser.add_argument("-videorate", type=int, default=24,
-                        help="frames per second of the video")
-    parser.add_argument("-fps", type=int, default=None,
-                        help="frames per second of the animation")
-    parser.add_argument("-samplerate", type=int, default=24,
-                        help="sample a frame from the animation every these frames")
-    parser.add_argument("-scale", type=float, default=1.5,
-                        help="level of scaling of the texture")
-    parser.add_argument("-conf", type=int, default=0,
-                        help="the line number of a config in the configuration file")
-    parser.add_argument("-video", action="store_true",
-                        help="turn on saving to the video")
-    parser.add_argument("-mask", type=str, default=None,
-                        help="a mask image to control the growth of the pattern")
-    parser.add_argument("-flip", type=int, default=0,
-                        help="flip the white/black pixels in the mask image")
+    parser.add_argument(
+        "-size", type=str, default="640x480", help="width and height of the window"
+    )
+    parser.add_argument(
+        "-videorate", type=int, default=24, help="frames per second of the video"
+    )
+    parser.add_argument(
+        "-fps", type=int, default=None, help="frames per second of the animation"
+    )
+    parser.add_argument(
+        "-samplerate",
+        type=int,
+        default=24,
+        help="sample a frame from the animation every these frames",
+    )
+    parser.add_argument(
+        "-scale", type=float, default=1.5, help="level of scaling of the texture"
+    )
+    parser.add_argument(
+        "-conf",
+        type=int,
+        default=0,
+        help="the line number of a config in the configuration file",
+    )
+    parser.add_argument(
+        "-video", action="store_true", help="turn on saving to the video"
+    )
+    parser.add_argument(
+        "-mask",
+        type=str,
+        default=None,
+        help="a mask image to control the growth of the pattern",
+    )
+    parser.add_argument(
+        "-flip",
+        type=int,
+        default=0,
+        help="flip the white/black pixels in the mask image",
+    )
 
     args = parser.parse_args()
 
     width, height = [int(i) for i in args.size.split("x")]
 
-    app = GrayScott(width,
-                    height,
-                    scale=args.scale,
-                    conf=args.conf,
-                    mask=args.mask,
-                    flip=args.flip,
-                    video=args.video,
-                    sample_rate=args.samplerate,
-                    video_rate=args.videorate)
+    app = GrayScott(
+        width,
+        height,
+        scale=args.scale,
+        conf=args.conf,
+        mask=args.mask,
+        flip=args.flip,
+        video=args.video,
+        sample_rate=args.samplerate,
+        video_rate=args.videorate,
+    )
 
     print(app.__doc__)
     app.run(args.fps)

@@ -25,6 +25,7 @@ class CosetTable(object):
     assigned a non-negative integer, all rows scan correctly under all words
     in R and the first row scans correctly under all generators of H.
     """
+
     def __init__(self, gens, rels, subgens=(), coxeter=True):
         """
         :param gens: a 1D list of integers that represents the generators,
@@ -57,10 +58,10 @@ class CosetTable(object):
         else:
             self.inv = lambda x: x - 1 if x % 2 else x + 1
         self.A = gens
-        self.R = rels     # relations R between the generators
+        self.R = rels  # relations R between the generators
         self.H = subgens  # generators of H
-        self.p = [0]      # initially we only have the 0-th coset H
-        self.q = []       # a queue holds all dead cosets to be processed.
+        self.p = [0]  # initially we only have the 0-th coset H
+        self.q = []  # a queue holds all dead cosets to be processed.
         self.table = [[None] * len(self.A)]
 
     def __getitem__(self, item):
@@ -259,7 +260,7 @@ class CosetTable(object):
                             self[y][self.inv(x)] = ind
 
         self.p = list(range(ind + 1))
-        self.table = self.table[:len(self.p)]
+        self.table = self.table[: len(self.p)]
 
     def swap(self, k, l):
         """

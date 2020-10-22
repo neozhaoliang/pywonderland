@@ -7,9 +7,11 @@ This file contains three main classes:
 3. `Animation` is the middle layer object that controls how a `Maze`
    object is rendered to a `GIFSurface` object.
 """
-from io import BytesIO
 from functools import partial
+from io import BytesIO
+
 from PIL import Image
+
 from . import encoder
 
 
@@ -48,7 +50,7 @@ class Maze(object):
         self.width = 2 * width - 1
         self.height = 2 * height - 1
         self._frame_box = None  # a 4-tuple maintains the region that to be updated.
-        self._num_changes = 0   # a counter holds how many cells are changed.
+        self._num_changes = 0  # a counter holds how many cells are changed.
 
         self.scaling = 1  # size of a cell in pixels.
         self.translation = (0, 0)  # (left, top) translation about the image in pixels.
@@ -101,8 +103,7 @@ class Maze(object):
         self._num_changes += 1
         if self._frame_box is not None:
             left, top, right, bottom = self._frame_box
-            self._frame_box = (min(x, left), min(y, top),
-                               max(x, right), max(y, bottom))
+            self._frame_box = (min(x, left), min(y, top), max(x, right), max(y, bottom))
         else:
             self._frame_box = (x, y, x, y)
 
@@ -163,8 +164,7 @@ class Maze(object):
         return self
 
     def translate(self, v):
-        self.translation = (self.translation[0] + v[0],
-                            self.translation[1] + v[1])
+        self.translation = (self.translation[0] + v[0], self.translation[1] + v[1])
         return self
 
     def setlinewidth(self, l):
@@ -311,10 +311,12 @@ def encode_maze(maze, mcl=8, cmap=None):
         return (w - 1) // 2 * (maze.scaling + maze.lw) + maze.lw
 
     # the image descriptor for this frame
-    descriptor = encoder.image_descriptor(enum_pixels(0, left - 1) + maze.translation[0],
-                                          enum_pixels(0, top - 1) + maze.translation[1],
-                                          enum_pixels(left, right),
-                                          enum_pixels(top, bottom))
+    descriptor = encoder.image_descriptor(
+        enum_pixels(0, left - 1) + maze.translation[0],
+        enum_pixels(0, top - 1) + maze.translation[1],
+        enum_pixels(left, right),
+        enum_pixels(top, bottom),
+    )
 
     def map_pixel(x, y):
         """
@@ -338,9 +340,11 @@ def encode_maze(maze, mcl=8, cmap=None):
         return colormap[maze.get_cell((left + dx, top + dy))]
 
     # a 1-d list holds all pixels in this frame
-    pixels = [map_pixel(x, y)
-              for y in range(enum_pixels(top, bottom))
-              for x in range(enum_pixels(left, right))]
+    pixels = [
+        map_pixel(x, y)
+        for y in range(enum_pixels(top, bottom))
+        for x in range(enum_pixels(left, right))
+    ]
 
     # the compressed image data of this frame
     data = encoder.lzw_compress(pixels, mcl)
@@ -379,8 +383,7 @@ class Animation(object):
         """
         self._gif_surface.init_data += data
 
-    def run(self, algo, maze, delay=5, trans_index=None,
-            cmap=None, mcl=8, **kwargs):
+    def run(self, algo, maze, delay=5, trans_index=None, cmap=None, mcl=8, **kwargs):
         encode_func = partial(encode_maze, cmap=cmap, mcl=mcl)
         control = encoder.graphics_control_block(delay, trans_index)
         for frame in algo(maze, encode_func, **kwargs):
@@ -401,9 +404,11 @@ class Animation(object):
         :param bg_color: background color (for the cells)
         :param line_color: line color (for the walls between adjacent cells)
         """
-        new_maze = Maze((maze.width + 1) // 2,
-                        (maze.height + 1) // 2,
-                        cell_init=bg_color,
-                        wall_init=line_color)
+        new_maze = Maze(
+            (maze.width + 1) // 2,
+            (maze.height + 1) // 2,
+            cell_init=bg_color,
+            wall_init=line_color,
+        )
         new_maze.scale(maze.scaling).translate(maze.translation).setlinewidth(maze.lw)
         self.insert_frame(encode_maze(new_maze, **kwargs))

@@ -1,6 +1,6 @@
 import subprocess
-from honeycomb import Honeycomb
 
+from honeycomb import Honeycomb
 
 POV_EXE = "povray"
 POV_COMMAND = "cd povray && povray {}"

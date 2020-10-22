@@ -8,9 +8,10 @@ with uniform probability.
 :copyright (c) 2015 by Zhao Liang.
 """
 import argparse
-from tqdm import trange
-import aztec
 
+from tqdm import trange
+
+import aztec
 
 # Four colors for the four types of dominoes
 N_COLOR = (1, 0, 0)
@@ -46,25 +47,25 @@ def render_with_cairo(az, imgsize, extent, filename):
     margin = 0.1
 
     for (i, j) in az.cells:
-        if (az.is_black(i, j) and az.tile[(i, j)] is not None):
-            if az.tile[(i, j)] == 'n':
-                ctx.rectangle(i - 1 + margin, j + margin,
-                              2 - 2 * margin, 1 - 2 * margin)
+        if az.is_black(i, j) and az.tile[(i, j)] is not None:
+            if az.tile[(i, j)] == "n":
+                ctx.rectangle(
+                    i - 1 + margin, j + margin, 2 - 2 * margin, 1 - 2 * margin
+                )
                 ctx.set_source_rgb(*N_COLOR)
 
-            if az.tile[(i, j)] == 's':
-                ctx.rectangle(i + margin, j + margin,
-                              2 - 2 * margin, 1 - 2 * margin)
+            if az.tile[(i, j)] == "s":
+                ctx.rectangle(i + margin, j + margin, 2 - 2 * margin, 1 - 2 * margin)
                 ctx.set_source_rgb(*S_COLOR)
 
-            if az.tile[(i, j)] == 'w':
-                ctx.rectangle(i + margin, j + margin,
-                              1 - 2 * margin, 2 - 2 * margin)
+            if az.tile[(i, j)] == "w":
+                ctx.rectangle(i + margin, j + margin, 1 - 2 * margin, 2 - 2 * margin)
                 ctx.set_source_rgb(*W_COLOR)
 
-            if az.tile[(i, j)] == 'e':
-                ctx.rectangle(i + margin, j - 1 + margin,
-                              1 - 2 * margin, 2 - 2 * margin)
+            if az.tile[(i, j)] == "e":
+                ctx.rectangle(
+                    i + margin, j - 1 + margin, 1 - 2 * margin, 2 - 2 * margin
+                )
                 ctx.set_source_rgb(*E_COLOR)
 
             ctx.fill()
@@ -78,28 +79,28 @@ def render_with_matplotlib(az, imgsize, extent, filename):
     Matplotlib is slower than cairo but it gives optimized results.
     The inputs are the same with those in `render_with_cairo`.
     """
-    import matplotlib.pyplot as plt
     import matplotlib.patches as mps
+    import matplotlib.pyplot as plt
 
-    fig = plt.figure(figsize=(imgsize/100.0, imgsize/100.0), dpi=100)
+    fig = plt.figure(figsize=(imgsize / 100.0, imgsize / 100.0), dpi=100)
     ax = fig.add_axes([0, 0, 1, 1], aspect=1)
     ax.axis([-extent, extent, -extent, extent])
-    ax.axis('off')
+    ax.axis("off")
     linewidth = fig.dpi * fig.get_figwidth() / (20.0 * extent)
 
     for i, j in az.cells:
         if az.is_black(i, j) and az.tile[(i, j)] is not None:
-            if az.tile[(i, j)] == 'n':
-                p = mps.Rectangle((i-1, j), 2, 1, fc=N_COLOR)
-            if az.tile[(i, j)] == 's':
+            if az.tile[(i, j)] == "n":
+                p = mps.Rectangle((i - 1, j), 2, 1, fc=N_COLOR)
+            if az.tile[(i, j)] == "s":
                 p = mps.Rectangle((i, j), 2, 1, fc=S_COLOR)
-            if az.tile[(i, j)] == 'w':
+            if az.tile[(i, j)] == "w":
                 p = mps.Rectangle((i, j), 1, 2, fc=W_COLOR)
-            if az.tile[(i, j)] == 'e':
-                p = mps.Rectangle((i, j-1), 1, 2, fc=E_COLOR)
+            if az.tile[(i, j)] == "e":
+                p = mps.Rectangle((i, j - 1), 1, 2, fc=E_COLOR)
 
             p.set_linewidth(linewidth)
-            p.set_edgecolor('w')
+            p.set_edgecolor("w")
             ax.add_patch(p)
 
     fig.savefig(filename)
@@ -109,24 +110,34 @@ def render(program, *args, **kwargs):
     """
     :param program: must be either cairo or matplotlib.
     """
-    if program == 'cairo':
+    if program == "cairo":
         render_with_cairo(*args, **kwargs)
-    elif program == 'matplotlib':
+    elif program == "matplotlib":
         render_with_matplotlib(*args, **kwargs)
     else:
-        raise ValueError('Program must be cairo or matplotlib!')
+        raise ValueError("Program must be cairo or matplotlib!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-size', metavar='s', type=int,
-                        default=800, help='image size')
-    parser.add_argument('-order', metavar='o', type=int,
-                        default=60, help='order of az graph')
-    parser.add_argument('-filename', metavar='f', type=str,
-                        default='random_tiling.png', help='output filename')
-    parser.add_argument('-prog', metavar='p', type=str,
-                        default='cairo', help='program to draw the tiling')
+    parser.add_argument("-size", metavar="s", type=int, default=800, help="image size")
+    parser.add_argument(
+        "-order", metavar="o", type=int, default=60, help="order of az graph"
+    )
+    parser.add_argument(
+        "-filename",
+        metavar="f",
+        type=str,
+        default="random_tiling.png",
+        help="output filename",
+    )
+    parser.add_argument(
+        "-prog",
+        metavar="p",
+        type=str,
+        default="cairo",
+        help="program to draw the tiling",
+    )
     args = parser.parse_args()
 
     az = aztec.AztecDiamond(0)
