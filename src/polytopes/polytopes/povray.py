@@ -25,9 +25,7 @@ def pov_vector_array(vectors):
     [(x, y, z), (a, b, c), ...] --> array[n] {<x, y, z>, <a, b, c>, ...}.
     """
     n = len(vectors)
-    return "array[{}]{{\n{}}}".format(
-        n,
-        concat(pov_vector(v) for v in vectors))
+    return "array[{}]{{\n{}}}".format(n, concat(pov_vector(v) for v in vectors))
 
 
 def pov_index_array1d(arr1d):
@@ -47,9 +45,8 @@ def pov_index_array2d(arr2d):
     dim1 = len(arr2d)
     dim2 = len(arr2d[0])
     return "array[{}][{}] {{\n{}}}".format(
-        dim1,
-        dim2,
-        concat(concat(arr, sep=", ", border="{{{}}}") for arr in arr2d))
+        dim1, dim2, concat(concat(arr, sep=", ", border="{{{}}}") for arr in arr2d)
+    )
 
 
 def pov_index_array3d(arr3d):
@@ -58,8 +55,8 @@ def pov_index_array3d(arr3d):
     """
     n = len(arr3d)
     return "array[{}] {{\n{}}}".format(
-        n,
-        concat(pov_index_array2d(arr2d) for arr2d in arr3d))
+        n, concat(pov_index_array2d(arr2d) for arr2d in arr3d)
+    )
 
 
 def export_polytope_data(P):

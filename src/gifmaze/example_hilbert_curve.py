@@ -6,6 +6,7 @@ Hilbert curve animation based on Gray code
 :copyright (c) 2018 by Zhao Liang
 """
 from colorsys import hls_to_rgb
+
 from gifmaze import create_animation_for_size
 
 
@@ -155,8 +156,9 @@ margin = 6
 
 pixels = tuple(pixels_hilbert(curve_size))
 
-maze, surface, anim = create_animation_for_size(curve_size, curve_size,
-                                                cell_size, lw, margin)
+maze, surface, anim = create_animation_for_size(
+    curve_size, curve_size, cell_size, lw, margin
+)
 colors = [0, 0, 0]
 for i in range(1, 256):
     rgb = hls_to_rgb(i / 256.0, 0.5, 1.0)

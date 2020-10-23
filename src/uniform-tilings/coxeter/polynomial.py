@@ -3,8 +3,9 @@
 Class for handling arithmetic of polynomials in Z[x]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
-from itertools import zip_longest as lzip
 from copy import copy
+from itertools import zip_longest as lzip
+
 from .integer import decompose
 
 
@@ -31,9 +32,9 @@ class IntPolynomial(object):
         Discard traling zeros in an array.
         """
         i = len(arr) - 1
-        while (i > 0 and arr[i] == 0):
+        while i > 0 and arr[i] == 0:
             i -= 1
-        return arr[:i+1]
+        return arr[: i + 1]
 
     def __str__(self):
         return "IntPolynomial" + str(self.coef)
@@ -56,7 +57,9 @@ class IntPolynomial(object):
         Check input for polynomial operations.
         """
         if not isinstance(g, (int, IntPolynomial)):
-            raise ValueError("type {} not supported for polynomial operations".format(type(g)))
+            raise ValueError(
+                "type {} not supported for polynomial operations".format(type(g))
+            )
         if isinstance(g, int):
             g = IntPolynomial(g)
         return g

@@ -11,11 +11,13 @@ except ImportError:
 
 IMAGE_SIZE = (800, 400)
 NUM_ITERATIONS = 4
-FACE_COLORS = [(0.9, 0.9, 0.5),
-               (0.5, 1, 0.9),
-               (0.3, 0.5, 0.8),
-               (0.4, 0.7, 0.2),
-               (1, 0.5, 0.25)]
+FACE_COLORS = [
+    (0.9, 0.9, 0.5),
+    (0.5, 1, 0.9),
+    (0.3, 0.5, 0.8),
+    (0.4, 0.7, 0.2),
+    (1, 0.5, 0.25),
+]
 EDGE_COLOR = (0.3, 0.3, 0.3)
 
 
@@ -26,11 +28,9 @@ def subdivide(triangles):
         E = 0.6 * A + 0.4 * C
         F = 0.2 * A + 0.8 * C
         G = (F + B) / 2
-        result.extend([(0, A, E, D),
-                       (1, F, E, D),
-                       (2, D, G, F),
-                       (3, D, G, B),
-                       (4, B, F, C)])
+        result.extend(
+            [(0, A, E, D), (1, F, E, D), (2, D, G, F), (3, D, G, B), (4, B, F, C)]
+        )
     return result
 
 
@@ -39,7 +39,7 @@ ctx = cairo.Context(surface)
 ctx.scale(IMAGE_SIZE[0] / 2.0, -IMAGE_SIZE[1])
 ctx.translate(0, -1)
 
-triangles = [(0, 0, 2, 2+1j), (0, 2+1j, 1j, 0)]
+triangles = [(0, 0, 2, 2 + 1j), (0, 2 + 1j, 1j, 0)]
 tiles = []
 
 for i in range(NUM_ITERATIONS):

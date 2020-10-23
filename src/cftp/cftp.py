@@ -56,6 +56,7 @@ REFERENCES:
 
 """
 import random
+
 from tqdm import tqdm
 
 
@@ -91,7 +92,7 @@ def run_cftp(mc):
             break
         # if not coupled the look further back into the past.
         else:
-            updates.insert(0, (rng_next, 2**len(updates)))
+            updates.insert(0, (rng_next, 2 ** len(updates)))
 
     random.setstate(rng_next)
     bar.close()
@@ -123,12 +124,19 @@ class LozengeTiling(object):
         a, b, c = self.size
         # min state that all paths move downward and then upward.
         # the tiling correspondes to a "full box" filled with cubes.
-        s0 = [[max(j - a, 0) if k == 0 else k + min(j, b)
-               for j in range(a + b + 1)] for k in range(c + 2)]
+        s0 = [
+            [max(j - a, 0) if k == 0 else k + min(j, b) for j in range(a + b + 1)]
+            for k in range(c + 2)
+        ]
         # max state that all paths move upward and then move downward.
         # the tiling correspondes to an "empty box" with no cubes.
-        s1 = [[c + 1 + min(j, b) if k == c + 1 else k + max(j - a, 0)
-               for j in range(a + b + 1)] for k in range(c + 2)]
+        s1 = [
+            [
+                c + 1 + min(j, b) if k == c + 1 else k + max(j - a, 0)
+                for j in range(a + b + 1)
+            ]
+            for k in range(c + 2)
+        ]
         return s0, s1
 
     def new_random_update(self):
@@ -136,9 +144,11 @@ class LozengeTiling(object):
         Return a new update operation.
         """
         a, b, c = self.size
-        return (random.randint(1, c),  # a random path
-                random.randint(1, a + b - 1),  # a random position in this path
-                random.randint(0, 1))  # a random direction (up or down)
+        return (
+            random.randint(1, c),  # a random path
+            random.randint(1, a + b - 1),  # a random position in this path
+            random.randint(0, 1),
+        )  # a random direction (up or down)
 
     def update(self, s, u):
         """Update a state `s` by a random update operation `u`.
@@ -163,12 +173,24 @@ class LozengeTiling(object):
             for j in range(1, a + b + 1):
                 if k > 0:
                     if s[k][j] == s[k][j - 1]:
-                        verts["L"].append([(j + dx, s[k][j] + dy) for dx, dy in
-                                           [(0, 0), (-1, 0), (-1, -1), (0, -1)]])
+                        verts["L"].append(
+                            [
+                                (j + dx, s[k][j] + dy)
+                                for dx, dy in [(0, 0), (-1, 0), (-1, -1), (0, -1)]
+                            ]
+                        )
                     else:
-                        verts["R"].append([(j + dx, s[k][j] + dy) for dx, dy in
-                                           [(0, 0), (-1, -1), (-1, -2), (0, -1)]])
+                        verts["R"].append(
+                            [
+                                (j + dx, s[k][j] + dy)
+                                for dx, dy in [(0, 0), (-1, -1), (-1, -2), (0, -1)]
+                            ]
+                        )
                 for l in range(s[k][j] + 1, s[k + 1][j]):
-                    verts["T"].append([(j + dx, l + dy) for dx, dy in
-                                       [(0, 0), (-1, -1), (0, -1), (1, 0)]])
+                    verts["T"].append(
+                        [
+                            (j + dx, l + dy)
+                            for dx, dy in [(0, 0), (-1, -1), (0, -1), (1, 0)]
+                        ]
+                    )
         return verts

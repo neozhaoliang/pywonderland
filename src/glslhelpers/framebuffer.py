@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import ctypes as ct
+
 import pyglet.gl as gl
 
 
@@ -20,8 +21,13 @@ class FrameBuffer(object):
     def attach_texture(self, texture):
         """`texture` must be an instance of pyglet's texture class.
         """
-        gl.glFramebufferTexture2DEXT(gl.GL_FRAMEBUFFER_EXT, gl.GL_COLOR_ATTACHMENT0_EXT,
-                                     texture.target, texture.id, texture.level)
+        gl.glFramebufferTexture2DEXT(
+            gl.GL_FRAMEBUFFER_EXT,
+            gl.GL_COLOR_ATTACHMENT0_EXT,
+            texture.target,
+            texture.id,
+            texture.level,
+        )
 
     def __enter__(self):
         self.bind()

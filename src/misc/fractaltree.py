@@ -39,15 +39,16 @@ def get_line_width(level):
     return max(1, TRUNK_RAD * level / ITERATIONS)
 
 
-def fractal_tree(ctx,         # a cairo context to draw on
-                 level,       # current level in the iterations
-                 start,       # (x, y) coordinates of the start of this trunk
-                 t,           # current trunk length
-                 r,           # factor to contract the trunk in each iteration
-                 theta,       # orientation of current trunk
-                 angle,       # angle between branches in the same level
-                 perturb,     # perturb the angle
-                 ):
+def fractal_tree(
+    ctx,  # a cairo context to draw on
+    level,  # current level in the iterations
+    start,  # (x, y) coordinates of the start of this trunk
+    t,  # current trunk length
+    r,  # factor to contract the trunk in each iteration
+    theta,  # orientation of current trunk
+    angle,  # angle between branches in the same level
+    perturb,  # perturb the angle
+):
     if level == 0:
         return
 
@@ -66,10 +67,8 @@ def fractal_tree(ctx,         # a cairo context to draw on
     theta1 = theta + np.random.random() * (perturb / level) * angle
     theta2 = theta - np.random.random() * (perturb / level) * angle
     # recursively draw the next branches
-    fractal_tree(ctx, level - 1, (x, y), t * r,
-                 r, theta1, angle, perturb)
-    fractal_tree(ctx, level - 1, (x, y), t * r,
-                 r, theta2, angle, perturb)
+    fractal_tree(ctx, level - 1, (x, y), t * r, r, theta1, angle, perturb)
+    fractal_tree(ctx, level - 1, (x, y), t * r, r, theta2, angle, perturb)
 
 
 def main():
@@ -79,8 +78,7 @@ def main():
     ctx.set_line_join(cairo.LINE_JOIN_ROUND)
     ctx.set_source_rgb(1, 1, 1)
     ctx.paint()
-    fractal_tree(ctx, ITERATIONS, ROOT, TRUNK_LEN,
-                 RATIO, THETA, ANGLE, PERTURB)
+    fractal_tree(ctx, ITERATIONS, ROOT, TRUNK_LEN, RATIO, THETA, ANGLE, PERTURB)
     surface.write_to_png("random_fractal_tree.png")
 
 

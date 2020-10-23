@@ -12,21 +12,21 @@ Again Matt's program has lots of rich features and a great UI!
 Press "ENTER" to save screenshots and "Esc" to escape.
 """
 import sys
+
 sys.path.append("../glslhelpers")
 
-import time
-import datetime
 import argparse
+import datetime
+import time
 
 import pyglet
+
 pyglet.options["debug_gl"] = False
 import pyglet.gl as gl
 import pyglet.window.key as key
-
-from shader import Shader
 from framebuffer import FrameBuffer
+from shader import Shader
 from texture import create_image_texture
-
 
 FONT_TEXTURE = "../glslhelpers/textures/font.png"
 NOISE_TEXTURE = "../glslhelpers/textures/rgba_noise_small.png"
@@ -41,33 +41,37 @@ def get_idate():
 
 
 class Wythoff(pyglet.window.Window):
-
     def __init__(self, width, height):
         """
         :param width and height: size of the window in pixels.
         """
-        pyglet.window.Window.__init__(self,
-                                      width,
-                                      height,
-                                      caption="Wythoff Explorer",
-                                      resizable=True,
-                                      visible=False,
-                                      vsync=False)
+        pyglet.window.Window.__init__(
+            self,
+            width,
+            height,
+            caption="Wythoff Explorer",
+            resizable=True,
+            visible=False,
+            vsync=False,
+        )
         self._start_time = time.clock()
         self._last = self._now = self._start_time
         self._frame_count = 0  # count number of frames rendered so far
-        self.shaderA = Shader(["./glsl_wythoff/wythoff.vert"],
-                              ["./glsl_wythoff/common.frag",
-                               "./glsl_wythoff/BufferA.frag"])
+        self.shaderA = Shader(
+            ["./glsl_wythoff/wythoff.vert"],
+            ["./glsl_wythoff/common.frag", "./glsl_wythoff/BufferA.frag"],
+        )
 
-        self.shaderB = Shader(["./glsl_wythoff/wythoff.vert"],
-                              ["./glsl_wythoff/common.frag",
-                               "./glsl_wythoff/main.frag"])
+        self.shaderB = Shader(
+            ["./glsl_wythoff/wythoff.vert"],
+            ["./glsl_wythoff/common.frag", "./glsl_wythoff/main.frag"],
+        )
 
         self.font_texture = create_image_texture(FONT_TEXTURE)
         self.noise_texture = create_image_texture(NOISE_TEXTURE)
-        self.iChannel0 = pyglet.image.Texture.create_for_size(gl.GL_TEXTURE_2D, width, height,
-                                                              gl.GL_RGBA32F_ARB)
+        self.iChannel0 = pyglet.image.Texture.create_for_size(
+            gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F_ARB
+        )
         gl.glActiveTexture(gl.GL_TEXTURE0)
         gl.glBindTexture(self.iChannel0.target, self.iChannel0.id)
         gl.glActiveTexture(gl.GL_TEXTURE1)
@@ -163,14 +167,15 @@ class Wythoff(pyglet.window.Window):
         if fps is None:
             pyglet.clock.schedule(lambda dt: None)
         else:
-            pyglet.clock.schedule_interval(lambda dt: None, 1.0/fps)
+            pyglet.clock.schedule_interval(lambda dt: None, 1.0 / fps)
         pyglet.app.run()
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-size", metavar="s", type=str,
-                        default="800x480", help="window size in pixels")
+    parser.add_argument(
+        "-size", metavar="s", type=str, default="800x480", help="window size in pixels"
+    )
     args = parser.parse_args()
     w, h = [int(x) for x in args.size.split("x")]
     app = Wythoff(width=w, height=h)

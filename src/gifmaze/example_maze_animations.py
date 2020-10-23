@@ -6,10 +6,16 @@ Make gif animations of maze algorithms
 :copyright (c) 2018 by Zhao Liang
 """
 from colorsys import hls_to_rgb
-from gifmaze import (Maze, GIFSurface, Animation, encode_maze,
-                     generate_text_mask, create_animation_for_size)
-import gifmaze.algorithms as algo
 
+import gifmaze.algorithms as algo
+from gifmaze import (
+    Animation,
+    GIFSurface,
+    Maze,
+    create_animation_for_size,
+    encode_maze,
+    generate_text_mask,
+)
 
 width, height = 80, 40
 cell_size = 4
@@ -21,7 +27,9 @@ def example1():
     """
     The most simple maze animation example.
     """
-    maze, surface, anim = create_animation_for_size(width, height, cell_size, lw, margin)
+    maze, surface, anim = create_animation_for_size(
+        width, height, cell_size, lw, margin
+    )
     surface.set_palette([0, 0, 0, 255, 255, 255])
     anim.pause(100)
     anim.run(algo.random_dfs, maze, speed=30, delay=5, mcl=2)
@@ -35,8 +43,15 @@ def example2():
     """
     _, surface, anim = create_animation_for_size(width, height, cell_size, lw, margin)
     surface.set_palette([0, 0, 0, 255, 255, 255])
-    mask = generate_text_mask((surface.width, surface.height), "UNIX", "./resources/ubuntu.ttf", 280)
-    maze = Maze(width, height, mask=mask).scale(cell_size).translate((margin, margin)).setlinewidth(lw)
+    mask = generate_text_mask(
+        (surface.width, surface.height), "UNIX", "./resources/ubuntu.ttf", 280
+    )
+    maze = (
+        Maze(width, height, mask=mask)
+        .scale(cell_size)
+        .translate((margin, margin))
+        .setlinewidth(lw)
+    )
     anim.pause(100)
     anim.run(algo.kruskal, maze, speed=30, delay=5, mcl=2)
     anim.pause(500)
@@ -48,12 +63,12 @@ def example3():
     This example shows how to insert a background image at the beginning
     of the gif file while the animation is running.
     """
-    maze, surface, anim = create_animation_for_size(width, height, cell_size, lw, margin)
-    surface.set_palette([0, 0, 0,
-                         255, 255, 255,
-                         50, 50, 50,
-                         150, 200, 100,
-                         255, 0, 255])
+    maze, surface, anim = create_animation_for_size(
+        width, height, cell_size, lw, margin
+    )
+    surface.set_palette(
+        [0, 0, 0, 255, 255, 255, 50, 50, 50, 150, 200, 100, 255, 0, 255]
+    )
     anim.pause(100)
     anim.run(algo.prim, maze, speed=30, delay=5, trans_index=0, mcl=2)
     anim.pause(300)
@@ -68,9 +83,17 @@ def example4():
     This example shows how to embed the animation into a background image.
     """
     surface = GIFSurface.from_image("./resources/bg.png")
-    palette = [38, 92, 66,     # wall color, the same with the blackboard's
-               200, 200, 200,  # tree color
-               244, 25, 220]   # path color
+    palette = [
+        38,
+        92,
+        66,  # wall color, the same with the blackboard's
+        200,
+        200,
+        200,  # tree color
+        244,
+        25,
+        220,
+    ]  # path color
     for i in range(256):
         rgb = hls_to_rgb((i / 360.0) % 1, 0.5, 1.0)
         palette += [int(round(255 * x)) for x in rgb]

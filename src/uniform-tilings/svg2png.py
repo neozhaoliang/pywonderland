@@ -2,9 +2,8 @@
 A helper script convert svg files in this directory to png format
 """
 import glob
-import subprocess
 import os
-
+import subprocess
 
 command = "inkscape -z {} -e {}.png"
 

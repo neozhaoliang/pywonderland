@@ -25,7 +25,7 @@ def decompose(n):
         primes[2] += 1
         n = n // 2
     # odd prime factors
-    for i in range(3, int(n**0.5) + 1, 2):
+    for i in range(3, int(n ** 0.5) + 1, 2):
         while n % i == 0:
             primes[i] += 1
             n = n // i

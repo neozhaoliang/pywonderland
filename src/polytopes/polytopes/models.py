@@ -1,4 +1,3 @@
-
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Classes for building models of 3D/4D/5D uniform polytopes
@@ -8,11 +7,13 @@ See the doc: "https://neozhaoliang.github.io/polytopes/"
 
 """
 from itertools import combinations
+
 import numpy as np
+
 from . import helpers
-from .todd_coxeter import CosetTable
-from .povray import export_polytope_data
 from .coxeter_plane import draw_on_coxeter_plane
+from .povray import export_polytope_data
+from .todd_coxeter import CosetTable
 
 
 class BasePolytope(object):
@@ -58,8 +59,10 @@ class BasePolytope(object):
         self.symmetry_gens = tuple(range(len(self.coxeter_matrix)))
 
         # relations between the generators
-        self.symmetry_rels = tuple((i, j) * self.coxeter_matrix[i][j]
-                                   for i, j in combinations(self.symmetry_gens, 2))
+        self.symmetry_rels = tuple(
+            (i, j) * self.coxeter_matrix[i][j]
+            for i, j in combinations(self.symmetry_gens, 2)
+        )
         # add the extra relations between generators (only used for star polytopes)
         self.symmetry_rels += tuple(extra_relations)
 
@@ -99,7 +102,9 @@ class BasePolytope(object):
         self.vwords = self.vtable.get_words()
         self.num_vertices = len(self.vwords)
         # apply words of the vertices to the initial vertex to get all vertices
-        self.vertices_coords = tuple(self.transform(self.init_v, w) for w in self.vwords)
+        self.vertices_coords = tuple(
+            self.transform(self.init_v, w) for w in self.vwords
+        )
 
     def get_edges(self):
         """
@@ -226,6 +231,7 @@ class BasePolytope(object):
         Return the words of the vertices in latex format.
         `cols` is the number of columns of the output latex array.
         """
+
         def to_latex(word):
             if not word:
                 return "e"
@@ -289,30 +295,37 @@ class Snub(Polyhedra):
         # 3. (rs)^2 = 1
         # 4. rr^-1 = 1
         # 5. ss^-1 = 1
-        self.symmetry_rels = ((0,) * self.coxeter_matrix[0][1],
-                              (2,) * self.coxeter_matrix[1][2],
-                              (0, 2) * self.coxeter_matrix[0][2],
-                              (0, 1), (2, 3))
+        self.symmetry_rels = (
+            (0,) * self.coxeter_matrix[0][1],
+            (2,) * self.coxeter_matrix[1][2],
+            (0, 2) * self.coxeter_matrix[0][2],
+            (0, 1),
+            (2, 3),
+        )
         # map the extra_relations expressed by reflections
         # into relations by (r, s).
         for extra_rel in extra_relations:
             snub_rel = []
             for x, y in zip(extra_rel[:-1:2], extra_rel[1::2]):
-                snub_rel.extend({
-                    (0, 1): [0],
-                    (0, 2): [0, 2],
-                    (1, 0): [1],
-                    (1, 2): [2],
-                    (2, 0): [2, 0],
-                    (2, 1): [3]
-                }[(x, y)])
+                snub_rel.extend(
+                    {
+                        (0, 1): [0],
+                        (0, 2): [0, 2],
+                        (1, 0): [1],
+                        (1, 2): [2],
+                        (2, 0): [2, 0],
+                        (2, 1): [3],
+                    }[(x, y)]
+                )
             self.symmetry_rels += (tuple(snub_rel),)
 
         # order of the generator rotations {rotation: order}
         # {r: p, s: q, rs: 2}
-        self.rotations = {(0,): self.coxeter_matrix[0][1],
-                          (2,): self.coxeter_matrix[1][2],
-                          (0, 2): self.coxeter_matrix[0][2]}
+        self.rotations = {
+            (0,): self.coxeter_matrix[0][1],
+            (2,): self.coxeter_matrix[1][2],
+            (0, 2): self.coxeter_matrix[0][2],
+        }
 
     def get_vertices(self):
         """
@@ -323,7 +336,9 @@ class Snub(Polyhedra):
         self.vtable.run()
         self.vwords = self.vtable.get_words()
         self.num_vertices = len(self.vwords)
-        self.vertices_coords = tuple(self.transform(self.init_v, w) for w in self.vwords)
+        self.vertices_coords = tuple(
+            self.transform(self.init_v, w) for w in self.vwords
+        )
 
     def get_edges(self):
         """
@@ -406,7 +421,9 @@ class Polychora(BasePolytope):
 
     def __init__(self, coxeter_diagram, init_dist, extra_relations=()):
         if not (len(coxeter_diagram) == 6 and len(init_dist) == 4):
-            raise ValueError("Length error: the input coxeter_diagram must have length 6 and init_dist has length 4")
+            raise ValueError(
+                "Length error: the input coxeter_diagram must have length 6 and init_dist has length 4"
+            )
         super().__init__(coxeter_diagram, init_dist, extra_relations)
 
 
@@ -418,7 +435,9 @@ class Polytope5D(BasePolytope):
 
     def __init__(self, coxeter_diagram, init_dist, extra_relations=()):
         if len(coxeter_diagram) != 10 and len(init_dist) != 5:
-            raise ValueError("Length error: the input coxeter_diagram must have length 10 and init_dist has length 5")
+            raise ValueError(
+                "Length error: the input coxeter_diagram must have length 10 and init_dist has length 5"
+            )
         super().__init__(coxeter_diagram, init_dist, extra_relations)
 
     def proj4d(self, pole=1.3):
@@ -465,17 +484,20 @@ class Snub24Cell(Polychora):
         # 7. rr^-1 = 1
         # 8. ss^-1 = 1
         # 9. tt^-1 = 1
-        self.symmetry_rels = ((0,) * 3, (2,) * 3, (4,) * 3,
-                              (0, 2) * 2, (0, 4) * 2, (3, 4) * 2,
-                              (0, 1), (2, 3), (4, 5))
+        self.symmetry_rels = (
+            (0,) * 3,
+            (2,) * 3,
+            (4,) * 3,
+            (0, 2) * 2,
+            (0, 4) * 2,
+            (3, 4) * 2,
+            (0, 1),
+            (2, 3),
+            (4, 5),
+        )
         # rotations and their order
         # {r: 3, s: 3, t: 3, rs: 2, rt: 2, s^-1t: 2}
-        self.rotations = {(0,): 3,
-                          (2,): 3,
-                          (4,): 3,
-                          (0, 2): 2,
-                          (0, 4): 2,
-                          (3, 4): 2}
+        self.rotations = {(0,): 3, (2,): 3, (4,): 3, (0, 2): 2, (0, 4): 2, (3, 4): 2}
 
     def get_vertices(self):
         """
@@ -485,7 +507,9 @@ class Snub24Cell(Polychora):
         self.vtable.run()
         self.vwords = self.vtable.get_words()
         self.num_vertices = len(self.vwords)
-        self.vertices_coords = tuple(self.transform(self.init_v, w) for w in self.vwords)
+        self.vertices_coords = tuple(
+            self.transform(self.init_v, w) for w in self.vwords
+        )
 
     def get_edges(self):
         """
@@ -534,10 +558,12 @@ class Snub24Cell(Polychora):
         # 4. {v0, v0rs, v0t^-1s}
         # the edges of these triangles are in different orbits
         # hence their stabilizing subgroups are all <1>.
-        for triangle in [(0, self.move(0, (2,)), self.move(0, (0, 2))),
-                         (0, self.move(0, (4,)), self.move(0, (0, 4))),
-                         (0, self.move(0, (2,)), self.move(0, (5, 2))),
-                         (0, self.move(0, (0, 2)), self.move(0, (5, 2)))]:
+        for triangle in [
+            (0, self.move(0, (2,)), self.move(0, (0, 2))),
+            (0, self.move(0, (4,)), self.move(0, (0, 4))),
+            (0, self.move(0, (2,)), self.move(0, (5, 2))),
+            (0, self.move(0, (0, 2)), self.move(0, (5, 2))),
+        ]:
             orbit = self.get_orbit(self.vwords, triangle)
             self.face_indices.append(orbit)
             self.num_faces += len(orbit)

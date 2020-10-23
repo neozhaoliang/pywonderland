@@ -16,19 +16,19 @@ References:
 
 """
 import sys
+
 sys.path.append("../glslhelpers")
 
-import time
-import subprocess
 import argparse
+import subprocess
+import time
 
 import pyglet
+
 pyglet.options["debug_gl"] = False
 import pyglet.gl as gl
 import pyglet.window.key as key
-
 from shader import Shader
-
 
 # windows users need to add the directory that contains
 # your "ffmpeg.exe" to the environment variables.
@@ -44,18 +44,24 @@ class Mobius(pyglet.window.Window):
     4. Press Ctrl + v to toggle on/off saving the video.
     5. Press Enter to save screenshot.
     """
-    def __init__(self, width, height, scene, video,
-                 sample_rate, video_rate, antialiasing):
-        pyglet.window.Window.__init__(self,
-                                      width,
-                                      height,
-                                      caption="Mobius transformation in hyperbolic 3-space",
-                                      resizable=True,
-                                      visible=False,
-                                      vsync=False)
+
+    def __init__(
+        self, width, height, scene, video, sample_rate, video_rate, antialiasing
+    ):
+        pyglet.window.Window.__init__(
+            self,
+            width,
+            height,
+            caption="Mobius transformation in hyperbolic 3-space",
+            resizable=True,
+            visible=False,
+            vsync=False,
+        )
         self._start_time = time.clock()
         self.shader = Shader(["./glsl/mobius.vert"], ["./glsl/mobius.frag"])
-        self.apply, self.elliptic, self.hyperbolic = [int(x) for x in bin(scene)[2:].zfill(3)]
+        self.apply, self.elliptic, self.hyperbolic = [
+            int(x) for x in bin(scene)[2:].zfill(3)
+        ]
         self.video_on = video
         self.buffer = pyglet.image.get_buffer_manager().get_color_buffer()
         self.sample_rate = sample_rate
@@ -158,18 +164,32 @@ class Mobius(pyglet.window.Window):
         self.ffmpeg_pipe.write(data)
 
     def create_new_pipe(self):
-        ffmpeg = subprocess.Popen((FFMPEG_EXE,
-                                   "-threads", "0",
-                                   "-loglevel", "panic",
-                                   "-r", "%d" % self.video_rate,
-                                   "-f", "rawvideo",
-                                   "-pix_fmt", "rgba",
-                                   "-s", "%dx%d" % (self.width, self.height),
-                                   "-i", "-",
-                                   "-c:v", "libx264",
-                                   "-crf", "20",
-                                   "-y", self.scene_info() + ".mp4"
-                                  ), stdin=subprocess.PIPE)
+        ffmpeg = subprocess.Popen(
+            (
+                FFMPEG_EXE,
+                "-threads",
+                "0",
+                "-loglevel",
+                "panic",
+                "-r",
+                "%d" % self.video_rate,
+                "-f",
+                "rawvideo",
+                "-pix_fmt",
+                "rgba",
+                "-s",
+                "%dx%d" % (self.width, self.height),
+                "-i",
+                "-",
+                "-c:v",
+                "libx264",
+                "-crf",
+                "20",
+                "-y",
+                self.scene_info() + ".mp4",
+            ),
+            stdin=subprocess.PIPE,
+        )
         return ffmpeg.stdin
 
     def run(self, fps=None):
@@ -177,37 +197,50 @@ class Mobius(pyglet.window.Window):
         if fps is None:
             pyglet.clock.schedule(lambda dt: None)
         else:
-            pyglet.clock.schedule_interval(lambda dt: None, 1.0/fps)
+            pyglet.clock.schedule_interval(lambda dt: None, 1.0 / fps)
         pyglet.app.run()
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-size", type=str, default="640x360",
-                        help="width and height of the window")
-    parser.add_argument("-videorate", type=int, default=24,
-                        help="frames per second of the video")
-    parser.add_argument("-fps", type=int, default=None,
-                        help="frames per second of the animation")
-    parser.add_argument("-samplerate", type=int, default=24,
-                        help="sample a frame from the animation every these frames")
-    parser.add_argument("-video", action="store_true",
-                        help="turn on saving to the video")
-    parser.add_argument("-scene", type=int, default=0,
-                        help="an integer between 0-7 that chooses the scene")
-    parser.add_argument("-aa", type=int, default=1,
-                        help="antialiasing level")
+    parser.add_argument(
+        "-size", type=str, default="640x360", help="width and height of the window"
+    )
+    parser.add_argument(
+        "-videorate", type=int, default=24, help="frames per second of the video"
+    )
+    parser.add_argument(
+        "-fps", type=int, default=None, help="frames per second of the animation"
+    )
+    parser.add_argument(
+        "-samplerate",
+        type=int,
+        default=24,
+        help="sample a frame from the animation every these frames",
+    )
+    parser.add_argument(
+        "-video", action="store_true", help="turn on saving to the video"
+    )
+    parser.add_argument(
+        "-scene",
+        type=int,
+        default=0,
+        help="an integer between 0-7 that chooses the scene",
+    )
+    parser.add_argument("-aa", type=int, default=1, help="antialiasing level")
 
     args = parser.parse_args()
 
     width, height = [int(i) for i in args.size.split("x")]
 
-    app = Mobius(width=width,
-                 height=height,
-                 scene=args.scene,
-                 video=args.video,
-                 sample_rate=args.samplerate,
-                 video_rate=args.videorate,
-                 antialiasing=args.aa)
+    app = Mobius(
+        width=width,
+        height=height,
+        scene=args.scene,
+        video=args.video,
+        sample_rate=args.samplerate,
+        video_rate=args.videorate,
+        antialiasing=args.aa,
+    )
     print(app.__doc__)
     app.run(fps=args.fps)

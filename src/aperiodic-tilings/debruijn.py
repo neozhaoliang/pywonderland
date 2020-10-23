@@ -33,6 +33,7 @@ Some params you can tweak with:
 :copyright: by Zhao Liang, 2018.
 """
 import itertools
+
 import numpy as np
 
 try:
@@ -70,21 +71,33 @@ def compute_rhombus(r, s, kr, ks):
         Re(z/grids[s]) + shifts[s] = ks
     """
     # The intersection point
-    intersect_point = (GRIDS[r] * (ks - SHIFTS[s])
-                       - GRIDS[s] * (kr - SHIFTS[r])) * 1j / GRIDS[s-r].imag
+    intersect_point = (
+        (GRIDS[r] * (ks - SHIFTS[s]) - GRIDS[s] * (kr - SHIFTS[r]))
+        * 1j
+        / GRIDS[s - r].imag
+    )
 
     # the list of integers that indicate the position of the intersection point.
     # the i-th integer n_i indicates that this point lies in the n_i-th strip
     # in the i-th grid.
-    index = [np.ceil((intersect_point/grid).real + shift)
-             for grid, shift in zip(GRIDS, SHIFTS)]
+    index = [
+        np.ceil((intersect_point / grid).real + shift)
+        for grid, shift in zip(GRIDS, SHIFTS)
+    ]
 
     # Be careful of the accuracy problem here.
     # Mathematically the r-th and s-th item of index should be kr and ks,
     # but programmingly it might not be the case,
     # so we have to manually set them to be the correct values.
-    return [np.dot(index, GRIDS) for index[r], index[s] in
-            [(kr, ks), (kr+1, ks), (kr+1, ks+1), (kr, ks+1)]]
+    return [
+        np.dot(index, GRIDS)
+        for index[r], index[s] in [
+            (kr, ks),
+            (kr + 1, ks),
+            (kr + 1, ks + 1),
+            (kr, ks + 1),
+        ]
+    ]
 
 
 surface = cairo.SVGSurface("debruijn.svg", IMAGE_SIZE[0], IMAGE_SIZE[1])
@@ -99,7 +112,7 @@ ctx.translate(NUM_LINES, NUM_LINES)
 with open("./povray/data.inc", "w") as f:
     for r, s in itertools.combinations(range(DIMENSION), 2):
         for kr, ks in itertools.product(range(-NUM_LINES, NUM_LINES), repeat=2):
-            if (s-r == 1 or s-r == DIMENSION - 1):
+            if s - r == 1 or s - r == DIMENSION - 1:
                 color = FAT_COLOR
                 shape = 0
             else:
@@ -118,18 +131,27 @@ with open("./povray/data.inc", "w") as f:
             ctx.set_source_rgb(*EDGE_COLOR)
             ctx.stroke()
 
-            f.write("Tile(<{}, {}>, <{}, {}>, <{}, {}>, <{}, {}>, {})\n".format(
-                A.real, A.imag,
-                B.real, B.imag,
-                C.real, C.imag,
-                D.real, D.imag,
-                shape
-                ))
+            f.write(
+                "Tile(<{}, {}>, <{}, {}>, <{}, {}>, <{}, {}>, {})\n".format(
+                    A.real,
+                    A.imag,
+                    B.real,
+                    B.imag,
+                    C.real,
+                    C.imag,
+                    D.real,
+                    D.imag,
+                    shape,
+                )
+            )
 
 surface.finish()
 
 try:
     import subprocess
-    subprocess.call("convert debruijn.svg +shade 20x20 -modulate 200 debruijn.png", shell=True)
+
+    subprocess.call(
+        "convert debruijn.svg +shade 20x20 -modulate 200 debruijn.png", shell=True
+    )
 except ImportError:
     print("Adding shading effect to image failed, `convert` command not found")

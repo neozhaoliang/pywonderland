@@ -26,21 +26,21 @@ Some notes:
 Press "Enter" to save screenshots and "Esc" to escape.
 """
 import sys
+
 sys.path.append("../glslhelpers")
 
-import time
 import argparse
 import subprocess
+import time
 
 import pyglet
+
 pyglet.options["debug_gl"] = False
 import pyglet.gl as gl
 import pyglet.window.key as key
-
-from shader import Shader
 from framebuffer import FrameBuffer
+from shader import Shader
 from texture import create_image_texture
-
 
 FFMPEG_EXE = "ffmpeg"
 FONT_TEXTURE = "../glslhelpers/textures/font.png"
@@ -56,21 +56,22 @@ class Wythoff(pyglet.window.Window):
       4. press `Esc` to exit.
     """
 
-    def __init__(self, width, height, aa=1,
-                 video_rate=16, sample_rate=4):
+    def __init__(self, width, height, aa=1, video_rate=16, sample_rate=4):
         """
         :param width and height: size of the window in pixels.
 
         :param aa: antialiasing level, a higher value will give better
             result but also slow down the animation. (aa=2 is recommended)
         """
-        pyglet.window.Window.__init__(self,
-                                      width,
-                                      height,
-                                      caption="Wythoff Explorer",
-                                      resizable=True,
-                                      visible=False,
-                                      vsync=False)
+        pyglet.window.Window.__init__(
+            self,
+            width,
+            height,
+            caption="Wythoff Explorer",
+            resizable=True,
+            visible=False,
+            vsync=False,
+        )
         self.video_rate = video_rate
         self.video_on = False
         self.sample_rate = sample_rate
@@ -79,19 +80,24 @@ class Wythoff(pyglet.window.Window):
         self._speed = 4  # control speed of the animation
         self.aa = aa
         # shader A draws the UI
-        self.shaderA = Shader(["./glsl/wythoff.vert"], ["./glsl/common.frag",
-                                                        "./glsl/BufferA.frag"])
+        self.shaderA = Shader(
+            ["./glsl/wythoff.vert"], ["./glsl/common.frag", "./glsl/BufferA.frag"]
+        )
         # shadwr B draws the polyhedra
-        self.shaderB = Shader(["./glsl/wythoff.vert"], ["./glsl/common.frag",
-                                                        "./glsl/BufferB.frag"])
+        self.shaderB = Shader(
+            ["./glsl/wythoff.vert"], ["./glsl/common.frag", "./glsl/BufferB.frag"]
+        )
         # shader C puts them together
-        self.shaderC = Shader(["./glsl/wythoff.vert"], ["./glsl/common.frag",
-                                                        "./glsl/main.frag"])
+        self.shaderC = Shader(
+            ["./glsl/wythoff.vert"], ["./glsl/common.frag", "./glsl/main.frag"]
+        )
         self.font_texture = create_image_texture(FONT_TEXTURE)
-        self.iChannel0 = pyglet.image.Texture.create_for_size(gl.GL_TEXTURE_2D, width, height,
-                                                              gl.GL_RGBA32F_ARB)
-        self.iChannel1 = pyglet.image.Texture.create_for_size(gl.GL_TEXTURE_2D, width, height,
-                                                              gl.GL_RGBA32F_ARB)
+        self.iChannel0 = pyglet.image.Texture.create_for_size(
+            gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F_ARB
+        )
+        self.iChannel1 = pyglet.image.Texture.create_for_size(
+            gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F_ARB
+        )
         gl.glActiveTexture(gl.GL_TEXTURE0)
         gl.glBindTexture(self.iChannel0.target, self.iChannel0.id)
         gl.glActiveTexture(gl.GL_TEXTURE1)
@@ -207,22 +213,41 @@ class Wythoff(pyglet.window.Window):
             print("> The video is closed.\n")
 
     def write_video_frame(self):
-        data = pyglet.image.get_buffer_manager().get_color_buffer().get_image_data().get_data("RGBA", -4 * self.width)
+        data = (
+            pyglet.image.get_buffer_manager()
+            .get_color_buffer()
+            .get_image_data()
+            .get_data("RGBA", -4 * self.width)
+        )
         self.ffmpeg_pipe.write(data)
 
     def create_new_pipe(self):
-        ffmpeg = subprocess.Popen((FFMPEG_EXE,
-                                   "-threads", "0",
-                                   "-loglevel", "panic",
-                                   "-r", "%d" % self.video_rate,
-                                   "-f", "rawvideo",
-                                   "-pix_fmt", "rgba",
-                                   "-s", "%dx%d" % (self.width, self.height),
-                                   "-i", "-",
-                                   "-c:v", "libx264",
-                                   "-crf", "20",
-                                   "-y",  "test.mp4"
-                                  ), stdin=subprocess.PIPE)
+        ffmpeg = subprocess.Popen(
+            (
+                FFMPEG_EXE,
+                "-threads",
+                "0",
+                "-loglevel",
+                "panic",
+                "-r",
+                "%d" % self.video_rate,
+                "-f",
+                "rawvideo",
+                "-pix_fmt",
+                "rgba",
+                "-s",
+                "%dx%d" % (self.width, self.height),
+                "-i",
+                "-",
+                "-c:v",
+                "libx264",
+                "-crf",
+                "20",
+                "-y",
+                "test.mp4",
+            ),
+            stdin=subprocess.PIPE,
+        )
         return ffmpeg.stdin
 
     def run(self, fps=None):
@@ -230,24 +255,32 @@ class Wythoff(pyglet.window.Window):
         if fps is None:
             pyglet.clock.schedule(lambda dt: None)
         else:
-            pyglet.clock.schedule_interval(lambda dt: None, 1.0/fps)
+            pyglet.clock.schedule_interval(lambda dt: None, 1.0 / fps)
         pyglet.app.run()
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-size", metavar="s", type=str,
-                        default="800x480", help="window size in pixels")
-    parser.add_argument("-aa", type=int, default=2,
-                        help="antialiasing level")
-    parser.add_argument("-video_rate", type=int, default=16,
-                        help="fps of the video")
-    parser.add_argument("-sample_rate", type=int, default=4,
-                        help="how often a frame is sampled and ouput to video")
+    parser.add_argument(
+        "-size", metavar="s", type=str, default="800x480", help="window size in pixels"
+    )
+    parser.add_argument("-aa", type=int, default=2, help="antialiasing level")
+    parser.add_argument("-video_rate", type=int, default=16, help="fps of the video")
+    parser.add_argument(
+        "-sample_rate",
+        type=int,
+        default=4,
+        help="how often a frame is sampled and ouput to video",
+    )
     args = parser.parse_args()
     w, h = [int(x) for x in args.size.split("x")]
-    app = Wythoff(width=w, height=h, aa=args.aa,
-                  video_rate=args.video_rate, sample_rate=args.sample_rate)
+    app = Wythoff(
+        width=w,
+        height=h,
+        aa=args.aa,
+        video_rate=args.video_rate,
+        sample_rate=args.sample_rate,
+    )
     print(app.__doc__)
     app.run()
 

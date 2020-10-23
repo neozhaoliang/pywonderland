@@ -11,7 +11,6 @@ Reference for dfa minimization:
 
 
 class DFAState(object):
-
     def __init__(self, subset, accept=True):
         """
         :param subset: a set of integers represents a subset of the minimal roots,
@@ -49,7 +48,6 @@ class DFAState(object):
 
 
 class DFA(object):
-
     def __init__(self, start, sigma):
         """
         :param start: the starting state of the DFA. Unreachable states from this

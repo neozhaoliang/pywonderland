@@ -17,9 +17,11 @@ Example usage:
 
 :copyright (c) 2015 by Zhao Liang.
 """
-import sys
 import argparse
+import sys
+
 import yaml
+
 from polytopes.todd_coxeter import CosetTable
 
 
@@ -50,8 +52,7 @@ def word2int(symbols, wordslist):
     """
     Map a list of words to the list of their integer representations.
     """
-    return tuple(tuple(char2int(symbols, c) for c in word)
-                 for word in wordslist)
+    return tuple(tuple(char2int(symbols, c) for c in word) for word in wordslist)
 
 
 class FpGroup(object):
@@ -120,10 +121,12 @@ class FpGroup(object):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", type=str, help="Input file name")
-    parser.add_argument("-std", type=bool, default=True,
-                        help="Standardize the coset table or not")
-    parser.add_argument("-out", metavar="-o", type=str,
-                        default=None, help="output file name")
+    parser.add_argument(
+        "-std", type=bool, default=True, help="Standardize the coset table or not"
+    )
+    parser.add_argument(
+        "-out", metavar="-o", type=str, default=None, help="output file name"
+    )
     args = parser.parse_args()
 
     with open(args.filename, "r") as f:

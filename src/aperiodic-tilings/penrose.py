@@ -3,8 +3,8 @@
 Draw Penrose P3 tiling using substitution rules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
-import math
 import cmath
+import math
 
 try:
     import cairocffi as cairo
@@ -43,8 +43,8 @@ ctx.scale(wheel_radius, wheel_radius)
 # Create wheel of red triangles around the origin
 triangles = []
 for i in range(10):
-    B = cmath.rect(1, (2*i - 1) * math.pi / 10)
-    C = cmath.rect(1, (2*i + 1) * math.pi / 10)
+    B = cmath.rect(1, (2 * i - 1) * math.pi / 10)
+    C = cmath.rect(1, (2 * i + 1) * math.pi / 10)
     if i % 2 == 0:
         B, C = C, B  # Make sure to mirror every second triangle
     triangles.append((0, 0j, B, C))
