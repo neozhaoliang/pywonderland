@@ -33,6 +33,7 @@ script:
   - python fractaltree.py
   - python e8.py
   - python kaleidoscope.py
+  - python domain_coloring.py
   # polytopes examples
   - cd ../polytopes/
   - python example_run_coset_enumeration.py tc_examples/G8723.yaml
