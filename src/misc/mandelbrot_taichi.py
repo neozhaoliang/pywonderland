@@ -12,13 +12,20 @@ import taichi as ti
 
 ti.init(debug=False, arch=ti.gpu)
 
+
+# window size
 WIDTH, HEIGHT = 800, 480
+# axis range
 ymin, ymax = -1, 1
 xmin, xmax = -WIDTH / HEIGHT, WIDTH / HEIGHT
+# 2d array store the (r, g, b) of the pixels
 pixels = ti.Vector(3, dt=ti.f32, shape=(WIDTH, HEIGHT))
+# create numpy 2d array store the complex points
 ox, oy = np.mgrid[xmin : xmax : WIDTH * 1j, ymin : ymax : HEIGHT * 1j]
+ogrid = np.stack((ox, oy), axis=2).astype(np.float32)
+# convert the numpy array to a taichi vector
 grid = ti.Vector(2, dt=ti.f32, shape=(WIDTH, HEIGHT))
-grid.from_numpy(np.stack((ox, oy), axis=2))
+grid.from_numpy(ogrid)
 
 
 @ti.func
@@ -47,13 +54,7 @@ def mix(x, y, a):
     """
     Mix two vectors `x` and `y` weighted by a real number `a`.
     """
-    return ti.Vector(
-        [
-            x[0] * (1.0 - a) + y[0] * a,
-            x[1] * (1.0 - a) + y[1] * a,
-            x[2] * (1.0 - a) + y[2] * a,
-        ]
-    )
+    return x * (1.0 - a) + y * a
 
 
 @ti.func
@@ -85,7 +86,7 @@ def get_color(z, timef32):
         co = 0.0
         w = ti.Vector([0.5, 0.0])
         for _ in range(256):
-            if ti.dot(w, w) > 1024:
+            if ti.dot(w, w) > 1024.0:
                 break
             w = cmul(cc, cmul(w, cadd(1.0, -w)))
             co += 1.0
