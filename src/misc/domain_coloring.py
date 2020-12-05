@@ -95,7 +95,7 @@ def gradient_magnitude(fz):
 
 
 def main():
-    y, x = np.ogrid[ymin: ymax: image_height * super_sampling * 1j,
+    y, x = np.ogrid[ymax: ymin: image_height * super_sampling * 1j,
                     xmin: xmax: image_width * super_sampling * 1j]
     z = x + y * 1j
     fz = complex_function(z)

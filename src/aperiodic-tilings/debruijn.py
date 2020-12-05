@@ -88,7 +88,7 @@ def compute_rhombus(r, s, kr, ks):
     # Be careful of the accuracy problem here.
     # Mathematically the r-th and s-th item of index should be kr and ks,
     # but programmingly it might not be the case,
-    # so we have to manually set them to be the correct values.
+    # so we have to manually set them to correct values.
     return [
         np.dot(index, GRIDS)
         for index[r], index[s] in [
@@ -151,7 +151,7 @@ try:
     import subprocess
 
     subprocess.call(
-        "convert debruijn.svg +shade 20x20 -modulate 200 debruijn.png", shell=True
+        "convert debruijn.svg +shade 20x20 -modulate 250 debruijn.png", shell=True
     )
 except ImportError:
     print("Adding shading effect to image failed, `convert` command not found")

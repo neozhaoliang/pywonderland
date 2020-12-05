@@ -133,6 +133,7 @@ I have learned a lot from the following people:
 - [Roice Nelson](https://github.com/roice3)
 - [Possibly Wrong](https://possiblywrong.wordpress.com/)
 - [Jos Leys](http://www.josleys.com/)
+- [Greg Egan](http://gregegan.net/)
 
 ## License
 

@@ -82,6 +82,9 @@ class BasePolytope(object):
         self.face_indices = []
 
     def build_geometry(self):
+        """
+        Split the building procedure into three steps.
+        """
         self.get_vertices()
         self.get_edges()
         self.get_faces()

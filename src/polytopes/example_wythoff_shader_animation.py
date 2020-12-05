@@ -7,21 +7,23 @@ Code exported from Matt Zucker's excellent shadertoy program at
 
     "https://www.shadertoy.com/view/Md3yRB"
 
-Matt's program has some rich features and a great UI (as a pure shader program!).
+Matt's program has some rich features and a great UI (as a pure
+shader program!).
 
 Some notes:
 
 1. This program draws only a subset of all uniform polyhedron in 3d,
-   it can't draw star and snub ones (the only exceptions are those with Schläfli
-   symbol (3, 5/2), you need to change the code manually in the function
-   `setup_triangle` in `common.frag` to see them.
+   it can't draw star and snub ones (the only exceptions are those
+   with Schläfli symbol (3, 5/2), you need to change the code manually
+   in the function `setup_triangle` in `common.frag` to see them.
 
-2. The antialiasing routine in Matt's original code is replaced by the usual supersampling
-   method, it runs slower but gives better result. I also deleted some redundant code
-   (for example the usage of iChannel1 in BufferA and BufferB) from Matt's version.
+2. The antialiasing routine in Matt's original code is replaced by the
+   usual supersampling method, it runs slower but gives better result.
+   I also deleted some redundant code (for example the usage of iChannel1
+   in BufferA and BufferB) from Matt's version.
 
-3. This program uses two invisible "frame buffers" to render the gui and the polyhedra,
-   and combines them together in a third main shader.
+3. This program uses two invisible "frame buffers" to render the gui
+   and the polyhedra, and combines them together in a third main shader.
 
 Press "Enter" to save screenshots and "Esc" to escape.
 """

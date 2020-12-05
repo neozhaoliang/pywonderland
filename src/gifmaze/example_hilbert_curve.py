@@ -3,6 +3,10 @@
 Hilbert curve animation based on Gray code
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Based on code at
+
+"https://possiblywrong.wordpress.com/2014/04/18/allrgb-hilbert-curves-and-random-spanning-trees/"
+
 :copyright (c) 2018 by Zhao Liang
 """
 from colorsys import hls_to_rgb
