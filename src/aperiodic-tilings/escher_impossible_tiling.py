@@ -176,7 +176,7 @@ class Rhombus(object):
             ctx.fill()
 
 
-surface = cairo.SVGSurface("debruijn.svg", IMAGE_SIZE[0], IMAGE_SIZE[1])
+surface = cairo.SVGSurface("Escher-impossible-tiling.svg", IMAGE_SIZE[0], IMAGE_SIZE[1])
 ctx = cairo.Context(surface)
 ctx.set_line_cap(cairo.LINE_CAP_ROUND)
 ctx.set_line_join(cairo.LINE_JOIN_ROUND)
