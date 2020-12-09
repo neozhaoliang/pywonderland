@@ -119,8 +119,6 @@ I have a long list of projects to do in mind and they may take a few years to ac
 
 + Escher circle limits in svg format.
 
-+ Shader animation of aperiodic tilings using de Bruijn's approach.
-
 + Draw limit roots of Coxeter groups.
 
 + Knots and dynamic systems.
