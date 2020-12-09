@@ -335,13 +335,14 @@ void main()
     col = mix(col, col * 2., (1. - smoothstep(0., .02, dborder - .02))*.3);
     col *= min(id / 2. + .5, 1.25);
 
-    vec2 diag = grids[rb.r] + grids[rb.s];
+    vec2 diag = (rb.verts[0] - rb.cen);
+    float dd = cA < 0. ? dot(q, diag) : dot(q, vec2(-diag.y, diag.x));
     // some hatch lines to make the faces look like pencil work
-    float hatch = clamp(sin(dot(q, diag)* 60.*PI) * 2. + .5, 0., 1.);
-    float hrnd = hash21(floor(q * 40.* PI) + 0.73);
+    float hatch = clamp(sin(dd * 60.*PI) * 2. + .5, 0., 1.);
+    float hrnd = hash21(floor(q * 400.* PI) + 0.73);
     if (hrnd > 0.66) hatch = hrnd;
     if (tunnel < 0.0 || hole < 0.0) hatch = 1.0;
-    col *= hatch *.25 + .75;
+    col *= hatch *.1 + .85;
     // some thin bouding box between the hole and the face border
     col = mix(col, vec3(0.), (1. - smoothstep(0., .01, max(dface+0.1, -(dface+.1))))*.5);
 
