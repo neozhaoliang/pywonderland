@@ -10,6 +10,9 @@ out vec4 FinalColor;
 #define BIGF 100000.0
 
 
+#define SOME_SOLID_FACES
+
+
 // iq's hash function
 float hash21(vec2 p)
 {
@@ -83,7 +86,7 @@ float dquad(vec2 p, vec2[4] verts)
 
 
 // shists of the grids
-const float[5] shifts = float[5](0.2, 0.2, 0.2, 0.2, 0.2);
+const float[5] shifts = float[5](0.5, 0.5, 0.5, 0.5, 0.5);
 
 // directions of the grids, will be initialized in the beginning of the main function
 vec2[5] grids;
@@ -267,7 +270,7 @@ void main()
     init_grids();
 
     vec2 p;
-    Rhombus rb = get_mapped_rhombus(uv + iTime * vec2(.2), p);
+    Rhombus rb = get_mapped_rhombus(uv + iTime * vec2(.5), p);
     get_tunnels(rb);
 
     // relative position of the transformed pixel in the rhombus
@@ -288,8 +291,6 @@ void main()
  
     float cA = dot(grids[rb.r], grids[rb.s]);
     float sA = sqrt(1. - cA * cA);
-
-      
     float dcen = dot(q, q) * 1.5;
     
     if(rnd > .5)
@@ -309,10 +310,28 @@ void main()
     // note each rhombus has unit side length, so sA is twice the distance
     // from the center to its four edges.
     float hole = dface + sA / 4.0;
-    if(abs(rnd - 0.5) > .48) { hole += 1e5; tunnel += 1e5; }
+    float dcross = 1e5;
+
+#ifdef SOME_SOLIDS_FACES
+    
+    if(abs(rnd - 0.5) > .48)
+    {
+        hole += 1e5; tunnel += 1e5; 
+    	vec2 vA = (rb.verts[0] + rb.cen) / 2.;
+        vec2 vB = (rb.verts[1] + rb.cen) / 2.;
+    	vec2 vC = (rb.verts[2] + rb.cen) / 2.;
+        vec2 vD = (rb.verts[3] + rb.cen) / 2.;
+    	dcross = dseg(p, vA, vB);
+        dcross = min(dcross, dseg(p, vB, vC));
+        dcross = min(dcross, dseg(p, vC, vD));
+        dcross = min(dcross, dseg(p, vD, vA));
+        dcross = min(dcross, dseg(p, vA, vC));
+        dcross = min(dcross, dseg(p, vB, vD));
+    }
+#endif
     
     // combine all distances
-    float dborder = max(dface, -(dface + 0.008));
+    float dborder = max(dface, -(dface + 0.006));
     dborder = min(dborder, min(tunnel, hole));
     
     // shade the tunnels by the type of the rhombus
@@ -333,6 +352,8 @@ void main()
     col = mix(col, vec3(1.), (1. - smoothstep(0., .01, tunnel)) *shade);
     // highlighting the edges
     col = mix(col, col * 2., (1. - smoothstep(0., .02, dborder - .02))*.3);
+    // highlight crosses on solid faces
+    col = mix(col, vec3(0.), (1. - smoothstep(0., .01, dcross-0.005)) * 0.5);
     col *= min(id / 2. + .5, 1.25);
 
     vec2 diag = (rb.verts[0] - rb.cen);
@@ -341,6 +362,7 @@ void main()
     float hatch = clamp(sin(dd * 60.*PI) * 2. + .5, 0., 1.);
     float hrnd = hash21(floor(q * 400.* PI) + 0.73);
     if (hrnd > 0.66) hatch = hrnd;
+    // we dont't want the hatch lines to show on top of the hole and tunnel
     if (tunnel < 0.0 || hole < 0.0) hatch = 1.0;
     col *= hatch *.1 + .85;
     // some thin bouding box between the hole and the face border

@@ -70,7 +70,7 @@ class Escher(pyglet.window.Window):
             pyglet.app.exit()
 
     def save_screenshot(self):
-        self.buffer.save(self.scene + "-screenshoot.png")
+        self.buffer.save("impossible-tiling.png")
 
     def run(self, fps=None):
         self.set_visible(True)
@@ -84,7 +84,7 @@ class Escher(pyglet.window.Window):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-size", metavar="s", type=str, default="800x480", help="window size in pixels"
+        "-size", metavar="s", type=str, default="1200x960", help="window size in pixels"
     )
     args = parser.parse_args()
     w, h = [int(x) for x in args.size.split("x")]
