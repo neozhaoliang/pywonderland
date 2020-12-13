@@ -119,8 +119,6 @@ I have a long list of projects to do in mind and they may take a few years to ac
 
 + Escher circle limits in svg format.
 
-+ Draw limit roots of Coxeter groups.
-
 + Knots and dynamic systems.
 
 ## Thanks
