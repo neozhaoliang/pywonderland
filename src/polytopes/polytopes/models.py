@@ -286,7 +286,7 @@ class Snub(Polyhedra):
 
     def __init__(self, coxeter_diagram, init_dist=(1.0, 1.0, 1.0), extra_relations=()):
         super().__init__(coxeter_diagram, init_dist, extra_relations)
-        # the representaion is not in the form of a Coxeter group,
+        # the representation is not in the form of a Coxeter group,
         # we must overwrite the relations.
 
         # four generators (r, r^-1, s, s^-1)
