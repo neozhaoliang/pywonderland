@@ -15,6 +15,15 @@
 <br>
 
 
+
+**UPDATE**: This repo is currently under a huge reconstruction, more fancy and advanced features will be added, some dirty code will be removed. Also I will make more shadertoy live demos to help people understand the math. So you can look forward a more fantastic version :smile:.​
+
+Known issues:
+
+1. The code for drawing E8 root system is not mathematically correct (though the result image looks right), I didn't take the bilinear form into account. Same reason for drawing polytope on its Coxeter plane in `polytopes` project.
+2. The math used in `Euclidean2D` class in `uniform-tilings`  project is wrong, though the result images look right. 
+
+
 ## About this repo
 
 The purpose of this project is to show the beauty of math with python. It consists of several independent subprojects with each one illustrates a special object/algorithm in math. The current list is:
@@ -51,7 +60,7 @@ A few examples:
 
 ## How to use
 
-All projects here are implemented in a ready-to-use manner for new comers. That is you can simply run the examples without tweaking any parameters once you have the dependencies installed correctly. Each subdirectory in `src/` is a single program (except that `glslhelpers` is a helper module for running glsl programs and `misc` is a collection of independent scripts), any file named `main.py`, `run_*.py`, `example_*.py` is an executable script that gives some output.
+All projects here are implemented in a ready-to-use manner for new comers. You can simply run the examples without tweaking any parameters once you have the dependencies installed correctly. Each subdirectory in `src/` is a single program (except that `glslhelpers` is a helper module for running glsl programs and `misc` is a collection of independent scripts), any file named `main.py`, `run_*.py`, `example_*.py` is an executable script that gives some output.
 
 
 ## List of algorithms
@@ -113,9 +122,9 @@ I have a long list of projects to do in mind and they may take a few years to ac
 
 + **Minimal surfaces**. Implement two ways to construct minimal surfaces: either by solving Plateau's problem or use a pair of analytic functions. Render the result in POV-Ray.
 
-+ **Uniform tilings**: Replace the hyperbolic module currently used in `uniform-tilings` project by a custom one, with upper half space model added. Also find an efficient way to render the upper half space boundary images in python. Inspired by [Roice's artwork](https://github.com/roice3/Honeycombs).
++ **Uniform tilings**: Replace the hyperbolic module currently used in `uniform-tilings` project by a custom one (since I want to include LaTeX expressions in the images), with upper half space model added. Also find an efficient way to render the upper half space boundary images in python. Inspired by [Roice's artwork](https://github.com/roice3/Honeycombs).
 
-+ Shader animations of polyhedral, euclidean, hyperbolic tilings with gears, inspired by [iq' artwork](https://www.shadertoy.com/view/tt2XzG).
++ Shader animations of polyhedral, euclidean, hyperbolic tilings with gears.
 
 + Escher circle limits in svg format.
 
