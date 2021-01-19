@@ -41,9 +41,8 @@ def get_point_from_distance(M, d, normalized=True):
     """
     p = np.linalg.solve(M, d)
     if normalized:
-        return normalize(p)
+        p = normalize(p)
     return p
-
 
 def get_coxeter_matrix(coxeter_diagram):
     """
@@ -69,16 +68,15 @@ def get_coxeter_matrix(coxeter_diagram):
     return make_symmetry_matrix(upper_triangle).astype(np.int)
 
 
-def get_spherical_or_affine_mirrors(coxeter_diagram):
+def get_spherical_mirrors(coxeter_diagram):
     """
     Given three or six integers/rationals that represent
     the angles between the mirrors (a rational p means the
     angle is π/p), return a 3x3 or 4x4 matrix whose rows
-    are the normal vectors of the mirrors.
-    Here the tiling space determined by `coxeter_diagram` must
-    be either spherical or euclidean.
+    are the normal vectors of the mirrors. Here the tiling
+    determined by `coxeter_diagram` must be spherical.
     """
-    coxeter_matrix = np.array(make_symmetry_matrix(coxeter_diagram)).astype(np.float)
+    coxeter_matrix = make_symmetry_matrix(coxeter_diagram).astype(np.float)
     C = -np.cos(np.pi / coxeter_matrix)
     M = np.zeros_like(C)
 
@@ -95,6 +93,34 @@ def get_spherical_or_affine_mirrors(coxeter_diagram):
         M[3, 3] = np.sqrt(
             abs(1 - M[3, 0] * M[3, 0] - M[3, 1] * M[3, 1] - M[3, 2] * M[3, 2])
         )
+    return M
+
+
+def get_euclidean_mirrors(coxeter_diagram):
+    """
+    Given three or six integers that represent the angles between the mirrors,
+    return a 3x3 or 4x4 matrix whose rows are the normal vectors of the mirrors.
+    Here the tiling determined by `coxeter_diagram` must be Euclidean.
+    """
+    coxeter_matrix = make_symmetry_matrix(coxeter_diagram).astype(np.float)
+    C = -np.cos(np.pi / coxeter_matrix)
+    M = np.zeros_like(C)
+
+    M[0, 0] = 1
+    M[1, 0] = C[0, 1]
+    M[1, 1] = np.sqrt(1 - M[1, 0] * M[1, 0])
+    M[2, 0] = C[0, 2]
+    M[2, 1] = (C[1, 2] - M[1, 0] * M[2, 0]) / M[1, 1]
+
+    if len(coxeter_matrix) == 3:
+        M[2, 2] = 1
+    else:
+        M[2, 2] = np.sqrt(abs(1 - M[2, 0] * M[2, 0] - M[2, 1] * M[2, 1]))
+        M[3, 0] = C[0, 3]
+        M[3, 1] = (C[1, 3] - M[1, 0] * M[3, 0]) / M[1, 1]
+        M[3, 2] = (C[2, 3] - M[2, 0] * M[3, 0] - M[2, 1] * M[3, 1]) / M[2, 2]
+        M[3, 3] = 1
+
     return M
 
 
@@ -134,12 +160,12 @@ def get_hyperbolic_honeycomb_mirrors(coxeter_diagram):
     return M
 
 
-def project_affine(v, level):
+def project_affine(v):
     """
-    Project a point in R^3 to a z=level plane.
+    Project a point in R^3 to a z=1 plane. We assume the z-component of
+    v is already 1.
     """
-    x, y, z = v
-    return np.array([x, y]) / z * level
+    return v[:-1]
 
 
 def project_poincare(v):

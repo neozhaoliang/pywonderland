@@ -18,7 +18,7 @@ def main():
     T.render("omnitruncated-3-3-3.svg", 1200, 960)
 
     T = Euclidean2D((6, 2, 3), (1, 0, 1))
-    T.build_geometry(60)
+    T.build_geometry(40)
     T.render(
         "bitruncated-6-2-3.svg",
         1200,

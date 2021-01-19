@@ -10,19 +10,21 @@ class DihedralFace(object):
     the fundamental triangle.
     """
 
-    def __init__(self, word, indices, center, coords, type):
+    def __init__(self, word, center, coords, type, geometry):
         """
         word: the word that transforms the fundamental domain to this polygon.
-        indices: the indices of the vertices of this polygon.
         center: coordinates of the center of this polygon.
         coords: coordinates of the vertices of this polygon.
         type: type of this face (0 or 1).
         """
         self.word = word
-        self.indices = indices
         self.center = center
         self.coords = coords
         self.type = type
+        if geometry == "euclidean":
+            self.normalize_func = lambda p: p / p[-1]
+        else:
+            self.normalize_func = helpers.normalize
 
     def get_alternative_domains(self):
         """
@@ -38,8 +40,8 @@ class DihedralFace(object):
             # the two adjacent vertices and the middle points with them
             q1 = self.coords[(i + 1) % len(self.coords)]
             q2 = self.coords[i - 1]
-            m1 = helpers.normalize((p + q1) / 2)
-            m2 = helpers.normalize((p + q2) / 2)
+            m1 = self.normalize_func((p + q1) / 2)
+            m2 = self.normalize_func((p + q2) / 2)
 
             if self.type:
                 if (len(self.word) + i) % 2 == 0:

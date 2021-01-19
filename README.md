@@ -21,7 +21,6 @@
 Known issues:
 
 1. The code for drawing E8 root system is not mathematically correct (though the result image looks right), I didn't take the bilinear form into account. Same reason for drawing polytope on its Coxeter plane in `polytopes` project.
-2. The math used in `Euclidean2D` class in `uniform-tilings`  project is wrong, though the result images look right. 
 
 
 ## About this repo

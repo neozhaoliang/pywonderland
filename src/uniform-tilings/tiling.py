@@ -101,6 +101,8 @@ def divide_line(hwidth, k):
 
 class Tiling2D(object):
 
+    GEOMETRY = None
+
     """
     Base class for all three types of tilings.
     """
@@ -267,7 +269,7 @@ class Tiling2D(object):
                 if None not in f:
                     center = self.transform(word, c0)
                     coords = [self.vertices_coords[k] for k in f]
-                    face = DihedralFace(word, f, center, coords, type)
+                    face = DihedralFace(word, center, coords, type, self.GEOMETRY)
                     flist.append(face)
 
             self.face_indices[(i, j)] = flist
@@ -322,6 +324,8 @@ class Tiling2D(object):
 
 
 class Poincare2D(Tiling2D):
+
+    GEOMETRY = "hyperbolic"
 
     """Uniform tilings in Poincaré hyperbolic disk model.
     """
@@ -444,35 +448,40 @@ class Poincare2D(Tiling2D):
 
 
 class Euclidean2D(Tiling2D):
-    @property
-    def level(self):
-        """Return the z-component of the initial vertex.
-        """
-        return self.init_v[2]
+
+    GEOMETRY = "euclidean"
+
+    def get_reflections(self):
+        def reflect(v, normal):
+            q = np.append(normal[:-1], 0)
+            return v - 2 * np.dot(v, normal) * q
+
+        return [partial(reflect, normal=n) for n in self.mirrors]
 
     def project(self, v):
-        return helpers.project_affine(v, self.level)
+        return helpers.project_affine(v)
 
     def get_init_point(self, init_dist):
-        return helpers.get_point_from_distance(self.mirrors, init_dist, False)
+        p = helpers.get_point_from_distance(self.mirrors, init_dist)
+        return p / p[-1]
 
     def get_fundamental_triangle_verts(self):
         m0, m1, m2 = self.mirrors
         A = np.cross(m1, m2)
         B = np.cross(m0, m2)
         C = np.cross(m0, m1)
-        return [p / p[-1] * self.level for p in [A, B, C]]
+        return [p / p[-1] for p in [A, B, C]]
 
     def get_mirrors(self, coxeter_diagram):
-        return helpers.get_spherical_or_affine_mirrors(coxeter_diagram)
+        return helpers.get_euclidean_mirrors(coxeter_diagram)
 
     def render(
         self,
         output,
         image_width,
         image_height,
-        extent=30,
-        line_width=0.2,
+        extent=8,
+        line_width=0.07,
         show_vertices_labels=False,
         face_colors=("thistle", "steelblue", "lightcoral"),
     ):
@@ -532,10 +541,10 @@ class Euclidean2D(Tiling2D):
         bar.close()
 
         if show_vertices_labels:
-            ctx.set_font_size(0.7)
+            ctx.set_font_size(0.2)
             for i, p in enumerate(self.vertices_coords[:1000]):
                 x, y = self.project(p)
-                ctx.arc(x, y, 0.5, 0, 2 * np.pi)
+                ctx.arc(x, y, 0.2, 0, 2 * np.pi)
                 ctx.set_source_rgb(*Color("darkolivegreen").rgb)
                 ctx.fill()
                 ctx.set_source_rgb(*Color("papayawhip").rgb)
@@ -554,6 +563,9 @@ class Euclidean2D(Tiling2D):
 
 
 class Spherical2D(Tiling2D):
+
+    GEOMETRY = "spherical"
+
     def project(self, v):
         """keep v untouched here since we want to draw a 3d plot of the
            tiling, for 4d polychora it should be stereographic projection.
@@ -568,7 +580,7 @@ class Spherical2D(Tiling2D):
         return [helpers.get_point_from_distance(self.mirrors, d) for d in M]
 
     def get_mirrors(self, coxeter_diagram):
-        return helpers.get_spherical_or_affine_mirrors(coxeter_diagram)
+        return helpers.get_spherical_mirrors(coxeter_diagram)
 
     def render(self, output, image_size):
         """Need to find out how to draw 3d plots in SVG format.
@@ -630,6 +642,7 @@ class Spherical2D(Tiling2D):
 
 
 class UpperHalfPlane(Poincare2D):
+
     def render(
         self,
         output,
