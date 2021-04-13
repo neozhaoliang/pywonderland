@@ -39,6 +39,7 @@ The purpose of this project is to show the beauty of math with python. It consis
 + [Reaction diffusion simulation with pyglet and glsl](./src/grayscott).
 + [Raymarching fractals with pyglet and glsl](./src/fractal3d).
 + [Raymarching Möbius transformation animations with pyglet and glsl](./src/mobius).
++ [Limit set of rank 4 hyperbolic Coxeter groups](./src/hyperbolic-limit-set)
 + [Miscellaneous scripts](./src/misc) like E8 root system, Mandelbrot set, Newton's fractal, Lorenz attractor, etc.
 
 These topics are chosen largely due to my personal taste:
@@ -50,12 +51,6 @@ These topics are chosen largely due to my personal taste:
 I'll use only popular python libs and build all math stuff by hand (tools like `sage`, `sympy`, `mathemetica` will not be used here). Also I will only maintain the code for `python >= 3.6`.
 
 **Note**: Python3.5 is deprecated now because it's a bit tricky to install the latest numba on Ubuntu16.04 for python3.5 (if you are using `anaconda` for package management then you need not worry about this because anaconda will fix it for you). Note `numba` is only used in a few fractal scripts in the `misc` directory and all other projects should also work for python>=2.7.
-
-A few examples:
-
-<p align="center">
-<img src="./gallery.png" width="800">
-</p>
 
 ## How to use
 
