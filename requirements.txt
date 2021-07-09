@@ -1,13 +1,10 @@
-colour
-drawSvg
-hyperbolic >= 1.2.0
 jupyter
 matplotlib
 numba
 numpy
 pillow
+pycairo
 pyglet
-pygraphviz
 pyyaml
 scipy
 taichi

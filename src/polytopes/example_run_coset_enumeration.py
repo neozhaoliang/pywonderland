@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*_
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Run coset enumeration examples using Todd-Coxeter algorithm
@@ -15,7 +14,7 @@ Example usage:
         -std: optional, if added then the output table is standard.
           -o: optional, output filename, the default is sys.stdout.
 
-:copyright (c) 2015 by Zhao Liang.
+:copyright (c) 2018 by Zhao Liang.
 """
 import argparse
 import sys

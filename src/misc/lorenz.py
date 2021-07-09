@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Make 3D Animations of Lorenz Attractor with Matplotlib

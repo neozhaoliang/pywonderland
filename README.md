@@ -1,46 +1,24 @@
-<p align="center">
-<img src="120-cell.png" width="400">
-</p>
-
 # A Tour in the Wonderland of Math with Python
 
-<br>
 
-> #### A collection of python scripts for drawing beautiful figures and animating interesting algorithms in mathematics.
-
-<br>
-
-[![Build Status](https://travis-ci.org/neozhaoliang/pywonderland.svg?branch=master)](https://travis-ci.org/neozhaoliang/pywonderland) ![](https://img.shields.io/badge/license-MIT-blue.svg) ![](https://img.shields.io/badge/python-3.5%20%7C%203.6-orange.svg)
-
-<br>
-
-
-
-**UPDATE**: This repo is currently under a huge reconstruction, more fancy and advanced features will be added, some dirty code will be removed. Also I will make more shadertoy live demos to help people understand the math. So you can look forward a more fantastic version :smile:.​
-
-Known issues:
-
-1. The code for drawing E8 root system is not mathematically correct (though the result image looks right), I didn't take the bilinear form into account. Same reason for drawing polytope on its Coxeter plane in `polytopes` project.
+> **A collection of python scripts for drawing beautiful figures and animating interesting algorithms in mathematics**.
 
 
 ## About this repo
 
-The purpose of this project is to show the beauty of math with python. It consists of several independent subprojects with each one illustrates a special object/algorithm in math. The current list is:
+The purpose of this project is to show the beauty of math with python by rendering high quality images, videos and animations. It consists of several independent projects with each one illustrates a special object/algorithm in math. The current list contains:
 
-+ [Aperiodic tilings](./src/aperiodic-tilings) like Penrose tiling, Ammann-Beenker tiling, etc.
-+ Triology on perfectly random sampling algorithms. See
-    1. [Domino shuffling algorithm on Aztec diamonds](./src/aztec)
-    2. [Wilson's uniform spanning tree algorithm on 2d grids](./src/gifmaze)
-    3. [Coupling from the past algorithm on lozenge tilings](./src/cftp).
-+ [Hopf fibration](./src/hopf)
-+ [3D and 4D Uniform polytopes](./src/polytopes).
-+ [2D and 3d Uniform tilings in Euclidean, spherical and hyperbolic spaces](./src/uniform-tilings).
-+ [Make gif animations of various algorithms](./src/gifmaze).
-+ [Reaction diffusion simulation with pyglet and glsl](./src/grayscott).
-+ [Raymarching fractals with pyglet and glsl](./src/fractal3d).
-+ [Raymarching Möbius transformation animations with pyglet and glsl](./src/mobius).
-+ [Limit set of rank 4 hyperbolic Coxeter groups](./src/hyperbolic-limit-set)
-+ [Miscellaneous scripts](./src/misc) like E8 root system, Mandelbrot set, Newton's fractal, Lorenz attractor, etc.
+- Aperiodic tilings like Penrose tiling, Ammann-Beenker tiling, etc.
+- Triology on perfectly random sampling algorithms.
+  1. Domino shuffling algorithm on Aztec diamonds.
+  2. Wilson's uniform spanning tree algorithm on 2d grids.
+  3. Coupling from the past algorithm on lozenge tilings.
+- Hopf fibration.
+- 3D and 4D Uniform polytopes.
+- 2D uniform tilings and 3D uniform honeycombs in Euclidean, spherical and hyperbolic spaces.
+- [Make gif animations of various algorithms](https://github.com/neozhaoliang/pywonderland/blob/master/src/gifmaze).
+- Lots of shader animations.
+- [Miscellaneous scripts](https://github.com/neozhaoliang/pywonderland/blob/master/src/misc) like E8 root system, Mandelbrot set, Newton's fractal, Lorenz attractor, etc.
 
 These topics are chosen largely due to my personal taste:
 
@@ -48,27 +26,64 @@ These topics are chosen largely due to my personal taste:
 2. There must be some non-trivial math behind them.
 3. The code should be as simple as possible.
 
-I'll use only popular python libs and build all math stuff by hand (tools like `sage`, `sympy`, `mathemetica` will not be used here). Also I will only maintain the code for `python >= 3.6`.
+I'll use only popular python libs and build all math stuff by hand (tools like `sage`, `sympy`, `mathemetica` will not be used here).
 
-**Note**: Python3.5 is deprecated now because it's a bit tricky to install the latest numba on Ubuntu16.04 for python3.5 (if you are using `anaconda` for package management then you need not worry about this because anaconda will fix it for you). Note `numba` is only used in a few fractal scripts in the `misc` directory and all other projects should also work for python>=2.7.
+
+## Gallery
+
+The code for some of the images are not in the master branch, they can be found in the [released version](https://github.com/neozhaoliang/pywonderland/releases/tag/0.1.0).
+
++ Uniform 3D and 4D polytopes
+
+
+
++ Möbius transformations
+
+<img src="https://user-images.githubusercontent.com/23307174/125022164-a3162180-e0ae-11eb-86f2-d41eaea7ba85.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125022177-a7423f00-e0ae-11eb-9ee8-a711538eda1b.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125022184-a9a49900-e0ae-11eb-9cc7-4c9f9bf126cb.png" width="30%"></img> 
+
++ Wythoff explorer from [Matt Zucker](https://github.com/mzucker)
+
+<img src="https://user-images.githubusercontent.com/23307174/125022575-9645fd80-e0af-11eb-8494-7a239231b5ce.png" width="45%"></img> <img src="https://user-images.githubusercontent.com/23307174/125022578-98a85780-e0af-11eb-8309-90175066a6be.png" width="45%"></img> 
+
++ 3D Euclidean uniform honeycombs and their duals
+
+<img src="https://user-images.githubusercontent.com/23307174/125022897-46b40180-e0b0-11eb-9e71-fccfde9f3734.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125022923-529fc380-e0b0-11eb-94ba-bf35a9a9b23c.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125022909-4d427900-e0b0-11eb-9957-1d251fc544d6.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125022914-4e73a600-e0b0-11eb-8946-175b1d3fb71c.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125022922-50d60000-e0b0-11eb-878c-f1d8799ef745.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125022905-4a478880-e0b0-11eb-9ed6-d99b6cd974fa.png" width="30%"></img> 
+
++ Gray-Scott simulation
+
+<img src="https://user-images.githubusercontent.com/23307174/125023296-22a4f000-e0b1-11eb-9fe2-4f23ae65541e.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125023301-26d10d80-e0b1-11eb-86a2-2d77333fec65.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125023303-29336780-e0b1-11eb-9e85-be678212e7ad.png" width="30%"></img> 
+
+
++ 3D hyperbolic uniform honeycombs
+
+<img src="https://user-images.githubusercontent.com/23307174/125023413-7283b700-e0b1-11eb-897e-47c449193535.png" width="45%"></img> <img src="https://user-images.githubusercontent.com/23307174/125023417-744d7a80-e0b1-11eb-85f3-2f0f666fc1b2.png" width="45%"></img> <img src="https://user-images.githubusercontent.com/23307174/125023422-77486b00-e0b1-11eb-91e4-3f161caedc77.png" width="45%"></img> <img src="https://user-images.githubusercontent.com/23307174/125023404-70215d00-e0b1-11eb-9024-bcc79778b6fe.png" width="45%"></img> 
+
++ Limit set of rank 4 Coxeter groups
+
+<img src="https://user-images.githubusercontent.com/23307174/125023777-2422e800-e0b2-11eb-916a-6b764e434128.png" width="45%"></img> <img src="https://user-images.githubusercontent.com/23307174/125023788-25ecab80-e0b2-11eb-9ff0-e188ee6d86da.png" width="45%"></img> <img src="https://user-images.githubusercontent.com/23307174/125023793-28e79c00-e0b2-11eb-9aa6-a2beaab2004d.png" width="45%"></img> <img src="https://user-images.githubusercontent.com/23307174/125024228-f0948d80-e0b2-11eb-876a-44e65b7d4c4b.png" width="45%"></img>
+
++ Aperiodic tilings
+
+<img src="https://user-images.githubusercontent.com/23307174/125026199-a9100080-e0b6-11eb-9b08-40c5c1ca2ea1.png" width="45%"></img> <img src="https://user-images.githubusercontent.com/23307174/125026217-b200d200-e0b6-11eb-9c22-4ad68ac9ff1e.png" width="45%"></img> <img src="https://user-images.githubusercontent.com/23307174/125026228-b62cef80-e0b6-11eb-9706-568b08461896.png" width="45%"></img> <img src="https://user-images.githubusercontent.com/23307174/125026248-bdec9400-e0b6-11eb-9ea0-ae2c631e68df.png" width="45%"></img> 
+
++ 3D Fractals
+
+<img src="https://user-images.githubusercontent.com/23307174/125026554-6b5fa780-e0b7-11eb-99a3-b20f8fc1bf44.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125026564-71558880-e0b7-11eb-8bc3-34dcb14514d2.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125026568-73b7e280-e0b7-11eb-9377-aff3fa249946.png" width="30%"></img>
+
++ Coxeter automata and 2D Uniform tilings
+
+<img src="https://user-images.githubusercontent.com/23307174/125031907-cac1b580-e0bf-11eb-8aa3-36ed29e4f40e.png" width="23%"></img> <img src="https://user-images.githubusercontent.com/23307174/125031930-d0b79680-e0bf-11eb-8fd4-b831c71e101a.png" width="23%"></img> <img src="https://user-images.githubusercontent.com/23307174/125031939-d3b28700-e0bf-11eb-88d7-bbd3f3906fec.png" width="23%"></img> <img src="https://user-images.githubusercontent.com/23307174/125031948-d614e100-e0bf-11eb-9e5c-19d9d4999f81.png" width="23%"></img> 
+<img src="https://user-images.githubusercontent.com/23307174/125033788-589ea000-e0c2-11eb-9d53-5ce757d0d41b.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125033839-6e13ca00-e0c2-11eb-902f-5394f1fe1cbb.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125033855-766c0500-e0c2-11eb-8be4-8d83ae522b9b.png" width="30%"></img> 
+
++ Others
+
+<img src="https://user-images.githubusercontent.com/23307174/125026748-cb564e00-e0b7-11eb-82e5-4686f114bd82.png" width="18%"></img> <img src="https://user-images.githubusercontent.com/23307174/125026768-d4dfb600-e0b7-11eb-9e92-3959b86d96f4.png" width="18%"></img> <img src="https://user-images.githubusercontent.com/23307174/125026774-d7421000-e0b7-11eb-8b9a-0ad1d17e1251.png" width="18%"></img> <img src="https://user-images.githubusercontent.com/23307174/125026787-dad59700-e0b7-11eb-889f-b0c737413b6a.png" width="18%"></img> <img src="https://user-images.githubusercontent.com/23307174/125026793-dc9f5a80-e0b7-11eb-9ac7-910bfc6bf81e.png" width="18%"></img> <img src="https://user-images.githubusercontent.com/23307174/125026803-df9a4b00-e0b7-11eb-8764-9277aea9cd53.png" width="18%"></img> <img src="https://user-images.githubusercontent.com/23307174/125026831-ec1ea380-e0b7-11eb-92fd-7e034208d03a.png" width="18%"></img> <img src="https://user-images.githubusercontent.com/23307174/125026859-f5a80b80-e0b7-11eb-8f7c-f2d665680094.png" width="18%"></img> <img src="https://user-images.githubusercontent.com/23307174/125026930-0bb5cc00-e0b8-11eb-91a7-efc3a14489d0.png" width="18%"></img> <img src="https://user-images.githubusercontent.com/23307174/125026938-0eb0bc80-e0b8-11eb-8fed-5d73fc2e21ea.png" width="18%"></img> 
+
+Many more to be comtinued ...
 
 ## How to use
 
-All projects here are implemented in a ready-to-use manner for new comers. You can simply run the examples without tweaking any parameters once you have the dependencies installed correctly. Each subdirectory in `src/` is a single program (except that `glslhelpers` is a helper module for running glsl programs and `misc` is a collection of independent scripts), any file named `main.py`, `run_*.py`, `example_*.py` is an executable script that gives some output.
-
-
-## List of algorithms
-
-Here is a list of some algorithms implemented in this project:
-
-+ [Domino shuffling algorithm](./src/aztec/aztec.py)
-+ [Hopcroft's DFA minimization algorithm](./src/uniform-tilings/coxeter/automata.py)
-+ [Lempel–Ziv–Welch compression algorithm](./src/gifmaze/gifmaze/encoder.py)
-+ [Propp-Wilson's coupling from the past algorithm](./src/cftp/cftp.py)
-+ [Todd-Coxeter coset enumeration algorithm](./src/polytopes/todd_coxeter.py)
-+ [Wilson's uniform spanning tree algorithm](./src/gifmaze/gifmaze/algorithms.py)
-+ [Casselman's minimal roots algorithm](./src/uniform-tilings/coxeter/reftable.py)
-+ [Encoding and decoding algorithms for Gray code](./src/gifmaze/example_hilbert_curve.py)
+All projects here are implemented in a ready-to-use manner for new comers. You can simply run the examples without tweaking any parameters once you have the dependencies installed correctly.
 
 ## Dependencies
 
@@ -108,22 +123,6 @@ sudo apt-get install libgraphviz-dev
 
 In the scripts these softwares are called in command line as `povray`, `ffmpeg`, `convert` (from `ImageMagick`), etc. For Windows users you should add the directories contain these .exe files to the system `Path` environment variables to let the system know what executables these commands refer to. For example on Windows the default location of POV-Ray's exe file is `C:\Program Files\POV-Ray\v3.7\bin\pvengine64.exe`, so you should add `C:\Program Files\POV-Ray\v3.7\bin` to system `Path` and rename `pvengine64.exe` to `povray.exe`, then you can run the scripts without any changes and everything works fine.
 
-## TODO
-
-I have a long list of projects to do in mind and they may take a few years to accomplish:
-
-+ **Knots**, inspired by [knotilus](http://knotilus.math.uwo.ca/gallery/) but I hope I could do better than that.
-
-+ **Minimal surfaces**. Implement two ways to construct minimal surfaces: either by solving Plateau's problem or use a pair of analytic functions. Render the result in POV-Ray.
-
-+ **Uniform tilings**: Replace the hyperbolic module currently used in `uniform-tilings` project by a custom one (since I want to include LaTeX expressions in the images), with upper half space model added. Also find an efficient way to render the upper half space boundary images in python. Inspired by [Roice's artwork](https://github.com/roice3/Honeycombs).
-
-+ Shader animations of polyhedral, euclidean, hyperbolic tilings with gears.
-
-+ Escher circle limits in svg format.
-
-+ Knots and dynamic systems.
-
 ## Thanks
 
 I have learned a lot from the following people:
@@ -133,6 +132,7 @@ I have learned a lot from the following people:
 - [Possibly Wrong](https://possiblywrong.wordpress.com/)
 - [Jos Leys](http://www.josleys.com/)
 - [Greg Egan](http://gregegan.net/)
+- [Matthew Arcus](https://github.com/matthewarcus).
 
 ## License
 

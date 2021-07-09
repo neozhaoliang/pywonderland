@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Make gif animations of Conway's game of life

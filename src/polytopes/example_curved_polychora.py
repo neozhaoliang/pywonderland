@@ -275,6 +275,20 @@ def main():
         camera_loc=(0, 0, 400),
     )
 
+    draw(
+        (Fraction(5, 2), 2, 2, 5, 2, Fraction(5, 2)),
+        (0, 1, 1, 0),
+        extra_relations=((0, 1, 2, 1) * 3, (1, 2, 3, 2) * 3),
+        description="runcinated-grand-stellated-120-cell",
+        size_func=1,
+        vertex_size=0.06,
+        edge_size=0.03,
+        use_area_light=1,
+        face_min=0.3,
+        face_max=1,
+        camera_loc=(0, 0, 380),
+    )
+
 
 if __name__ == "__main__":
     main()

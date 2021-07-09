@@ -6,7 +6,7 @@ Maze generation and maze solving algorithms
 
 This file contains the maze generation and maze solving algorithms.
 Each algorithm is implemented as a generator function which runs on
-a `maze` instance and calls a `encode_func` function to yield the data.
+a `maze` instance and calls an `encode_func` function to yield the data.
 All algorithms have a similar interface:
 
     algo(maze, encode_func, speed, **kwargs)

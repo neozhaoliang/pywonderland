@@ -1,11 +1,15 @@
-import cairocffi as cairo
+try:
+    import cairocffi as cairo
+except ImportError:
+    import cairo
+
 import numpy as np
 
 from . import helpers
 
 
 def draw_on_coxeter_plane(
-    P, nodes1, nodes2, svgpath=None, image_size=600, linewidth=0.0012, markersize=0.015
+    P, svgpath=None, image_size=600, linewidth=0.0012, markersize=0.015
 ):
     """
     Project the vertices of a polytope `P` to its Coxeter plane
@@ -18,22 +22,22 @@ def draw_on_coxeter_plane(
     """
     P.build_geometry()
     M = P.mirrors
-    C = np.dot(M, M.T)  # Cartan matrix
+    C = 2 * np.dot(M, M.T)  # Cartan matrix
     eigenvals, eigenvecs = np.linalg.eigh(C)
     # get the eigenvector with largest (or smallest) eigenvalue
-    v = eigenvecs[:, 0]
+    u = eigenvecs[:, 0]
+    v = eigenvecs[:, -1]
     # a basis of the Coxeter plane
-    mu_a = np.sum([v[i] * M[i] for i in nodes1], axis=0)
-    mu_b = np.sum([v[j] * M[j] for j in nodes2], axis=0)
-    # make them orthogonal
-    mu_a = helpers.normalize(mu_a)
-    mu_b -= np.dot(mu_b, mu_a) * mu_a
-    mu_b = helpers.normalize(mu_b)
-    vertices_2d = [(np.dot(mu_a, x), np.dot(mu_b, x)) for x in P.vertices_coords]
+    u = np.dot(u, M)
+    v = np.dot(v, M)
+    u = helpers.normalize(u)
+    v = helpers.normalize(v)
+    vertices_2d = [(np.dot(u, x), np.dot(v, x)) for x in P.vertices_coords]
 
     # draw on image
     if svgpath is None:
         svgpath = P.__class__.__name__ + ".svg"
+
     extent = 0.99
     surface = cairo.SVGSurface(svgpath, image_size, image_size)
     ctx = cairo.Context(surface)

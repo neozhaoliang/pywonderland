@@ -2,7 +2,11 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Plot domain coloring images of complex functions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Adapted from Reusser's work at "https://observablehq.com/@rreusser"
+
+Adapted from Reusser's work at
+
+    "https://observablehq.com/@rreusser"
+
 """
 
 import numpy as np

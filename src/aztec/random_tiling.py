@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Sample a random domino tiling of an Aztec diamond
@@ -8,9 +7,7 @@ with uniform probability.
 :copyright (c) 2015 by Zhao Liang.
 """
 import argparse
-
 from tqdm import trange
-
 import aztec
 
 # Four colors for the four types of dominoes

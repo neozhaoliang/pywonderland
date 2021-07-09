@@ -83,20 +83,14 @@ def example4():
     This example shows how to embed the animation into a background image.
     """
     surface = GIFSurface.from_image("./resources/bg.png")
-    palette = [
-        38,
-        92,
-        66,  # wall color, the same with the blackboard's
-        200,
-        200,
-        200,  # tree color
-        244,
-        25,
-        220,
-    ]  # path color
+    palette = [38, 92, 66,     # wall color, the same with the blackboard's
+               200, 200, 200,  # tree color
+               244, 25, 220]   # path color
+
     for i in range(256):
         rgb = hls_to_rgb((i / 360.0) % 1, 0.5, 1.0)
         palette += [int(round(255 * x)) for x in rgb]
+
     surface.set_palette(palette)
     size = (surface.width, surface.height)
     mask = generate_text_mask(size, "UST", "./resources/ubuntu.ttf", 300)

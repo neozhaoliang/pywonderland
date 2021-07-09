@@ -253,9 +253,15 @@ class BasePolytope(object):
         return r"\begin{{array}}{{{}}}{}\end{{array}}".format("l" * cols, latex)
 
     def get_povray_data(self):
+        """
+        Export data of this polytope to POV-Ray .inc file.
+        """
         return export_polytope_data(self)
 
     def draw_on_coxeter_plane(self, *args, **kwargs):
+        """
+        Draw the vertices projected to the Coxeter plane.
+        """
         draw_on_coxeter_plane(self, *args, **kwargs)
 
 

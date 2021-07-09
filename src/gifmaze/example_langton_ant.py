@@ -1,5 +1,3 @@
-# coding: utf-8
-
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Make gif animation of Langton's ant
@@ -72,23 +70,13 @@ maze, surface, anim = create_animation_for_size(
 )
 surface.set_palette(
     [
-        255,
-        255,
-        255,  # white spaces
-        0,
-        0,
-        0,  # grid line color
-        0,
-        0,
-        255,  # dead cells
-        0,
-        255,
-        0,  # live cells
-        255,
-        0,
-        0,
+        255, 255, 255,  # white spaces
+        0, 0, 0,        # grid line color
+        0, 0, 255,      # dead cells
+        0, 255, 0,      # live cells
+        255, 0, 0       # current position
     ]
-)  # current position
+)
 anim.show_grid(maze, bg_color=0, line_color=1)
 anim.pause(100)
 anim.run(langton, maze, speed=5, delay=3, steps=11500, mcl=3)

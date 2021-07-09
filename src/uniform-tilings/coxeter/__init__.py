@@ -1,1 +1,0 @@
-from .coxeter import CoxeterGroup

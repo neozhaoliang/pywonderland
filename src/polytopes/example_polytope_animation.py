@@ -185,7 +185,7 @@ def main():
 
     # 600-cell family, dual to 120-cell
     P = anim((3, 2, 2, 3, 2, 5), (1, 0, 0, 0), description="600-cell")
-    P.draw_on_coxeter_plane(nodes1=(0, 2), nodes2=(1, 3), svgpath="600-cell.svg")
+    P.draw_on_coxeter_plane(svgpath="600-cell.svg")
 
     # 4d prism and duoprism
     anim((5, 2, 2, 3, 2, 2), (1, 1, 0, 1), description="truncated-dodecahedron-prism")
@@ -225,13 +225,11 @@ def main():
         extra_relations=((0, 1, 2, 1) * 3, (1, 2, 3, 2) * 3),
         description="grand-stellated-120-cell",
     )
-    P.draw_on_coxeter_plane(
-        nodes1=(0, 2), nodes2=(1, 3), svgpath="grand-stellated-120-cell.svg"
-    )
+    P.draw_on_coxeter_plane(svgpath="grand-stellated-120-cell.svg")
 
     # and 5d polytopes
     P = anim((4, 2, 2, 2, 3, 2, 2, 3, 2, 3), (1, 0, 0, 0, 0), description="5d-cube")
-    P.draw_on_coxeter_plane(nodes1=(0, 2, 4), nodes2=(1, 3), svgpath="5-cube.svg")
+    P.draw_on_coxeter_plane(svgpath="5-cube.svg")
 
     # some star polyhedron
     anim(
