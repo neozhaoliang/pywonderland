@@ -73,7 +73,12 @@ The code for some of the images are not in the master branch, they can be found 
 + Coxeter automata and 2D Uniform tilings
 
 <img src="https://user-images.githubusercontent.com/23307174/125031907-cac1b580-e0bf-11eb-8aa3-36ed29e4f40e.png" width="23%"></img> <img src="https://user-images.githubusercontent.com/23307174/125031930-d0b79680-e0bf-11eb-8fd4-b831c71e101a.png" width="23%"></img> <img src="https://user-images.githubusercontent.com/23307174/125031939-d3b28700-e0bf-11eb-88d7-bbd3f3906fec.png" width="23%"></img> <img src="https://user-images.githubusercontent.com/23307174/125031948-d614e100-e0bf-11eb-9e5c-19d9d4999f81.png" width="23%"></img> 
-<img src="https://user-images.githubusercontent.com/23307174/125033788-589ea000-e0c2-11eb-9d53-5ce757d0d41b.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125033839-6e13ca00-e0c2-11eb-902f-5394f1fe1cbb.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125033855-766c0500-e0c2-11eb-8be4-8d83ae522b9b.png" width="30%"></img> 
+<img src="https://user-images.githubusercontent.com/23307174/125033788-589ea000-e0c2-11eb-9d53-5ce757d0d41b.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125033839-6e13ca00-e0c2-11eb-902f-5394f1fe1cbb.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125033855-766c0500-e0c2-11eb-8be4-8d83ae522b9b.png" width="30%"></img>
+
+
++ GIF animations of various algorithms
+
+<img src="https://user-images.githubusercontent.com/23307174/125714052-13443b6c-8686-48ba-9d19-b2526d01e034.gif" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125714042-310409c7-10d9-4fae-ac6a-6b7d5ef015dc.gif" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125714045-b873e336-8593-4a17-a549-4319108df44f.gif" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125714051-83a818df-f78c-4bdf-a7d3-55ea183e0a4d.gif" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125714055-c4a90a82-7eb0-4d58-b158-72e860047226.gif" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125714033-9ffea676-26a7-4664-9536-5f8ad4da4cfc.gif" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125714056-21c7c8de-08e9-4ee7-b8f6-fb673d9917dc.gif" width="30%"></img> 
 
 + Others
 

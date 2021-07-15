@@ -1,14 +1,8 @@
-#version 130
-
-uniform vec3 iResolution;
-uniform float iTime;
-uniform bool b_apply;
-uniform bool b_elliptic;
-uniform bool b_hyperbolic;
-uniform bool b_riemann;
+uniform bool u_apply;
+uniform bool u_elliptic;
+uniform bool u_hyperbolic;
+uniform bool u_riemann;
 uniform int  AA;
-
-out vec4 fragColor;
 
 #define PI  3.1415926536
 #define E_  2.7182818285
@@ -46,13 +40,12 @@ const vec2 star_diag_factor = vec2(30, 1);
 //const vec2 star_hv_factor = vec2(9.0, 0.3);
 //const vec2 star_diag_factor = vec2(12.0, 0.6);
 
-// b_parabolic is true if b_elliptic and b_parabolic are both false
-// b_loxodromic is true if b_elliptic and b_parabolic are both true
+// b_parabolic is true if u_elliptic and b_parabolic are both false
+// b_loxodromic is true if u_elliptic and b_parabolic are both true
 bool b_parabolic, b_loxodromic;
 
 // hsv to rgb conversion
-vec3 hsv2rgb(vec3 hsv)
-{
+vec3 hsv2rgb(vec3 hsv) {
     const vec3 p = vec3(0.0, 2.0/3.0, 1.0/3.0);
     hsv.yz = clamp(hsv.yz, 0.0, 1.0);
     return hsv.z*(0.63*hsv.y*(cos(2.*PI*(hsv.x + p)) - 1.0) + 1.0);
@@ -67,19 +60,16 @@ float hypToEuc(float d) { return pow(E_, d); }
 vec2 rot2d(vec2 p, float a) { return cos(a) * p + sin(a) * vec2(p.y, -p.x); }
 
 // 1d and 2d rectangular grids
-float grid1d(float x, float size)
-{
+float grid1d(float x, float size) {
     return mod(x + 0.5 * size, size) - 0.5 * size;
 }
 
-vec2 grid2d(vec2 p, vec2 size)
-{
+vec2 grid2d(vec2 p, vec2 size) {
     return mod(p + 0.5 * size, size) - 0.5 * size;
 }
 
 // 2d polar grids
-vec2 polarGrid(vec2 p, vec2 size)
-{
+vec2 polarGrid(vec2 p, vec2 size) {
     float theta = atan(p.y, p.x);
     float r = eucToHyp(length(p));
     return grid2d(vec2(r, theta), size);
@@ -88,18 +78,15 @@ vec2 polarGrid(vec2 p, vec2 size)
 /*
  * Complex arithmetic
 */
-vec2 cmul(vec2 z, vec2 w)
-{
+vec2 cmul(vec2 z, vec2 w) {
     return vec2(z.x * w.x - z.y * w.y, z.x * w.y + z.y * w.x);
 }
 
-vec2 cdiv(vec2 z, vec2 w)
-{
+vec2 cdiv(vec2 z, vec2 w) {
     return vec2(z.x * w.x + z.y * w.y, -z.x * w.y + z.y * w.x) / dot(w, w);
 }
 
-vec2 csqrt(vec2 z)
-{
+vec2 csqrt(vec2 z) {
     float r2 = dot(z, z);
     float r = sqrt(sqrt(r2));
     float angle = atan(z.y, z.x);
@@ -109,22 +96,19 @@ vec2 csqrt(vec2 z)
 /*
  * Quaternion arithmetic
 */
-vec4 qmul(vec4 p, vec4 q)
-{
+vec4 qmul(vec4 p, vec4 q) {
     return vec4(p.x * q.x - dot(p.yzw, q.yzw),
                 p.x * q.yzw + q.x * p.yzw + cross(p.yzw, q.yzw));
 }
 
-vec4 qdiv(vec4 p, vec4 q)
-{
+vec4 qdiv(vec4 p, vec4 q) {
     return qmul(p, vec4(q.x, -q.yzw) / dot(q, q));
 }
 
 /*
  * Mobius transformation z --> (Az + B) / (Cz + D)
 */
-struct Mobius
-{
+struct Mobius {
     vec2 A, B, C, D;
 };
 
@@ -136,8 +120,7 @@ const Mobius mob = Mobius(
 );
 
 // Apply Mobius transformation on complex plane
-vec2 applyMobius(vec2 z)
-{
+vec2 applyMobius(vec2 z) {
     vec2 z1 = cmul(mob.A, z) + mob.B;
     vec2 z2 = cmul(mob.C, z) + mob.D;
     return cdiv(z1, z2);
@@ -145,16 +128,14 @@ vec2 applyMobius(vec2 z)
 
 // Apply Mobius transformation on upper half space as quaternions
 // (x, y, z) --> (x + yi + zj + 0k)
-vec4 applyMobius(vec4 p)
-{
+vec4 applyMobius(vec4 p) {
     vec4 p1 = qmul(vec4(mob.A, 0., 0.), p) + vec4(mob.B, 0., 0.);
     vec4 p2 = qmul(vec4(mob.C, 0., 0.), p) + vec4(mob.D, 0., 0.);
     return qdiv(p1, p2);
 }
 
-float applyMobius(inout vec3 p)
-{
-    if (!b_apply)
+float applyMobius(inout vec3 p) {
+    if (!u_apply)
         return 1.0;
 
     p = applyMobius(vec4(p, 0)).xyz;
@@ -163,8 +144,7 @@ float applyMobius(inout vec3 p)
 }
 
 // A Mobius transformation of hyperbolic type is conjugate to a pure scaling
-void trans_hyperbolic(inout vec2 p)
-{
+void trans_hyperbolic(inout vec2 p) {
     float d = eucToHyp(length(p)) - anim_speed * polar_grid.x;
     // This avoids running out of resolution.
     d = grid1d(d, polar_grid.x);
@@ -172,14 +152,12 @@ void trans_hyperbolic(inout vec2 p)
 }
 
 // A Mobius transformation of elliptic type is conjugate to a pure rotation
-void trans_elliptic(inout vec2 p)
-{
+void trans_elliptic(inout vec2 p) {
     p = rot2d(p, anim_speed * polar_grid.y);
 }
 
 // A Mobius transformation of parabolic type is conjugate to a pure translation
-void trans_parabolic(inout vec2 p)
-{
+void trans_parabolic(inout vec2 p) {
     p.x += iTime * polar_grid.x / 3.;
 }
 
@@ -190,11 +168,9 @@ float sdPlane(vec3 p) { return p.y; }
 float sdPlane(vec3 p, float c) { return p.y - c; }
 // a cone in the upper hyperbolic space may be a usual cone at the origin
 // or a Dupin cyclide with its two horns on the plane
-float sdCone(vec3 p)
-{
+float sdCone(vec3 p) {
     float t = 1.0;
-    if (b_apply)
-    {
+    if (u_apply) {
         t = applyMobius(p);
         p = normalize(p);
     }
@@ -203,33 +179,29 @@ float sdCone(vec3 p)
 }
 
 // signed distance function for parabolic case
-float sdScene1(vec3 p)
-{
-    return b_apply ? min(sdPlane(p), sdSphere(p, 1.0)) : sdPlane(p, 0.5);
+float sdScene1(vec3 p) {
+    return u_apply ? min(sdPlane(p), sdSphere(p, 1.0)) : sdPlane(p, 0.5);
 }
 
 // signed distance function for elliptic/hyperbolic case
-float sdScene2(vec3 p)
-{
-    if (b_riemann)
+float sdScene2(vec3 p) {
+    if (u_riemann)
         return min(sdPlane(p), sdSphere(p, 1.));
 
     return min(sdPlane(p), sdCone(p));
 }
 
-vec3 getColor(vec2 p, float pint)
-{
+vec3 getColor(vec2 p, float pint) {
     float sat = 0.75 / pow(pint, 2.5) + center_sat;
     // change hue by time
     float hue2 = b_parabolic ?
-        hue_speed - length(p.y) / 5.0 :
-        hue_speed - eucToHyp(length(p)) / 7.0;
+    hue_speed - length(p.y) / 5.0 :
+    hue_speed - eucToHyp(length(p)) / 7.0;
     float hue = center_hue + hue2;
     return hsv2rgb(vec3(hue, sat, pint)) + pint / 3.;
 }
 
-float getIntensity1(vec2 p)
-{
+float getIntensity1(vec2 p) {
     float dist = length(p);
     float disth = length(p * star_hv_factor);
     float distv = length(p * star_hv_factor.yx);
@@ -248,8 +220,7 @@ float getIntensity1(vec2 p)
     return center_intensity * intensity_factor_max * pow(pint1, ppow) / intensity_divisor / 2.;
 }
 
-float getIntensity2(vec2 p)
-{
+float getIntensity2(vec2 p) {
     float angle = atan(polar_grid.x, polar_grid.y);
     float dist  = length(p);
     float disth = length(p * star_hv_factor);
@@ -261,22 +232,19 @@ float getIntensity2(vec2 p)
     float dist2 = length(q2 * star_diag_factor);
 
     float pint1 = 1. / (dist * dist_factor  + .5);
-    if (b_loxodromic)
-    {
+    if (b_loxodromic) {
         pint1 = strong_factor / (dist2 * dist_factor + 0.01)
             + weak_factor  / (dist1 * dist_factor + 0.01)
             + weak_factor / (disth * dist_factor + 0.01)
             + weak_factor / (distv * dist_factor + 0.01);
     }
-    else if (b_elliptic)
-    {
+    else if (u_elliptic) {
         pint1 += weak_factor / (distv * dist_factor + 0.01) +
             strong_factor / (disth * dist_factor + 0.01) +
             weak_factor / (dist1 * dist_factor + 0.01) +
             weak_factor / (dist2 * dist_factor + 0.01);
     }
-    else
-    {
+    else {
         pint1 += weak_factor / (disth * dist_factor + 1.) +
             strong_factor / (distv * dist_factor + .01) +
             weak_factor / (dist1 * dist_factor + 0.01) +
@@ -285,13 +253,11 @@ float getIntensity2(vec2 p)
     return intensity_factor_max * pow(pint1, ppow) / intensity_divisor * center_intensity * 3.;
 }
 
-float map(vec3 pos)
-{
+float map(vec3 pos) {
     return b_parabolic ? sdScene1(pos) : sdScene2(pos);
 }
 
-vec3 getNormal(vec3 p)
-{
+vec3 getNormal(vec3 p) {
     vec2 e = vec2(.003, 0);
     float d1 = map(p + e.xyy), d2 = map(p - e.xyy);
     float d3 = map(p + e.yxy), d4 = map(p - e.yxy);
@@ -300,13 +266,11 @@ vec3 getNormal(vec3 p)
     return normalize(vec3(d1 - d2, d3 - d4, d5 - d6));
 }
 
-float softShadow(vec3 ro, vec3 ld, float tmin, float tmax, float k)
-{
+float softShadow(vec3 ro, vec3 ld, float tmin, float tmax, float k) {
     const int maxShadeIterations = 20;
     float res = 1.0;
     float t = tmin;
-    for (int i = 0; i < maxShadeIterations; i++)
-    {
+    for (int i = 0; i < maxShadeIterations; i++) {
         float h = map(ro + ld * t);
         res = min(res, smoothstep(0., 1., k * h / t));
         t += clamp(h, 0.01, 0.2);
@@ -318,12 +282,10 @@ float softShadow(vec3 ro, vec3 ld, float tmin, float tmax, float k)
 
 
 // iq's ambient occlusion
-float calcAO(vec3 p, vec3 n)
-{
+float calcAO(vec3 p, vec3 n) {
     float occ = 0.0;
     float sca = 1.0;
-    for (int i = 0; i < 5; i++)
-    {
+    for (int i = 0; i < 5; i++) {
         float h = 0.01 + 0.15 * float(i) / 4.0;
         float d = map(p + h * n);
         occ += (h - d) * sca;
@@ -332,22 +294,19 @@ float calcAO(vec3 p, vec3 n)
     return clamp(1.0 - 3.0 * occ, 0.0, 1.0);
 }
 
-float trace(vec3 ro, vec3 rd, out vec2 p, out float pint)
-{
+float trace(vec3 ro, vec3 rd, out vec2 p, out float pint) {
     float depth = MIN_TRACE_DIST;
     float dist;
     vec3 pos;
-    for (int i = 0; i < MAX_TRACE_STEPS; i++)
-    {
+    for (int i = 0; i < MAX_TRACE_STEPS; i++) {
         pos = ro + rd * depth;
         dist = b_parabolic ? sdScene1(pos) : sdScene2(pos);
         if (dist < PRECISION || depth >= FAR)
             break;
         depth += dist;
     }
-    if (b_parabolic)
-    {
-        if (b_apply)
+    if (b_parabolic) {
+        if (u_apply)
             pos /= dot(pos, pos);
 
         p = pos.xz;
@@ -355,12 +314,11 @@ float trace(vec3 ro, vec3 rd, out vec2 p, out float pint)
         pos.xz = grid2d(pos.xz, vec2(polar_grid.x / 2.0));
         pint = getIntensity1(pos.xz);
     }
-    else
-    {
+    else {
         applyMobius(pos);
         p = pos.xz;
-        if (b_hyperbolic) trans_hyperbolic(pos.xz);
-        if (b_elliptic)   trans_elliptic(pos.xz);
+        if (u_hyperbolic) trans_hyperbolic(pos.xz);
+        if (u_elliptic)   trans_elliptic(pos.xz);
         pos.xz = polarGrid(pos.xz, polar_grid);
         pint = getIntensity2(pos.xz);
     }
@@ -369,8 +327,7 @@ float trace(vec3 ro, vec3 rd, out vec2 p, out float pint)
 
 // ACES tone mapping
 // https://knarkowicz.wordpress.com/2016/01/06/aces-filmic-tone-mapping-curve/
-vec3 tonemap(vec3 color)
-{
+vec3 tonemap(vec3 color) {
     const float A = 2.51;
     const float B = 0.03;
     const float C = 2.43;
@@ -379,10 +336,9 @@ vec3 tonemap(vec3 color)
     return (color * (A * color + B)) / (color * (C * color + D) + E);
 }
 
-void mainImage( out vec4 fragColor, in vec2 fragCoord)
-{
-    b_parabolic = !(b_elliptic || b_hyperbolic);
-    b_loxodromic = b_elliptic && b_hyperbolic;
+void mainImage( out vec4 fragColor, in vec2 fragCoord) {
+    b_parabolic = !(u_elliptic || u_hyperbolic);
+    b_loxodromic = u_elliptic && u_hyperbolic;
     vec3 ro = vec3(-3.0, 4.8, 7.0);
     ro.xz = rot2d(ro.xz, iTime*0.3);
     vec3 lookat = vec3(0.0, 0.6, 0.0);
@@ -395,10 +351,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord)
 
     vec3 tot = vec3(0);
 
-    for (int ii = 0; ii < AA; ii++)
-    {
-        for (int jj = 0; jj < AA; jj++)
-        {
+    for (int ii = 0; ii < AA; ii++) {
+        for (int jj = 0; jj < AA; jj++) {
             vec2 offset = vec2(float(ii), float(jj)) / float(AA);
             vec2 uv = (fragCoord + offset) / iResolution.xy;
             uv = 2.0 * uv - 1.0;
@@ -407,8 +361,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord)
             vec2 p;
             float pint;
             float t = trace(ro, rd, p, pint);
-            if (t >= 0.0)
-            {
+            if (t >= 0.0) {
                 vec3 col = tonemap(4.0 * getColor(p, pint));
                 vec3 pos = ro + rd * t;
                 vec3 nor = getNormal(pos);
@@ -421,7 +374,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord)
 
                 float diff = clamp(dot(nor, ld), 0.0, 1.0);
                 float spec = max( 0.0, dot( reflect(-ld, nor), -rd));
-	            spec = pow(spec, 50.0);
+                spec = pow(spec, 50.0);
                 tot += diff * 2.5 * col + vec3(0.6, 0.8, 0.8) * spec * 2.;
                 tot *= ao * sh * at;
             }
@@ -434,9 +387,4 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord)
     }
     tot /= float(AA * AA);
     fragColor = vec4(sqrt(clamp(tot, 0., 1.)), 1.0);
-}
-
-void main()
-{
-    mainImage(fragColor, gl_FragCoord.xy);
 }

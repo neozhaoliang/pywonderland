@@ -1,80 +1,52 @@
-#version 130
-
-uniform vec3 iResolution;
-uniform float iTime;
-
-out vec4 fragColor;
-
-/* Marden's theorem on Steiner inellipse, Zhao Liang.
-
-Motivated by this tweet:
-
-    https://twitter.com/theAlbertChern/status/1395468792788967428?s=20
-*/
 #define PI 3.141592653
 
 float sl;
 
 const float palNum = 70.;
 
-
-float sFract(float x, float sm)
-{
-    // Extra smoothing factor. "1" is the norm.
+float sFract(float x, float sm) {
     const float sf = 1.;
 
-    // The hardware "fwidth" is cheap, but you could take the expensive route and
-    // calculate it by hand if more quality was required.
     vec2 u = vec2(x, fwidth(x)*sf*sm);
-
-    // Ollj's original formula with a transcendental term omitted.
     u.x = fract(u.x);
     u += (1. - 2.*u)*step(u.y, u.x);
     return clamp(1. - u.x/u.y, 0., 1.); // Cos term ommitted.
 }
 
-// Only correct for nonnegative values, but in this example, numbers aren't negative.
-float sFloor(float x)
-{
+float sFloor(float x) {
     return x - sFract(x, 1.);
 }
 
-vec3 rotHue(vec3 p, float a)
-{
+vec3 rotHue(vec3 p, float a) {
     vec2 cs = sin(vec2(1.570796, 0) + a);
 
     mat3 hr = mat3(0.299,  0.587,  0.114,  0.299,  0.587,  0.114,  0.299,  0.587,  0.114) +
-        	  mat3(0.701, -0.587, -0.114, -0.299,  0.413, -0.114, -0.300, -0.588,  0.886) * cs.x +
-        	  mat3(0.168,  0.330, -0.497, -0.328,  0.035,  0.292,  1.250, -1.050, -0.203) * cs.y;
+              mat3(0.701, -0.587, -0.114, -0.299,  0.413, -0.114, -0.300, -0.588,  0.886) * cs.x +
+              mat3(0.168,  0.330, -0.497, -0.328,  0.035,  0.292,  1.250, -1.050, -0.203) * cs.y;
 
     return clamp(p*hr, 0., 1.);
 }
 
-float msign(in float x)
-{
+float msign(in float x) {
     return x < 0.0 ? -1.0 : 1.0;
 }
 
-mat2 rot2d(float a)
-{
+mat2 rot2d(float a) {
     float c=cos(a), s=sin(a);
     return mat2(c, -s, s, c);
 }
 
-vec2 cmul(vec2 p, vec2 q)
-{
+vec2 cmul(vec2 p, vec2 q) {
     return vec2(p.x*q.x-p.y*q.y, p.x*q.y+p.y*q.x);
 }
 
-vec2 csqrt(vec2 p)
-{
+vec2 csqrt(vec2 p) {
     float a = atan(p.y, p.x) / 2.;
     return vec2(cos(a), sin(a)) * sqrt(length(p));
 }
 
 // distance from a 2d point p to a 2d segment (a, b)
-float dseg(vec2 p, vec2 a, vec2 b)
-{
+float dseg(vec2 p, vec2 a, vec2 b) {
     vec2 v = b - a;
     p -= a;
     float t = clamp(dot(p, v)/dot(v, v), 0., 1.);
@@ -82,8 +54,7 @@ float dseg(vec2 p, vec2 a, vec2 b)
 }
 
 // iq's triangle signed distance function
-float sdTriangle( in vec2 p, in vec2 p0, in vec2 p1, in vec2 p2 )
-{
+float sdTriangle( in vec2 p, in vec2 p0, in vec2 p1, in vec2 p2 ) {
     vec2 e0 = p1 - p0;
     vec2 e1 = p2 - p1;
     vec2 e2 = p0 - p2;
@@ -105,8 +76,7 @@ float sdTriangle( in vec2 p, in vec2 p0, in vec2 p1, in vec2 p2 )
 }
 
 // ellipse signed distance function
-float sdEllipse( vec2 p, vec2 cen, float theta, in vec2 ab )
-{
+float sdEllipse( vec2 p, vec2 cen, float theta, in vec2 ab ) {
     p -= cen;
     float c = cos(theta), s = sin(theta);
     p *= mat2(c, s, -s, c);
@@ -114,8 +84,7 @@ float sdEllipse( vec2 p, vec2 cen, float theta, in vec2 ab )
     return (0.5 * dot(pab, p) - 0.5) / length(pab);
 }
 
-float sdEllipseFromTriangle(vec2 p, vec2 p0, vec2 p1, vec2 p2, out vec2 f1, out vec2 f2)
-{
+float sdEllipseFromTriangle(vec2 p, vec2 p0, vec2 p1, vec2 p2, out vec2 f1, out vec2 f2) {
     vec2 m = (p0 + p1 + p2) / 3.;
     vec2 n = (cmul(p0, p1) + cmul(p1, p2) + cmul(p2, p0)) / 3.;
     f1 = m + csqrt(cmul(m, m) - n);
@@ -129,8 +98,7 @@ float sdEllipseFromTriangle(vec2 p, vec2 p0, vec2 p1, vec2 p2, out vec2 f1, out 
     return sdEllipse(p, cen, theta, vec2(a, b));
 }
 
-float getVoltage( vec2 p, vec2 p0, vec2 p1, vec2 p2 )
-{
+float getVoltage( vec2 p, vec2 p0, vec2 p1, vec2 p2 ) {
     float c = length(p - p0) * length(p - p1) * length(p - p2);
     c = log(max(c, 0.001));
     c = c / 10. + 0.5;
@@ -140,8 +108,7 @@ float getVoltage( vec2 p, vec2 p0, vec2 p1, vec2 p2 )
     return clamp(level/(palNum - 1.), 0., 1.) * .85 + .15 * c;
 }
 
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
-{
+void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
     vec2 uv = (2.0*fragCoord - iResolution.xy) / iResolution.y;
     float sf = 2. / iResolution.y;
     vec2 p = uv * 2.;
@@ -216,16 +183,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     // decorate the vertices and foci
     vec2[3] verts; verts[0] = A; verts[1] = B; verts[2] = C;
     float lw = 0.02;
-    for (int i=0; i<3; i++)
-    {
+    for (int i=0; i<3; i++) {
         float dv = length(p - verts[i]) - .12;
         col = mix(col, vec3(0), (1. - smoothstep(0., sf*8., dv))*.5);
         col = mix(col, vec3(0), 1. - smoothstep(0., sf, dv));
         col = mix(col, vec3(1, .7, .6), 1. - smoothstep(0., sf, dv + lw*1.6));
         col = mix(col, vec3(0), 1. - smoothstep(0., sf, dv + .1 - lw));
     }
-    for (int i=0; i<2; i++)
-    {
+    for (int i=0; i<2; i++) {
         float dv = length(p - foci[i]) - .07;
         col = mix(col, vec3(0), (1. - smoothstep(0., sf*8., dv))*.5);
         col = mix(col, vec3(0), 1. - smoothstep(0., sf, dv));
@@ -236,10 +201,4 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     col *= 1.25 - 0.2*length(p);
 
     fragColor = vec4(sqrt(max(col, 0.)), 1.0);
-}
-
-
-void main()
-{
-    mainImage(fragColor, gl_FragCoord.xy);
 }

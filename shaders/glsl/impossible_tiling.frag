@@ -1,10 +1,3 @@
-#version 130
-
-uniform vec3 iResolution;
-uniform float iTime;
-
-out vec4 fragColor;
-
 /*
 Aperiodic tiling using de Bruijn's algebraic approach, Zhao Liang.
 
@@ -113,32 +106,27 @@ void init_grids()
 }
 
 // distance from a 2d point p to a 2d segment (a, b)
-float dseg(vec2 p, vec2 a, vec2 b)
-{
-	vec2 v = b - a;
+float dseg(vec2 p, vec2 a, vec2 b) {
+vec2 v = b - a;
     p -= a;
     float t = clamp(dot(p, v)/dot(v, v), 0., 1.);
     return length(p - t * v);
 }
 
 // iq's hash function, for randomly flip the tunnels and open/closed faces
-float hash21(vec2 p)
-{
+float hash21(vec2 p) {
     return fract(sin(dot(p, vec2(141.13, 289.97))) * 43758.5453);
 }
 
-float cross_prod(vec2 p, vec2 q)
-{
+float cross_prod(vec2 p, vec2 q) {
     return p.x * q.y - p.y * q.x;
 }
 
 // signed distance function to a polygon using winding number
-float sdPoly4(in vec2 p, in vec2[4] verts)
-{
+float sdPoly4(in vec2 p, in vec2[4] verts) {
     float d = dot(p - verts[0], p - verts[0]);
     float s = 1.0;
-    for(int i = 0, j = 3; i < 4; j = i, i++)
-    {
+    for(int i = 0, j = 3; i < 4; j = i, i++) {
         vec2 e = verts[j] - verts[i];
         vec2 w = p - verts[i];
         vec2 b = w - e*clamp(dot(w, e)/dot(e, e), 0., 1.);
@@ -153,20 +141,17 @@ float sdPoly4(in vec2 p, in vec2[4] verts)
 
 // project a vector p to the k-th grid, note each grid line is shifted so we need
 // to add the corresponding shifts.
-float project_point_grid(vec2 p, int k)
-{
+float project_point_grid(vec2 p, int k) {
     return dot(p, grids[k]) + shifts[k];
 }
 
 // find the vertices of the rhombus corresponding to the intersection point P,
 // where P is the intersection of the kr-th line and ks-th line in the r/s grids.
-void solve_rhombus_verts(int r, int s, float kr, float ks, out vec2[4] verts)
-{
+void solve_rhombus_verts(int r, int s, float kr, float ks, out vec2[4] verts) {
     vec2 P = grids[r] * (ks - shifts[s]) - grids[s] * (kr - shifts[r]);
     P = vec2(-P.y, P.x) / grids[s - r].y;
     vec2 sum = kr * grids[r] + ks * grids[s];
-    for(int k = 0; k < N; k++)
-    {
+    for(int k = 0; k < N; k++) {
         if ((k != r) && (k != s))
             sum += grids[k] * ceil(project_point_grid(P, k));
     }
@@ -178,8 +163,7 @@ void solve_rhombus_verts(int r, int s, float kr, float ks, out vec2[4] verts)
 
 // this is the "continous" version of de Bruijn's transformation that maps a pixel
 // to its position in the tiling.
-vec2 debruijn_transform(vec2 p)
-{
+vec2 debruijn_transform(vec2 p) {
     vec2 sum = vec2(0.0);
     for(int k = 0; k < N; k++)
     {
@@ -195,30 +179,23 @@ vec2 debruijn_transform(vec2 p)
 // the four rhombus (r, s, kr, ks), (r, s, kr, ks+1), (r, s, kr+1, ks), (r, s, kr+1, ks+1)
 // contains q.
 // Sadly due to float rounding errors, we have to search from (r, s, kr-1, ks-1).
-Rhombus get_mapped_rhombus(vec2 p, out vec2 q)
-{
+Rhombus get_mapped_rhombus(vec2 p, out vec2 q) {
     q = debruijn_transform(p);
     Rhombus rb;
     float kr, ks;
     vec2[4] verts;
     float[N] pindex;
-    for (int i = 0; i < N; i++)
-    {
+    for (int i = 0; i < N; i++) {
         pindex[i] = floor(project_point_grid(p, i));
     }
-    for(int r = 0; r < N-1; r++)
-    {
-        for(int s = r+1; s < N; s++)
-        {
-            for(float dr = -1.; dr < 2.; dr += 1.0)
-            {
-                for(float ds = -1.; ds < dr+2.; ds += 1.0)
-                {
+    for(int r = 0; r < N-1; r++) {
+        for(int s = r+1; s < N; s++) {
+            for(float dr = -1.; dr < 2.; dr += 1.0) {
+                for(float ds = -1.; ds < dr+2.; ds += 1.0) {
                     kr = pindex[r] + dr;
                     ks = pindex[s] + ds;
                     solve_rhombus_verts(r, s, kr, ks, verts);
-                    if (sdPoly4(q, verts) < 0.)
-                    {
+                    if (sdPoly4(q, verts) < 0.) {
                         rb.r = r, rb.s = s, rb.kr = kr, rb.ks = ks;
                         rb.verts = verts;
                         rb.cen = (verts[0] + verts[1] + verts[2] + verts[3]) / 4.0;
@@ -233,18 +210,14 @@ Rhombus get_mapped_rhombus(vec2 p, out vec2 q)
 // For each tunnel in the face, we want it to slant by a best-looking direction.
 // We simply choose a grid line direction that matches best with the diagonal line
 // of this face. This is proposed by Greg Egan.
-vec2 get_best_dir(int r, int s, vec2 v)
-{
+vec2 get_best_dir(int r, int s, vec2 v) {
     float maxdot = 0.;
     float inn = 0.;
     vec2 result;
-    for(int k = 0; k < N; k++)
-    {
-        if ((k != r) && (k != s))
-        {
+    for(int k = 0; k < N; k++) {
+        if ((k != r) && (k != s)) {
             inn = dot(grids[k], v);
-            if (abs(inn) > maxdot)
-            {
+            if (abs(inn) > maxdot) {
                 maxdot = abs(inn);
                 result = (inn > 0.) ? grids[k] : -grids[k];
             }
@@ -254,8 +227,7 @@ vec2 get_best_dir(int r, int s, vec2 v)
 }
 
 // Compute the vertices of the two pieces of the tunnel
-void get_tunnels(inout Rhombus rb)
-{
+void get_tunnels(inout Rhombus rb) {
     vec2 gr = grids[rb.r] / 2.;
     vec2 gs = grids[rb.s] / 2.;
     float cA = dot(gr, gs);
@@ -285,8 +257,7 @@ void get_tunnels(inout Rhombus rb)
     rb.inset2[2] = rb.inset2[3] + t * v1;
 }
 
-float getCross(vec2 p, Rhombus rb)
-{
+float getCross(vec2 p, Rhombus rb) {
     vec2 vA = (rb.verts[0] + rb.cen) / 2.;
     vec2 vB = (rb.verts[1] + rb.cen) / 2.;
     vec2 vC = (rb.verts[2] + rb.cen) / 2.;
@@ -301,8 +272,7 @@ float getCross(vec2 p, Rhombus rb)
 }
 
 
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
-{
+void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
     vec2 uv = (fragCoord - iResolution.xy*.5)/iResolution.y;
 
     // zoom factor
@@ -339,8 +309,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
     float dcen = dot(q, q) * .95;
 
-    if(rnd > .2)
-    {
+    if(rnd > .2) {
         q.xy = -q.xy; // randomly flip the tunnels to make some cubes look impossible
         col *= max(1.25 - dcen, 0.);
     }
@@ -366,8 +335,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
 #ifdef SOME_CLOSED_FACES
     // really dirty, maybe should put into a function
-    if(abs(rnd - 0.5) > .495)
-    {
+    if(abs(rnd - 0.5) > .495) {
         dhole += 1e5; dtunnel += 1e5;
         dcross = min(dcross, getCross(p, rb));
     }
@@ -424,9 +392,4 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     uv = fragCoord / iResolution.xy;
     col *= pow(16. * uv.x * uv.y * (1. - uv.x) * (1. - uv.y), .125) * .75 + .25;
     fragColor = vec4(sqrt(max(col, 0.0)), 1.0);
-}
-
-void main()
-{
-    mainImage(fragColor, gl_FragCoord.xy);
 }
