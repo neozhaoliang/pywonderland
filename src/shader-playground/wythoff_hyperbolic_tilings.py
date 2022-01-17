@@ -11,6 +11,10 @@ Again Matt's program has lots of rich features and a great UI!
 
 Press "ENTER" to save screenshots and "Esc" to escape.
 """
+import sys
+
+sys.path.append("../")
+
 import argparse
 import datetime
 import time
@@ -22,8 +26,8 @@ import pyglet.gl as gl
 import pyglet.window.key as key
 from glslhelpers import FrameBuffer, Shader, create_image_texture
 
-FONT_TEXTURE = "./glslhelpers/textures/font.png"
-NOISE_TEXTURE = "./glslhelpers/textures/rgba_noise_small.png"
+FONT_TEXTURE = "../glslhelpers/textures/font.png"
+NOISE_TEXTURE = "../glslhelpers/textures/rgba_noise_small.png"
 
 
 def get_idate():
@@ -49,7 +53,7 @@ class Wythoff(pyglet.window.Window):
             visible=False,
             vsync=False,
         )
-        self._start_time = time.clock()
+        self._start_time = time.perf_counter()
         self._last = self._now = self._start_time
         self._frame_count = 0  # count number of frames rendered so far
         self.shaderA = Shader(
@@ -111,7 +115,7 @@ class Wythoff(pyglet.window.Window):
         self.clear()
         gl.glViewport(0, 0, self.width, self.height)
         self._last = self._now
-        self._now = time.clock()
+        self._now = time.perf_counter()
         itime = self._now - self._start_time
         idate = get_idate()
         delta = self._now - self._last

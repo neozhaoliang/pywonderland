@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 import ctypes as ct
+
 import pyglet.gl as gl
 
 

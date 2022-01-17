@@ -27,6 +27,10 @@ Some notes:
 
 Press "Enter" to save screenshots and "Esc" to escape.
 """
+import sys
+
+sys.path.append("../")
+
 import argparse
 import subprocess
 import time
@@ -41,7 +45,7 @@ from glslhelpers import FrameBuffer, Shader, create_image_texture
 
 FFMPEG_EXE = "ffmpeg"
 
-FONT_TEXTURE = "./glslhelpers/textures/font.png"
+FONT_TEXTURE = "../glslhelpers/textures/font.png"
 
 
 class Wythoff(pyglet.window.Window):
@@ -73,9 +77,8 @@ class Wythoff(pyglet.window.Window):
         self.video_rate = video_rate
         self.video_on = False
         self.sample_rate = sample_rate
-        self._start_time = time.process_time()
+        self._start_time = time.perf_counter()
         self._frame_count = 0  # count number of frames rendered so far
-        self._speed = 4  # control speed of the animation
         self.aa = aa
         # shader A draws the UI
         self.shaderA = Shader(
@@ -151,8 +154,7 @@ class Wythoff(pyglet.window.Window):
         gl.glClearColor(0, 0, 0, 0)
         self.clear()
         gl.glViewport(0, 0, self.width, self.height)
-        now = time.process_time() - self._start_time
-        now *= self._speed
+        now = time.perf_counter() - self._start_time
         with self.bufferA:
             with self.shaderA:
                 self.shaderA.uniformf("iTime", now)

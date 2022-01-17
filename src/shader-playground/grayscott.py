@@ -14,6 +14,8 @@ from __future__ import division
 
 import sys
 
+sys.path.append("../")
+
 import argparse
 import re
 import subprocess
@@ -212,13 +214,13 @@ class GrayScott(pyglet.window.Window):
         if video:
             self.ffmpeg_pipe = self.create_new_pipe()
 
-        self.start_time = time.time()
+        self.start_time = time.perf_counter()
 
     def on_draw(self):
         gl.glClearColor(0.0, 0.0, 0.0, 0.0)
         self.clear()
 
-        if time.time() - self.start_time > 0.1:
+        if time.perf_counter() - self.start_time > 0.1:
             gl.glViewport(0, 0, self.tex_width, self.tex_height)
             with self.fbo:
                 with self.reaction_shader:

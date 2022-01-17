@@ -105,9 +105,9 @@ class BasePolytope(object):
         self.vwords = self.vtable.get_words()
         self.num_vertices = len(self.vwords)
         # apply words of the vertices to the initial vertex to get all vertices
-        self.vertices_coords = tuple(
+        self.vertices_coords = np.array([
             self.transform(self.init_v, w) for w in self.vwords
-        )
+        ])
 
     def get_edges(self):
         """
@@ -253,15 +253,9 @@ class BasePolytope(object):
         return r"\begin{{array}}{{{}}}{}\end{{array}}".format("l" * cols, latex)
 
     def get_povray_data(self):
-        """
-        Export data of this polytope to POV-Ray .inc file.
-        """
         return export_polytope_data(self)
 
     def draw_on_coxeter_plane(self, *args, **kwargs):
-        """
-        Draw the vertices projected to the Coxeter plane.
-        """
         draw_on_coxeter_plane(self, *args, **kwargs)
 
 
@@ -595,3 +589,82 @@ class Snub24Cell(Polychora):
                 vector = np.dot(vector, self.reflections[1])
                 vector = np.dot(vector, self.reflections[3])
         return vector
+
+
+class Catalan3D(Polyhedra):
+
+    """Catalan solids are duals of uniform polyhedron.
+    These polyhedron are face transitive but (usually) not vertex transitive.
+    But to keep things consistent we still put the vertices in a 1d list.
+    """
+
+
+    def __init__(self, P):
+        """Construct a Catalan solid form a given polyhedra `P`.
+        """
+        self.P = P
+        self.vertices_coords = []
+        self.face_indices = []
+
+    def build_geometry(self):
+        self.P.build_geometry()
+        self.get_vertices()
+        self.get_faces()
+
+    def get_vertices(self):
+        """Each vertex in this dual polyhedra comes from a face f in the
+        original polyhedra `P`. Usually it's not the center of f but a
+        scaled version of it.
+        """
+        for face_group in self.P.face_indices:
+            for face in face_group:
+                verts = [self.P.vertices_coords[ind] for ind in face]
+                cen = sum(verts)
+                normal = helpers.normalize(cen)
+                weights = sum(np.dot(v, normal) for v in verts) / len(face)
+                self.vertices_coords.append(normal / weights)
+
+    def get_faces(self):
+        """Each face f in this dual polyhedra comes from a vertex v in the
+        original polyhedra `P`. The vertices in f are faces of `P` that meet at v.
+        """
+        def contain_edge(f, e):
+            """Check if a face f contains a given edge e = (v1, v2).
+            """
+            v1, v2 = e
+            for w1, w2 in zip(f, f[1:] + [f[0]]):
+                if (v1, v2) in [(w1, w2), (w2, w1)]:
+                    return True
+            return False
+
+        def is_adjacent(f1, f2):
+            """Check if two faces f1, f2 are adjacent.
+            """
+            for e in zip(f1, f1[1:] + [f1[0]]):
+                if contain_edge(f2, e):
+                    return True
+            return False
+
+        result = []
+        P_faces_flatten = [face for face_group in self.P.face_indices
+                           for face in face_group]
+        # there is a face for each vertex v in the original polyhedra P
+        for k in range(len(self.P.vertices_coords)):
+            # firstly we gather all faces in P that meet at v
+            faces_unordered = []
+            for ind, f in enumerate(P_faces_flatten):
+                if k in f:
+                    faces_unordered.append([ind, f])
+
+            # then we re-align them so that they form a cycle around v
+            i0, f0 = faces_unordered[0]
+            face = [i0]
+            current_face = f0
+            while len(face) < len(faces_unordered):
+                for ind, f in faces_unordered:
+                    if ind not in face and is_adjacent(current_face, f):
+                        face.append(ind)
+                        current_face = f
+
+            result.append(face)
+        self.face_indices.append(result)
