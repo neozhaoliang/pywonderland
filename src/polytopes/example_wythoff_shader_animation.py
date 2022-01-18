@@ -31,6 +31,7 @@ import sys
 
 sys.path.append("../")
 
+import os
 import argparse
 import subprocess
 import time
@@ -40,12 +41,12 @@ import pyglet
 pyglet.options["debug_gl"] = False
 import pyglet.gl as gl
 import pyglet.window.key as key
-
 from glslhelpers import FrameBuffer, Shader, create_image_texture
 
-FFMPEG_EXE = "ffmpeg"
 
+FFMPEG_EXE = "ffmpeg"
 FONT_TEXTURE = "../glslhelpers/textures/font.png"
+GLSL_DIR = os.path.join(os.getcwd(), "glsl/wythoff")
 
 
 class Wythoff(pyglet.window.Window):
@@ -82,26 +83,19 @@ class Wythoff(pyglet.window.Window):
         self.aa = aa
         # shader A draws the UI
         self.shaderA = Shader(
-            ["./glsl/default.vert"],
-            [
-                "./glsl/wythoff_polyhedra/common.frag",
-                "./glsl/wythoff_polyhedra/BufferA.frag"
-            ]
-        )
-        # shader B draws the polyhedra
+            [os.path.join(GLSL_DIR, "wythoff.vert")],
+            [os.path.join(GLSL_DIR, "common.frag"),
+             os.path.join(GLSL_DIR, "BufferA.frag")])
+        # shadwr B draws the polyhedra
         self.shaderB = Shader(
-            ["./glsl/default.vert"],
-            [
-                "./glsl/wythoff_polyhedra/common.frag",
-                "./glsl/wythoff_polyhedra/BufferB.frag"
-            ]
-        )
+            [os.path.join(GLSL_DIR, "wythoff.vert")],
+            [os.path.join(GLSL_DIR, "common.frag"),
+             os.path.join(GLSL_DIR, "BufferB.frag")])
         # shader C puts them together
         self.shaderC = Shader(
-            ["./glsl/default.vert"],
-            ["./glsl/wythoff_polyhedra/common.frag",
-             "./glsl/wythoff_polyhedra/main.frag"]
-        )
+            [os.path.join(GLSL_DIR, "wythoff.vert")],
+            [os.path.join(GLSL_DIR, "common.frag"),
+             os.path.join(GLSL_DIR, "main.frag")])
         self.font_texture = create_image_texture(FONT_TEXTURE)
         self.iChannel0 = pyglet.image.Texture.create_for_size(
             gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F_ARB
@@ -148,7 +142,7 @@ class Wythoff(pyglet.window.Window):
             self.shaderC.uniformf("iMouse", 0.0, 0.0, 0.0, 0.0)
             self.shaderC.uniformi("iChannel0", 0)
             self.shaderC.uniformi("iChannel1", 1)
-            self.shaderC.uniformi("iChannel2", 2)
+            self.shaderC.uniformi("iTexture", 2)
 
     def on_draw(self):
         gl.glClearColor(0, 0, 0, 0)

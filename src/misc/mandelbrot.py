@@ -39,7 +39,7 @@ def iterate(c):
 def main(xmin, xmax, ymin, ymax, width, height):
     y, x = np.ogrid[ymax : ymin : height * 1j, xmin : xmax : width * 1j]
     z = x + y * 1j
-    R, G, B = np.asarray(np.frompyfunc(iterate, 1, 3)(z)).astype(np.float)
+    R, G, B = np.asarray(np.frompyfunc(iterate, 1, 3)(z)).astype(float)
     img = np.stack((R, G, B), axis=2)
     Image.fromarray(np.uint8(img * 255)).save("mandelbrot.png")
 

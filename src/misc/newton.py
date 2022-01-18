@@ -35,7 +35,7 @@ def iterate(z):
 def render(imgsize):
     y, x = np.ogrid[1 : -1 : imgsize * 2j, -1 : 1 : imgsize * 2j]
     z = x + y * 1j
-    img = np.frompyfunc(iterate, 1, 1)(z).astype(np.float)
+    img = np.frompyfunc(iterate, 1, 1)(z).astype(float)
     fig = plt.figure(figsize=(imgsize / 100.0, imgsize / 100.0), dpi=100)
     ax = fig.add_axes([0, 0, 1, 1], aspect=1)
     ax.axis("off")

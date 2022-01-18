@@ -5,7 +5,6 @@ sudo apt-get install \
      ffmpeg \
      imagemagick \
      graphviz \
-     python3-tk \
      libgraphviz-dev \
      python3-cairocffi \
      inkscape

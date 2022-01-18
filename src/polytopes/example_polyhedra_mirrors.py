@@ -6,6 +6,7 @@ Shader animation of polyhedron mirrors
 import sys
 sys.path.append("../")
 
+import os
 import time
 import pyglet
 pyglet.options["debug_gl"] = False
@@ -22,6 +23,8 @@ WOOD_IMAGE = "../glslhelpers/textures/wood.jpg"
 CUBEMAP_IMAGES = [
     f"../glslhelpers/textures/st_peters{i}.png" for i in range(6)
 ]
+GLSL_DIR = "./glsl/mirrors"
+
 
 def generate_polytope_data(
         coxeter_diagram,
@@ -69,7 +72,7 @@ def generate_polytope_data(
     if len(P.face_indices) > 2:
         result += get_oriented_faces(P.face_indices[2], "facesC")
 
-    with open("./glsl/data.frag", "w") as f:
+    with open(os.path.join(GLSL_DIR, "data.frag"), "w") as f:
         f.write(result)
 
 
@@ -96,10 +99,10 @@ class PolyhedraMirror(pyglet.window.Window):
             vsync=False,
         )
         self._start_time = time.perf_counter()
-        self.shader = Shader(["./glsl/default.vert"],
-                             ["./glsl/common.frag",
-                              "./glsl/data.frag",
-                              "./glsl/main.frag"])
+        self.shader = Shader([os.path.join(GLSL_DIR, "default.vert")],
+                             [os.path.join(GLSL_DIR, "common.frag"),
+                              os.path.join(GLSL_DIR, "data.frag"),
+                              os.path.join(GLSL_DIR, "main.frag")])
 
         wood = create_image_texture(WOOD_IMAGE)
         cubemap = create_cubemap_texture(CUBEMAP_IMAGES)

@@ -45,6 +45,8 @@ void main()
 }
 """
 
+METAL_TEXTURE = "../glslhelpers/textures/rusty_metal.jpg"
+
 
 class EuclideanHoneycombs(app.Canvas):
 
@@ -91,7 +93,7 @@ class EuclideanHoneycombs(app.Canvas):
         self.program["snub"] = self.snub
         self.program["dual"] = self.dual
 
-        img = imread("./glsl/rusty_metal.jpg")
+        img = imread(METAL_TEXTURE)
         tex = gloo.Texture2D(img)
         tex.interpolation = "linear"
         tex.wrapping = "repeat"

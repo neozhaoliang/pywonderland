@@ -35,9 +35,9 @@ ax = fig.add_axes(
     projection="3d",
     xlim=(-25, 25),
     ylim=(-35, 35),
-    zlim=(5, 55),
-    aspect=1,
+    zlim=(5, 55)
 )
+ax.set_box_aspect((1, 1, 1))
 ax.view_init(30, 0)
 ax.axis("off")
 
