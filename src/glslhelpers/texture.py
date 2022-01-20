@@ -5,7 +5,7 @@ import ctypes as ct
 
 import pyglet
 import pyglet.gl as gl
-from PIL import Image
+from PIL import Image, ImageOps
 
 
 def create_texture_from_ndarray(array):
@@ -85,8 +85,8 @@ def create_cubemap_texture(imgfiles):
     gl.glTexParameteri(
         gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_WRAP_R, gl.GL_CLAMP_TO_EDGE
     )
-
-    faces = [Image.open(img) for img in imgfiles]
+    # it seems we need to flip the images to make the cubemap look correct
+    faces = [ImageOps.flip(Image.open(img)) for img in imgfiles]
     # set the faces of the cubemap texture
     for i, face in enumerate(faces):
         width, height = face.size

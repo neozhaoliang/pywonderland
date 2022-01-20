@@ -212,7 +212,7 @@ vec4 get_wall_color(vec3 ray_dir, Hit hit) {
 
 
 vec3 get_background_color(vec3 ray_dir) {
-    vec3 col = texture(iChannel0, -ray_dir).rgb;
+    vec3 col = texture(iChannel0, ray_dir).rgb;
     col = pow(col, vec3(2.2));
     float luma = dot(col, vec3(0.2126, 0.7152, 0.0722)) * 0.7;
     return 2.5 * col / (1.0 - luma);
@@ -262,6 +262,28 @@ mat3 camera_matrix(vec3 eye, vec3 lookat, vec3 up) {
 }
 
 
+mat3 rotateX(float theta) {
+    float c = cos(theta);
+    float s = sin(theta);
+    return mat3(
+        vec3(1, 0, 0),
+        vec3(0, c, -s),
+        vec3(0, s, c)
+    );
+}
+
+// Rotation matrix around the Y axis.
+mat3 rotateY(float theta) {
+    float c = cos(theta);
+    float s = sin(theta);
+    return mat3(
+        vec3(c, 0, s),
+        vec3(0, 1, 0),
+        vec3(-s, 0, c)
+    );
+}
+
+
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     vec2 uv = (fragCoord.xy - iResolution.xy * 0.5) / iResolution.y;
     vec2 movement = vec2(iTime * 0.2, sin(iTime * 0.2) * 0.5);
@@ -269,6 +291,11 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
         cos(movement.x) * cos(movement.y),
         sin(movement.y),
         sin(movement.x) * cos(movement.y));
+    vec2 mouse = vec2(0);
+    if (iMouse.x > 0.) {
+        mouse = 2. * iMouse.xy / iResolution.y - 1.;
+        eye = rotateY(mouse.x) * rotateX(mouse.y) * eye;
+    }
     mat3 M = camera_matrix(eye, vec3(0), vec3(0, 1, 0));
     vec3 camera_ray = normalize(M * vec3(uv, -1.0));
     vec3 color = get_ray_color(eye, camera_ray);

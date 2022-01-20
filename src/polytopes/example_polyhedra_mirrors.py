@@ -134,6 +134,28 @@ class PolyhedraMirror(pyglet.window.Window):
         if symbol == key.ESCAPE:
             pyglet.app.exit()
 
+    def on_mouse_press(self, x, y, button, modifiers):
+        if button & pyglet.window.mouse.LEFT:
+            with self.shader:
+                self.shader.uniformf("iMouse", x, y, x, y)
+
+    def on_mouse_release(self, x, y, button, modifiers):
+        """
+        Don't forget reset 'iMouse' when mouse is released.
+        """
+        with self.shader:
+            self.shader.uniformf("iMouse", 0, 0, 0, 0)
+
+    def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
+        if button & pyglet.window.mouse.LEFT:
+            with self.shader:
+                x += dx
+                y += dy
+                x = max(min(x, self.width), 0)
+                y = max(min(y, self.height), 0)
+                self.shader.uniformf("iMouse", x, y, x, y)
+
+
     def save_screenshot(self):
         buff = pyglet.image.get_buffer_manager().get_color_buffer()
         buff.save("screenshot.png")
