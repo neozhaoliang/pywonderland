@@ -294,7 +294,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     vec2 mouse = vec2(0);
     if (iMouse.x > 0.) {
         mouse = 2. * iMouse.xy / iResolution.y - 1.;
-        eye = rotateY(mouse.x) * rotateX(mouse.y) * eye;
+        eye = rotateY(mouse.x) * rotateX(-mouse.y) * eye;
     }
     mat3 M = camera_matrix(eye, vec3(0), vec3(0, 1, 0));
     vec3 camera_ray = normalize(M * vec3(uv, -1.0));
