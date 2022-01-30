@@ -12,11 +12,11 @@ import argparse
 import glob
 import os
 import subprocess
-
-from random_tiling import render_with_cairo as render
 from tqdm import trange
 
 import aztec
+from random_tiling import render_with_cairo as render
+
 
 CONVERTER = "convert"
 

@@ -10,6 +10,7 @@ import argparse
 from tqdm import trange
 import aztec
 
+
 # Four colors for the four types of dominoes
 N_COLOR = (1, 0, 0)
 S_COLOR = (0.75, 0.75, 0)
@@ -19,8 +20,8 @@ E_COLOR = (0, 0, 1)
 
 def render_with_cairo(az, imgsize, extent, filename):
     """
-    Draw current tiling of `az` (possibly have holes)
-    to a png image with cairo.
+    Draw current tiling of an Aztec diamond `az` (possibly have holes) to a
+    png image with cairo.
 
     :param az: an instance of the AztecDiamond class.
     :param imgsize: image size in pixels, e.g. size = 600 means 600x600.
@@ -117,7 +118,8 @@ def render(program, *args, **kwargs):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-size", metavar="s", type=int, default=800, help="image size")
+    parser.add_argument(
+        "-size", metavar="s", type=int, default=800, help="image size")
     parser.add_argument(
         "-order", metavar="o", type=int, default=60, help="order of az graph"
     )

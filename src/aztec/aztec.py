@@ -26,9 +26,9 @@ class AztecDiamond(object):
     """
     Use a dict to represent a tiling of an Aztec diamond graph.
     Items in the dict are of the form {cell: type} where a cell is a
-    1x1 unit square and is specified by the coordinates of its left bottom
-    corner. Each cell has five possible types: 'n', 's', 'w', 'e', None,
-    here None means it's an empty cell.
+    1x1 unit square and is specified by the coordinates of its bottom
+    left corner. Each cell has five possible types: n/s/w/e/None, where
+    None means it's an empty cell.
 
     Be careful that one should always start from the boundary when
     deleting or filling blocks, this is an implicit but important
@@ -52,13 +52,13 @@ class AztecDiamond(object):
     @staticmethod
     def block(i, j):
         """
-        Return the 2x2 block with its bottom-left cell at (i, j).
+        Return the 2x2 block with its bottom left cell at (i, j).
         """
         return [(i, j), (i + 1, j), (i, j + 1), (i + 1, j + 1)]
 
     def is_black(self, i, j):
         """
-        Check if cell (i, j) is colored black. Note that the chessboard is
+        Check if a cell (i, j) is colored black. Note that the chessboard is
         colored in the fashion that the leftmost cell in the top row is white.
         """
         return (i + j + self.order) % 2 == 1
@@ -113,7 +113,7 @@ class AztecDiamond(object):
         """
         Fill all holes with pairs of dominoes that leaving each other.
         This is a somewhat subtle step since the new Aztec graph returned
-        by the sliding step is placed on a different chessboard which is
+        by the sliding step is placed on a different chessboard and is
         colored in the opposite fashion!
         """
         for i, j in self.cells:
