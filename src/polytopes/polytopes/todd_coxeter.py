@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Coset Enumeration using Todd-Coxeter Algorithm
@@ -38,12 +37,12 @@ class CosetTable(object):
             e.g. [[0, 2]] for < ac >.
 
         :param coxeter: whether this is a Coxeter group. If false then the inverse of
-            the generators are also included as generators, else they are not.
+            the generators are also included as generators, otherwise they are not.
 
         we use a list p to hold the equivalence classes of the cosets,
         p[k] = l means k and l really represent the same coset. It's always
-        true that p[k] <= k, if p[k] = k then we call k "alive" else we call
-        k "dead". All cosets are created "alive" but as the algorithm runs
+        true that p[k] <= k, if p[k] = k then we call k "alive" otherwise we call
+        k "dead". All cosets are created "alive", but as the algorithm runs
         some of them may be declared to "dead" and their rows are deleted from
         the table (we do not explicitly free the memory of these row but keep
         in mind that they do not belong to our table).
@@ -71,14 +70,12 @@ class CosetTable(object):
         return len(self.table)
 
     def is_alive(self, coset):
-        """
-        Check if a coset is alive.
+        """Check if a coset is alive.
         """
         return self.p[coset] == coset
 
     def is_defined(self, coset, x):
-        """
-        Check if an entry is defined.
+        """Check if an entry is defined.
         """
         return self[coset][x] is not None
 
@@ -99,9 +96,8 @@ class CosetTable(object):
         self.p.append(n)
 
     def rep(self, coset):
-        """
-        Find the minimal equivalent representative of a given coset and
-        modify `p` along the way.
+        """Find the minimal equivalent representative of a given coset
+        and modify `p` along the way.
         """
         m = coset
         while m != self.p[m]:
@@ -222,8 +218,7 @@ class CosetTable(object):
                         # so we also copy the information at (f, y) to (f1, y).
 
     def hlt(self):
-        """
-        Run the HLT strategy (Haselgrove, Leech and Trotter).
+        """Run the HLT strategy (Haselgrove, Leech and Trotter).
         """
         for word in self.H:
             self.scan_and_fill(0, word)
@@ -264,8 +259,9 @@ class CosetTable(object):
 
     def swap(self, k, l):
         """
-        Swap two live cosets in the table. It's called in the `standardize()` method
-        after the table is compressed, but it also works for non-compressed table.
+        Swap two live cosets in the table. It's called in the `standardize()`
+        method after the table is compressed, but it also works for
+        non-compressed table.
         """
         for x in self.A:
             # swap the two rows k and l.
@@ -280,8 +276,7 @@ class CosetTable(object):
                         self[coset][x] = k
 
     def standardize(self):
-        """
-        Rearrange the cosets in the table to a standard form.
+        """Rearrange the cosets in the table to a standard form.
         """
         # the next coset we want to encounter in the table.
         next_coset = 1

@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Render curved 4d polychoron examples
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Render curved 4d polychoron examples in POV-Ray
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :copyright (c) 2018 by Zhao Liang.
 """
@@ -12,6 +11,7 @@ from fractions import Fraction
 
 from polytopes.models import Polychora
 from polytopes.povray import pov_index_array1d, pov_vector
+
 
 IMAGE_DIR = "polychora_frames"  # directory to save the frames
 POV_EXE = "povray"  # POV-Ray exe binary
@@ -108,15 +108,20 @@ def draw(
     """
     Export data to povray .inc file and call the rendering process.
 
-    :param camera_loc: location of the camera.
+    :param camera_loc:
+        location of the camera.
 
-    :param size_func: choose which sizing funcion to use, currently only 0, 1, 2.
+    :param size_func:
+        choose which sizing funcion to use, currently only 0, 1, 2.
 
-    :param face_index: a list controls which types of faces are shown.
+    :param face_index:
+        a list controls which types of faces are shown.
 
-    :param face_max: only faces smaller than this threshold are shown.
+    :param face_max:
+        only faces smaller than this threshold are shown.
 
-    :param face_min: only faces larger than this threshold are shown.
+    :param face_min:
+        only faces larger than this threshold are shown.
     """
     P = Polychora(coxeter_diagram, trunc_type, extra_relations)
     P.build_geometry()

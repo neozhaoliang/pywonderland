@@ -7,4 +7,4 @@ uniform int           iFrame;
 uniform samplerCube   iChannel0;
 uniform sampler2D     iChannel1;
 
-out vec4 FinalColor;
+out vec4 fragColor;

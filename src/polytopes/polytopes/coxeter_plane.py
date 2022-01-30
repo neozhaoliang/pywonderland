@@ -1,3 +1,6 @@
+"""
+Project the vertices of a polytope to the Coxeter plane.
+"""
 try:
     import cairocffi as cairo
 except ImportError:
@@ -17,8 +20,8 @@ def draw_on_coxeter_plane(
 
     The most important parameters are `nodes1` and `nodes2`, they
     can be of lists/tuples/sets type and must partition the Coxeter
-    diagram of `P` into two disjoint sets such that the nodes in
-    each set are mutually orthogonal with each other.
+    diagram of `P` into two disjoint sets. The nodes in each set are
+    mutually orthogonal with each other.
     """
     P.build_geometry()
     M = P.mirrors

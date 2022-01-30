@@ -9,7 +9,7 @@ uniform sampler2D     iChannel0;
 uniform sampler2D     iChannel1;
 uniform int           AA;
 
-out vec4 FinalColor;
+out vec4 fragColor;
 
 
 // mostly code for triangle setup and coordinate projection

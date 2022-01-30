@@ -1,34 +1,13 @@
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Real time animation of Wythoff construction with pyglet and glsl
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Shader animation of Wythoff construction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Code exported from Matt Zucker's excellent shadertoy program at
+Exported from Matt Zucker's excellent shadertoy program at
 
     "https://www.shadertoy.com/view/Md3yRB"
-
-Matt's program has some rich features and a great UI (as a pure
-shader program!).
-
-Some notes:
-
-1. This program draws only a subset of all uniform polyhedron in 3d,
-   it can't draw star and snub ones (the only exceptions are those
-   with Schläfli symbol (3, 5/2), you need to change the code manually
-   in the function `setup_triangle` in `common.frag` to see them.
-
-2. The antialiasing routine in Matt's original code is replaced by the
-   usual supersampling method, it runs slower but gives better result.
-   I also deleted some redundant code (for example the usage of iChannel1
-   in BufferA and BufferB) from Matt's version.
-
-3. This program uses two invisible "frame buffers" to render the gui
-   and the polyhedra, and combines them together in a third main shader.
-
-Press "Enter" to save screenshots and "Esc" to escape.
 """
 import sys
-
 sys.path.append("../")
 
 import os
@@ -170,8 +149,7 @@ class Wythoff(pyglet.window.Window):
         self._frame_count += 1
 
     def on_key_press(self, symbol, modifiers):
-        """
-        Keyboard interface.
+        """Keyboard interface.
         """
         if symbol == key.ENTER:
             self.save_screenshot()
@@ -188,8 +166,7 @@ class Wythoff(pyglet.window.Window):
                 self.shaderA.uniformf("iMouse", x, y, x, y)
 
     def on_mouse_release(self, x, y, button, modifiers):
-        """
-        Don't forget reset 'iMouse' when mouse is released.
+        """Don't forget reset 'iMouse' when mouse is released.
         """
         with self.shaderA:
             self.shaderA.uniformf("iMouse", 0, 0, 0, 0)
@@ -266,10 +243,15 @@ class Wythoff(pyglet.window.Window):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-size", metavar="s", type=str, default="800x480", help="window size in pixels"
+        "-size", metavar="s", type=str, default="800x480",
+        help="window size in pixels"
     )
-    parser.add_argument("-aa", type=int, default=2, help="antialiasing level")
-    parser.add_argument("-video_rate", type=int, default=16, help="fps of the video")
+    parser.add_argument(
+        "-aa", type=int, default=2, help="antialiasing level"
+    )
+    parser.add_argument(
+        "-video_rate", type=int, default=16, help="fps of the video"
+    )
     parser.add_argument(
         "-sample_rate",
         type=int,

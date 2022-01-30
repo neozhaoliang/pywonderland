@@ -106,8 +106,7 @@ def anim(
 
 
 def snub24cell(description="snub-24-cell"):
-    """
-    Handle the special case snub 24-cell.
+    """Handle the special case snub 24-cell.
     """
     P = models.Snub24Cell()
     P.build_geometry()

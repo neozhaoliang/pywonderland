@@ -200,7 +200,7 @@ vec4 get_wall_color(vec3 ray_dir, Hit hit) {
        albedo = mix(vec3(0.01), albedo, f);
        return vec4(albedo * lighting, f);
     }
-    
+
     float m = max(max(hit.bary.x, hit.bary.y), hit.bary.z);
     vec2 a = fract(vec2(hit.ed, m) * 40.) - 0.5;
     float b = 0.2 / (dot(a, a) + 0.2);
@@ -306,5 +306,5 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
 
 void main() {
-    mainImage(FinalColor, gl_FragCoord.xy);
+    mainImage(fragColor, gl_FragCoord.xy);
 }

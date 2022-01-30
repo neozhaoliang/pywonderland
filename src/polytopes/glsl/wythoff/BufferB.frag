@@ -362,7 +362,7 @@ void main() {
 
 #ifdef STEREOGRAPHIC_POLAR
 
-    FinalColor = vec4(1, 1, 1, dmax);
+    fragColor = vec4(1, 1, 1, dmax);
 
 #else
 
@@ -415,6 +415,6 @@ void main() {
             tot += shade(ro, rd);
         }
     }
-    FinalColor = tot / float(AA * AA);
+    fragColor = tot / float(AA * AA);
 #endif
 }

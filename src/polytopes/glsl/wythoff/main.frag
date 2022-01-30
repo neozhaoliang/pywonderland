@@ -362,5 +362,5 @@ void main() {
     color = mix(pre_gui_color, color, gui);
     // gamma correction
     color = pow(color, vec3(1.0/2.2));
-    FinalColor = vec4(color, 1);
+    fragColor = vec4(color, 1);
 }

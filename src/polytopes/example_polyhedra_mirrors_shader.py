@@ -12,10 +12,10 @@ import pyglet
 pyglet.options["debug_gl"] = False
 
 import numpy as np
-from polytopes import models
-
 import pyglet.gl as gl
 import pyglet.window.key as key
+
+from polytopes import models
 from glslhelpers import Shader, create_cubemap_texture, create_image_texture
 
 
@@ -33,7 +33,9 @@ def generate_polytope_data(
         snub=False,
         dual=False
 ):
-    """Generate data for polyhedra vertex coordinates and face indices.
+    """
+    Generate polyhedra vertex coordinates and face indices.
+    The result is output to the file `data.frag`.
     """
     if snub:
         P = models.Snub(coxeter_diagram, extra_relations=extra_relations)
@@ -47,6 +49,10 @@ def generate_polytope_data(
     vertices_coords = P.vertices_coords
 
     def get_oriented_faces(face_group, name):
+        """The faces returned by `P.build_geometry()` may not have their
+        normal vectors pointing outward, we need to rearange them in the
+        right order before sending them to the gpu.
+        """
         m = len(face_group)
         n = len(face_group[0])
         faces_data = np.zeros((m, n, 3), dtype=float)
@@ -61,7 +67,9 @@ def generate_polytope_data(
             faces_data[ind, :, :] = face_coords
 
         faces_data = faces_data.reshape(m * n, 3)
-        vec_string = ",\n".join(f"    vec3({x}, {y}, {z})" for x, y, z in faces_data)
+        vec_string = ",\n".join(
+            f"    vec3({x}, {y}, {z})" for x, y, z in faces_data
+        )
         return (f"#define {name}Enabled  {n}\n\n" +
                 f"vec3[{m * n}] {name} = vec3[{m * n}](\n{vec_string}\n);\n\n")
 
@@ -84,10 +92,7 @@ class PolyhedraMirror(pyglet.window.Window):
     """
 
     def __init__(self, width, height):
-        """
-        :param width & height: size of the main window in pixels.
-
-        :param zoom: zoom factor of the scene.
+        """:param width & height: size of the main window in pixels.
         """
         pyglet.window.Window.__init__(
             self,
@@ -99,10 +104,13 @@ class PolyhedraMirror(pyglet.window.Window):
             vsync=False,
         )
         self._start_time = time.perf_counter()
-        self.shader = Shader([os.path.join(GLSL_DIR, "default.vert")],
-                             [os.path.join(GLSL_DIR, "common.frag"),
-                              os.path.join(GLSL_DIR, "data.frag"),
-                              os.path.join(GLSL_DIR, "main.frag")])
+        self.shader = Shader(
+            [os.path.join(GLSL_DIR, "default.vert")],
+            [os.path.join(GLSL_DIR, "common.frag"),
+             os.path.join(GLSL_DIR, "data.frag"),
+             os.path.join(GLSL_DIR, "main.frag")
+            ]
+        )
 
         wood = create_image_texture(WOOD_IMAGE)
         cubemap = create_cubemap_texture(CUBEMAP_IMAGES)
@@ -140,8 +148,7 @@ class PolyhedraMirror(pyglet.window.Window):
                 self.shader.uniformf("iMouse", x, y, x, y)
 
     def on_mouse_release(self, x, y, button, modifiers):
-        """
-        Don't forget reset 'iMouse' when mouse is released.
+        """Don't forget reset 'iMouse' when mouse is released.
         """
         with self.shader:
             self.shader.uniformf("iMouse", 0, 0, 0, 0)
@@ -154,7 +161,6 @@ class PolyhedraMirror(pyglet.window.Window):
                 x = max(min(x, self.width), 0)
                 y = max(min(y, self.height), 0)
                 self.shader.uniformf("iMouse", x, y, x, y)
-
 
     def save_screenshot(self):
         buff = pyglet.image.get_buffer_manager().get_color_buffer()

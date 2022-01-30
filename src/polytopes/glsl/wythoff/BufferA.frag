@@ -272,5 +272,5 @@ void main() {
             data.w = abs(pqrx.w);
         }
     }
-    FinalColor = data;
+    fragColor = data;
 }
