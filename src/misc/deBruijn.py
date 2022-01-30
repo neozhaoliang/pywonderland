@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Draw aperiodic tilings using de Bruijn's algebraic approach
@@ -8,21 +7,6 @@ Reference:
 
   "Algebraic theory of Penrose's non-periodic tilings of the plane".
                                                      N.G. de Bruijn.
-
-Usage:
-    Firstly run
-
-        python debruijn.py
-
-    This will output a .png image of a rhombus tiling rendered by cairo
-    and a POV-Ray include file "rhombus.inc" that contains the data of
-    the rhombus, then go to the folder "/povray" and run the file
-    "scene.pov" with POV-Ray, for example in command line:
-
-        povray scene.pov +W800 +H600 +Q11 +A0.001 +R5
-
-    Each time you run this script it outputs a different pattern,
-    these patterns are almost surely not isomorphic with each other.
 
 Some params you can tweak with:
 
@@ -140,4 +124,4 @@ try:
         "convert debruijn.svg +shade 20x20 -modulate 250 debruijn.png", shell=True
     )
 except ImportError:
-    print("Adding shading effect to image failed, `convert` command not found")
+    print("Add shading effect to image failed, `convert` command not found")

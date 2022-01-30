@@ -38,23 +38,20 @@ def complex_function(z):
 
 
 def mix(x, y, a):
-    """
-    glsl `mix` function.
+    """glsl `mix` function.
     """
     return x * (1 - a) + y * a
 
 
 def smoothstep(a, b, x):
-    """
-    glsl `smoothstep` function.
+    """glsl `smoothstep` function.
     """
     y = np.clip((x - a) / (b - a), 0, 1)
     return (3 - 2 * y) * y * y
 
 
 def colormap(t):
-    """
-    Map each entry of a 2d-array `t` to a rgb triple.
+    """Map each entry of a 2d-array `t` to a rgb triple.
     """
     x = 2 * pi * t - 1.74533
     y = (0.25 * cos(2 * pi * t) + 0.25) * (-1.5) + 1.5
@@ -81,8 +78,8 @@ def checker(z):
 
 
 def grid_distance_function(z):
-    """
-    Return the absolute distance of z to the nearest horizontal and vertical grid lines.
+    """Return the absolute distance of z to the nearest horizontal and
+    vertical grid lines.
     """
     fx = (z.real - 0.5) % 1 - 0.5
     fy = (z.imag - 0.5) % 1 - 0.5
@@ -90,8 +87,7 @@ def grid_distance_function(z):
 
 
 def gradient_magnitude(fz):
-    """
-    Compute the magnitude of the gradients of a 2d array fz.
+    """Compute the magnitude of the gradients of a 2d array fz.
     """
     dx = np.absolute(np.diff(fz, axis=1, append=0))
     dy = np.absolute(np.diff(fz, axis=0, prepend=0))
