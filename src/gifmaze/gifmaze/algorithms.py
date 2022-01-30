@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Maze generation and maze solving algorithms
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Maze generation and solving algorithms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This file contains the maze generation and maze solving algorithms.
+This file contains algorithms for generating and solving mazes.
 Each algorithm is implemented as a generator function which runs on
 a `maze` instance and calls an `encode_func` function to yield the data.
 All algorithms have a similar interface:
@@ -13,7 +12,7 @@ All algorithms have a similar interface:
 
 Here `maze` is the Maze object that the algorithm runs on,
 `encode_func` is the function that encodes the animation into frames,
-`speed` controls how often `encode_func` is called.
+`speed` controls how often `encode_func` is called (hence speed of the animation).
 """
 import heapq
 import random
@@ -100,14 +99,14 @@ def bfs(maze, encode_func, speed=20, start=None, end=None):
     The cells are marked by their distances to the starting cell plus three.
     This is because we must distinguish a 'flooded' cell from walls and tree.
     """
-    if start is None:
+    if start is None:  # default start is the top left corner
         start = (0, 0)
-    if end is None:
+    if end is None:  # default end is the bottom right corner
         end = (maze.width - 1, maze.height - 1)
 
     bar = tqdm(total=len(maze.cells) - 1, desc="Solving maze by bfs")
     init_dist = 3
-    came_from = {start: start}
+    came_from = {start: start}  # remember the last cell we come from
     queue = deque([(start, init_dist)])
     maze.mark_cell(start, init_dist)
     visited = set([start])
@@ -146,8 +145,7 @@ def bfs(maze, encode_func, speed=20, start=None, end=None):
 
 
 def random_dfs(maze, encode_func, speed=10, start=(0, 0)):
-    """
-    Maze generation using random depth-first search.
+    """Maze generation using random depth-first search.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running random depth first search")
 
@@ -178,8 +176,7 @@ def random_dfs(maze, encode_func, speed=10, start=(0, 0)):
 
 
 def dfs(maze, encode_func, speed=20, start=None, end=None):
-    """
-    Solve a maze using depth-first search.
+    """Solve a maze using depth-first search.
     """
     if start is None:
         start = (0, 0)
@@ -227,8 +224,7 @@ def dfs(maze, encode_func, speed=20, start=None, end=None):
 
 
 def prim(maze, encode_func, speed=30, start=(0, 0)):
-    """
-    Maze generation using Prim's algorithm.
+    """Maze generation using Prim's algorithm.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Prim's algorithm")
 
@@ -259,8 +255,7 @@ def prim(maze, encode_func, speed=30, start=(0, 0)):
 
 
 def kruskal(maze, encode_func, speed=30):
-    """
-    Maze generation using Kruskal's algorithm.
+    """Maze generation using Kruskal's algorithm.
     """
     bar = tqdm(total=len(maze.cells) - 1, desc="Running Kruskal's algorithm")
 
@@ -311,8 +306,7 @@ def kruskal(maze, encode_func, speed=30):
 
 
 def astar(maze, encode_func, speed, start=None, end=None):
-    """
-    Solving a maze by A* search.
+    """Solving a maze by A* search.
     """
     if start is None:
         start = (0, 0)

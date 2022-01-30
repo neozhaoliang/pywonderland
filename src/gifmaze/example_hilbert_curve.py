@@ -21,15 +21,13 @@ class Hilbert(object):
     """
 
     def __init__(self, n):
-        """
-        Create an n-dimensional Hilbert space-filling curve.
+        """Create an n-dimensional Hilbert space-filling curve.
         """
         self.n = n
         self.mask = (1 << n) - 1
 
     def encode(self, index):
-        """
-        Convert index to coordinates of a point on the Hilbert curve.
+        """Convert index to coordinates of a point on the Hilbert curve.
         """
         # Compute base-n digits of index.
         digits = []
@@ -57,8 +55,7 @@ class Hilbert(object):
         return tuple(2 * x for x in coords)
 
     def decode(self, coords):
-        """
-        Convert coordinates to index of a point on the Hilbert curve.
+        """Convert coordinates to index of a point on the Hilbert curve.
         """
         # Convert n m-bit coordinates to m base-n digits.
         coords = list(coords)
@@ -122,16 +119,14 @@ class Hilbert(object):
 
 def color_pixel(index):
     """
-    Color the vertex by its index. Note the color index must lie
-    between 0-255 since gif allows at most 256 colors in the global
-    color table.
+    Color the vertex by its index. Note the color index must lie between
+    0-255 since gif allows at most 256 colors in the global color table.
     """
     return max(index % 256, 1)
 
 
 def pixels_hilbert(size):
-    """
-    Generate the pixels of a 2d Hilbert curve.
+    """Generate the pixels of a 2d Hilbert curve.
     """
     h = Hilbert(2)  # 2d curve
     for k in range(size * size):
@@ -139,8 +134,7 @@ def pixels_hilbert(size):
 
 
 def hilbert(maze, encode_func, pixels, speed=30):
-    """
-    We just traverse the curve and color the pixels along the way.
+    """We just traverse the curve and color the pixels along the way.
     """
     for i in range(len(pixels) - 1):
         maze.mark_cell(pixels[i], color_pixel(i))

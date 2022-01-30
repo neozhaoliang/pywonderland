@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 ~~~~~~~~~~~~~~~~~~~~
 A simple GIF encoder
@@ -47,8 +46,7 @@ def screen_descriptor(width, height, color_depth):
 
 
 def loop_control_block(loop):
-    """
-    This block specifies the number of loops (0 means loop infinitely).
+    """This block specifies the number of loops (0 means loop infinitely).
     """
     return pack("<3B8s3s2BHB", 0x21, 0xFF, 11, b"NETSCAPE", b"2.0", 3, 1, loop, 0)
 
@@ -57,7 +55,7 @@ def graphics_control_block(delay, trans_index=None):
     """
     This block specifies the delay and transparent color of the coming frame.
     `trans_index=None` means there is no transparent color in this frame.
-    For static frames this block is not needed.
+    For static frames this block is not necessary.
     """
     if trans_index is None:
         return pack("<4BH2B", 0x21, 0xF9, 4, 0b00000100, delay, 0, 0)
@@ -73,8 +71,7 @@ def image_descriptor(left, top, width, height, byte=0):
 
 
 def rectangle(left, top, width, height, color):
-    """
-    A rectangle painted with a given color.
+    """Paint a rectangle with given color.
     """
     descriptor = image_descriptor(left, top, width, height)
     data = lzw_compress([color] * width * height, mcl=2)
@@ -82,9 +79,8 @@ def rectangle(left, top, width, height, color):
 
 
 def pause(delay, trans_index=0):
-    """
-    A 1x1 invisible frame that can be used for padding delay time
-    in an animation.
+    """A 1x1 invisible frame that can be used for padding delay time in
+    an animation.
     """
     control = graphics_control_block(delay, trans_index)
     pixel1x1 = rectangle(0, 0, 1, 1, trans_index)
@@ -157,10 +153,9 @@ class DataBlock(object):
     def dump_bytes(self):
         """
         Pack the LZW encoded image data into blocks.
-        Each block is of length <= 255 and is preceded by a byte
-        in 0-255 that indicates the length of this block.
-        Each time after this function is called `_nbits` and
-        `_bitstream` are reset to 0 and empty.
+        Each block is of length <= 255 and is preceded by a byte in 0-255 that
+        indicates the length of this block. Each time after this function is
+        called `_nbits` and `_bitstream` are reset to 0 and empty.
         """
         bytestream = bytearray()
         while len(self._bitstream) > 255:

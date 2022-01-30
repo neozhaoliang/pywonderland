@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 This file contains three main classes:
 1. `Maze` is the top layer object on which we run the algorithms.
@@ -9,7 +8,6 @@ This file contains three main classes:
 """
 from functools import partial
 from io import BytesIO
-
 from PIL import Image
 
 from . import encoder
@@ -40,7 +38,7 @@ class Maze(object):
         """
         :param width & height: size of the maze.
         :param mask: `None` or a file-like image or an instance of PIL's Image class.
-            If not `None` then this mask image must be of binary type:
+            If not `None` then this mask image must have binary type:
             the black pixels are considered as `walls` and are overlayed on top of the
             grid graph. Note the walls must preserve the connectivity of the grid graph,
             otherwise the program will not terminate.
@@ -95,8 +93,7 @@ class Maze(object):
         return self._graph[cell]
 
     def mark_cell(self, cell, value):
-        """
-        Mark a cell and update `frame_box` and `num_changes`.
+        """Mark a cell and update `frame_box` and `num_changes`.
         """
         x, y = cell
         self._grid[x][y] = value
@@ -112,15 +109,13 @@ class Maze(object):
         return self._grid[x][y]
 
     def mark_space(self, c1, c2, value):
-        """
-        Mark the space between two adjacent cells.
+        """Mark the space between two adjacent cells.
         """
         c = ((c1[0] + c2[0]) // 2, (c1[1] + c2[1]) // 2)
         self.mark_cell(c, value)
 
     def mark_path(self, path, value):
-        """
-        Mark the cells in a path and the spaces between them.
+        """Mark the cells in a path and the spaces between them.
         """
         for cell in path:
             self.mark_cell(cell, value)
@@ -128,8 +123,7 @@ class Maze(object):
             self.mark_space(c1, c2, value)
 
     def barrier(self, c1, c2):
-        """
-        Check if two adjacent cells are connected.
+        """Check if two adjacent cells are connected.
         """
         x = (c1[0] + c2[0]) // 2
         y = (c1[1] + c2[1]) // 2
@@ -175,10 +169,11 @@ class Maze(object):
 class GIFSurface(object):
 
     """
-    A GIFSurface is an object on which the animations are drawn, and which can
-    be saved as GIF images. Each instance opens a BytesIO file in memory once
-    it's created. The frames are temporarily written to this in-memory file for speed.
-    When the animation is finished one should call the `finish()` method to close the io.
+    A GIFSurface is an object on which the animations are drawn, and
+    which can be saved as GIF images. Each instance opens a BytesIO file
+    in memory once it's created. The frames are temporarily written to
+    this in-memory file for speed. When the animation is finished one should
+    call the `finish()` method to close the io.
     """
 
     def __init__(self, width, height, loop=0, bg_color=None):
@@ -225,8 +220,8 @@ class GIFSurface(object):
                        0, 255, 0,  # green
                        0, 0, 255]  # blue
 
-        A gif image can have at most 256 colors in the global color table, so redundant
-        colors will be discarded if `palette` contains more than 256 colors.
+        A gif image can have at most 256 colors in the global color table, redundant
+        colors will be discarded if the input `palette` contains more than 256 colors.
         """
         try:
             palette = bytearray(palette)
@@ -261,8 +256,7 @@ class GIFSurface(object):
         return screen + self.palette + loop
 
     def save(self, filename):
-        """
-        Save the animation to a .gif file, note the 'wb' mode here!
+        """Save the animation to a .gif file, note the 'wb' mode here!
         """
         with open(filename, "wb") as f:
             f.write(self._gif_header)
@@ -300,7 +294,7 @@ def encode_maze(maze, mcl=8, cmap=None):
     def enum_pixels(k, l):
         """
         Compute how many pixels are there from the k-th cell to the l-th
-        cell (k < l) in the same row (or the same column).
+        cell (k < l) in a row (or column).
         """
         w = l - k + 1  # total number of cells in this interval
         if w % 2 == 0:  # cells and walls are one-half to one-half
@@ -365,40 +359,46 @@ class Animation(object):
         self._gif_surface = surface
 
     def pause(self, delay, trans_index=0):
-        """
-        Pause the animation by padding a 1x1 invisible frame.
+        """Pause the animation by padding a 1x1 invisible frame.
         """
         self._gif_surface.write(encoder.pause(delay, trans_index))
 
     def paint(self, left, top, width, height, color):
-        """
-        Paint a rectangular region in the surface.
+        """Paint a rectangular region in the surface.
         """
         self._gif_surface.write(encoder.rectangle(left, top, width, height, color))
 
     def insert_frame(self, data):
-        """
-        One can insert data at the beginning of the image while
-        the animation is running.
+        """One can insert data at the beginning of the image while the animation
+        is running.
         """
         self._gif_surface.init_data += data
 
-    def run(self, algo, maze, delay=5, trans_index=None, cmap=None, mcl=8, **kwargs):
+    def run(self, algo, maze, delay=5, trans_index=None,
+            cmap=None, mcl=8, **kwargs):
+        """This is the main entrance for using this class to encode an animation
+        into frames.
+
+        :param algo: a maze generating/solving algorithm implemented as a generator.
+        :param maze: an instance of the maze class.
+        :param delay: delay between successive frames.
+        :trans_index: transparent color index used in this animation.
+        :cmap: a dict that maps values of the cells to color indices.
+        :mcl: minimal code length.
+        """
         encode_func = partial(encode_maze, cmap=cmap, mcl=mcl)
         control = encoder.graphics_control_block(delay, trans_index)
         for frame in algo(maze, encode_func, **kwargs):
             self._gif_surface.write(control + frame)
 
     def save(self, filename):
-        """
-        A simple wrapper for saving and closing a `GIFSurface`.
+        """A simple wrapper for saving and closing a `GIFSurface`.
         """
         self._gif_surface.save(filename)
         self._gif_surface.finish()
 
     def show_grid(self, maze, bg_color, line_color, **kwargs):
-        """
-        Draw the background grid of a Maze.
+        """Draw the background grid of a Maze.
 
         :param maze: a Maze object.
         :param bg_color: background color (for the cells)

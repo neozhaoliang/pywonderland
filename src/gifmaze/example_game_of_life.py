@@ -10,7 +10,6 @@ For more patterns see
 :copyright (c) 2018 by Zhao Liang
 """
 import os
-
 import numpy as np
 from tqdm import tqdm
 
@@ -22,8 +21,7 @@ margin = 4
 
 
 def parse(filename):
-    """
-    Read data from a .cells file.
+    """Read data from a .cells file. Return a 2d array of live/dead cells.
     """
     seed = []
     with open(filename, "r") as f:
@@ -51,8 +49,7 @@ def parse(filename):
 
 
 def evolve(grid):
-    """
-    Evolve the grid one step.
+    """Evolve the grid one step.
     """
     G = grid.astype(np.int)
     N = np.zeros_like(G)
@@ -74,7 +71,8 @@ def main(seed_file, grid_size, offsets, cutoff, frames):
     """
     :param seed_file: the pattern file.
     :param grid_size: (width, height) of the grid in the life world.
-    :param offsets: (left, top) position of the initial pattern with respect to the grid.
+    :param offsets: (left, top) position of the initial pattern with
+        respect to the grid.
     :param cutoff: cutoff of the image relative to the actual grid.
     :param frames: number of frames in the animation.
     """
@@ -106,7 +104,8 @@ def main(seed_file, grid_size, offsets, cutoff, frames):
             bar.update(1)
         bar.close()
 
-    anim.run(conway, maze, grid=grid, frames=frames, mcl=2, delay=10, cmap={0: 2, 3: 0})
+    anim.run(conway, maze, grid=grid, frames=frames, mcl=2,
+             delay=10, cmap={0: 2, 3: 0})
     anim.pause(500)
     anim.save(pattern_name + ".gif")
 
