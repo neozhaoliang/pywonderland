@@ -12,7 +12,6 @@ Again Matt's program has lots of rich features and a great UI!
 Press "ENTER" to save screenshots and "Esc" to escape.
 """
 import sys
-
 sys.path.append("../")
 
 import argparse
@@ -179,7 +178,8 @@ class Wythoff(pyglet.window.Window):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-size", metavar="s", type=str, default="800x480", help="window size in pixels"
+        "-size", metavar="s", type=str, default="800x480",
+        help="window size in pixels"
     )
     args = parser.parse_args()
     w, h = [int(x) for x in args.size.split("x")]

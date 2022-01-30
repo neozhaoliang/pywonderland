@@ -2,12 +2,10 @@ import vispy
 from vispy import gloo, app
 from vispy.io import imread, imsave
 
-
 vispy.set_log_level("error")
 
 
 vertex = """
-
 #version 130
 
 in vec2 position;
@@ -19,7 +17,6 @@ void main()
 """
 
 fragment = """
-
 #version 130
 
 uniform vec3      iResolution;           // viewport resolution (in pixels)

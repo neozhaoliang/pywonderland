@@ -18,7 +18,6 @@ Example usage:
 """
 import argparse
 import sys
-
 import yaml
 
 from polytopes.todd_coxeter import CosetTable

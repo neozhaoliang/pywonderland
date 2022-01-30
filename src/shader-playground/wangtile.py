@@ -9,7 +9,6 @@ Code exported from srtuss's shadertoy project at
 
 """
 import sys
-
 sys.path.append("../")
 
 import time
@@ -37,7 +36,6 @@ class WangTile(pyglet.window.Window):
     def __init__(self, width, height, zoom):
         """
         :param width & height: size of the main window in pixels.
-
         :param zoom: zoom factor of the scene.
         """
         pyglet.window.Window.__init__(

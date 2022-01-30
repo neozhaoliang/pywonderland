@@ -7,6 +7,5 @@ pycairo
 pyglet
 pyyaml
 scipy
-taichi
 tqdm
 vispy
