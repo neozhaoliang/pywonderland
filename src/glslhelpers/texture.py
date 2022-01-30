@@ -35,6 +35,7 @@ def create_texture_from_ndarray(array):
 
 def create_image_texture(imgfile):
     """Create a 2D texture from an image file.
+    You can use either a .png or .jpg file.
     """
     image = pyglet.image.load(imgfile)
     data = image.get_data("RGBA", image.width * 4)
@@ -62,6 +63,9 @@ def create_image_texture(imgfile):
 
 def create_cubemap_texture(imgfiles):
     """Create a cubemap texture from image files.
+
+    :param imgfiles: a list of six strings specifying the path to the
+        cubemap images. In the order [pos+X, pos-X, pos+Y, ..., pos-Z]
     """
     if len(imgfiles) != 6:
         raise ValueError("exactly six images are required for a cubemap texture")
@@ -72,7 +76,9 @@ def create_cubemap_texture(imgfiles):
 
     # bind it to `GL_TEXTURE_CUBE_MAP` and set the filter and wrap mode
     gl.glBindTexture(gl.GL_TEXTURE_CUBE_MAP, cubemap)
-    gl.glTexParameteri(gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_MAG_FILTER, gl.GL_LINEAR)
+    gl.glTexParameteri(
+        gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_MAG_FILTER, gl.GL_LINEAR
+    )
     gl.glTexParameteri(
         gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_MIN_FILTER, gl.GL_LINEAR_MIPMAP_LINEAR
     )

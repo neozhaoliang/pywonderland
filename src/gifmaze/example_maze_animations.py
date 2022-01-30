@@ -112,17 +112,16 @@ def example4():
     anim = Animation(surface)
     # currently nothing has happened, we just show the background image for 1 second
     anim.pause(100, trans_index=1)
-    # then we draw a rectangle that on top of the blackboard region
+    # then we draw a rectangle on top of the blackboard region
     anim.paint(48, 32, 361, 231, 0)
     anim.pause(100)
-    # everything lays directly on top of the blackboard,
-    # there is no transparent color used here.
+    # there is no transparent color in the maze generating stage.
     anim.run(algo.wilson, maze, speed=50, delay=2, trans_index=None, mcl=2)
     anim.pause(300)
     cmap = {i: max(i % 256, 3) for i in range(len(maze.cells))}
     # in the maze solving stage we color the walls and trees with the transparent
-    # color index 0, what would happen then? since these are transparent so we
-    # can see the background maze through them.
+    # color index 0, what would happen then? since these cells are transparent we
+    # can see the underlying maze through them.
     cmap.update({0: 0, 1: 0, 2: 2})
     anim.run(algo.bfs, maze, speed=30, mcl=8, delay=5, cmap=cmap, trans_index=0)
     anim.pause(500)
