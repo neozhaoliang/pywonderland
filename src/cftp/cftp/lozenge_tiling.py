@@ -18,9 +18,7 @@ class LozengeTiling(MonotoneMarkovChain):
 
     For a path system s, its k-th path s[k] starts at (k - 0.5) * dir(90),
     moves to the next vertex along (-30) or (+30) directions in each step,
-    until it reaches the right vertical side of the hexagon. The number
-    s[k][j] records the offset of the j-th vertex in s[k] along the (+30)
-    direction from the origin.
+    until it reaches the right vertical side of the hexagon.
 
     +y (+90 deg)
     |  ____
