@@ -121,10 +121,10 @@ class LozengeTiling(MonotoneMarkovChain):
                         #            \|
                         #          (0, -1)
                         verts["L"].append(
-                            ([
+                            [
                                 (j + dx, s[k][j] + dy)
                                 for dx, dy in [(0, 0), (-1, 0), (-1, -1), (0, -1)]
-                            ], k)
+                            ]
                         )
                     else:
                         #           (0, 0)
@@ -135,10 +135,10 @@ class LozengeTiling(MonotoneMarkovChain):
                         #          |/
                         #        (-1, -2)
                         verts["R"].append(
-                            ([
+                            [
                                 (j + dx, s[k][j] + dy)
                                 for dx, dy in [(0, 0), (-1, -1), (-1, -2), (0, -1)]
-                            ], k)
+                            ]
                         )
 
                 for l in range(s[k][j] + 1, s[k + 1][j]):
@@ -149,9 +149,9 @@ class LozengeTiling(MonotoneMarkovChain):
                     #           \/
                     #         (0, -1)
                     verts["T"].append(
-                        ([
+                        [
                             (j + dx, l + dy)
                             for dx, dy in [(0, 0), (-1, -1), (0, -1), (1, 0)]
-                        ], k)
+                        ]
                     )
         return verts

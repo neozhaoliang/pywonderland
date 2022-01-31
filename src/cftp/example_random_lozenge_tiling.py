@@ -1,5 +1,5 @@
 """
-Draw random lozenge tiling and its non-intersecting lattice paths
+Draw a random lozenge tiling and its non-intersecting lattice paths
 """
 import matplotlib.pyplot as plt
 from cftp import LozengeTiling
@@ -55,13 +55,13 @@ def main(hexagon_size, figsize):
 
     # draw the random lozenge tiling
     for key, li in tiles.items():
-        for verts, ht in li:
+        for verts in li:
             utils.draw_lozenge(ax, verts, key)
 
     fig.savefig("random_lozenge_tiling.svg")
 
     # draw the non-intersecting path system
-    utils.draw_paths_on_hexagon(ax, hexagon_size, (X, Y, Z), paths)
+    utils.draw_paths_on_hexagon(ax, (X, Y, Z), paths)
 
     fig.savefig("non-intersecting_paths_lozenge.svg")
 

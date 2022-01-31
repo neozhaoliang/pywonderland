@@ -68,16 +68,14 @@ def draw_marker(ax, z, label):
             color="w", ha="center", va="center")
 
 
-def draw_paths_on_hexagon(ax, size, XYZ, paths):
+def draw_paths_on_hexagon(ax, XYZ, paths):
     """
     Draw the non-intersecting paths of a rhombus tiling on hexagon.
 
     :param ax: an instance of matplotlib's axes.
-    :param size: side length of the hexagon (a, b, c).
     :param XYZ: three directions of the triangle grids.
     :param paths: list of paths.
     """
-    a, b, c = size
     X, Y, Z = XYZ
     for i, path in enumerate(paths):
         start = (i - 0.5) * Y
@@ -95,16 +93,14 @@ def draw_paths_on_hexagon(ax, size, XYZ, paths):
             v1 = v2
 
 
-def draw_paths_on_rectangle(ax, size, XYZ, paths):
+def draw_paths_on_rectangle(ax, XYZ, paths):
     """
     Draw the non-intersecting paths of a domino tiling on rectangle.
 
     :param ax: an instance of matplotlib's axes.
-    :param size: side length of the rectangle (a, b).
     :param XYZ: X, Y for the usual xy-axis, Z for dir(45).
     :param paths: list of paths.
     """
-    a, b = size
     X, Y, Z = XYZ
     for i, path in enumerate(paths):
         start = -0.5 * Y if i == 0 else (2 * i - 1.5) * Y

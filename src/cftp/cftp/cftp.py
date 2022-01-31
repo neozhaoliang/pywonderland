@@ -50,8 +50,7 @@ class MonotoneMarkovChain(object):
                 break
 
             # if not coupled then look further back into the past.
-            else:
-                updates.insert(0, (rng_next, 2 ** len(updates)))
+            updates.insert(0, (rng_next, 2 ** len(updates)))
 
         random.setstate(rng_next)
         bar.close()

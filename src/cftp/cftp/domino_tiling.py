@@ -9,7 +9,7 @@ from .cftp import MonotoneMarkovChain
 
 
 def generate_path(k, n, offset=0, flip=False):
-    """A helper function for generating a path consists of n steps like this:
+    r"""A helper function for generating a path consists of n steps like this:
 
        -----
       /     \
@@ -29,8 +29,8 @@ def generate_path(k, n, offset=0, flip=False):
     k = min(k, n // 2)
     if flip:
         return [max(i + k - n, 0) - min(i, k) + offset for i in range(n + 1)]
-    else:
-        return [min(i, k) - max(i + k - n, 0) + offset for i in range(n + 1)]
+
+    return [min(i, k) - max(i + k - n, 0) + offset for i in range(n + 1)]
 
 
 class DominoTiling(MonotoneMarkovChain):

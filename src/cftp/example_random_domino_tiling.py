@@ -1,5 +1,5 @@
 """
-Draw random domino tilings and its non-intersecting lattice paths.
+Draw a random domino tiling and its non-intersecting lattice paths.
 """
 import matplotlib.pyplot as plt
 from cftp import DominoTiling
@@ -28,7 +28,7 @@ def main(rect_size, figsize):
 
     fig.savefig("random_domino_tiling.svg")
 
-    utils.draw_paths_on_rectangle(ax, rect_size, (X, Y, Z), paths)
+    utils.draw_paths_on_rectangle(ax, (X, Y, Z), paths)
 
     fig.savefig("non-intersecting_paths_domino.svg")
 
