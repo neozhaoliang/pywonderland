@@ -179,7 +179,7 @@ class DominoTiling(MonotoneMarkovChain):
                     j += 1
 
                 else:
-                    # an downward edge inside a vertical domino
+                    # a downward edge inside a vertical domino
                     # (-1, 1) ---- (0, 1)
                     #         |  |
                     #         |\ |
