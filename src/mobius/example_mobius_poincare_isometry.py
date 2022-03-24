@@ -41,6 +41,7 @@ style = dict(
 def example_elliptic():
     ax.clear()
     ax.axis([-1.1, 2, -1.5, 1.6])
+    ax.axis("off")
     ax.add_patch(unit_circle)
     # the fixed point
     z = 0.5 + 0.2j
@@ -95,6 +96,7 @@ def example_elliptic():
 def example_parabolic():
     ax.clear()
     ax.axis([-1.1, 1.3, -1.1, 1.3])
+    ax.axis("off")
     ax.add_patch(unit_circle)
 
     theta = np.pi / 3
@@ -136,6 +138,7 @@ def example_parabolic():
 def example_hyperbolic():
     ax.clear()
     ax.axis([-1.2, 1.2, -1.2, 1.2])
+    ax.axis("off")
     ax.add_patch(unit_circle)
 
     theta = 0
