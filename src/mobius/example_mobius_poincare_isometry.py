@@ -29,8 +29,8 @@ N = 16
 # styles for the two families of circles/lines.
 linestyle1 = {"linestyle": "-", "color": "k"}
 circstyle1 = {"linestyle": "-", "ec": "k"}
-linestyle2 = {"linestyle": "--", "color": "k", "lw": .75}
-circstyle2 = {"linestyle": "--", "ec": "k", "fc": 'none', "lw": .75}
+linestyle2 = {"linestyle": "--", "color": "k"}
+circstyle2 = {"linestyle": "--", "ec": "k", "fc": 'none'}
 # arrow style
 style = dict(
     arrowstyle="Simple, tail_width=0.5, head_width=4, head_length=8",
