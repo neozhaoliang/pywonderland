@@ -106,9 +106,9 @@ def main():
     base_scale = np.power(num_steps, -discrete_scale) / zoom_factor
     grid_scale = np.power(num_steps, fract_scale)
 
-    total_weights = np.zeros_like(z, dtype=np.float)
-    shading = np.zeros_like(z, dtype=np.float)
-    grid = np.zeros_like(z, dtype=np.complex)
+    total_weights = np.zeros_like(z, dtype=float)
+    shading = np.zeros_like(z, dtype=float)
+    grid = np.zeros_like(z, dtype=complex)
     octave_scale = 1
 
     for i in range(num_octaves):
@@ -135,7 +135,12 @@ def main():
     color = mix(1, color, 0.97)
     shade = mix(1, shading, shading_opacity)
     grid = np.maximum(grid.real, grid.imag)
-    color = np.clip(mix(color * np.stack([shade]*3, axis=2), np.zeros_like(color), np.stack([grid]*3, axis=2)), 0, 1)
+    color = np.clip(
+        mix(color * np.stack([shade]*3, axis=2),
+            np.zeros_like(color),
+            np.stack([grid]*3, axis=2)
+        ), 0, 1
+    )
     color = np.power(color, 1 / gamma)
     Image.fromarray(np.uint8(255 * color)).resize((image_width, image_height)).save("domain_coloring.png")
 
