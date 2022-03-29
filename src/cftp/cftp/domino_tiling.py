@@ -124,7 +124,7 @@ class DominoTiling(MonotoneMarkovChain):
                 if count % 2 == 1:
                     s[k][j] -= 1
 
-            # else if this is a 'peak', we push it downwad
+            # else if this is a 'peak', we push it downward
             elif s[k][j - 1] < s[k][j] > s[k][j + 1] > s[k - 1][j]:
                 s[k][j] -= 1
 
