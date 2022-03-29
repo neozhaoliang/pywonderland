@@ -57,7 +57,7 @@ class DominoTiling(MonotoneMarkovChain):
         The minimum state is the path system in which each path goes
         downward as deep as possible, while the maximum state is the
         path system in which each path goes upward as high as possible.
-        (of course their must be no intersections)
+        (of course all paths in a system must have no intersections)
         """
         a, b = self.size
         m = b // 2
