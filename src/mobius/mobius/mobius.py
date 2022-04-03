@@ -16,7 +16,7 @@ class Mobius(np.ndarray):
         """
         m = np.array(data, dtype=complex).reshape(2, 2).view(cls)
         det = m.det
-        assert utils.nonzero(abs(det)), \
+        assert utils.nonzero(det), \
             "Cannot initialize a Mobius transformation with a singular matrix"
         m /= np.sqrt(det)
         return m
