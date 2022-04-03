@@ -13,12 +13,12 @@ def less_than(x, y):
     return x < y - epsilon
 
 
-def equal(x, y):
-    return x - epsilon <= y <= x + epsilon
-
-
 def iszero(x):
-    return equal(x, 0)
+    return abs(x) < epsilon
+
+
+def equal(x, y):
+    return iszero(x - y)
 
 
 def nonzero(x):
