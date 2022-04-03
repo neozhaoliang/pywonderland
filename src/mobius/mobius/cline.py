@@ -134,3 +134,9 @@ class CLine(np.ndarray):
         M_inv_conj = M_inv.conj()
         # make sure return a CLine, not a Mobius transformation.
         return CLine(M_inv_T) @ self @ CLine(M_inv_conj)
+
+    def __call__(self, z):
+        """Reflect a point `z` about this circle.
+        """
+        x, y = self @ np.array([z.conjugate(), 1])
+        return utils.safe_div(-y, x)
