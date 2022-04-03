@@ -54,7 +54,7 @@ class CLine(np.ndarray):
             det > 0: Impossible
         """
         det = self.det
-        a, b, c, d = self.abcd
+        a, _, _, _ = self.abcd
         if utils.nonzero(a):
             if utils.less_than(det.real, 0):
                 return "circle"
