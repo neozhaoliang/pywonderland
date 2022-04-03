@@ -27,15 +27,16 @@ ax = fig.add_axes([0, 0, 1, 1])
 N = 16
 
 # styles for the two families of circles/lines.
-linestyle1 = {"linestyle": "-", "color": "k"}
-circstyle1 = {"linestyle": "-", "ec": "k"}
-linestyle2 = {"linestyle": "--", "color": "k"}
-circstyle2 = {"linestyle": "--", "ec": "k", "fc": 'none'}
+linestyle1 = dict(linestyle="-", color="k")
+circstyle1 = dict(linestyle="-", ec="k")
+linestyle2 = dict(linestyle="--", color="m")
+circstyle2 = dict(linestyle="--", ec="m", fc="none")
 # arrow style
 style = dict(
     arrowstyle="Simple, tail_width=0.5, head_width=4, head_length=8",
     color="k"
 )
+fontstyle = dict(fontsize=20)
 
 
 def example_elliptic():
@@ -63,7 +64,7 @@ def example_elliptic():
 
     # another family
     for i, c in enumerate(orth_grid):
-        cs = {**circstyle2, "ec": "m"}
+        cs = circstyle2
         ls = {**linestyle2, "color": "m"}
         mobius.plot_cline(ax, c, ls, cs)
 
@@ -75,9 +76,9 @@ def example_elliptic():
     ax.plot(p2.real, p2.imag, "bo", markersize=6)
 
     # add labels
-    ax.text(p1.real - 0.15, p1.imag - 0.15, "$p_1$", fontsize=18, fontweight="normal")
-    ax.text(p2.real + 0.12, p2.imag + 0.1, "$p_2$", fontsize=18, fontweight="normal")
-    ax.text(-0.3, 0., "$M$", fontsize=18, fontweight="normal")
+    ax.text(p1.real - 0.2, p1.imag - 0.15, "$p_1$", **fontstyle)
+    ax.text(p2.real + 0.12, p2.imag + 0.1, "$p_2$", **fontstyle)
+    ax.text(-0.35, 0, "$M$", **fontstyle)
 
     # draw arrow
     start = -0.45 + 0.3j
@@ -112,15 +113,14 @@ def example_parabolic():
         mobius.plot_cline(ax, c, ls, cs)
 
     for i, c in enumerate(orth_grid):
-        cs = {**circstyle2, "ec": "m"}
-        ls = {**linestyle2, "color": "m"}
+        cs = circstyle2
+        ls = linestyle2
         mobius.plot_cline(ax, c, ls, cs)
 
     ax.plot(p1.real, p1.imag, "go", markersize=6)
 
-    ax.text(p1.real + 0.05, p1.imag, "$p$", fontsize=18, fontweight="normal")
-
-    ax.text(-0.3, -0.2, "$M$", fontsize=18, fontweight="normal")
+    ax.text(p1.real + 0.05, p1.imag, "$p$", **fontstyle)
+    ax.text(-0.3, -0.2, "$M$", **fontstyle)
 
     start = -0.55 + 0.2j
     end = M(start)
@@ -164,10 +164,9 @@ def example_hyperbolic():
     ax.plot(p1.real, p1.imag, "go", markersize=6)
     ax.plot(p2.real, p2.imag, "bo", markersize=6)
 
-    ax.text(p1.real + 0.05, p1.imag, "$p_1$", fontsize=18, fontweight="normal")
-    ax.text(p2.real + 0.05, p2.imag, "$p_2$", fontsize=18, fontweight="normal")
-
-    ax.text(0., 0.6, "$M$", fontsize=18, fontweight="normal")
+    ax.text(p1.real + 0.05, p1.imag - 0.15, "$p_1$", **fontstyle)
+    ax.text(p2.real + 0.05, p2.imag - 0.15, "$p_2$", **fontstyle)
+    ax.text(0., 0.6, "$M$", **fontstyle)
 
     start = -0.3 + 0.5j
     end = M(start)
