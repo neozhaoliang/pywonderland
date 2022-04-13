@@ -6,7 +6,7 @@ import random
 from tqdm import tqdm
 
 
-class MonotoneMarkovChain(object):
+class MonotoneMarkovChain:
 
     """
     This class holds a Markov chain object that implements following methods:

@@ -3,10 +3,10 @@ from .gentext import generate_text_mask
 from .gifmaze import Animation, GIFSurface, Maze, encode_maze
 
 
-def create_animation_for_size(width, height, cell_size, linewidth, margin, **kwargs):
+def create_animation_for_size(width, height, cell_size,
+                              linewidth, margin, **kwargs):
     """
-    A helper function for creating an animation embedded at the center
-    of the image window.
+    A helper function for quickly creating an animation.
 
     :param width & height: size of the maze.
     :param cell_size: size of the cells in pixels.

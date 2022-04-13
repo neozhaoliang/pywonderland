@@ -21,7 +21,7 @@ REFERENCES:
 import random
 
 
-class AztecDiamond(object):
+class AztecDiamond:
 
     """
     Use a dict to represent a tiling of an Aztec diamond graph.

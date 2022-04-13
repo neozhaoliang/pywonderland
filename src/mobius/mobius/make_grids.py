@@ -25,8 +25,8 @@ def generate_grids_elliptic(p, N, interval=(0.0001, 5)):
     dirs = np.exp(1j * np.linspace(0, 2 * np.pi, N + 1))
     orth_grid = [CLine.from_line(n, 0) for n in dirs]
     T = Mobius.translation(0, p)
-    para_grid = [C.transform_by(T) for C in para_grid]
-    orth_grid = [C.transform_by(T) for C in orth_grid]
+    para_grid = [T(C) for C in para_grid]
+    orth_grid = [T(C) for C in orth_grid]
     return para_grid, orth_grid
 
 
@@ -50,8 +50,8 @@ def generate_grids_parabolic(p, N, dist=1):
     verticals = np.arange(-(N // 2) * dist, (N // 2) * dist, dist)
     orth_grid = [CLine.from_line(1, offset) for offset in verticals]
     T = Mobius.disk_to_uhs(p, 'to_inf')
-    para_grid = [C.transform_by(T.inv) for C in para_grid]
-    orth_grid = [C.transform_by(T.inv) for C in orth_grid]
+    para_grid = [T.inv(C) for C in para_grid]
+    orth_grid = [T.inv(C) for C in orth_grid]
     return para_grid, orth_grid
 
 
@@ -77,6 +77,6 @@ def generate_grids_hyperbolic(p1, p2, N, scale=3.0):
     rads = np.exp(np.linspace(-3, 3, N + 1))
     orth_grid = [CLine.from_circle(0, r) for r in rads]
     T = Mobius([-p1.conjugate() * 1j, 1j, -p2.conjugate(), 1]).inv
-    para_grid = [C.transform_by(T) for C in para_grid]
-    orth_grid = [C.transform_by(T) for C in orth_grid]
+    para_grid = [T(C) for C in para_grid]
+    orth_grid = [T(C) for C in orth_grid]
     return para_grid, orth_grid

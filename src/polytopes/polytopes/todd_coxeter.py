@@ -12,7 +12,7 @@ Reference:
 """
 
 
-class CosetTable(object):
+class CosetTable:
     """
     Let G = < X | R > be a finitely presented group and H be a subgroup of
     G with |G:H| < inf. The coset table T of G/H is a 2D array with rows

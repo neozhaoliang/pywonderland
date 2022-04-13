@@ -14,7 +14,7 @@ from colorsys import hls_to_rgb
 from gifmaze import create_animation_for_size
 
 
-class Hilbert(object):
+class Hilbert:
 
     """
     Multi-dimensional Hilbert space-filling curve.

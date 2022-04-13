@@ -2,7 +2,7 @@ import ctypes as ct
 import pyglet.gl as gl
 
 
-class Shader(object):
+class Shader:
     """A helper class for compiling and communicating with shader programs.
     """
 

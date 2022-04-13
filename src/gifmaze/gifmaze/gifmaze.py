@@ -13,7 +13,7 @@ from PIL import Image
 from . import encoder
 
 
-class Maze(object):
+class Maze:
 
     """
     This class defines the basic structure of a maze and some operations on it.
@@ -166,7 +166,7 @@ class Maze(object):
         return self
 
 
-class GIFSurface(object):
+class GIFSurface:
 
     """
     A GIFSurface is an object on which the animations are drawn, and
@@ -348,7 +348,7 @@ def encode_maze(maze, mcl=8, cmap=None):
     return descriptor + data
 
 
-class Animation(object):
+class Animation:
 
     """
     This class is the main entrance for calling algorithms to

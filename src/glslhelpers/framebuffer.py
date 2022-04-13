@@ -2,7 +2,7 @@ import ctypes as ct
 import pyglet.gl as gl
 
 
-class FrameBuffer(object):
+class FrameBuffer:
     """A simple helper class for handling the frame buffer object (fbo).
     """
 

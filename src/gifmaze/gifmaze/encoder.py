@@ -119,7 +119,7 @@ def parse_image(img):
     return descriptor + bytearray(palette) + compressed_data
 
 
-class DataBlock(object):
+class DataBlock:
 
     """
     Write bits into a bytearray and then pack this bytearray into data blocks.

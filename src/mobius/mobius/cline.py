@@ -40,6 +40,11 @@ class CLine(np.ndarray):
     def det(self):
         return self[0, 0] * self[1, 1] - self[0, 1] * self[1, 0]
 
+    @property
+    def inv(self):
+        a, b, c, d = self.abcd
+        return CLine([d, -b, -c, a]) / self.det
+
     def get_classification(self):
         """
         Use the `det` to determine which type of shape this Cline is:
@@ -135,8 +140,19 @@ class CLine(np.ndarray):
         # make sure return a CLine, not a Mobius transformation.
         return CLine(M_inv_T) @ self @ CLine(M_inv_conj)
 
-    def __call__(self, z):
-        """Reflect a point `z` about this circle.
+    def reflect(self, other):
+        """Use `self` as mirror to reflect another complex or a CLine.
         """
-        x, y = self @ np.array([z.conjugate(), 1])
-        return utils.safe_div(-y, x)
+        H = CLine([0, -1, 1, 0]) @ self
+        if np.isscalar(other):
+            x, y = H @ np.array([other.conjugate(), 1])
+            return utils.safe_div(x, y)
+
+        if isinstance(other, CLine):
+            H_inv = H.inv
+            return H_inv.T.conj() @ other @ H_inv
+
+        raise TypeError("A complex or a CLine is expected")
+
+    def __call__(self, other):
+        return self.reflect(other)

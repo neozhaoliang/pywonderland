@@ -17,7 +17,7 @@ lw = 1
 margin = 6
 
 
-class Ant(object):
+class Ant:
 
     """
     The rule:

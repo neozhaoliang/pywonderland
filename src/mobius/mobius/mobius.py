@@ -1,4 +1,5 @@
 import numpy as np
+from .cline import CLine
 from . import utils
 
 
@@ -26,13 +27,19 @@ class Mobius(np.ndarray):
         return f"({a}*z + {b}) / ({c}*z + {d})"
 
     def __call__(self, z):
-        """Apply this transformation to a complex `z`.
+        """Apply this transformation to a complex or a CLine.
         """
         a, b, c, d = self.abcd
-        if utils.isinf(z):
-            return utils.safe_div(a, c)
+        if np.isscalar(z):
+            if utils.isinf(z):
+                return utils.safe_div(a, c)
 
-        return utils.safe_div(a * z + b, c * z + d)
+            return utils.safe_div(a * z + b, c * z + d)
+
+        elif isinstance(z, CLine):
+            return z.transform_by(self)
+
+        raise TypeError("A complex or a CLine is expected")
 
     @property
     def abcd(self):
