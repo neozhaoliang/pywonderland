@@ -5,7 +5,6 @@ their actions on two orthogonal families of circles.
 """
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.pyplot as plt
 plt.rcParams.update(
     {
         "text.usetex": True,
