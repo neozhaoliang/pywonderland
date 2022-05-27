@@ -41,6 +41,8 @@ The code for some of the images are not in the master branch, they can be found 
 
 + Möbius transformations
 
+<img src="https://user-images.githubusercontent.com/23307174/170706652-330f6fff-1e2e-4458-900c-2c96c5269aeb.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/170706658-c11ac2ba-bc8f-4b5c-b1f1-a9e3f339a035.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/170706666-531a3db9-871d-4dac-865d-76c388e89460.png" width="30%"></img> 
+
 <img src="https://user-images.githubusercontent.com/23307174/125022164-a3162180-e0ae-11eb-86f2-d41eaea7ba85.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125022177-a7423f00-e0ae-11eb-9ee8-a711538eda1b.png" width="30%"></img> <img src="https://user-images.githubusercontent.com/23307174/125022184-a9a49900-e0ae-11eb-9cc7-4c9f9bf126cb.png" width="30%"></img> 
 
 + Wythoff explorer from [Matt Zucker](https://github.com/mzucker)
