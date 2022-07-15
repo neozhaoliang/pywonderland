@@ -381,10 +381,10 @@ class Animation:
 
         :param algo: a maze generating/solving algorithm implemented as a generator.
         :param maze: an instance of the maze class.
-        :param delay: delay between successive frames.
+        :param delay: delay between consecutive frames.
         :trans_index: transparent color index used in this animation.
-        :cmap: a dict that maps values of the cells to color indices.
-        :mcl: minimal code length.
+        :cmap: a dict that maps cells to color indices.
+        :mcl: minimal code length for lzw compression.
         """
         encode_func = partial(encode_maze, cmap=cmap, mcl=mcl)
         control = encoder.graphics_control_block(delay, trans_index)
