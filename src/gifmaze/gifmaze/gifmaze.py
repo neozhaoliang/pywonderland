@@ -18,7 +18,7 @@ class Maze:
     """
     This class defines the basic structure of a maze and some operations on it.
     A maze with `height` rows and `width` columns is represented by a larger 2d
-    array with (2 * height - 1) rows and (2 * width - 1) columns: we also add
+    array with (2 * height - 1) rows and (2 * width - 1) columns: we also pad
     entries for the 'wall's between adjacent cells, so adjacent cells are spaced
     out by one cell in the larger grid.
     Each cell has 4 possible states:
@@ -40,7 +40,7 @@ class Maze:
         :param mask: `None` or a file-like image or an instance of PIL's Image class.
             If not `None` then this mask image must have binary type:
             the black pixels are considered as `walls` and are overlayed on top of the
-            grid graph. Note the walls must preserve the connectivity of the grid graph,
+            grid graph. These walls must preserve the connectivity of the grid graph,
             otherwise the program will not terminate.
         :param cell_init: an integer to initialize the cells of the maze.
         :param wall_init: an integer to initialize the walls of the maze.
@@ -171,7 +171,7 @@ class GIFSurface:
     """
     A GIFSurface is an object on which the animations are drawn, and
     which can be saved as GIF images. Each instance opens a BytesIO file
-    in memory once it's created. The frames are temporarily written to
+    in memory when it's created. The frames are temporarily written to
     this in-memory file for speed. When the animation is finished one should
     call the `finish()` method to close the io.
     """
