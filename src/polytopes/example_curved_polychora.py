@@ -264,7 +264,7 @@ def main():
     )
 
     # this is the settings I used to render the movie at
-    # http://pywonderland.com/images/cn/polytopes/rectified-grand-stellated-120-cell.mp4
+    # http://pywonderland.com/images/polytopes/rectified-grand-stellated-120-cell.mp4
     # (the parameters are not exactly the same but very similar)
     # take quite a while to render.
     draw(
