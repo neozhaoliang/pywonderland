@@ -4,7 +4,7 @@ numba
 numpy
 pillow
 pycairo
-pyglet
+pyglet==1.5.27
 pyyaml
 scipy
 tqdm
