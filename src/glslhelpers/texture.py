@@ -13,7 +13,7 @@ def create_texture_from_ndarray(array):
     """
     height, width = array.shape[:2]
     texture = pyglet.image.Texture.create_for_size(
-        gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F_ARB
+        gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F
     )
     gl.glBindTexture(texture.target, texture.id)
     gl.glTexImage2D(
