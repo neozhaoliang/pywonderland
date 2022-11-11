@@ -77,10 +77,10 @@ class Wythoff(pyglet.window.Window):
              os.path.join(GLSL_DIR, "main.frag")])
         self.font_texture = create_image_texture(FONT_TEXTURE)
         self.iChannel0 = pyglet.image.Texture.create_for_size(
-            gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F_ARB
+            gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F
         )
         self.iChannel1 = pyglet.image.Texture.create_for_size(
-            gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F_ARB
+            gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F
         )
         gl.glActiveTexture(gl.GL_TEXTURE0)
         gl.glBindTexture(self.iChannel0.target, self.iChannel0.id)
