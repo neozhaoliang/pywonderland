@@ -19,7 +19,7 @@ def create_texture_from_ndarray(array):
     gl.glTexImage2D(
         texture.target,
         texture.level,
-        gl.GL_RGBA32F_ARB,
+        gl.GL_RGBA32F,
         width,
         height,
         0,
