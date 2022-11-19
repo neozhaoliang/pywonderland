@@ -52,7 +52,7 @@ for i, j in combinations(range(8), 2):
 for v in product([-1, 1], repeat=8):
     if sum(v) % 4 == 0:
         roots.append(v)
-roots = np.array(roots).astype(np.int)
+roots = np.array(roots).astype(int)
 
 
 # Connect a root to its nearest neighbors,
