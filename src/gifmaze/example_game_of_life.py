@@ -51,7 +51,7 @@ def parse(filename):
 def evolve(grid):
     """Evolve the grid one step.
     """
-    G = grid.astype(np.int)
+    G = grid.astype(int)
     N = np.zeros_like(G)
     N[1:-1, 1:-1] = (
         G[:-2, :-2]
