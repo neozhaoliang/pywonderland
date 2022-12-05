@@ -2,10 +2,10 @@
 # 48 cosets
 name: Cube
 relators:
-  - aa
-  - bb
-  - cc
-  - abababab
-  - bcbcbc
-  - acac
+  - a^2
+  - b^2
+  - c^2
+  - (ab)^4
+  - (bc)^3
+  - (ac)^2
 subgroup-generators:

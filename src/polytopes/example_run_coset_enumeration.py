@@ -17,6 +17,7 @@ Example usage:
 :copyright (c) 2018 by Zhao Liang.
 """
 import argparse
+import re
 import sys
 import yaml
 
@@ -52,6 +53,28 @@ def word2int(symbols, wordslist):
     return tuple(tuple(char2int(symbols, c) for c in word) for word in wordslist)
 
 
+def parse_latex(string):
+    """
+    Given a generator relation as a LaTeX string, convert it to a flattened string.
+    Examples: a^{3} -> aaa, (ab)^2 -> abab, (aB)^{-2} -> bAbA
+    """
+    if len(string) == 0:
+        return ""
+    if "^" not in string:
+        return string
+
+    pattern = "\w+|/\(\w+\)/\^\d+|\{-?\d+\}"
+    result = re.findall(pattern, string)
+    base, exponent= result
+    if "{" in exponent:
+        exponent = exponent[1:-1]
+    exponent = int(exponent)
+    if exponent < 0:
+        exponent = -exponent
+        base = base[::-1].swapcase()
+    return base * exponent
+
+
 class FpGroup(object):
 
     """
@@ -71,18 +94,20 @@ class FpGroup(object):
         if not name:
             name = self.__class__.__name__
         self.name = name
-        self.relators = relators
-        self.generators = get_symbols(relators)
+        self.relators = [parse_latex(s) for s in relators]
+        self.generators = get_symbols(self.relators)
         if len(self.generators) < 2:
             raise ValueError("Not enough generators")
         if not subgens:
             subgens = []
+        else:
+            subgens = [parse_latex(s) for s in subgens]
         self.subgens = subgens
 
         # initialize the coset table
         gens = tuple(range(2 * len(self.generators)))
         relators += tuple(c + c.upper() for c in self.generators)
-        rels = word2int(self.generators, relators)
+        rels = word2int(self.generators, self.relators)
         subgens = word2int(self.generators, self.subgens)
         self.coset_table = CosetTable(gens, rels, subgens, coxeter=False)
 

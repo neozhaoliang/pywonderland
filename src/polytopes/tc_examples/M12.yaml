@@ -2,11 +2,11 @@
 # 95040 cosets
 name: M12
 relators:
-  - aaaaaaaaaaa
-  - bb
-  - cc
-  - ababab
-  - acacac
-  - bcbcbcbcbcbcbcbcbcbc
+  - a^{11}
+  - b^2
+  - c^2
+  - (ab)^3
+  - (ac)^3
+  - (bc)^{10}
   - aabcbcaCBCB
 subgroup-generators:

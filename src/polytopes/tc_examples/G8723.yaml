@@ -5,10 +5,10 @@
 # 448 cosets
 name: G8723
 relators:
-  - aaaaaaaa
-  - bbbbbbb
-  - abab
-  - AbAbAb
+  - a^8
+  - b^7
+  - (ab)^2
+  - (Ab)^3
 subgroup-generators:
   - aa
   - Ab

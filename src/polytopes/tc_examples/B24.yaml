@@ -2,14 +2,14 @@
 # 1024 cosets
 name: B24
 relators:
-  - aaaa
-  - bbbb
-  - abababab
-  - AbAbAbAb
-  - aabaabaabaab
-  - abbabbabbabb
-  - aabbaabbaabbaabb
-  - AbabAbabAbabAbab
-  - aBabaBabaBabaBab
+  - a^4
+  - b^4
+  - (ab)^4
+  - (Ab)^4
+  - (aab)^4
+  - (abb)^4
+  - (aabb)^4
+  - (Abab)^4
+  - (aBab)^4
 subgroup-generators:
   - a
