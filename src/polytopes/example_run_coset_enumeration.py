@@ -63,17 +63,27 @@ def parse_latex(string):
     if "^" not in string:
         return string
 
-    pattern = "\w+|/\(\w+\)/\^\d+|\{-?\d+\}"
+    pattern = "(?:[a-zA-Z]{1}|\([a-zA-Z]+\))\^(?:\d+|\{-?\d+\})|[a-zA-Z]+(?!\^)"
     result = re.findall(pattern, string)
-    base, exponent= result
-    if "{" in exponent:
-        exponent = exponent[1:-1]
-    exponent = int(exponent)
-    if exponent < 0:
-        exponent = -exponent
-        base = base[::-1].swapcase()
-    return base * exponent
+    word = ""
+    for substring in result:
+        if "^" not in substring:
+            word += substring
+        else:
+            base, exponent = substring.split("^")
+            if base[0] == "(":
+                base = base[1:-1]
+            if exponent[0] == "{":
+                exponent = exponent[1:-1]
+        
+            exponent = int(exponent)
+            if exponent < 0:
+                exponent = -exponent
+                base = base[::-1].swapcase()
+            
+            word += base * exponent
 
+    return word
 
 class FpGroup(object):
 

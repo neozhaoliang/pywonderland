@@ -8,5 +8,5 @@ relators:
   - (ab)^3
   - (ac)^3
   - (bc)^{10}
-  - aabcbcaCBCB
+  - a^2(bc)^2a(CB)^2
 subgroup-generators:
