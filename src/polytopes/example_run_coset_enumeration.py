@@ -75,12 +75,12 @@ def parse_latex(string):
                 base = base[1:-1]
             if exponent[0] == "{":
                 exponent = exponent[1:-1]
-        
+
             exponent = int(exponent)
             if exponent < 0:
                 exponent = -exponent
                 base = base[::-1].swapcase()
-            
+
             word += base * exponent
 
     return word
