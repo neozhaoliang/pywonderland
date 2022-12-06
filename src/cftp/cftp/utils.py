@@ -154,16 +154,16 @@ def draw_domino(ax, vertices, type):
     coords.append(coords[0])
 
     if type == "v1":
-        color = (0.433, 1, 0.76)
+        color = (1.0, 0.5, 0.5)
 
     elif type == "v2":
-        color = (0.93, 0.8, 0.91)
+        color = (0.7, 0.8, 1.0)
 
     elif type == "h1":
-        color = (1, 0.476, 0.56)
+        color = (1.0, 1.0, 0.8)
 
     else:
-        color = (0.455, 0.64, 0.976)
+        color = (0.8, 0.7, 1.0)
 
     patch = PathPatch(Path(coords, codes), facecolor=color, ec="k")
     ax.add_patch(patch)

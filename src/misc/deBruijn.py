@@ -124,4 +124,4 @@ try:
         "convert debruijn.svg +shade 20x20 -modulate 250 debruijn.png", shell=True
     )
 except ImportError:
-    print("Add shading effect to image failed, `convert` command not found")
+    print("Failed to add shading effect to image, `convert` command not found.")
