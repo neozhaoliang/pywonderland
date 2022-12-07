@@ -1,3 +1,3 @@
 # A Tour in the Wonderland of Math with Python
 
-[![Build Status](https://app.travis-ci.com/neozhaoliang/pywonderland.svg?branch=new_cleanup)](https://app.travis-ci.com/neozhaoliang/pywonderland)
+[![CI](https://github.com/neozhaoliang/pywonderland/actions/workflows/test.yaml/badge.svg)](https://github.com/neozhaoliang/pywonderland/actions/workflows/test.yaml)
