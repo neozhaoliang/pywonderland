@@ -1,0 +1,51 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - "new_cleanup"
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        # Run in all these versions of Python
+        python-version: [3.8, 3.9, 3.10]
+
+    steps:
+        # Checkout the latest code from the repo
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        # Setup which version of Python to use
+      - name: Set Up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+        # Install the package using the setup.py
+      - name: Install packages
+        run: pip install -r requirements.txt
+      - name: Install softwares
+        run: bash install_dependencies.sh
+      - name: Run tests
+        run:
+          python src/aztec/random_tiling.py
+          python src/aztec/run_domino_shuffling_animation.py
+          python src/cftp/example_random_domino_tiling.py
+          python src/cftp/example_random_lozenge_tiling.py
+          python src/gifmaze/example_game_of_life.py
+          python src/gifmaze/example_hilbert_curve.py
+          python src/gifmaze/example_langton_ant.py
+          python src/gifmaze/example_maze_animations.py
+          python src/misc/Ammann-Beenker.py
+          python src/misc/debruijn.py
+          python src/misc/domain_coloring.py
+          python src/misc/E8.py
+          python src/misc/fractaltree.py
+          python src/misc/julia.py
+          python src/misc/kaleidoscope.py
+          python src/misc/lorenz.py
+          python src/misc/mandelbrot.py
+          python src/misc/modulargroup.py
+          python src/misc/newton.py
+          python src/misc/penrose.py
+          python src/misc/ust_leaves.py
