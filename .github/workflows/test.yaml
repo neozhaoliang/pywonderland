@@ -27,18 +27,20 @@ jobs:
         run: pip install -r requirements.txt
       - name: Install softwares
         run: bash install_dependencies.sh
-      - name: Run tests
+      - name: Run perfectly sampling tests
         run: |
           python src/aztec/random_tiling.py
           python src/aztec/run_domino_shuffling_animation.py
           python src/cftp/example_random_domino_tiling.py
           python src/cftp/example_random_lozenge_tiling.py
+      - name: Run gifmaze
         run: |
           cd src/gifmaze
           python example_game_of_life.py
           python example_hilbert_curve.py
           python example_langton_ant.py
           python example_maze_animations.py
+      - name: Run misc tests
         run: |
           python src/misc/Ammann-Beenker.py
           python src/misc/debruijn.py
