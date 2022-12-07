@@ -33,10 +33,13 @@ jobs:
           python src/aztec/run_domino_shuffling_animation.py
           python src/cftp/example_random_domino_tiling.py
           python src/cftp/example_random_lozenge_tiling.py
-          python src/gifmaze/example_game_of_life.py
-          python src/gifmaze/example_hilbert_curve.py
-          python src/gifmaze/example_langton_ant.py
-          python src/gifmaze/example_maze_animations.py
+        run: |
+          cd src/gifmaze
+          python example_game_of_life.py
+          python example_hilbert_curve.py
+          python example_langton_ant.py
+          python example_maze_animations.py
+        run: |
           python src/misc/Ammann-Beenker.py
           python src/misc/debruijn.py
           python src/misc/domain_coloring.py
