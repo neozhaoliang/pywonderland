@@ -28,7 +28,7 @@ jobs:
       - name: Install softwares
         run: bash install_dependencies.sh
       - name: Run tests
-        run:
+        run: |
           python src/aztec/random_tiling.py
           python src/aztec/run_domino_shuffling_animation.py
           python src/cftp/example_random_domino_tiling.py
