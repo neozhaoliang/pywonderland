@@ -107,7 +107,7 @@ for a complete list of valid Coxeter diagrams."
 
     coxeter_matrix = np.array(
         make_symmetry_matrix(coxeter_diagram)
-    ).astype(np.float)
+    ).astype(float)
     C = -np.cos(np.pi / coxeter_matrix)
     M = np.zeros_like(C)
     n = len(M)
