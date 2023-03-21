@@ -90,5 +90,5 @@ anim.save(
     dpi=200,
     bitrate=1000,
     codec="libx264",
-    extra_args=["-crf", "10"],
+    extra_args=["-crf", "10", "-pix_fmt", "yuv420p"],
 )
