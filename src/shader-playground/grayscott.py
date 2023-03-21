@@ -365,7 +365,7 @@ class GrayScott(pyglet.window.Window):
                 "-f",
                 "rawvideo",
                 "-pix_fmt",
-                "rgba",
+                "yuv420p",
                 "-s",
                 "%dx%d" % (self.width, self.height),
                 "-i",
