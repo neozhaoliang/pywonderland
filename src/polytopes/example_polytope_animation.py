@@ -50,7 +50,7 @@ FFMPEG_COMMAND = (
     + " -y"
     + " -i {}"
     + "%0{}d.png".format(len(str(FRAMES - 1)))
-    + " -crf 18 -c:v libx264"
+    + " -crf 18 -c:v libx264 -pix_fmt yuv420p"
     + " ../{}.mp4"
 )
 
