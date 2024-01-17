@@ -1,0 +1,12 @@
+# Mathieu group M12.
+# 95040 cosets
+name: M12
+relators:
+  - a^{11}
+  - b^2
+  - c^2
+  - (ab)^3
+  - (ac)^3
+  - (bc)^{10}
+  - a^2(bc)^2a(CB)^2
+subgroup-generators:

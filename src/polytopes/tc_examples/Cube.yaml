@@ -1,0 +1,11 @@
+# Symmetry group of the cube (S_4 x Z_2).
+# 48 cosets
+name: Cube
+relators:
+  - a^2
+  - b^2
+  - c^2
+  - (ab)^4
+  - (bc)^3
+  - (ac)^2
+subgroup-generators:

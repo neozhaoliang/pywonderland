@@ -1,0 +1,14 @@
+# The G8723 group, see
+# J. J. Cannon, L. A. Dimino, G. Havas, and J. M. Watson.
+# "Implementation and analysis of the Todd-Coxeter algorithm".
+# Mathematics of Computation, 27:463--490, 1973.
+# 448 cosets
+name: G8723
+relators:
+  - a^8
+  - b^7
+  - (ab)^2
+  - (Ab)^3
+subgroup-generators:
+  - aa
+  - Ab

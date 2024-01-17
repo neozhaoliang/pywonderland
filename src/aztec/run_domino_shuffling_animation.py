@@ -69,9 +69,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-order", metavar="o", type=int, default=30, help="order of aztec diamond"
     )
-    parser.add_argument(
-        "-size", metavar="s", type=int, default=400, help="image size"
-    )
+    parser.add_argument("-size", metavar="s", type=int, default=400, help="image size")
     parser.add_argument(
         "-filename", metavar="f", default="domino_shuffling.gif", help="output filename"
     )

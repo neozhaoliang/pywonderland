@@ -1,0 +1,15 @@
+# The 2-generator Burnside group of exponent 4.
+# 1024 cosets
+name: B24
+relators:
+  - a^4
+  - b^4
+  - (ab)^4
+  - (Ab)^4
+  - (aab)^4
+  - (abb)^4
+  - (aabb)^4
+  - (Abab)^4
+  - (aBab)^4
+subgroup-generators:
+  - a
