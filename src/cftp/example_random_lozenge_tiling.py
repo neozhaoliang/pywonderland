@@ -2,6 +2,9 @@
 Draw a random lozenge tiling and its non-intersecting lattice paths
 """
 import matplotlib.pyplot as plt
+
+plt.rcParams.update({"text.usetex": True, "font.family": "Courier"})
+
 from cftp import LozengeTiling
 import cftp.utils as utils
 
@@ -31,14 +34,12 @@ def main(hexagon_size, figsize):
     ax.axis("off")
 
     patch = utils.draw_bounding_polygon(ax, verts)
-    lines = utils.draw_background_triangle_lattice(
-        ax, (X, Y, Z), N
-    )
+    lines = utils.draw_background_triangle_lattice(ax, (X, Y, Z), hexagon_size)
     for line in lines:
         line.set_clip_path(patch)
 
     # add text annotations
-    fs = 20
+    fs = 30
     z = B + C + A / 2
     ax.text(z.real + 0.5, z.imag + 0.8, "$a$", fontsize=fs)
     z = B + C / 2
@@ -47,7 +48,7 @@ def main(hexagon_size, figsize):
     ax.text(z.real - 1, z.imag, "$c$", fontsize=fs)
 
     # draw the background hexagon
-    fig.savefig("hexagon.png")
+    fig.savefig("hexagon.svg")
 
     # remove background grid lines
     for line in lines:
