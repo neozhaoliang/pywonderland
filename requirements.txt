@@ -2,10 +2,8 @@ jupyter
 matplotlib
 numba
 numpy
-pillow
+pillow==9.5.0
 pycairo
-pyglet==1.5.27
 pyyaml
 scipy
 tqdm
-vispy
