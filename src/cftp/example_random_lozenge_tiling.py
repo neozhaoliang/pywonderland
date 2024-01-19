@@ -3,7 +3,7 @@ Draw a random lozenge tiling and its non-intersecting lattice paths
 """
 import matplotlib.pyplot as plt
 
-plt.rcParams.update({"text.usetex": True, "font.family": "Courier"})
+#plt.rcParams.update({"text.usetex": True, "font.family": "Courier"})
 
 from cftp import LozengeTiling
 import cftp.utils as utils
