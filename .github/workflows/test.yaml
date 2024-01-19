@@ -57,3 +57,8 @@ jobs:
           python src/misc/newton.py
           python src/misc/penrose.py
           python src/misc/ust_leaves.py
+
+      - name: Run polytopes tests
+        run: |
+          python src/polytopes/example_curved_polychora.py
+          python src/polytopes/example_polytope_animation.py
