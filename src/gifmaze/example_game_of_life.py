@@ -76,8 +76,8 @@ def main(seed_file, grid_size, offsets, cutoff, frames):
     :param cutoff: cutoff of the image relative to the actual grid.
     :param frames: number of frames in the animation.
     """
-    seed = np.array(parse(seed_file), dtype=np.bool)
-    grid = np.zeros(grid_size).astype(np.bool)
+    seed = np.array(parse(seed_file), dtype=bool)
+    grid = np.zeros(grid_size).astype(bool)
     grid[
         offsets[0] : seed.shape[0] + offsets[0], offsets[1] : seed.shape[1] + offsets[1]
     ] = seed
