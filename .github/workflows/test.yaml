@@ -27,6 +27,10 @@ jobs:
         run: pip install -r requirements.txt
       - name: Install softwares
         run: bash install_dependencies.sh
+      - name: setup terminal
+        run: |
+          export TERM=xterm-256color
+          export COLORTERM=truecolor
       - name: Run perfectly sampling tests
         run: |
           python src/aztec/random_tiling.py
