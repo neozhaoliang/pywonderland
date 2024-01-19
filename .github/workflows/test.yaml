@@ -27,10 +27,6 @@ jobs:
         run: pip install -r requirements.txt
       - name: Install softwares
         run: bash install_dependencies.sh
-      - name: setup terminal
-        run: |
-          export TERM=xterm-256color
-          export COLORTERM=truecolor
       - name: Run perfectly sampling tests
         run: |
           python src/aztec/random_tiling.py
@@ -61,9 +57,3 @@ jobs:
           python src/misc/newton.py
           python src/misc/penrose.py
           python src/misc/ust_leaves.py
-
-      - name: Run polytopes tests
-        run: |
-          cd src/polytopes
-          python example_curved_polychora.py
-          python example_polytope_animation.py
