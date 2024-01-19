@@ -39,6 +39,7 @@ POV_COMMAND = (
     + " +KFI0"
     + " +KFF{}".format(FRAMES - 1)
     + " -V"
+    + " -D"
     + " +O../{}/".format(IMAGE_DIR)
     + "{}"
 )
