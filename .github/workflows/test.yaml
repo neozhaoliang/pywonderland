@@ -61,5 +61,5 @@ jobs:
       - name: Run polytopes tests
         run: |
           cd src/polytopes
-          python src/polytopes/example_curved_polychora.py
-          python src/polytopes/example_polytope_animation.py
+          python example_curved_polychora.py
+          python example_polytope_animation.py
