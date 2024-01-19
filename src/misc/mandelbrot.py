@@ -16,7 +16,7 @@ MAXITERS = 200
 RADIUS = 100
 
 
-@jit
+@jit(nopython=True)
 def color(z, i):
     v = np.log2(i + 1 - np.log2(np.log2(abs(z)))) / 5
     if v < 1.0:
@@ -26,7 +26,7 @@ def color(z, i):
         return v, v ** 1.5, v ** 3
 
 
-@jit
+@jit(nopython=True)
 def iterate(c):
     z = 0j
     for i in range(MAXITERS):

@@ -12,7 +12,7 @@ RADIUS = 4
 CONST = 0.7
 
 
-@jit("float32(complex64)")
+@jit("float32(complex64)", nopython=True)
 def escape(z):
     for i in range(MAXITERS):
         if z.real * z.real + z.imag * z.imag > RADIUS:
