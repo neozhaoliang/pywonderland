@@ -114,10 +114,8 @@ class HyperbolicDrawing(cairo.Context):
     """
 
     def set_axis(self, **kwargs):
-        surface = self.get_target()
-        width = surface.get_width()
-        height = surface.get_height()
-
+        width = kwargs.get("width", 800)
+        height = kwargs.get("height", 400)
         xlim = kwargs.get("xlim", [-2, 2])
         x_min, x_max = xlim
         ylim = kwargs.get("ylim", [0, 2])
@@ -183,9 +181,11 @@ def main(width, height, depth, xlim=None, ylim=None):
         xlim = [-2, 2]
     if ylim is None:
         ylim = [0, 2]
-    surface = cairo.ImageSurface(cairo.FORMAT_RGB24, width, height)
+    surface = cairo.SVGSurface("modulargroup.svg", width, height)
     ctx = HyperbolicDrawing(surface)
-    ctx.set_axis(xlim=xlim, ylim=ylim, background_color=(1, 1, 1))
+    ctx.set_axis(
+        width=width, height=height, xlim=xlim, ylim=ylim, background_color=(1, 1, 1)
+    )
     ctx.set_line_join(2)
     # draw the x-axis
     ctx.move_to(xlim[0], 0)
@@ -207,11 +207,13 @@ def main(width, height, depth, xlim=None, ylim=None):
             triangle, facecolor=fc_color, linewidth=0.04 / (len(word) + 1)
         )
 
-    surface.write_to_png("modulargroup.png")
+    surface.finish()
 
-    surface = cairo.ImageSurface(cairo.FORMAT_RGB24, width, height)
+    surface = cairo.SVGSurface("cayleygraph.svg", width, height)
     ctx = HyperbolicDrawing(surface)
-    ctx.set_axis(xlim=xlim, ylim=ylim, background_color=(1, 1, 1))
+    ctx.set_axis(
+        width=width, height=height, xlim=xlim, ylim=ylim, background_color=(1, 1, 1)
+    )
     ctx.set_line_join(2)
     # draw the x-axis
     ctx.move_to(xlim[0], 0)
@@ -237,7 +239,7 @@ def main(width, height, depth, xlim=None, ylim=None):
             linewidth=0.02 / (1 + len(word)),
         )
 
-    surface.write_to_png("cayley_graph.png")
+    surface.finish()
 
 
 if __name__ == "__main__":

@@ -30,11 +30,7 @@ def derivative(point, t):
 
 fig = plt.figure(figsize=(6.4, 4.8), dpi=100)
 ax = fig.add_axes(
-    [0, 0, 1, 1],
-    projection="3d",
-    xlim=(-25, 25),
-    ylim=(-35, 35),
-    zlim=(5, 55)
+    [0, 0, 1, 1], projection="3d", xlim=(-25, 25), ylim=(-35, 35), zlim=(5, 55)
 )
 ax.set_box_aspect((1, 1, 1))
 ax.view_init(30, 0)
@@ -90,5 +86,5 @@ anim.save(
     dpi=200,
     bitrate=1000,
     codec="libx264",
-    extra_args=["-crf", "10"],
+    extra_args=["-crf", "10", "-pix_fmt", "yuv420p"],
 )
