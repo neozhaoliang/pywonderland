@@ -356,6 +356,7 @@ class Poincare2D(Tiling2D):
         draw_polygon_edges=True,
         draw_inner_lines=False,
         draw_labelled_edges=False,
+        draw_weave_pattern=False,
         vertex_size=0.1,
         line_width=0.07,
         checker=False,
@@ -442,6 +443,29 @@ class Poincare2D(Tiling2D):
                 d.draw(P, hradius=vertex_size, fill="darkolivegreen")
                 x, y, r = get_euclidean_center_radius(P, hrad=vertex_size * 1.3)
                 d.draw(drawsvg.Text(str(i), r, x, y, center=0.7, fill="white"))
+
+        if draw_weave_pattern:
+            bar = tqdm.tqdm(desc="drawing weave pattern", total=self.num_faces)
+            for k, face in enumerate(flist):
+                domain1, _ = face.get_alternative_domains()
+                domain1_2d = [[self.project(p) for p in D] for D in domain1]
+
+                lw = 0.06
+                rim = 0.01
+                for i in range(0, len(domain1_2d)):
+                    j = (i + 2) % len(domain1_2d)
+                    d.draw(
+                        Line.from_points(*domain1_2d[i][0], *domain1_2d[j][0]),
+                        hwidth=(-lw, lw),
+                        fill="papaayawhip",
+                    )
+                    d.draw(
+                        Line.from_points(*domain1_2d[i][0], *domain1_2d[j][0]),
+                        hwidth=(rim - lw, lw - rim),
+                        fill="wheat",
+                    )
+                bar.update(1)
+        bar.close()
 
         print("saving to svg...")
         d.set_render_size(w=image_size)
