@@ -11,6 +11,7 @@ Again Matt's program has lots of rich features and a great UI!
 
 Press "ENTER" to save screenshots and "Esc" to escape.
 """
+
 import sys
 
 sys.path.append("../glslhelpers")
@@ -54,7 +55,7 @@ class Wythoff(pyglet.window.Window):
             visible=False,
             vsync=False,
         )
-        self._start_time = time.clock()
+        self._start_time = time.perf_counter()
         self._last = self._now = self._start_time
         self._frame_count = 0  # count number of frames rendered so far
         self.shaderA = Shader(
@@ -110,7 +111,7 @@ class Wythoff(pyglet.window.Window):
         self.clear()
         gl.glViewport(0, 0, self.width, self.height)
         self._last = self._now
-        self._now = time.clock()
+        self._now = time.perf_counter()
         itime = self._now - self._start_time
         idate = get_idate()
         delta = self._now - self._last
@@ -130,8 +131,7 @@ class Wythoff(pyglet.window.Window):
         self._frame_count += 1
 
     def on_key_press(self, symbol, modifiers):
-        """Keyboard interface.
-        """
+        """Keyboard interface."""
         if symbol == key.ENTER:
             self.save_screenshot()
 
@@ -144,8 +144,7 @@ class Wythoff(pyglet.window.Window):
                 self.shaderA.uniformf("iMouse", x, y, x, y)
 
     def on_mouse_release(self, x, y, button, modifiers):
-        """Don't forget reset 'iMouse' when mouse is released.
-        """
+        """Don't forget reset 'iMouse' when mouse is released."""
         with self.shaderA:
             self.shaderA.uniformf("iMouse", 0, 0, 0, 0)
 
