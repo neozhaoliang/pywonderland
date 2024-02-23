@@ -14,15 +14,13 @@ sq2 = np.sqrt(2)
 
 
 def dir(angle_in_degree):
-    """Return the unit complex cos(a) + i*sin(a).
-    """
+    """Return the unit complex cos(a) + i*sin(a)."""
     theta = np.radians(angle_in_degree)
     return complex(np.cos(theta), np.sin(theta))
 
 
 def plot_line(ax, points, *args, **kwargs):
-    """Connect a list of complex points with piecewise line segments.
-    """
+    """Connect a list of complex points with piecewise line segments."""
     xli = [z.real for z in points]
     yli = [z.imag for z in points]
     return ax.plot(xli, yli, *args, **kwargs)
@@ -42,30 +40,42 @@ def draw_bounding_polygon(ax, vertices):
     return patch
 
 
-def draw_background_triangle_lattice(ax, dirs, N):
+def draw_background_triangle_lattice(ax, dirs, hexagon_size):
     """Draw the background triangle grids for lozenge tilings.
 
     :param ax: an instance of matplotlib's axes class.
     :param dirs: three grid directions of the triangle grids.
-    :param N: how many lines we draw in each direction.
+    :param hexagon_size: A triple of integers (a, b, c) for the size of hexagon.
     """
     lines = []
     d = sq3 / 2
-    for v in dirs:
-        u = v * 1j
-        for i in range(-N, N + 1):
-            z1 = u * d * i - N * v
-            z2 = u * d * i + N * v
+    a, b, c = hexagon_size
+    X, Y, Z = dirs
+    N = max(a, b, c)
+    o = b * Z
+    for i in range(-N, N):
+        for start, end in [
+            (o - N * Z + i * X, o + N * Z + i * X),
+            (o - N * Y + i * d, o + N * Y + i * d),
+            (o - N * X + i * Z, o + N * X + i * Z),
+        ]:
             lines.extend(
-                plot_line(ax, [z1, z2], "--", color="gray", lw=1)
+                ax.plot(
+                    [start.real, end.real],
+                    [start.imag, end.imag],
+                    "--",
+                    color=(0.5, 0.5, 0.5),
+                    lw=0.5,
+                )
             )
     return lines
 
 
 def draw_marker(ax, z, label):
-    plot_line(ax, [z, z], 'go', markersize=markersize)
-    ax.text(z.real, z.imag, label, fontsize=labelsize,
-            color="w", ha="center", va="center")
+    plot_line(ax, [z, z], "go", markersize=markersize)
+    ax.text(
+        z.real, z.imag, label, fontsize=labelsize, color="w", ha="center", va="center"
+    )
 
 
 def draw_paths_on_hexagon(ax, XYZ, paths):
@@ -154,16 +164,16 @@ def draw_domino(ax, vertices, type):
     coords.append(coords[0])
 
     if type == "v1":
-        color = (0.433, 1, 0.76)
+        color = (1.0, 0.5, 0.5)
 
     elif type == "v2":
-        color = (0.93, 0.8, 0.91)
+        color = (0.7, 0.8, 1.0)
 
     elif type == "h1":
-        color = (1, 0.476, 0.56)
+        color = (1.0, 1.0, 0.8)
 
     else:
-        color = (0.455, 0.64, 0.976)
+        color = (0.8, 0.7, 1.0)
 
     patch = PathPatch(Path(coords, codes), facecolor=color, ec="k")
     ax.add_patch(patch)

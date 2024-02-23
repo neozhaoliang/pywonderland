@@ -9,7 +9,6 @@ from .cftp import MonotoneMarkovChain
 
 
 class LozengeTiling(MonotoneMarkovChain):
-
     r"""
     This class builds the "monotone" Markov chain structure on the set
     of lozenge tilings of an (a x b x c) hexagon. A tiling is represented
@@ -29,7 +28,7 @@ class LozengeTiling(MonotoneMarkovChain):
     |         |
     O\        |
       \      /
-       \____/ 
+       \____/
         \
          +x (-30 deg)
 
@@ -63,7 +62,10 @@ class LozengeTiling(MonotoneMarkovChain):
             for k in range(c + 2)
         ]
         s1 = [
-            [c + 1 + min(j, b) if k == c + 1 else k + max(j - a, 0) for j in range(a + b + 1)]
+            [
+                c + 1 + min(j, b) if k == c + 1 else k + max(j - a, 0)
+                for j in range(a + b + 1)
+            ]
             for k in range(c + 2)
         ]
         return s0, s1
@@ -86,8 +88,7 @@ class LozengeTiling(MonotoneMarkovChain):
         )  # a random direction (up or down)
 
     def update(self, state, operation):
-        """Update a state by a random update operation.
-        """
+        """Update a state by a random update operation."""
         s = state
         k, j, dy = operation
         # try to push up
@@ -109,47 +110,50 @@ class LozengeTiling(MonotoneMarkovChain):
         verts = {"L": [], "R": [], "T": []}
         for k in range(c + 1):  # loop over the paths from bottom to top
             for j in range(1, a + b + 1):  # loop over the inner sites
-                if k > 0:
-                    if s[k][j] == s[k][j - 1]:
-                        #        (-1, 0)
-                        #          |\
-                        #          | \ (0, 0)
-                        # (-1, -1) |  |
-                        #           \ |
-                        #            \|
-                        #          (0, -1)
-                        verts["L"].append(
-                            [
-                                (j + dx, s[k][j] + dy)
-                                for dx, dy in [(0, 0), (-1, 0), (-1, -1), (0, -1)]
-                            ]
-                        )
-                    else:
-                        #           (0, 0)
-                        #            /|
-                        #           / |
-                        # (-1, -1) |  | (0, -1)
-                        #          | /
-                        #          |/
-                        #        (-1, -2)
-                        verts["R"].append(
-                            [
-                                (j + dx, s[k][j] + dy)
-                                for dx, dy in [(0, 0), (-1, -1), (-1, -2), (0, -1)]
-                            ]
-                        )
+                try:  # try-else allows you to draw a subset of the paths without raising errors
+                    if k > 0:
+                        if s[k][j] == s[k][j - 1]:
+                            #        (-1, 0)
+                            #          |\
+                            #          | \ (0, 0)
+                            # (-1, -1) |  |
+                            #           \ |
+                            #            \|
+                            #          (0, -1)
+                            verts["L"].append(
+                                [
+                                    (j + dx, s[k][j] + dy)
+                                    for dx, dy in [(0, 0), (-1, 0), (-1, -1), (0, -1)]
+                                ]
+                            )
+                        else:
+                            #           (0, 0)
+                            #            /|
+                            #           / |
+                            # (-1, -1) |  | (0, -1)
+                            #          | /
+                            #          |/
+                            #        (-1, -2)
+                            verts["R"].append(
+                                [
+                                    (j + dx, s[k][j] + dy)
+                                    for dx, dy in [(0, 0), (-1, -1), (-1, -2), (0, -1)]
+                                ]
+                            )
 
-                for l in range(s[k][j] + 1, s[k + 1][j]):
-                    #         (0, 0)
-                    #           /\
-                    # (-1, -1) /  \ (1, 0)
-                    #          \  /
-                    #           \/
-                    #         (0, -1)
-                    verts["T"].append(
-                        [
-                            (j + dx, l + dy)
-                            for dx, dy in [(0, 0), (-1, -1), (0, -1), (1, 0)]
-                        ]
-                    )
+                    for l in range(s[k][j] + 1, s[k + 1][j]):
+                        #         (0, 0)
+                        #           /\
+                        # (-1, -1) /  \ (1, 0)
+                        #          \  /
+                        #           \/
+                        #         (0, -1)
+                        verts["T"].append(
+                            [
+                                (j + dx, l + dy)
+                                for dx, dy in [(0, 0), (-1, -1), (0, -1), (1, 0)]
+                            ]
+                        )
+                except IndexError:
+                    pass
         return verts
