@@ -95,23 +95,6 @@ def main():
         vertex_size=0.08,
     )
 
-    T = Poincare2D((7, 2, 3), (1, 0, 0))
-    depth = 40
-    maxcount = 50000
-    T.build_geometry(depth, maxcount)
-    T.render(
-        "7-2-3-weave-pattern.svg",
-        800,
-        show_vertices_labels=False,
-        draw_labelled_edges=False,
-        draw_inner_lines=True,
-        draw_polygon_edges=False,
-        draw_weave_pattern=True,
-        line_width=0.05,
-        vertex_size=0.07,
-        face_colors=("firebrick", "steelblue", "rebeccapurple"),
-    )
-
 
 if __name__ == "__main__":
     main()
