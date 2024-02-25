@@ -6,7 +6,7 @@ import glob
 import os
 import subprocess
 
-command = "inkscape {} --export-type='png' --export-filename='{}.png'"
+command = "inkscape {} -d 300 --export-type='png' --export-filename='{}.png'"
 
 for svg in glob.glob("*.svg"):
     fname = os.path.basename(svg).split(".")[0]

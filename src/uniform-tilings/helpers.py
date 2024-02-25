@@ -17,7 +17,16 @@ def hdot(v, w):
     return np.dot(v[:-1], w[:-1]) - v[-1] * w[-1]
 
 
+def is_ideal(v):
+    """
+    Check if a point v is ideal.
+    """
+    return np.isclose(hdot(v, v), 0)
+
+
 def hnormalize(v):
+    if is_ideal(v):
+        return normalize(v[:-1])
     return v / np.sqrt(-hdot(v, v))
 
 
@@ -130,6 +139,8 @@ def get_hyperbolic_mirrors(coxeter_matrix):
     Get reflection mirrors for the 2D hyperbolic case.
     """
     C = -np.cos(np.pi / coxeter_matrix)
+    inf_indices = np.where(coxeter_matrix == -1)
+    C[inf_indices] = -1
     M = np.zeros_like(C)
     M[0, 0] = 1
     M[1, 0] = C[1, 0]
@@ -174,6 +185,8 @@ def project_poincare(v):
     Project a point in H^n to H^{n-1}.
     It's the projection from hyperboloid to Poincare's disk.
     """
+    if is_ideal(v):
+        return normalize(v[:-1])
     return v[:-1] / (1 + v[-1])
 
 
@@ -230,7 +243,7 @@ def is_degenerate(cox_mat, active):
 # LaTeX formatting functions
 
 
-def export_latex_array(self, words, symbol=r"s", cols=4):
+def export_latex_array(words, symbol=r"s", cols=4):
     r"""
     Export a list words to latex array format.
     `cols` is the number of columns of the output latex array.

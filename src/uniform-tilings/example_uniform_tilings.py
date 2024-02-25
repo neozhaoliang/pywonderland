@@ -11,6 +11,9 @@ you can use inkscape to convert the output svg to png format:
 from tiling import Euclidean2D, Poincare2D, Spherical2D, UpperHalfPlane
 
 
+inf = -1
+
+
 def main():
     T = Euclidean2D((3, 3, 3), (1, 1, 1))
     T.build_geometry(60)
@@ -93,6 +96,21 @@ def main():
         face_colors=("#477984", "#EEAA4D", "#C03C44"),
         line_width=0.05,
         vertex_size=0.08,
+    )
+
+    T = Poincare2D((3, 2, inf), (0, 0, 1))
+    depth = 30
+    maxcount = 30000
+    T.build_geometry(depth, maxcount)
+    T.render(
+        "apeirogonal-3-2-inf.svg",
+        800,
+        show_vertices_labels=True,
+        draw_polygon_edges=True,
+        draw_labelled_edges=False,
+        line_width=0.09,
+        vertex_size=0.18,
+        background_color="pink",
     )
 
 

@@ -224,6 +224,9 @@ class Tiling2D(object):
             # this is the center of the initial face,
             # it's a vertex of the fundamental triangle.
             c0 = self.triangle_verts[self.vertex_at_mirrors(i, j)]
+            if self.GEOMETRY == "hyperbolic" and helpers.is_ideal(c0):
+                # we don't support draw faces with infinitely many vertices
+                continue
             # a list holds the vertices of the initial face.
             f0 = []
             m = self.cox_mat[i][j]
@@ -345,22 +348,21 @@ class Poincare2D(Tiling2D):
         return helpers.get_hyperbolic_mirrors(coxeter_matrix)
 
     def get_init_point(self, init_dist):
-        return helpers.get_point_from_distance(self.mirrors, init_dist, self.GEOMETRY)
+        v = helpers.get_point_from_distance(self.mirrors, init_dist, self.GEOMETRY)
+        assert not helpers.is_ideal(v), "The initial point cannot be ideal"
+        return v
 
     def render(
         self,
         output,
         image_size,
         show_vertices_labels=False,
-        draw_alternative_domains=True,
         draw_polygon_edges=True,
         draw_inner_lines=False,
         draw_labelled_edges=False,
         vertex_size=0.1,
         line_width=0.07,
-        checker=False,
-        checker_colors=("#1E7344", "#EAF78D"),
-        face_colors=("lightcoral", "mistyrose", "steelblue"),
+        **color_options
     ):
         """
         An example drawing function shows how to draw hyperbolic patterns
@@ -370,10 +372,19 @@ class Poincare2D(Tiling2D):
         print(self.get_info())
         d = drawsvg.Drawing(2.05, 2.05, origin="center")
         # draw background unit circle
-        d.draw(euclid.Circle(0, 0, 1), fill="silver")
+        bg_color = color_options.get("background_color", "silver")
+        d.draw(euclid.Circle(0, 0, 1), fill=bg_color)
 
         bar = tqdm.tqdm(desc="processing polygons", total=self.num_faces)
 
+        checker = color_options.get("checker", False)
+        checker_colors = color_options.get("checker_colors", ("#1E7344", "#EAF78D"))
+        edge_color = color_options.get("edge_color", "darkolivegreen")
+        face_colors = color_options.get(
+            "face_colors", ("lightcoral", "mistyrose", "steelblue")
+        )
+        strip_color = color_options.get("strip_color", "papayawhip")
+        text_color = color_options.get("text_color", "white")
         # draw the faces
         for (i, j), flist in self.face_indices.items():
             if checker:
@@ -401,7 +412,7 @@ class Poincare2D(Tiling2D):
                     if checker:
                         d.draw(poly, hwidth=0.005, **style1)
                     if draw_inner_lines:
-                        d.draw(poly, fill="papayawhip", hwidth=0.015)
+                        d.draw(poly, fill=strip_color, hwidth=0.015)
                 # draw domains of odd reflections
                 for D in domain2_2d:
                     poly = Polygon.from_vertices(D)
@@ -409,39 +420,36 @@ class Poincare2D(Tiling2D):
                     if checker:
                         d.draw(poly, hwidth=0.005, **style2)
                     if draw_inner_lines:
-                        d.draw(poly, fill="papayawhip", hwidth=0.015)
-                # outmost polygon contours
-                if draw_polygon_edges:
-                    d.draw(polygon, hwidth=line_width, fill="darkolivegreen")
-
+                        d.draw(poly, fill=strip_color, hwidth=0.015)
                 bar.update(1)
 
         bar.close()
 
-        # draw the edges with white strips
-        if draw_labelled_edges:
+        if draw_polygon_edges:
             for k, elist in self.edge_indices.items():
-                if k != 0:
-                    for i, j in elist:
-                        p = self.project(self.vertices_coords[i])
-                        q = self.project(self.vertices_coords[j])
-                        hl = Line.from_points(p[0], p[1], q[0], q[1], segment=True)
+                for i, j in elist:
+                    p = self.project(self.vertices_coords[i])
+                    q = self.project(self.vertices_coords[j])
+                    hl = Line.from_points(p[0], p[1], q[0], q[1], segment=True)
+                    d.draw(hl, hwidth=line_width, fill=edge_color)
+                    # draw the edges with white strips
+                    if draw_labelled_edges:
                         if k == 1:
                             x, _ = divide_line(line_width, 1)
-                            d.draw(hl, hwidth=(-x, x), fill="papayawhip")
+                            d.draw(hl, hwidth=(-x, x), fill=strip_color)
                         if k == 2:
                             x1, x2 = divide_line(line_width, 2)
-                            d.draw(hl, hwidth=(x1, x2), fill="papayawhip")
-                            d.draw(hl, hwidth=(-x2, -x1), fill="papayawhip")
+                            d.draw(hl, hwidth=(x1, x2), fill=strip_color)
+                            d.draw(hl, hwidth=(-x2, -x1), fill=strip_color)
 
         # draw vertices with labels
         if show_vertices_labels:
             for i, p in enumerate(self.vertices_coords):
                 loc = self.project(p)
                 P = Point(*loc)
-                d.draw(P, hradius=vertex_size, fill="darkolivegreen")
+                d.draw(P, hradius=vertex_size, fill=edge_color)
                 x, y, r = get_euclidean_center_radius(P, hrad=vertex_size * 1.3)
-                d.draw(drawsvg.Text(str(i), r, x, y, center=0.7, fill="white"))
+                d.draw(drawsvg.Text(str(i), r, x, y, center=0.7, fill=text_color))
 
         print("saving to svg...")
         d.set_render_size(w=image_size)
