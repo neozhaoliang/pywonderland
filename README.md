@@ -18,27 +18,26 @@ Use Todd-Coxeter algorithm to compute the data of a polytope, and render it in P
 
 [[Book]](https://www.routledge.com/Handbook-of-Computational-Group-Theory/Holt-Eick-OBrien/p/book/9780367659448) | [[Doc]](https://pywonderland.com/polytopes)
 
+<img src="images/polytopes.png" width=600>
 
-![](images/polytopes.png | width=600)
-
-![](images/polyhedra_mirrors.png | width=600)
+<img src="images/polyhedra_mirrors.png" width=600>
 
 
 ## Möbius transformations
 
 + When a Möbius transformation is an isometry of the hyperbolic disk, it must be of elliptic/parabolic/hyperbolic type, and it's elliptic/parabolic/hyperbolic if and only if it's a composition of reflections about two intersecting/parallel/hyper-parallel mirrors.
 
-    ![](images/mobius.png | width=600)
+    <img src="images/mobius.png" width=600>
 
 + A Möbius transformation can be uniquely extended to an isometry of the hyperbolic upper-half space.
 
-    ![](images/h3_isometry.png | width=600)
+    <img src="images/h3_isometry.png" width=600>
 
 ## Coxeter automata and 2D Uniform tilings
 
 [[Casselman's Paper]](https://personal.math.ubc.ca/~cass/research/pdf/roots.pdf) | [[Doc]](https://pywonderland.com/uniform-tilings/)
 
-![](images/hyperbolic-tilings.png | width=600)
+<img src="images/hyperbolic-tilings.png" width=600>
 
 ## GIF animations of maze and cellular automata
 
@@ -58,13 +57,13 @@ This algorithm samples a perfectly random tiling of a aztec diamond.
 
 [[Mathologer Video]](https://www.youtube.com/watch?v=Yy7Q8IWNfHM) | [[Paper]](https://arxiv.org/abs/math/9201305)
 
-![](images/dominoshuffling.gif)
+<img src="images/dominoshuffling.gif" width=400>
 
 ## Propp and Wilson's coupling from the past algorithm
 
 [[Book](https://www.cambridge.org/core/books/finite-markov-chains-and-algorithmic-applications/EE10AF27811B43B02E05905DC6413467)]
 
-![](images/random_lozenge_tiling.svg | width=500)
+<img src="images/random_lozenge_tiling.svg" width=500>
 
 ## Catacaustics of plane curves
 
@@ -87,7 +86,7 @@ We explain how to project the E8 root system to its Coxeter plane.
 |   |    |
 |:---:|:---:|
 | E8   |  5-Cube   |
-| ![](images/e8.svg | width=300) | ![](images/5-cube.svg | width=300) |
+| <img src="images/e8.svg" width=300> | <img src="images/5-cube.svg" width=300> |
 
 # How to use
 
