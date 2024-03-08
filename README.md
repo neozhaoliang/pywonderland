@@ -19,26 +19,26 @@ Use Todd-Coxeter algorithm to compute the data of a polytope, and render it in P
 [[Book]](https://www.routledge.com/Handbook-of-Computational-Group-Theory/Holt-Eick-OBrien/p/book/9780367659448) | [[Doc]](https://pywonderland.com/polytopes)
 
 
-![](images/polytopes.png)
+![](images/polytopes.png | width=600)
 
-![](images/polyhedra_mirrors.png)
+![](images/polyhedra_mirrors.png | width=600)
 
 
 ## Möbius transformations
 
 + When a Möbius transformation is an isometry of the hyperbolic disk, it must be of elliptic/parabolic/hyperbolic type, and it's elliptic/parabolic/hyperbolic if and only if it's a composition of reflections about two intersecting/parallel/hyper-parallel mirrors.
 
-    ![](images/mobius.png)
+    ![](images/mobius.png | width=600)
 
 + A Möbius transformation can be uniquely extended to an isometry of the hyperbolic upper-half space.
 
-    ![](images/h3_isometry.png)
+    ![](images/h3_isometry.png | width=600)
 
 ## Coxeter automata and 2D Uniform tilings
 
 [[Casselman's Paper]](https://personal.math.ubc.ca/~cass/research/pdf/roots.pdf) | [[Doc]](https://pywonderland.com/uniform-tilings/)
 
-![](images/hyperbolic-tilings.png)
+![](images/hyperbolic-tilings.png | width=600)
 
 ## GIF animations of maze and cellular automata
 
@@ -64,7 +64,7 @@ This algorithm samples a perfectly random tiling of a aztec diamond.
 
 [[Book](https://www.cambridge.org/core/books/finite-markov-chains-and-algorithmic-applications/EE10AF27811B43B02E05905DC6413467)]
 
-![](images/random_lozenge_tiling.svg)
+![](images/random_lozenge_tiling.svg | width=500)
 
 ## Catacaustics of plane curves
 
@@ -87,7 +87,7 @@ We explain how to project the E8 root system to its Coxeter plane.
 |   |    |
 |:---:|:---:|
 | E8   |  5-Cube   |
-| ![](images/e8.svg) | ![](images/5-cube.svg) |
+| ![](images/e8.svg | width=300) | ![](images/5-cube.svg | width=300) |
 
 # How to use
 
