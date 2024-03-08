@@ -9,6 +9,7 @@ For a detailed discussion of the math see Bill Casselman's article
     "https://secure.math.ubc.ca/~cass/research/pdf/Element.pdf"
 
 """
+
 from itertools import combinations, product
 
 import numpy as np
@@ -29,7 +30,6 @@ COLORS = [
     (0.65, 0.337, 0.157),
     (0.97, 0.506, 0.75),
 ]
-
 
 
 # --- step one: compute all roots and edges ---
@@ -89,6 +89,7 @@ delta = np.array(
 # The cartan matrix:
 cartan = np.dot(delta, delta.transpose())
 
+
 # get the simple reflection with respect to the basis Delta.
 def get_reflection_matrix(ind):
     M = np.eye(8)
@@ -98,38 +99,47 @@ def get_reflection_matrix(ind):
             M[ind, k] = -cartan[k, ind]
     return M
 
+
 # The distinct Coxeter element gamma
 X = np.eye(8)
 Y = np.eye(8)
 
 for k in [0, 2, 4, 6]:
     X = X @ get_reflection_matrix(k)
-    Y = Y @ get_reflection_matrix(k+1)
+    Y = Y @ get_reflection_matrix(k + 1)
 
 gamma = X @ Y
 gamma_inv = Y @ X
 I = np.eye(8)
 
-# we can check that 2I + gamma + gamma_inv = (2I - cartan)^2
-assert ((2*I + gamma + gamma_inv) == (2*I - cartan) @ (2*I - cartan)).all()
+# We can check that 2I + gamma + gamma_inv = (2I - cartan)^2
+# Casselman's article shows that (2I - cartan) and (cartan - 2I)
+# have the same characteristic polynomial. These two facts together tell us
+# that a pair of complex eigenvalues e^{+- i\theta} of gamma
+# corresponds to a pair of eigenvalues 2 +- 2*cos(theta/2) of cartan.
+assert ((2 * I + gamma + gamma_inv) == (2 * I - cartan) @ (2 * I - cartan)).all()
 
 eigenvals, eigenvecs = np.linalg.eigh(cartan)
 
 # The eigenvalues returned by eigh() are in ascending order
 # and the eigenvectors are listed by columns.
 
-# The eigenvectors for the min/max eigenvalues of the
-# Cartan matrix form a basis of the Coxeter plane
+# Especially, the eigenvectors for the min/max eigenvalues of cartan
+# are both one-dimensional, and form a basis of the Coxeter plane
 u = eigenvecs[:, 0]
 v = eigenvecs[:, -1]
 
 u = np.dot(u, delta)
 v = np.dot(v, delta)
 
+# normalize u and v in the inner product defined by the cartan matrix
 u /= np.linalg.norm(u)
 v /= np.linalg.norm(v)
 
 # --- step three: project to the Coxeter plane ---
+
+# project the roots to the Coxeter plane
+# the inner product is defined by the cartan matrix.
 roots_2d = [(np.dot(u, x), np.dot(v, x)) for x in roots]
 
 # Sort these projected vertices by their modulus in the coxter plane,

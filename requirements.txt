@@ -7,5 +7,6 @@ pycairo
 pyglet==1.5.27
 pyyaml
 scipy
+sympy
 tqdm
 vispy
