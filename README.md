@@ -34,7 +34,7 @@ Use Todd-Coxeter algorithm to compute the data of a polytope, and render it in P
 
     ![](images/h3_isometry.png)
 
-+ Coxeter automata and 2D Uniform tilings
+## Coxeter automata and 2D Uniform tilings
 
 [[Casselman's Paper]](https://personal.math.ubc.ca/~cass/research/pdf/roots.pdf) | [[Doc]](https://pywonderland.com/uniform-tilings/)
 
