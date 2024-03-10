@@ -92,7 +92,9 @@ The purpose of this project is to show the beauty of math with python by renderi
 
 + Assassin vs Bodyguards
 
-    Consider a room of regular polygon shape in the xy-plane, and let A (an "assassin") and T (a "target") be two arbitrary-but-fixed points within the room. Suppose that the room behaves like a billiard table, so that any ray (a.k.a "shot") from the assassin will bounce off the walls of the room, with the angle of incidence equaling the angle of reflection. Puzzle: Is it possible to block any possible shot from A to T by placing a finite number of points in the square?
+    Consider a room of regular polygon shape in the xy-plane, and let A (an "assassin") and T (a "target") be two arbitrary-but-fixed points within the room. Suppose that the room behaves like a billiard table, so that any ray (a.k.a "shot") from the assassin will bounce off the walls of the room, with the angle of incidence equaling the angle of reflection.
+
+    Puzzle: Is it possible to block any possible shot from A to T by placing a finite number of points in the square?
 
     [[PBS Video](https://www.youtube.com/watch?v=a7gp9c2p0UQ)] | [[math3ma blog](https://www.math3ma.com/blog/is-the-square-a-secure-polygon)]
 
