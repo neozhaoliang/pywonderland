@@ -12,81 +12,92 @@ The purpose of this project is to show the beauty of math with python by renderi
 
 # What's fun here
 
-## Todd-Coxeter algorithm and uniform polytopes
 
-Use Todd-Coxeter algorithm to compute the data of a polytope, and render it in POV-Ray.
++ Todd-Coxeter algorithm and uniform polytopes
 
-[[Book]](https://www.routledge.com/Handbook-of-Computational-Group-Theory/Holt-Eick-OBrien/p/book/9780367659448) | [[Doc]](https://pywonderland.com/polytopes)
+    Use Todd-Coxeter algorithm to compute the data of a polytope, and render it in POV-Ray.
 
-<img src="images/polytopes.png" width=600>
+    [[Book]](https://www.routledge.com/Handbook-of-Computational-Group-Theory/Holt-Eick-OBrien/p/book/9780367659448) | [[Doc]](https://pywonderland.com/polytopes)
 
-<img src="images/polyhedra_mirrors.png" width=600>
+    <img src="images/polytopes.png" width=600>
 
-
-## Möbius transformations
-
-+ When a Möbius transformation is an isometry of the hyperbolic disk, it must be of elliptic/parabolic/hyperbolic type, and it's elliptic/parabolic/hyperbolic if and only if it's a composition of reflections about two intersecting/parallel/hyper-parallel mirrors.
-
-    <img src="images/mobius.png" width=600>
-
-+ A Möbius transformation can be uniquely extended to an isometry of the hyperbolic upper-half space.
-
-    <img src="images/h3_isometry.png" width=600>
-
-## Coxeter automata and 2D Uniform tilings
-
-[[Casselman's Paper]](https://personal.math.ubc.ca/~cass/research/pdf/roots.pdf) | [[Doc]](https://pywonderland.com/uniform-tilings/)
-
-<img src="images/hyperbolic-tilings.png" width=600>
-
-## GIF animations of maze and cellular automata
-
-Generate maze animations containing thousands of frames in a few seconds. No external libs used and no drawing api call!
-
-[[Doc]](https://pywonderland.com/gifmaze)
-
-|    |    |
-|:---:|:---:|
-| ![](images/kruskal.gif) | ![](images/wilson-bfs.gif)    |
-| ![](images/gosperglidergun.gif) | ![](images/langton-ant.gif) |
+    <img src="images/polyhedra_mirrors.png" width=600>
 
 
-## Domino shuffling algorithm
++ Möbius transformations
 
-This algorithm samples a perfectly random tiling of a aztec diamond.
+    + When a Möbius transformation is an isometry of the hyperbolic disk, it must be of elliptic/parabolic/hyperbolic type, and it's elliptic/parabolic/hyperbolic if and only if it's a composition of reflections about two intersecting/parallel/hyper-parallel mirrors.
 
-[[Mathologer Video]](https://www.youtube.com/watch?v=Yy7Q8IWNfHM) | [[Paper]](https://arxiv.org/abs/math/9201305)
+        <img src="images/mobius.png" width=600>
 
-<img src="images/dominoshuffling.gif" width=400>
+    + A Möbius transformation can be uniquely extended to an isometry of the hyperbolic upper-half space.
 
-## Propp and Wilson's coupling from the past algorithm
+        <img src="images/h3_isometry.png" width=600>
 
-[[Book](https://www.cambridge.org/core/books/finite-markov-chains-and-algorithmic-applications/EE10AF27811B43B02E05905DC6413467)]
++ Coxeter automata and 2D Uniform tilings
 
-<img src="images/random_lozenge_tiling.svg" width=500>
+    [[Casselman's Paper]](https://personal.math.ubc.ca/~cass/research/pdf/roots.pdf) | [[Doc]](https://pywonderland.com/uniform-tilings/)
 
-## Catacaustics of plane curves
+    <img src="images/hyperbolic-tilings.png" width=600>
 
-Use sympy to compute catacaustics of parametric and implicit curves.
++ GIF animations of maze and cellular automata
 
-[[Doc](https://pywonderland.com/catacaustics)]
+    Generate maze animations containing thousands of frames in a few seconds. No external libs used and no drawing api call!
 
-|   |   |
-|:---:|:---:|
-| Cardioid as a catacaustic of circle | Nephroid as a catacaustic of cardioid |
-|![](images/caustics_cardioid.png) | ![](images/caustics_nephroid.png)|
+    [[Doc]](https://pywonderland.com/gifmaze)
+
+    |    |    |
+    |:---:|:---:|
+    | ![](images/kruskal.gif) | ![](images/wilson-bfs.gif)    |
+    | ![](images/gosperglidergun.gif) | ![](images/langton-ant.gif) |
 
 
-## Coxeter element and Coxeter plane
++ Domino shuffling algorithm
 
-We explain how to project the E8 root system to its Coxeter plane.
+    This algorithm samples a perfectly random tiling of a aztec diamond.
 
-[[Casselman's Paper](https://personal.math.ubc.ca/~cass/research/pdf/Element.pdf)] | [[Doc](https://pywonderland.com/e8-and-coxeter-plane/)]
+    [[Mathologer Video]](https://www.youtube.com/watch?v=Yy7Q8IWNfHM) | [[Paper]](https://arxiv.org/abs/math/9201305)
 
-|   |    |
-|:---:|:---:|
-| E8   |  5-Cube   |
-| <img src="images/e8.svg" width=300> | <img src="images/5-cube.svg" width=300> |
+    <img src="images/dominoshuffling.gif" width=400>
+
++ Propp and Wilson's coupling from the past algorithm
+
+    [[Book](https://www.cambridge.org/core/books/finite-markov-chains-and-algorithmic-applications/EE10AF27811B43B02E05905DC6413467)]
+
+    <img src="images/random_lozenge_tiling.svg" width=500>
+
++ Catacaustics of plane curves
+
+    Use sympy to compute catacaustics of parametric and implicit curves.
+
+    [[Doc](https://pywonderland.com/catacaustics)]
+
+    |   |   |
+    |:---:|:---:|
+    | Cardioid as a catacaustic of circle | Nephroid as a catacaustic of cardioid |
+    |![](images/caustics_cardioid.png) | ![](images/caustics_nephroid.png)|
+
+
++ Coxeter element and Coxeter plane
+
+    We explain how to project the E8 root system to its Coxeter plane.
+
+    [[Casselman's Paper](https://personal.math.ubc.ca/~cass/research/pdf/Element.pdf)] | [[Doc](https://pywonderland.com/e8-and-coxeter-plane/)]
+
+    |   |    |
+    |:---:|:---:|
+    | E8   |  5-Cube   |
+    | <img src="images/e8.svg" width=300> | <img src="images/5-cube.svg" width=300> |
+
+
++ Assassin vs Bodyguards
+
+    Consider a room of regular polygon shape in the xy-plane, and let A (an "assassin") and T (a "target") be two arbitrary-but-fixed points within the room. Suppose that the room behaves like a billiard table, so that any ray (a.k.a "shot") from the assassin will bounce off the walls of the room, with the angle of incidence equaling the angle of reflection. Puzzle: Is it possible to block any possible shot from A to T by placing a finite number of points in the square?
+
+    [[PBS Video](https://www.youtube.com/watch?v=a7gp9c2p0UQ)] | [[math3ma blog](https://www.math3ma.com/blog/is-the-square-a-secure-polygon)]
+
+    <img src="images/assassin_vs_bodyguards.png" width=600>
+
 
 # How to use
 
