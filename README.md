@@ -19,26 +19,36 @@ The purpose of this project is to show the beauty of math with python by renderi
 
     [[Book]](https://www.routledge.com/Handbook-of-Computational-Group-Theory/Holt-Eick-OBrien/p/book/9780367659448) | [[Doc]](https://pywonderland.com/polytopes)
 
-    <img style="margin:0px auto;display:block" src="images/polytopes.png" width=600>
+    <p align="center">
+    <img src="images/polytopes.png" width=600>
+    </p>
 
-    <img style="margin:0px auto;display:block" src="images/polyhedra_mirrors.png" width=600>
+    <p align="center">
+    <img src="images/polyhedra_mirrors.png" width=600>
+    </p>
 
 
 + Möbius transformations
 
     + When a Möbius transformation is an isometry of the hyperbolic disk, it must be of elliptic/parabolic/hyperbolic type, and it's elliptic/parabolic/hyperbolic if and only if it's a composition of reflections about two intersecting/parallel/hyper-parallel mirrors.
 
-        <img style="margin:0px auto;display:block" src="images/mobius.png" width=600>
+        <p align="center">
+        <img src="images/mobius.png" width=600>
+        </p>
 
     + A Möbius transformation can be uniquely extended to an isometry of the hyperbolic upper-half space.
 
-        <img style="margin:0px auto;display:block" src="images/h3_isometry.png" width=600>
+        <p align="center">
+        <img src="images/h3_isometry.png" width=600>
+        </p>
 
 + Coxeter automata and 2D Uniform tilings
 
     [[Casselman's Paper]](https://personal.math.ubc.ca/~cass/research/pdf/roots.pdf) | [[Doc]](https://pywonderland.com/uniform-tilings/)
 
-    <img style="margin:0px auto;display:block" src="images/hyperbolic-tilings.png" width=600>
+    <p align="center">
+    <img src="images/hyperbolic-tilings.png" width=600>
+    </p>
 
 + GIF animations of maze and cellular automata
 
@@ -58,13 +68,17 @@ The purpose of this project is to show the beauty of math with python by renderi
 
     [[Mathologer Video]](https://www.youtube.com/watch?v=Yy7Q8IWNfHM) | [[Paper]](https://arxiv.org/abs/math/9201305)
 
-    <img style="margin:0px auto;display:block" src="images/dominoshuffling.gif" width=400>
+    <p align="center">
+    <img src="images/dominoshuffling.gif" width=400>
+    </p>
 
 + Propp and Wilson's coupling from the past algorithm
 
     [[Book](https://www.cambridge.org/core/books/finite-markov-chains-and-algorithmic-applications/EE10AF27811B43B02E05905DC6413467)]
 
-    <img style="margin:0px auto;display:block" src="images/random_lozenge_tiling.svg" width=500>
+    <p align="center">
+    <img src="images/random_lozenge_tiling.svg" width=400>
+    </p>
 
 + Catacaustics of plane curves
 
@@ -87,18 +101,20 @@ The purpose of this project is to show the beauty of math with python by renderi
     |   |    |
     |:---:|:---:|
     | E8   |  5-Cube   |
-    | <img style="margin:0px auto;display:block" src="images/e8.svg" width=300> | <img style="margin:0px auto;display:block" src="images/5-cube.svg" width=300> |
+    | <img src="images/e8.svg" width=300> | <img src="images/5-cube.svg" width=300> |
 
 
 + Assassin vs Bodyguards
 
     Consider a room of regular polygon shape in the xy-plane, and let A (an "assassin") and T (a "target") be two arbitrary-but-fixed points within the room. Suppose that the room behaves like a billiard table, so that any ray (a.k.a "shot") from the assassin will bounce off the walls of the room, with the angle of incidence equaling the angle of reflection.
 
-    Puzzle: Is it possible to block any possible shot from A to T by placing a finite number of points in the square?
+    Puzzle: Is it possible to block any possible shot from A to T by placing a finite number of points in the room?
 
     [[PBS Video](https://www.youtube.com/watch?v=a7gp9c2p0UQ)] | [[math3ma blog](https://www.math3ma.com/blog/is-the-square-a-secure-polygon)]
 
-    <img style="margin:0px auto;display:block" src="images/assassin_vs_bodyguards.png" width=600>
+    <p align="center">
+    <img src="images/assassin_vs_bodyguards.png" width=600>
+    </p>
 
 
 # How to use
