@@ -1,9 +1,7 @@
 """
-Compute the catacaustic of the cardioid and draw it using matplotlib.
-The light source is at (-1/3, 0).
-The result is a nephroid.
+Compute the catacaustic of the cardioid and draw it with matplotlib. The result is a nephroid.
 
-Full explanations: https://pywonderland.com/catacaustics
+Full explanation: https://pywonderland.com/catacaustics
 """
 
 import numpy as np
@@ -14,20 +12,20 @@ t, X, Y = symbols("t X Y")
 x = (2 * cos(t) + cos(2 * t)) / 3
 y = (2 * sin(t) + sin(2 * t)) / 3
 C = Matrix([x, y])  # curve
-light_source = Matrix([S("-1/3", evaluate=False), 0])
+light_source = Matrix([S("-1/3", evaluate=False), 0])  # The light source is at the cusp (-1/3, 0).
 l = C - light_source  # incident ray at (x, y)
 dx, dy = diff(x, t), diff(y, t)  # tangent vector at (x, y)
 n = Matrix([dy, -dx])  # normal vector at (x, y)
 r = simplify(l - 2 * l.dot(n) * n / n.dot(n))  # reflected ray at (x, y)
 
-# equations of the envelope
+# equations of the envelope: F = 0 and dF = 0
 F = (Y - y) * r[0] - (X - x) * r[1]
 dF = diff(F, t)
 
 # solve the envelope
 result = solve((F, dF), X, Y)
 
-# simplify the result
+# simplify the result. The option "method=groebner" is the key to get a good expression!
 X = trigsimp(result[X], method="groebner")
 Y = trigsimp(result[Y], method="groebner")
 
