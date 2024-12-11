@@ -6,19 +6,17 @@ to the IQ Puzzler Pro by SmartGames:
 
 The goal is to fill an 11x5 board using 12 distinct pieces.
 
-For each piece and its possible placement on the board, we assign a binary
-variable x_i (which can only take values 0 or 1). In total, there are 2140 binary variables.
+For each piece and its possible placement on the board, we assign a binary variable x_i
+(which can only take values 0 or 1). In total, there are 2140 binary variables.
 
-For every cell on the board, we generate a linear equation ensuring that
-the sum of the variables covering it equals 1, meaning each cell is covered exactly once.
+For every cell on the board, we generate a linear equation ensuring that the sum of the
+variables covering it equals 1, meaning each cell is covered exactly once.
 
-Since each piece can be used only once, we require the sum of the variables
-corresponding to the placements of any individual piece to be 1.
-This results in 12 additional equations.
+Since each piece can be used only once, we require the sum of the variables corresponding to
+the placements of any individual piece to be 1. This results in 12 additional equations.
 
-We use the `pulp` library to solve the system of equations and find all
-possible solutions. Solutions that are reflections or central inversions
-of previously found ones are discarded.
+We use the `pulp` library to solve the system of equations and find all possible solutions.
+Solutions that are reflections or central inversions of previously found ones are discarded.
 """
 
 import os
@@ -48,6 +46,7 @@ output_dir = os.path.join(current_dir, "solutions")
 os.makedirs(output_dir, exist_ok=True)
 solutions_data_file = os.path.join(output_dir, "solutions.txt")
 
+
 class Piece:
     """
     A class to represent a piece used in the IQ Puzzler Pro game.
@@ -58,7 +57,6 @@ class Piece:
     def __init__(self, data):
         self.variants = self.get_variants(data)
         self.placements = []
-        self.num_placesments = None
 
     def get_variants(self, data):
         """
@@ -96,7 +94,6 @@ class Piece:
                     ):
                         self.placements.append(current_placement)
 
-        self.num_placesments = len(self.placements)
         return self.placements
 
 
@@ -115,33 +112,13 @@ skyblue = Piece([[1, 1], [1, 0]])
 
 
 pieces = [
-    pink,
-    cyan,
-    orange,
-    purple,
-    yellow,
-    crimson,
-    green,
-    blue,
-    red,
-    olive,
-    darkBlue,
-    skyblue,
+    pink, cyan, orange, purple, yellow, crimson,
+    green, blue, red, olive, darkBlue, skyblue
 ]
 
 colors = [
-    "pink",
-    "cyan",
-    "orange",
-    "purple",
-    "yellow",
-    "crimson",
-    "green",
-    "blue",
-    "red",
-    "olive",
-    "darkblue",
-    "skyblue",
+    "pink", "cyan", "orange", "purple", "yellow", "crimson",
+    "green", "blue", "red", "olive", "darkblue", "skyblue"
 ]
 
 
@@ -248,7 +225,8 @@ def plot_solution(solution, file_path):
 
 # A long list contains all 2140 placements of the 12 pieces
 all_placements = []
-# Remember the starting and ending positions of all placements for each piece in the
+
+# Save the starting and ending positions of the placements for each piece in the
 # `all_placements`list. This way, we can determine the prototype piece by the index
 # of a piece in `all_placements`
 intervals = []
@@ -287,7 +265,6 @@ while True:
         break
 
     current_solution = np.array([int(pulp.value(x[i])) for i in range(nvars)])
-
     mat = get_board_configuration(current_solution)
     if not is_duplicate(matrices_found, mat):
         matrices_found.append(mat)
@@ -298,7 +275,7 @@ while True:
         )
         save_solution(solutions_data_file, mat, N)
 
-    # exclude current solution
+    # exclude current solution in future search
     prob += (
         pulp.lpSum(
             (1 - current_solution[i]) * x[i] + current_solution[i] * (1 - x[i])
