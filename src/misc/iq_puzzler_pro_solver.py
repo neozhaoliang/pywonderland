@@ -6,15 +6,19 @@ to the IQ Puzzler Pro by SmartGames:
 
 The goal is to fill an 11x5 board using 12 distinct pieces.
 
-For each piece and its possible placement on the board, we assign a binary variable x_i
-(which can only take values 0 or 1). In total, there are 2140 binary variables.
+For each piece and its possible placement on the board, we assign a binary
+variable x_i (which can only take values 0 or 1). In total, there are 2140 binary variables.
 
-For every cell on the board, we generate a linear equation ensuring that the sum of the variables covering it equals 1, meaning each cell is covered exactly once.
+For every cell on the board, we generate a linear equation ensuring that
+the sum of the variables covering it equals 1, meaning each cell is covered exactly once.
 
-Since each piece can be used only once, we require the sum of the variables corresponding to the placements of any individual piece to be 1. This results in 12 additional equations.
+Since each piece can be used only once, we require the sum of the variables
+corresponding to the placements of any individual piece to be 1.
+This results in 12 additional equations.
 
-We use the `pulp` library to solve the system of equations and find all possible solutions.
-Solutions that are reflections or central inversions of previously found ones are discarded.
+We use the `pulp` library to solve the system of equations and find all
+possible solutions. Solutions that are reflections or central inversions
+of previously found ones are discarded.
 """
 
 import os
