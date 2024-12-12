@@ -122,12 +122,16 @@ colors = [
 ]
 
 
-def get_piece_prototype_index(intervals, k):
+def get_piece_prototype_index(intervals, index):
     """
     Retrieves the prototype index for a given piece placement based on its index.
+
+    intervals = [(0, n_1), (n_1, n_2), ..., (n_{k-1}, n_k)]
+    where [n_i, n_{i+1}) is the range of the placements of the i-th piece in the list `all_placements`.
+    return the first i such that n_i <= index < n_{i+1}.
     """
     for i, (start, end) in enumerate(intervals):
-        if start <= k < end:
+        if start <= index < end:
             return i
 
 
@@ -140,6 +144,13 @@ def get_board_configuration(solution):
 
     Returns:
         np.ndarray: A matrix representing the board state, with each cell containing the index of the piece.
+
+    Example output:
+        10 10  9  9  9  0  6  6  6  1  1
+         4 10  9 11  9  0  0  6  8  1  1
+         4 10  2 11 11  3  0  7  8  5  1
+         4  4  2  2  3  3  0  7  8  5  5
+         4  2  2  3  3  7  7  7  8  8  5
     """
     global all_placements, intervals
     mat = np.zeros((board_height, board_width), dtype=int)
@@ -236,26 +247,26 @@ for piece in pieces:
     end = len(all_placements)
     intervals.append((start, end))
 
-# One variable for each placement
-nvars = len(all_placements)
-# One equation of each cell
-neqs = board_width * board_height
+nvars = len(all_placements)  # One variable for each placement
+neqs = board_width * board_height  # One equation of each cell
 A = np.zeros((neqs, nvars))
-for i, piece in enumerate(all_placements):
+
+# A[i, j] = 1 if the j-th item in `all_placements` covers the i-th cell
+for j, piece in enumerate(all_placements):
     for col, row in piece:
-        A[col + row * board_width, i] = 1
+        A[col + row * board_width, j] = 1
 
 prob = pulp.LpProblem("Integer_LP", pulp.LpMinimize)
 x = [pulp.LpVariable(f"x_{i}", cat="Binary") for i in range(nvars)]
-# each cell is covered exactly once
-# Ax = 1 (column vector of all 1's)
+
+# Ax = 1 because each cell is covered exactly once by a placement of a piece
 for i in range(neqs):
     prob += pulp.lpSum(A[i, j] * x[j] for j in range(nvars)) == 1
-# each piece is used only once
+
+# Each piece is used only once across all its possible placements
 for start, end in intervals:
     prob += pulp.lpSum(x[i] for i in range(start, end)) == 1
 
-# store the matrix representation of all solutions found so far (excluding global symmetry)
 matrices_found = []
 while True:
     prob.solve(PULP_CBC_CMD(msg=False))
