@@ -97,18 +97,69 @@ class Piece:
         return self.placements
 
 
-pink = Piece([[1, 1, 0, 0], [0, 1, 1, 1]])
-cyan = Piece([[1, 1, 1], [1, 1, 0]])
-orange = Piece([[1, 0, 0], [1, 1, 1], [0, 1, 0]])
-purple = Piece([[1, 1, 0], [0, 1, 1], [0, 0, 1]])
-yellow = Piece([[1, 1, 1, 1], [0, 1, 0, 0]])
-crimson = Piece([[1, 1, 0], [0, 1, 1]])
-green = Piece([[1, 1, 1], [0, 1, 0]])
-blue = Piece([[1, 1, 1], [1, 0, 0], [1, 0, 0]])
-red = Piece([[1, 1, 1, 1], [1, 0, 0, 0]])
-olive = Piece([[1, 1, 1], [1, 0, 1]])
-darkBlue = Piece([[1, 1, 1], [1, 0, 0]])
-skyblue = Piece([[1, 1], [1, 0]])
+# fmt:off
+pink = Piece(
+    [[1, 1, 0, 0],
+     [0, 1, 1, 1]]
+)
+
+cyan = Piece(
+    [[1, 1, 1],
+     [1, 1, 0]]
+)
+
+orange = Piece(
+    [[1, 0, 0],
+     [1, 1, 1],
+     [0, 1, 0]]
+)
+
+purple = Piece(
+    [[1, 1, 0],
+     [0, 1, 1],
+     [0, 0, 1]]
+)
+
+yellow = Piece(
+    [[1, 1, 1, 1],
+     [0, 1, 0, 0]]
+)
+
+crimson = Piece(
+    [[1, 1, 0],
+     [0, 1, 1]]
+)
+
+green = Piece(
+    [[1, 1, 1],
+     [0, 1, 0]]
+)
+
+blue = Piece(
+    [[1, 1, 1],
+     [1, 0, 0],
+     [1, 0, 0]]
+)
+
+red = Piece(
+    [[1, 1, 1, 1],
+     [1, 0, 0, 0]]
+)
+
+olive = Piece(
+    [[1, 1, 1],
+     [1, 0, 1]]
+)
+
+darkBlue = Piece(
+    [[1, 1, 1],
+     [1, 0, 0]]
+)
+
+skyblue = Piece(
+    [[1, 1],
+     [1, 0]]
+)
 
 
 pieces = [
@@ -120,6 +171,7 @@ colors = [
     "pink", "cyan", "orange", "purple", "yellow", "crimson",
     "green", "blue", "red", "olive", "darkblue", "skyblue"
 ]
+# fmt:on
 
 
 def get_piece_prototype_index(intervals, index):
@@ -169,9 +221,13 @@ def is_duplicate(existing_matrices, candidate_matrix):
         candidate_matrix,
         np.fliplr(candidate_matrix),
         np.flipud(candidate_matrix),
-        np.flipud(np.fliplr(candidate_matrix))
+        np.flipud(np.fliplr(candidate_matrix)),
     ]
-    return any(np.array_equal(existing, M) for existing in existing_matrices for M in transforms)
+    return any(
+        np.array_equal(existing, M)
+        for existing in existing_matrices
+        for M in transforms
+    )
 
 
 def save_solution(output_file, mat, index):
@@ -228,7 +284,7 @@ def plot_solution(solution, file_path):
                 facecolor=colors[proto_index],
                 edgecolor="k",
                 add_points=False,
-                linewidth=2
+                linewidth=2,
             )
 
     plt.savefig(file_path, bbox_inches="tight")
