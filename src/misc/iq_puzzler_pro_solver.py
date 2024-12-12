@@ -9,8 +9,8 @@ The goal is to fill an 11x5 board using 12 distinct pieces.
 For each piece and its possible placement on the board, we assign a binary variable x_i
 (which can only take values 0 or 1). In total, there are 2140 binary variables.
 
-For every cell on the board, we generate a linear equation ensuring that the sum of the
-variables covering it equals 1, meaning each cell is covered exactly once.
+For every cell on the board, we generate a linear equation ensuring that the sum of the variables
+covering it equals 1, meaning each cell is covered exactly once. We get 5x11=55 equations in this way.
 
 Since each piece can be used only once, we require the sum of the variables corresponding to
 the placements of any individual piece to be 1. This results in 12 additional equations.
@@ -275,7 +275,8 @@ while True:
         )
         save_solution(solutions_data_file, mat, N)
 
-    # exclude current solution in future search
+    # Exclude the current solution from future searches by adding a constraint.
+    # The x_i's must differ from the current solution in at least one position.
     prob += (
         pulp.lpSum(
             (1 - current_solution[i]) * x[i] + current_solution[i] * (1 - x[i])
