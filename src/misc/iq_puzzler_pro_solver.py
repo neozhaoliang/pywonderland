@@ -352,4 +352,4 @@ while True:
         >= 1
     )
 
-print(f"Total solutions: {len(matrices_found)}")
+print(f"Total number of solutions: {len(matrices_found)}")
