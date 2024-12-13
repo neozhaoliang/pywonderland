@@ -338,7 +338,7 @@ while True:
         N = len(matrices_found)
         print(f"{N} solutions found...", end="\r")
         plot_solution(
-            current_solution, os.path.join(output_dir, f"solution-{N:03d}.svg")
+            current_solution, os.path.join(output_dir, f"solution-{N:04d}.svg")
         )
         save_solution(solutions_data_file, mat, N)
 
@@ -351,3 +351,5 @@ while True:
         )
         >= 1
     )
+
+print(f"Total solutions: {len(matrices_found)}")
