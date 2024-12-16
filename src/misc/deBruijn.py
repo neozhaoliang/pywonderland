@@ -60,9 +60,7 @@ def compute_rhombus(r, s, kr, ks):
     # the list of integers that indicate the position of the intersection point.
     # the i-th integer n_i indicates that this point lies in the n_i-th strip
     # in the i-th grid.
-    index = [
-        np.ceil(np.dot(intersect_point, uv[i]) + SHIFTS[i]) for i in range(DIMENSION)
-    ]
+    index = np.ceil(uv @ intersect_point + SHIFTS).astype(int)
 
     # Be careful of the accuracy problem here.
     # Mathematically the r-th and s-th item of index should be kr and ks,
