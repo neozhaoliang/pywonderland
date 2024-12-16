@@ -60,9 +60,7 @@ def compute_rhombus(r, s, kr, ks):
 
     # The intersection point
     M = uv[[r, s], :]
-    intersect_point = np.linalg.solve(
-        M, np.array([kr, ks]) - np.array([SHIFTS[r], SHIFTS[s]])
-    )
+    intersect_point = np.linalg.solve(M, [kr - SHIFTS[r], ks - SHIFTS[s]])
     # the list of integers that indicate the position of the intersection point.
     # the i-th integer n_i indicates that this point lies in the n_i-th strip
     # in the i-th grid.
