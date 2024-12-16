@@ -87,7 +87,7 @@ ax.axis([xmin, xmax, ymin, ymax])
 ax.set_aspect("equal")
 
 
-for r, s in itertools.combinations(range(DIMENSION), 2):
+for r, s in itertools.combinations(range(DIMENSION), repeat=2):
     for kr, ks in itertools.product(range(-NUM_LINES, NUM_LINES), repeat=2):
         if s - r == 1 or s - r == DIMENSION - 1:
             color = FAT_COLOR
