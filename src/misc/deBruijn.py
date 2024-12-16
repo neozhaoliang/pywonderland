@@ -53,19 +53,18 @@ def compute_rhombus(r, s, kr, ks):
         |                    | @ |   | + |           | = |    |
         | uv[s][0]  uv[s][1] |   | y |   | shifts[s] |   | ks |
     """
-
-    # The intersection point
     M = uv[[r, s], :]
+    # The (x, y) coordinates of the intersection point
     intersect_point = np.linalg.solve(M, [kr - SHIFTS[r], ks - SHIFTS[s]])
-    # the list of integers that indicate the position of the intersection point.
-    # the i-th integer n_i indicates that this point lies in the n_i-th strip
-    # in the i-th grid.
+    # Compute the list of integers representing the positions of the intersection points.
+    # Specifically, the i-th integer n_i indicates that the point lies in the n_i-th strip
+    # within the i-th grid.
     index = np.ceil(uv @ intersect_point + SHIFTS).astype(int)
 
-    # Be careful of the accuracy problem here.
-    # Mathematically the r-th and s-th item of index should be kr and ks,
-    # but programmingly it might not be the case,
-    # so we have to manually set them to correct values.
+    # Note: Accuracy issues may arise here due to floating-point precision.
+    # Mathematically, the r-th and s-th elements of `index` should be `kr` and `ks`,
+    # respectively. However, due to potential computational inaccuracies, 
+    # we need to manually set these values to ensure correctness.
     return [
         np.dot(index, uv)
         for index[r], index[s] in [
