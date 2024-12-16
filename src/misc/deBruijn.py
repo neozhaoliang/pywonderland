@@ -16,6 +16,7 @@ Some params you can tweak with:
 
 :copyright: by Zhao Liang, 2018.
 """
+
 import itertools
 
 import numpy as np
@@ -29,14 +30,14 @@ except ImportError:
 IMAGE_SIZE = (800, 800)
 NUM_LINES = 12
 PI = np.pi
-DIMENSION = 5  # DIMENSION = 4 is the Ammann-Beenker tiling
-
+DIMENSION = 4  # DIMENSION = 4 is the Ammann-Beenker tiling
 if DIMENSION % 2 == 0:
-    GRIDS = [np.exp(PI * 1j * i / DIMENSION) for i in range(DIMENSION)]
+    theta = np.pi * np.arange(DIMENSION) / DIMENSION
 else:
-    GRIDS = [np.exp(PI * 2j * i / DIMENSION) for i in range(DIMENSION)]
+    theta = 2 * np.pi * np.arange(DIMENSION) / DIMENSION
 
-SHIFTS = [0.5] * 5  # you can use np.random.random(5) to draw a random pattern
+uv = np.column_stack((np.cos(theta), np.sin(theta)))
+SHIFTS = [0.5] * DIMENSION  # you can use np.random.random(DIMENSION) to draw a random pattern
 
 FAT_COLOR = (0.894, 0.102, 0.11)
 THIN_COLOR = (1.0, 0.5, 0.0)
@@ -51,22 +52,22 @@ def compute_rhombus(r, s, kr, ks):
     integers and 0 <= r < s <= DIMENSION and -NUM_LINES <= kr, ks <= NUM_LINES.
 
     The intersection point is the solution to a 2x2 linear equation:
-        Re(z/grids[r]) + shifts[r] = kr
-        Re(z/grids[s]) + shifts[s] = ks
-    """
-    # The intersection point
-    intersect_point = (
-        (GRIDS[r] * (ks - SHIFTS[s]) - GRIDS[s] * (kr - SHIFTS[r]))
-        * 1j
-        / GRIDS[s - r].imag
-    )
 
+        | uv[r][0]  uv[r][1] |   | x |   | shifts[r] |   | kr |
+        |                    | @ |   | + |           | = |    |
+        | uv[s][0]  uv[s][1] |   | y |   | shifts[s] |   | ks |
+    """
+
+    # The intersection point
+    M = uv[[r, s], :]
+    intersect_point = np.linalg.solve(
+        M, np.array([kr, ks]) - np.array([SHIFTS[r], SHIFTS[s]])
+    )
     # the list of integers that indicate the position of the intersection point.
     # the i-th integer n_i indicates that this point lies in the n_i-th strip
     # in the i-th grid.
     index = [
-        np.ceil((intersect_point / grid).real + shift)
-        for grid, shift in zip(GRIDS, SHIFTS)
+        np.ceil(np.dot(intersect_point, uv[i]) + SHIFTS[i]) for i in range(DIMENSION)
     ]
 
     # Be careful of the accuracy problem here.
@@ -74,7 +75,7 @@ def compute_rhombus(r, s, kr, ks):
     # but programmingly it might not be the case,
     # so we have to manually set them to correct values.
     return [
-        np.dot(index, GRIDS)
+        np.dot(index, uv)
         for index[r], index[s] in [
             (kr, ks),
             (kr + 1, ks),
@@ -105,10 +106,10 @@ for r, s in itertools.combinations(range(DIMENSION), 2):
 
         ctx.set_source_rgb(*color)
         A, B, C, D = compute_rhombus(r, s, kr, ks)
-        ctx.move_to(A.real, A.imag)
-        ctx.line_to(B.real, B.imag)
-        ctx.line_to(C.real, C.imag)
-        ctx.line_to(D.real, D.imag)
+        ctx.move_to(*A)
+        ctx.line_to(*B)
+        ctx.line_to(*C)
+        ctx.line_to(*D)
         ctx.close_path()
         ctx.fill_preserve()
 
