@@ -42,10 +42,11 @@ EDGE_COLOR = (0.216, 0.494, 0.72)
 
 def compute_rhombus(r, s, kr, ks):
     """
-    Compute the coordinates of the four vertices of the rhombus that
-    correspondes to the intersection point of the kr-th line in the r-th
-    grid and the ks-th line in the s-th grid. Here r, s, kr, ks are all
-    integers and 0 <= r < s <= DIMENSION and -NUM_LINES <= kr, ks <= NUM_LINES.
+    Compute the coordinates of the four vertices of the rhombus that correspondes to
+    the intersection point of the kr-th line in the r-th grid and the ks-th line in
+    the s-th grid. Here r, s, kr, ks are all integers and satisfy
+        0 <= r < s <= DIMENSION
+        -NUM_LINES <= kr, ks <= NUM_LINES
 
     The intersection point is the solution to a 2x2 linear equation:
 
