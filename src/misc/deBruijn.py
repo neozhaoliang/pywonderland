@@ -18,26 +18,22 @@ Some params you can tweak with:
 """
 
 import itertools
-
 import numpy as np
-
-try:
-    import cairocffi as cairo
-except ImportError:
-    import cairo
+import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
 
 
 IMAGE_SIZE = (800, 800)
 NUM_LINES = 12
 PI = np.pi
-DIMENSION = 4  # DIMENSION = 4 is the Ammann-Beenker tiling
+DIMENSION = 5  # DIMENSION = 4 is the Ammann-Beenker tiling
 if DIMENSION % 2 == 0:
     theta = np.pi * np.arange(DIMENSION) / DIMENSION
 else:
     theta = 2 * np.pi * np.arange(DIMENSION) / DIMENSION
 
 uv = np.column_stack((np.cos(theta), np.sin(theta)))
-SHIFTS = [0.5] * DIMENSION  # you can use np.random.random(DIMENSION) to draw a random pattern
+SHIFTS = [0.5] * DIMENSION  # np.random.random(DIMENSION) for a random pattern
 
 FAT_COLOR = (0.894, 0.102, 0.11)
 THIN_COLOR = (1.0, 0.5, 0.0)
@@ -83,14 +79,12 @@ def compute_rhombus(r, s, kr, ks):
     ]
 
 
-surface = cairo.SVGSurface("debruijn.svg", IMAGE_SIZE[0], IMAGE_SIZE[1])
-ctx = cairo.Context(surface)
-ctx.set_line_cap(cairo.LINE_CAP_ROUND)
-ctx.set_line_join(cairo.LINE_JOIN_ROUND)
-ctx.set_line_width(0.1)
-scale = max(IMAGE_SIZE) / (2.0 * NUM_LINES)
-ctx.scale(scale, scale)
-ctx.translate(NUM_LINES, NUM_LINES)
+xmin, xmax = -12, 12
+ymin, ymax = -8, 8
+ax = plt.gca()
+ax.axis("off")
+ax.axis([xmin, xmax, ymin, ymax])
+ax.set_aspect("equal")
 
 
 for r, s in itertools.combinations(range(DIMENSION), 2):
@@ -102,19 +96,11 @@ for r, s in itertools.combinations(range(DIMENSION), 2):
             color = THIN_COLOR
             shape = 1
 
-        ctx.set_source_rgb(*color)
-        A, B, C, D = compute_rhombus(r, s, kr, ks)
-        ctx.move_to(*A)
-        ctx.line_to(*B)
-        ctx.line_to(*C)
-        ctx.line_to(*D)
-        ctx.close_path()
-        ctx.fill_preserve()
+        vertices = compute_rhombus(r, s, kr, ks)
+        poly = Polygon(vertices, closed=True, fc=color, ec=EDGE_COLOR, lw=1)
+        ax.add_patch(poly)
 
-        ctx.set_source_rgb(*EDGE_COLOR)
-        ctx.stroke()
-
-surface.finish()
+plt.savefig("debruijn.svg", bbox_inches="tight")
 
 try:
     import subprocess
