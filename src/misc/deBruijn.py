@@ -23,7 +23,6 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
 
 
-IMAGE_SIZE = (800, 800)
 NUM_LINES = 12
 PI = np.pi
 DIMENSION = 5  # DIMENSION = 4 is the Ammann-Beenker tiling
