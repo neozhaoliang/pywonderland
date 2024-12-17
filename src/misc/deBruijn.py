@@ -94,7 +94,7 @@ for r, s in itertools.combinations(range(DIMENSION), 2):
             shape = 1
 
         vertices = compute_rhombus(r, s, kr, ks)
-        poly = Polygon(vertices, closed=True, fc=color, ec=EDGE_COLOR, lw=1)
+        poly = Polygon(vertices, closed=True, fc=color, ec=EDGE_COLOR, lw=1, joinstyle="round", capstyle="round")
         ax.add_patch(poly)
 
 plt.savefig("debruijn.svg", bbox_inches="tight")
