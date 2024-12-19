@@ -11,30 +11,35 @@ from sympy import *
 t, X, Y = symbols("t X Y")
 x = (2 * cos(t) + cos(2 * t)) / 3
 y = (2 * sin(t) + sin(2 * t)) / 3
-C = Matrix([x, y])  # curve
-light_source = Matrix([S("-1/3", evaluate=False), 0])  # The light source is at the cusp (-1/3, 0).
-l = C - light_source  # incident ray at (x, y)
+curve = Matrix([x, y])
+
+light_source = Matrix(
+    [S("-1/3", evaluate=False), 0]
+)  # The light source is at the cusp (-1/3, 0).
+incident_ray = curve - light_source
 dx, dy = diff(x, t), diff(y, t)  # tangent vector at (x, y)
-n = Matrix([dy, -dx])  # normal vector at (x, y)
-r = simplify(l - 2 * l.dot(n) * n / n.dot(n))  # reflected ray at (x, y)
+normal = Matrix([dy, -dx])
+reflected_ray = simplify(
+    incident_ray - 2 * incident_ray.dot(normal) * normal / normal.dot(normal)
+)
 
 # equations of the envelope: F = 0 and dF = 0
-F = (Y - y) * r[0] - (X - x) * r[1]
+F = (Y - y) * reflected_ray[0] - (X - x) * reflected_ray[1]
 dF = diff(F, t)
 
 # solve the envelope
-result = solve((F, dF), X, Y)
+envelope = solve((F, dF), X, Y)
 
 # simplify the result. The option "method=groebner" is the key to get a good expression!
-X = trigsimp(result[X], method="groebner")
-Y = trigsimp(result[Y], method="groebner")
+X = trigsimp(envelope[X], method="groebner")
+Y = trigsimp(envelope[Y], method="groebner")
 
 # draw the cardioid and the envelope
 T = np.linspace(0, 2 * np.pi, 500)
 curve_x = np.array([x.subs(t, ti) for ti in T])
 curve_y = np.array([y.subs(t, ti) for ti in T])
-ray_x = np.array([r[0].subs(t, ti) for ti in T]) * 100
-ray_y = np.array([r[1].subs(t, ti) for ti in T]) * 100
+ray_x = np.array([reflected_ray[0].subs(t, ti) for ti in T]) * 100
+ray_y = np.array([reflected_ray[1].subs(t, ti) for ti in T]) * 100
 catacaustic_x = np.array([X.subs(t, ti) for ti in T])
 catacaustic_y = np.array([Y.subs(t, ti) for ti in T])
 
