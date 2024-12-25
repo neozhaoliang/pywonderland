@@ -8,6 +8,7 @@ reddit discussion:
     "https://www.reddit.com/r/math/comments/2abwyt/smooth_colour_mandelbrot"
 
 """
+
 import numpy as np
 from numba import jit
 from PIL import Image
@@ -20,10 +21,10 @@ RADIUS = 100
 def color(z, i):
     v = np.log2(i + 1 - np.log2(np.log2(abs(z)))) / 5
     if v < 1.0:
-        return v ** 4, v ** 2.5, v
+        return v**4, v**2.5, v
     else:
         v = max(0, 2 - v)
-        return v, v ** 1.5, v ** 3
+        return v, v**1.5, v**3
 
 
 @jit

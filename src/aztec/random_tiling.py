@@ -6,6 +6,7 @@ with uniform probability.
 
 :copyright (c) 2015 by Zhao Liang.
 """
+
 import argparse
 from tqdm import trange
 import aztec
@@ -44,7 +45,7 @@ def render_with_cairo(az, imgsize, extent, filename):
 
     margin = 0.1
 
-    for (i, j) in az.cells:
+    for i, j in az.cells:
         if az.is_black(i, j) and az.tile[(i, j)] is not None:
             if az.tile[(i, j)] == "n":
                 ctx.rectangle(
@@ -118,8 +119,7 @@ def render(program, *args, **kwargs):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-size", metavar="s", type=int, default=800, help="image size")
+    parser.add_argument("-size", metavar="s", type=int, default=800, help="image size")
     parser.add_argument(
         "-order", metavar="o", type=int, default=60, help="order of az graph"
     )

@@ -32,8 +32,8 @@ else:
     theta = 2 * np.pi * np.arange(DIMENSION) / DIMENSION
 
 uv = np.column_stack((np.cos(theta), np.sin(theta)))
-SHIFTS = [0.5] * DIMENSION  # np.random.random(DIMENSION) for a random pattern
-
+SHIFTS = np.random.random(DIMENSION)  # for a random pattern
+print(SHIFTS)
 FAT_COLOR = (0.894, 0.102, 0.11)
 THIN_COLOR = (1.0, 0.5, 0.0)
 EDGE_COLOR = (0.216, 0.494, 0.72)
@@ -63,7 +63,7 @@ def compute_rhombus(r, s, kr, ks):
 
     # Note: Accuracy issues may arise here due to floating-point precision.
     # Mathematically, the r-th and s-th elements of `index` should be `kr` and `ks`,
-    # respectively. However, due to potential computational inaccuracies, 
+    # respectively. However, due to potential computational inaccuracies,
     # we need to manually set these values to ensure correctness.
     return [
         np.dot(index, uv)
@@ -76,8 +76,8 @@ def compute_rhombus(r, s, kr, ks):
     ]
 
 
-xmin, xmax = -12, 12
-ymin, ymax = -8, 8
+xmin, xmax = -16, 16
+ymin, ymax = -12, 12
 ax = plt.gca()
 ax.axis("off")
 ax.axis([xmin, xmax, ymin, ymax])
@@ -94,7 +94,15 @@ for r, s in itertools.combinations(range(DIMENSION), 2):
             shape = 1
 
         vertices = compute_rhombus(r, s, kr, ks)
-        poly = Polygon(vertices, closed=True, fc=color, ec=EDGE_COLOR, lw=1, joinstyle="round", capstyle="round")
+        poly = Polygon(
+            vertices,
+            closed=True,
+            fc=color,
+            ec=EDGE_COLOR,
+            lw=1,
+            joinstyle="round",
+            capstyle="round",
+        )
         ax.add_patch(poly)
 
 plt.savefig("debruijn.svg", bbox_inches="tight")
