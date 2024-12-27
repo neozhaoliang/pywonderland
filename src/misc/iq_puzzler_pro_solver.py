@@ -22,6 +22,7 @@ Solutions that are reflections or central inversions of previously found ones ar
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.patches import Shadow
 
 try:
     import pulp
@@ -40,6 +41,7 @@ except ImportError:
 board_width = 11
 board_height = 5
 shaft_width = 0.2
+shadow_dir = (0.2, -0.2)
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 output_dir = os.path.join(current_dir, "solutions")
@@ -248,10 +250,14 @@ def save_solution(output_file, mat, index):
 def plot_solution(solution, file_path):
     """Plots the solution to a SVG file."""
     global all_placements
-    plt.gca().clear()
-    plt.gca().axis([-0.5, board_width - 0.5, -0.5, board_height - 0.5])
-    plt.gca().axis("off")
-    plt.gca().set_aspect("equal")
+    ax = plt.gca()
+    ax.clear()
+    ax.axis([-0.5, board_width - 0.5, -0.5, board_height - 0.5])
+    ax.axis("off")
+    ax.set_aspect("equal")
+    ax.set_facecolor("lightgray")
+    ax.patch.set_edgecolor("black")
+    ax.patch.set_linewidth(3)
     for ind, val in enumerate(solution):
         if val != 0:
             piece = all_placements[ind]
@@ -278,7 +284,7 @@ def plot_solution(solution, file_path):
                 shapes.append(Point(i, j).buffer(0.35))
 
             merged_shape = unary_union(shapes)
-            plot_polygon(
+            patch = plot_polygon(
                 merged_shape,
                 ax=plt.gca(),
                 facecolor=colors[proto_index],
@@ -286,7 +292,11 @@ def plot_solution(solution, file_path):
                 add_points=False,
                 linewidth=2,
             )
+            shadow = Shadow(patch, 0.2, -0.2, fc="gray", ec="none", lw=0, zorder=-1)
+            plt.gca().add_artist(shadow)
 
+    plt.gcf().patch.set_linewidth(4)
+    plt.gcf().patch.set_edgecolor("black")
     plt.savefig(file_path, bbox_inches="tight")
 
 
