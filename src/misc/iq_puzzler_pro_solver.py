@@ -293,7 +293,7 @@ def plot_solution(solution, file_path):
                 linewidth=2,
             )
             shadow = Shadow(patch, 0.2, -0.2, fc="gray", ec="none", lw=0, zorder=-1)
-            plt.gca().add_artist(shadow)
+            ax.add_artist(shadow)
 
     plt.gcf().patch.set_linewidth(4)
     plt.gcf().patch.set_edgecolor("black")
