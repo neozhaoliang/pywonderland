@@ -41,7 +41,7 @@ except ImportError:
 board_width = 11
 board_height = 5
 shaft_width = 0.2
-shadow_dir = (0.2, -0.2)
+shadow_offset = (0.1, -0.1)
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 output_dir = os.path.join(current_dir, "solutions")
@@ -292,7 +292,7 @@ def plot_solution(solution, file_path):
                 add_points=False,
                 linewidth=2,
             )
-            shadow = Shadow(patch, 0.2, -0.2, fc="gray", ec="none", lw=0, zorder=-1)
+            shadow = Shadow(patch, *shadow_offset, fc="gray", ec="none", lw=0, zorder=-1)
             ax.add_artist(shadow)
 
     plt.gcf().patch.set_linewidth(4)
