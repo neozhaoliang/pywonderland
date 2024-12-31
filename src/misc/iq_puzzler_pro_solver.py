@@ -1,34 +1,23 @@
 """
-This script employs integer linear programming to find all solutions
-to the IQ Puzzler Pro by SmartGames:
+his script utilizes Knuth's Dancing Links X (DLX) algorithm to find all solutions 
+for the IQ Puzzler Pro puzzle by SmartGames:
 
     https://www.smartgames.eu/uk/one-player-games/iq-puzzler-pro-0
 
-The goal is to fill an 11x5 board using 12 distinct pieces.
+The goal is to tile an 11x5 board using 12 unique pieces.
 
-For each piece and its possible placement on the board, we assign a binary variable x_i
-(which can only take values 0 or 1). In total, there are 2140 binary variables.
+The total number of solutions (excluding those symmetric under horizontal or vertical reflections) is 1,082,785.
 
-For every cell on the board, we generate a linear equation ensuring that the sum of the variables
-covering it equals 1, meaning each cell is covered exactly once. We get 5x11=55 equations in this way.
+The DLX implementation is borrowed from:
 
-Since each piece can be used only once, we require the sum of the variables corresponding to
-the placements of any individual piece to be 1. This results in 12 additional equations.
-
-We use the `pulp` library to solve the system of equations and find all possible solutions.
-Solutions that are reflections or central inversions of previously found ones are discarded.
+    https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html
 """
 
 import os
+from collections import defaultdict
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Shadow
-
-try:
-    import pulp
-    from pulp.apis import PULP_CBC_CMD
-except ImportError:
-    raise ("please run `pip install pulp` to install")
 
 try:
     from shapely.geometry import Point, box
@@ -40,13 +29,16 @@ except ImportError:
 
 board_width = 11
 board_height = 5
-shaft_width = 0.2
-shadow_offset = (0.1, -0.1)
 
+# save output solutions
 current_dir = os.path.dirname(os.path.abspath(__file__))
 output_dir = os.path.join(current_dir, "solutions")
 os.makedirs(output_dir, exist_ok=True)
 solutions_data_file = os.path.join(output_dir, "solutions.txt")
+
+# for drawing figures
+shaft_width = 0.2
+shadow_offset = (0.1, -0.1)
 
 
 class Piece:
@@ -56,11 +48,12 @@ class Piece:
     its valid placements on the board.
     """
 
-    def __init__(self, data):
-        self.variants = self.get_variants(data)
+    def __init__(self, name, data, freeze=False):
+        self.name = name
+        self.variants = self.get_variants(data, freeze)
         self.placements = []
 
-    def get_variants(self, data):
+    def get_variants(self, data, freeze):
         """
         Generates all unique variants of the piece by applying reflection and rotation.
 
@@ -70,6 +63,9 @@ class Piece:
         Returns:
             list of np.ndarray: List of unique piece variants after transformations.
         """
+        if freeze:
+            return [np.array(data)]
+
         variants = []
         for piece in [data, np.fliplr(data)]:
             for k in range(4):
@@ -94,71 +90,81 @@ class Piece:
                         0 <= cx < board_width and 0 <= cy < board_height
                         for cx, cy in current_placement
                     ):
+                        # Add a virtual cell that is covered by all placements of this piece to
+                        # ensure the piece is used exactly once. The name of the virtual cell is
+                        # not critical, as long as it is hashable and unique for each piece.
+                        # In total, there are 12 virtual cells, one for each piece.
+                        current_placement.append(self.name)
                         self.placements.append(current_placement)
 
         return self.placements
 
 
 # fmt:off
-pink = Piece(
+
+# By restricting the blue piece to a single orientation, we eliminate redundant 
+# solutions that are equivalent under horizontal or vertical reflections. 
+# The blue piece is unique in that all its possible orientations can be obtained 
+# by applying horizontal and vertical reflections.
+blue = Piece("blue", 
+    [[1, 1, 1],
+     [1, 0, 0],
+     [1, 0, 0]], freeze=True
+)
+
+pink = Piece("pink", 
     [[1, 1, 0, 0],
      [0, 1, 1, 1]]
 )
 
-cyan = Piece(
+cyan = Piece("cyan", 
     [[1, 1, 1],
      [1, 1, 0]]
 )
 
-orange = Piece(
+orange = Piece("orange",
     [[1, 0, 0],
      [1, 1, 1],
      [0, 1, 0]]
 )
 
-purple = Piece(
+purple = Piece("purple", 
     [[1, 1, 0],
      [0, 1, 1],
      [0, 0, 1]]
 )
 
-yellow = Piece(
+yellow = Piece("yellow", 
     [[1, 1, 1, 1],
      [0, 1, 0, 0]]
 )
 
-crimson = Piece(
+crimson = Piece("crimson",
     [[1, 1, 0],
      [0, 1, 1]]
 )
 
-green = Piece(
+green = Piece("green", 
     [[1, 1, 1],
      [0, 1, 0]]
 )
 
-blue = Piece(
-    [[1, 1, 1],
-     [1, 0, 0],
-     [1, 0, 0]]
-)
-
-red = Piece(
+red = Piece("red",
     [[1, 1, 1, 1],
      [1, 0, 0, 0]]
 )
 
-olive = Piece(
+olive = Piece("olive",
     [[1, 1, 1],
      [1, 0, 1]]
 )
 
-darkBlue = Piece(
+darkBlue = Piece("darkblue",
     [[1, 1, 1],
      [1, 0, 0]]
 )
 
-skyblue = Piece(
+skyblue = Piece("skyblue",
     [[1, 1],
      [1, 0]]
 )
@@ -169,11 +175,64 @@ pieces = [
     green, blue, red, olive, darkBlue, skyblue
 ]
 
-colors = [
-    "pink", "cyan", "orange", "purple", "yellow", "crimson",
-    "green", "blue", "red", "olive", "darkblue", "skyblue"
-]
 # fmt:on
+
+# A long list contains all placements of the 12 pieces
+all_placements = []
+
+# Save the starting and ending positions of the placements for each piece in the
+# `all_placements`list. This way, we can determine the prototype piece by the index
+# of a piece in `all_placements`
+intervals = []
+for piece in pieces:
+    start = len(all_placements)
+    all_placements += piece.get_all_placements(board_width, board_height)
+    end = len(all_placements)
+    intervals.append((start, end))
+
+
+# The `X``, `Y` dicts name style and the `solve`, `select`, `dselect` functions
+# are coherent with https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html
+
+Y = {i: cells for i, cells in enumerate(all_placements)}
+X = defaultdict(set)
+for i, cells in Y.items():
+    for cell in cells:
+        X[cell].add(i)
+
+
+def solve(X, Y, solution=[]):
+    if not X:
+        yield solution
+    else:
+        c = min(X, key=lambda c: len(X[c]))
+        for r in list(X[c]):
+            solution.append(r)
+            cols = select(X, Y, r)
+            for s in solve(X, Y, solution):
+                yield s
+            deselect(X, Y, r, cols)
+            solution.pop()
+
+
+def select(X, Y, r):
+    cols = []
+    for j in Y[r]:
+        for i in X[j]:
+            for k in Y[i]:
+                if k != j:
+                    X[k].remove(i)
+        cols.append(X.pop(j))
+    return cols
+
+
+def deselect(X, Y, r, cols):
+    for j in reversed(Y[r]):
+        X[j] = cols.pop()
+        for i in X[j]:
+            for k in Y[i]:
+                if k != j:
+                    X[k].add(i)
 
 
 def get_piece_prototype_index(intervals, index):
@@ -189,67 +248,8 @@ def get_piece_prototype_index(intervals, index):
             return i
 
 
-def get_board_configuration(solution):
-    """
-    Converts a binary solution vector into a 2D matrix representing the board configuration.
-
-    Args:
-        solution (list of int): A binary vector where each entry indicates if a piece is used at a given placement.
-
-    Returns:
-        np.ndarray: A matrix representing the board state, with each cell containing the index of the piece.
-
-    Example output:
-        10 10  9  9  9  0  6  6  6  1  1
-         4 10  9 11  9  0  0  6  8  1  1
-         4 10  2 11 11  3  0  7  8  5  1
-         4  4  2  2  3  3  0  7  8  5  5
-         4  2  2  3  3  7  7  7  8  8  5
-    """
-    global all_placements, intervals
-    mat = np.zeros((board_height, board_width), dtype=int)
-    for ind, val in enumerate(solution):
-        if val != 0:
-            piece = all_placements[ind]
-            proto_index = get_piece_prototype_index(intervals, ind)
-            for i, j in piece:
-                mat[j, i] = proto_index
-    return mat
-
-
-def is_duplicate(existing_matrices, candidate_matrix):
-    """Check if a matrix is a duplicate (including rotations and reflections) of existing ones."""
-    transforms = [
-        candidate_matrix,
-        np.fliplr(candidate_matrix),
-        np.flipud(candidate_matrix),
-        np.flipud(np.fliplr(candidate_matrix)),
-    ]
-    return any(
-        np.array_equal(existing, M)
-        for existing in existing_matrices
-        for M in transforms
-    )
-
-
-def save_solution(output_file, mat, index):
-    """
-    Saves the current solution matrix to a file.
-
-    Args:
-        output_file (str): The file path where the solution should be saved.
-        mat (np.ndarray): The matrix representing the solution.
-    """
-    with open(output_file, "a") as f:
-        f.write(f"# solution {index}:\n")
-        for row in mat:
-            f.write(" ".join(f"{element:>2}" for element in row) + "\n")
-        f.write("\n")
-
-
-def plot_solution(solution, file_path):
+def plot_solution(solution, filename):
     """Plots the solution to a SVG file."""
-    global all_placements
     ax = plt.gca()
     ax.clear()
     ax.axis([-0.5, board_width - 0.5, -0.5, board_height - 0.5])
@@ -258,108 +258,51 @@ def plot_solution(solution, file_path):
     ax.set_facecolor("lightgray")
     ax.patch.set_edgecolor("black")
     ax.patch.set_linewidth(3)
-    for ind, val in enumerate(solution):
-        if val != 0:
-            piece = all_placements[ind]
-            proto_index = get_piece_prototype_index(intervals, ind)
-            shapes = []
-            for k in range(len(piece)):
-                A = piece[k]
-                for j in range(k + 1, len(piece)):
-                    B = piece[j]
-                    x1, y1 = A
-                    x2, y2 = B
-                    if abs(x1 - x2) == 1 and y1 == y2 or abs(y1 - y2) == 1 and x1 == x2:
-                        width = abs(x2 - x1) or shaft_width
-                        height = abs(y2 - y1) or shaft_width
-                        lower_left_x = min(x1, x2) - shaft_width / 2
-                        lower_left_y = min(y1, y2) - shaft_width / 2
-                        upper_right_x = lower_left_x + width
-                        upper_right_y = lower_left_y + height
-                        b = box(
-                            lower_left_x, lower_left_y, upper_right_x, upper_right_y
-                        )
-                        shapes.append(b)
-            for i, j in piece:
-                shapes.append(Point(i, j).buffer(0.35))
+    for ind in solution:
+        piece = all_placements[ind][:-1]  # remove the last virtual cell
+        proto_index = get_piece_prototype_index(intervals, ind)
+        shapes = []
+        for k in range(len(piece)):
+            A = piece[k]
+            for j in range(k + 1, len(piece)):
+                B = piece[j]
+                x1, y1 = A
+                x2, y2 = B
+                if abs(x1 - x2) == 1 and y1 == y2 or abs(y1 - y2) == 1 and x1 == x2:
+                    width = abs(x2 - x1) or shaft_width
+                    height = abs(y2 - y1) or shaft_width
+                    lower_left_x = min(x1, x2) - shaft_width / 2
+                    lower_left_y = min(y1, y2) - shaft_width / 2
+                    upper_right_x = lower_left_x + width
+                    upper_right_y = lower_left_y + height
+                    b = box(lower_left_x, lower_left_y, upper_right_x, upper_right_y)
+                    shapes.append(b)
+        for i, j in piece:
+            shapes.append(Point(i, j).buffer(0.35))
 
-            merged_shape = unary_union(shapes)
-            patch = plot_polygon(
-                merged_shape,
-                ax=plt.gca(),
-                facecolor=colors[proto_index],
-                edgecolor="k",
-                add_points=False,
-                linewidth=2,
-            )
-            shadow = Shadow(patch, *shadow_offset, fc="gray", ec="none", lw=0, zorder=-1)
-            ax.add_artist(shadow)
+        merged_shape = unary_union(shapes)
+        patch = plot_polygon(
+            merged_shape,
+            ax=plt.gca(),
+            facecolor=pieces[proto_index].name,
+            edgecolor="k",
+            add_points=False,
+            linewidth=2,
+        )
+        shadow = Shadow(patch, *shadow_offset, fc="gray", ec="none", lw=0, zorder=-1)
+        ax.add_artist(shadow)
 
     plt.gcf().patch.set_linewidth(4)
     plt.gcf().patch.set_edgecolor("black")
-    plt.savefig(file_path, bbox_inches="tight")
+    plt.savefig(os.path.join(output_dir, filename), bbox_inches="tight")
 
 
-# A long list contains all 2140 placements of the 12 pieces
-all_placements = []
+count = 0
+for solution in solve(X, Y, []):
+    count += 1
+    print(f"found {count} solutions", end="\r")
+    # I assume you don't want to plot all one million solutions
+    if count < 100:
+        plot_solution(solution, f"solution-{count:06d}.svg")
 
-# Save the starting and ending positions of the placements for each piece in the
-# `all_placements`list. This way, we can determine the prototype piece by the index
-# of a piece in `all_placements`
-intervals = []
-for piece in pieces:
-    start = len(all_placements)
-    all_placements += piece.get_all_placements(board_width, board_height)
-    end = len(all_placements)
-    intervals.append((start, end))
-
-nvars = len(all_placements)  # One variable for each placement
-neqs = board_width * board_height  # One equation of each cell
-A = np.zeros((neqs, nvars))
-
-# A[i, j] = 1 if the j-th item in `all_placements` covers the i-th cell
-for j, piece in enumerate(all_placements):
-    for col, row in piece:
-        A[col + row * board_width, j] = 1
-
-prob = pulp.LpProblem("Integer_LP", pulp.LpMinimize)
-x = [pulp.LpVariable(f"x_{i}", cat="Binary") for i in range(nvars)]
-
-# Ax = 1 because each cell is covered exactly once by a placement of a piece
-for i in range(neqs):
-    prob += pulp.lpSum(A[i, j] * x[j] for j in range(nvars)) == 1
-
-# Each piece is used only once across all its possible placements
-for start, end in intervals:
-    prob += pulp.lpSum(x[i] for i in range(start, end)) == 1
-
-matrices_found = []
-while True:
-    prob.solve(PULP_CBC_CMD(msg=False))
-
-    if pulp.LpStatus[prob.status] != "Optimal":
-        print(f"No more solutions. Status: {pulp.LpStatus[prob.status]}")
-        break
-
-    current_solution = np.array([int(pulp.value(x[i])) for i in range(nvars)])
-    mat = get_board_configuration(current_solution)
-    if not is_duplicate(matrices_found, mat):
-        matrices_found.append(mat)
-        N = len(matrices_found)
-        print(f"{N} solutions found...", end="\r")
-        plot_solution(
-            current_solution, os.path.join(output_dir, f"solution-{N:04d}.svg")
-        )
-        save_solution(solutions_data_file, mat, N)
-
-    # Exclude the current solution from future searches by adding a constraint.
-    # The x_i's must differ from the current solution in at least one position.
-    prob += (
-        pulp.lpSum(
-            (1 - current_solution[i]) * x[i] + current_solution[i] * (1 - x[i])
-            for i in range(nvars)
-        )
-        >= 1
-    )
-
-print(f"Total number of solutions: {len(matrices_found)}")
+print(f"total number of solutions: {count}")
