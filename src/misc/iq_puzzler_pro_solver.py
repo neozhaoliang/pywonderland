@@ -297,12 +297,10 @@ def plot_solution(solution, filename):
     plt.savefig(os.path.join(output_dir, filename), bbox_inches="tight")
 
 
-count = 0
-for solution in solve(X, Y, []):
-    count += 1
+for count, solution in enumerate(solve(X, Y, []), start=1):
     print(f"found {count} solutions", end="\r")
     # I assume you don't want to plot all one million solutions
-    if count < 100:
+    if count <= 100:
         plot_solution(solution, f"solution-{count:06d}.svg")
 
 print(f"total number of solutions: {count}")
