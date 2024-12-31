@@ -6,7 +6,7 @@ for the IQ Puzzler Pro puzzle by SmartGames:
 
 The goal is to tile an 11x5 board using 12 unique pieces.
 
-The total number of solutions (excluding those symmetric under horizontal or vertical reflections) is 1,082,785.
+The total number of solutions (excluding those symmetric under horizontal or vertical reflections) is 1082785.
 
 The DLX implementation is borrowed from:
 
