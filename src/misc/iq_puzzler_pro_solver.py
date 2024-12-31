@@ -1,5 +1,5 @@
 """
-his script utilizes Knuth's Dancing Links X (DLX) algorithm to find all solutions 
+This script utilizes Knuth's Dancing Links X (DLX) algorithm to find all solutions 
 for the IQ Puzzler Pro puzzle by SmartGames:
 
     https://www.smartgames.eu/uk/one-player-games/iq-puzzler-pro-0
