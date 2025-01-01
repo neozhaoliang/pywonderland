@@ -104,8 +104,9 @@ class Piece:
 
 # By restricting the blue piece to a single orientation, we eliminate redundant 
 # solutions that are equivalent under horizontal or vertical reflections. 
-# The blue piece is unique in that all its possible orientations can be obtained 
-# by applying horizontal and vertical reflections.
+# The blue piece is special in that all its possible orientations can be obtained 
+# by applying horizontal and vertical reflections. You can also use the 'green' or
+# 'skyblue' piece instead.
 blue = Piece("blue", 
     [[1, 1, 1],
      [1, 0, 0],
