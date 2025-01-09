@@ -15,7 +15,7 @@ The DLX implementation is borrowed from:
 
 import os
 from collections import defaultdict
-from itertools import combinations
+from itertools import combinations, chain
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Shadow
@@ -179,14 +179,12 @@ pieces = [
 
 # fmt:on
 
-all_placements = sum(
-    [piece.get_all_placements(board_width, board_height) for piece in pieces], []
-)
-
 # The `X``, `Y` dicts name style and the `solve`, `select`, `dselect` functions
 # are coherent with https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html
 # We can directly use the list `all_placements` for `Y`.
-
+all_placements = list(
+    chain(*(piece.get_all_placements(board_width, board_height) for piece in pieces))
+)
 X = defaultdict(set)
 for i, cells in enumerate(all_placements):
     for cell in cells:
