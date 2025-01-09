@@ -236,9 +236,9 @@ def plot_solution(solution, filename):
     ax.patch.set_edgecolor("black")
     ax.patch.set_linewidth(3)
     for ind in solution:
-        piece_with_color = all_placements[ind]
-        cells = piece_with_color[:-1]
-        name = piece_with_color[-1]
+        piece_with_name = all_placements[ind]
+        cells = piece_with_name[:-1]
+        name = piece_with_name[-1]
         shapes = []
         for A, B in combinations(cells, 2):  # check cells adjacency
             x1, y1 = A
