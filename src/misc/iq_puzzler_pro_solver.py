@@ -15,6 +15,7 @@ The DLX implementation is borrowed from:
 
 import os
 from collections import defaultdict
+from itertools import combinations
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Shadow
@@ -178,19 +179,9 @@ pieces = [
 
 # fmt:on
 
-# A long list contains all placements of the 12 pieces
-all_placements = []
-
-# Save the starting and ending positions of the placements for each piece in the
-# `all_placements`list. This way, we can determine the prototype piece by the index
-# of a piece in `all_placements`
-intervals = []
-for piece in pieces:
-    start = len(all_placements)
-    all_placements += piece.get_all_placements(board_width, board_height)
-    end = len(all_placements)
-    intervals.append((start, end))
-
+all_placements = sum(
+    [piece.get_all_placements(board_width, board_height) for piece in pieces], []
+)
 
 # The `X``, `Y` dicts name style and the `solve`, `select`, `dselect` functions
 # are coherent with https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html
@@ -236,19 +227,6 @@ def deselect(X, Y, r, cols):
                     X[k].add(i)
 
 
-def get_piece_prototype_index(intervals, index):
-    """
-    Retrieves the prototype index for a given piece placement based on its index.
-
-    intervals = [(0, n_1), (n_1, n_2), ..., (n_{k-1}, n_k)]
-    where [n_i, n_{i+1}) is the range of the placements of the i-th piece in the list `all_placements`.
-    return the first i such that n_i <= index < n_{i+1}.
-    """
-    for i, (start, end) in enumerate(intervals):
-        if start <= index < end:
-            return i
-
-
 def plot_solution(solution, filename):
     """Plots the solution to a SVG file."""
     ax = plt.gca()
@@ -260,32 +238,30 @@ def plot_solution(solution, filename):
     ax.patch.set_edgecolor("black")
     ax.patch.set_linewidth(3)
     for ind in solution:
-        piece = all_placements[ind][:-1]  # remove the last virtual cell
-        proto_index = get_piece_prototype_index(intervals, ind)
+        piece_with_color = all_placements[ind]
+        cells = piece_with_color[:-1]
+        color = piece_with_color[-1]
         shapes = []
-        for k in range(len(piece)):
-            A = piece[k]
-            for j in range(k + 1, len(piece)):
-                B = piece[j]
-                x1, y1 = A
-                x2, y2 = B
-                if abs(x1 - x2) == 1 and y1 == y2 or abs(y1 - y2) == 1 and x1 == x2:
-                    width = abs(x2 - x1) or shaft_width
-                    height = abs(y2 - y1) or shaft_width
-                    lower_left_x = min(x1, x2) - shaft_width / 2
-                    lower_left_y = min(y1, y2) - shaft_width / 2
-                    upper_right_x = lower_left_x + width
-                    upper_right_y = lower_left_y + height
-                    b = box(lower_left_x, lower_left_y, upper_right_x, upper_right_y)
-                    shapes.append(b)
-        for i, j in piece:
+        for A, B in combinations(cells, 2):
+            x1, y1 = A
+            x2, y2 = B
+            if abs(x1 - x2) == 1 and y1 == y2 or abs(y1 - y2) == 1 and x1 == x2:
+                width = abs(x2 - x1) or shaft_width
+                height = abs(y2 - y1) or shaft_width
+                lower_left_x = min(x1, x2) - shaft_width / 2
+                lower_left_y = min(y1, y2) - shaft_width / 2
+                upper_right_x = lower_left_x + width
+                upper_right_y = lower_left_y + height
+                b = box(lower_left_x, lower_left_y, upper_right_x, upper_right_y)
+                shapes.append(b)
+        for i, j in cells:
             shapes.append(Point(i, j).buffer(0.35))
 
         merged_shape = unary_union(shapes)
         patch = plot_polygon(
             merged_shape,
             ax=plt.gca(),
-            facecolor=pieces[proto_index].name,
+            facecolor=color,
             edgecolor="k",
             add_points=False,
             linewidth=2,
