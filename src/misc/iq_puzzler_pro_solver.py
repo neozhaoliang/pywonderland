@@ -185,44 +185,44 @@ all_placements = sum(
 
 # The `X``, `Y` dicts name style and the `solve`, `select`, `dselect` functions
 # are coherent with https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html
+# We can directly use the list `all_placements` for `Y`.
 
-Y = {i: cells for i, cells in enumerate(all_placements)}
 X = defaultdict(set)
-for i, cells in Y.items():
+for i, cells in enumerate(all_placements):
     for cell in cells:
         X[cell].add(i)
 
 
-def solve(X, Y, solution=[]):
+def solve(X, solution=[]):
     if not X:
         yield solution
     else:
         c = min(X, key=lambda c: len(X[c]))
         for r in list(X[c]):
             solution.append(r)
-            cols = select(X, Y, r)
-            for s in solve(X, Y, solution):
+            cols = select(X, r)
+            for s in solve(X, solution):
                 yield s
-            deselect(X, Y, r, cols)
+            deselect(X, r, cols)
             solution.pop()
 
 
-def select(X, Y, r):
+def select(X, r):
     cols = []
-    for j in Y[r]:
+    for j in all_placements[r]:
         for i in X[j]:
-            for k in Y[i]:
+            for k in all_placements[i]:
                 if k != j:
                     X[k].remove(i)
         cols.append(X.pop(j))
     return cols
 
 
-def deselect(X, Y, r, cols):
-    for j in reversed(Y[r]):
+def deselect(X, r, cols):
+    for j in reversed(all_placements[r]):
         X[j] = cols.pop()
         for i in X[j]:
-            for k in Y[i]:
+            for k in all_placements[i]:
                 if k != j:
                     X[k].add(i)
 
@@ -240,9 +240,9 @@ def plot_solution(solution, filename):
     for ind in solution:
         piece_with_color = all_placements[ind]
         cells = piece_with_color[:-1]
-        color = piece_with_color[-1]
+        name = piece_with_color[-1]
         shapes = []
-        for A, B in combinations(cells, 2):
+        for A, B in combinations(cells, 2):  # check cells adjacency
             x1, y1 = A
             x2, y2 = B
             if abs(x1 - x2) == 1 and y1 == y2 or abs(y1 - y2) == 1 and x1 == x2:
@@ -261,7 +261,7 @@ def plot_solution(solution, filename):
         patch = plot_polygon(
             merged_shape,
             ax=plt.gca(),
-            facecolor=color,
+            facecolor=name,  # piece name is a valid color
             edgecolor="k",
             add_points=False,
             linewidth=2,
@@ -274,7 +274,7 @@ def plot_solution(solution, filename):
     plt.savefig(os.path.join(output_dir, filename), bbox_inches="tight")
 
 
-for count, solution in enumerate(solve(X, Y, []), start=1):
+for count, solution in enumerate(solve(X, []), start=1):
     print(f"found {count} solutions", end="\r")
     # I assume you don't want to plot all one million solutions
     if count <= 100:
