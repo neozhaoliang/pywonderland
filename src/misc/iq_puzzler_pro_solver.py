@@ -195,19 +195,19 @@ def solve(X, solution=[]):
     if not X:
         yield solution
     else:
-        c = min(X, key=lambda c: len(X[c]))
-        for r in list(X[c]):
-            solution.append(r)
-            cols = select(X, r)
+        # Iterate over the column that is covered by the fewest number of options
+        for row in min(X.values(), key=len):
+            solution.append(row)
+            cols = select(X, row)
             for s in solve(X, solution):
                 yield s
-            deselect(X, r, cols)
+            deselect(X, row, cols)
             solution.pop()
 
 
-def select(X, r):
+def select(X, row):
     cols = []
-    for j in all_placements[r]:
+    for j in all_placements[row]:
         for i in X[j]:
             for k in all_placements[i]:
                 if k != j:
