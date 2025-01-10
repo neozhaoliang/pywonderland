@@ -178,9 +178,10 @@ pieces = [
 
 # fmt:on
 
-# The `X``, `Y` dicts name style and the `solve`, `select`, `dselect` functions
-# are coherent with https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html
-# We can directly use the list `all_placements` for `Y`.
+# The `X`, `Y` dicts and the `solve`, `select`, `dselect` function follow from
+# https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html
+# but with some modifications: we can directly use the list `all_placements` for `Y`.
+# This list is never changed throughout the whole process.
 all_placements = list(
     chain(*(piece.get_all_placements(board_width, board_height) for piece in pieces))
 )
