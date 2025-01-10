@@ -35,7 +35,6 @@ board_height = 5
 current_dir = os.path.dirname(os.path.abspath(__file__))
 output_dir = os.path.join(current_dir, "solutions")
 os.makedirs(output_dir, exist_ok=True)
-solutions_data_file = os.path.join(output_dir, "solutions.txt")
 
 # for drawing figures
 shaft_width = 0.2
