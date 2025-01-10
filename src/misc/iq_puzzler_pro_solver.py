@@ -207,17 +207,19 @@ def solve(X, solution=[]):
 
 def select(X, row):
     cols = []
-    for j in all_placements[row]:
-        for i in X[j]:
-            for k in all_placements[i]:
-                if k != j:
-                    X[k].remove(i)
-        cols.append(X.pop(j))
+    # Find all columns covered by this placement of piece
+    for col in all_placements[row]:
+        # remove other rows that are conflicting with the selected one 
+        for other_rows in X[col]:
+            for k in all_placements[other_rows]:
+                if k != col:
+                    X[k].remove(other_rows)
+        cols.append(X.pop(col))
     return cols
 
 
-def deselect(X, r, cols):
-    for j in reversed(all_placements[r]):
+def deselect(X, row, cols):
+    for j in reversed(all_placements[row]):
         X[j] = cols.pop()
         for i in X[j]:
             for k in all_placements[i]:
