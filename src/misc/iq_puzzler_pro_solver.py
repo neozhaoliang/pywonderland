@@ -195,8 +195,7 @@ def solve(X, solution=[]):
     if not X:
         yield solution
     else:
-        # Iterate over the column that is covered by the fewest number of options
-        for row in min(X.values(), key=len):
+        for row in list(min(X.values(), key=len)):
             solution.append(row)
             cols = select(X, row)
             for s in solve(X, solution):
@@ -207,9 +206,9 @@ def solve(X, solution=[]):
 
 def select(X, row):
     cols = []
-    # Find all columns covered by this placement of piece
+    # Find all columns covered by this placement
     for col in all_placements[row]:
-        # remove other rows that are conflicting with the selected one 
+        # remove other rows that conflict with the selected one 
         for other_rows in X[col]:
             for k in all_placements[other_rows]:
                 if k != col:
