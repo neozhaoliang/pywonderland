@@ -32,8 +32,11 @@ y, x = np.ogrid[
     ymax : ymin : image_height * super_sampling_level * 1j,
     xmin : xmax : image_width * super_sampling_level * 1j,
 ]
-z = x + y * 1j
+grid = x + y * 1j
 
+# The initial data includes the centers of circles 2, 3, 4, and 5,
+# as well as the radius of circle 1.
+# The remaining data are computed based on these.
 z2 = 0.068 - 0.272j
 z3 = 0.426 - 0.672j
 z4 = 0.816 + 0.362j
@@ -187,7 +190,7 @@ def iterate(z):
     return color[0], color[1], color[2]
 
 
-R, G, B = np.asarray(np.frompyfunc(iterate, 1, 3)(z)).astype(float)
+R, G, B = np.asarray(np.frompyfunc(iterate, 1, 3)(grid)).astype(float)
 img = np.stack((R, G, B), axis=2)
 Image.fromarray(np.uint8(img * 255)).resize((image_width, image_height)).save(
     "klein_limit_set.png"
