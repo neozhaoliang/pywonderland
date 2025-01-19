@@ -118,13 +118,21 @@ circles = ((z1, r1), (z2, r2), (z3, r3), (z4, r4), (z5, r5))
 
 @jit
 def region1(z):
-    """The first fundamental domain inside the three circles at z2, z3, z4"""
+    """Determines whether a given complex number lies within the first fundamental domain.
+
+    This domain is defined as the interior of the region surrounded by circles 2, 3 and 4.
+    """
     return abs(z - zr1) < rr1
 
 
 @jit
 def region2(z):
-    """The second fundamental domain surrounded by the four circles at z1, z2, z4, z5."""
+    """Determines whether a given complex number lies within the second fundamental domain.
+
+    This domain is defined by the quadrilateral formed by the tangency points
+    on the circles centered at z1, z2, z4, and z5. The function checks whether
+    the point z lies inside this polygon using cross-product tests.
+    """
     return (
         ((z.imag - u12.imag) * u2412.real - (z.real - u12.real) * u2412.imag) > 0
         and ((z.imag - u24.imag) * u4524.real - (z.real - u24.real) * u4524.imag) > 0
