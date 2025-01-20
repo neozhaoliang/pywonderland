@@ -103,7 +103,7 @@ u12 = GeometryUtils.get_touch_point(z1, r1, z2)
 u15 = GeometryUtils.get_touch_point(z1, r1, z5)
 u45 = GeometryUtils.get_touch_point(z4, r4, z5)
 
-points = (u12, u15, u23, u24, u34, u45)
+vertices = (u12, u15, u23, u24, u34, u45)
 
 zr1 = GeometryUtils.circumcenter(u23, u24, u34)
 rr1 = abs(u24 - zr1)
@@ -169,7 +169,7 @@ def iterate(z):
     color = RED
     scale = 1.0
     for _ in range(1000):
-        for p in points:
+        for p in vertices:
             if scale < 1e3 and abs(z - p) / scale < curve_thickness:
                 return BLACK[0], BLACK[1], BLACK[2]
         found = True
