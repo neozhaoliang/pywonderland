@@ -25,7 +25,7 @@ xmin, xmax = -1, 1
 ymin, ymax = -1, 1
 image_width = 1000
 image_height = 1000
-super_sampling_level = 4
+super_sampling_level = 3
 curve_thickness = 2e-3
 
 y, x = np.ogrid[
@@ -95,6 +95,13 @@ class GeometryUtils:
         return d * r1 + z1
 
 
+@jit
+def cross2d(A, B, C):
+    AB = B - A
+    AC = C - A
+    return AB.real * AC.imag - AB.imag * AC.real
+
+
 z1 = GeometryUtils.find_third_vertex(z2, z5, a, b, c)
 u24 = GeometryUtils.get_touch_point(z2, r2, z4)
 u23 = GeometryUtils.get_touch_point(z2, r2, z3)
@@ -134,10 +141,10 @@ def region2(z):
     the point z lies inside this polygon using cross-product tests.
     """
     return (
-        ((z.imag - u12.imag) * u2412.real - (z.real - u12.real) * u2412.imag) > 0
-        and ((z.imag - u24.imag) * u4524.real - (z.real - u24.real) * u4524.imag) > 0
-        and ((z.imag - u45.imag) * u1545.real - (z.real - u45.real) * u1545.imag) > 0
-        and ((z.imag - u15.imag) * u1215.real - (z.real - u15.real) * u1215.imag) > 0
+        cross2d(z, u12, u24) > 0
+        and cross2d(z, u24, u45) > 0
+        and cross2d(z, u45, u15) > 0
+        and cross2d(z, u15, u12) > 0
     )
 
 
