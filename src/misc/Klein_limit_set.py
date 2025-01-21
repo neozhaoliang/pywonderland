@@ -111,16 +111,9 @@ u15 = GeometryUtils.get_touch_point(z1, r1, z5)
 u45 = GeometryUtils.get_touch_point(z4, r4, z5)
 
 vertices = (u12, u15, u23, u24, u34, u45)
-
+circles = ((z1, r1), (z2, r2), (z3, r3), (z4, r4), (z5, r5))
 zr1 = GeometryUtils.circumcenter(u23, u24, u34)
 rr1 = abs(u24 - zr1)
-
-u2412 = u24 - u12
-u4524 = u45 - u24
-u1545 = u15 - u45
-u1215 = u12 - u15
-
-circles = ((z1, r1), (z2, r2), (z3, r3), (z4, r4), (z5, r5))
 
 
 @jit
