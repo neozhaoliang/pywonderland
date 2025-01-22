@@ -166,7 +166,7 @@ def invert(z, cen, r, scale):
 def equal(z, p, scale):
     """Check if the final location z is near a given cusp p."""
     # This factor k is a magic to fix the artifacts near cusps.
-    k = (1 + abs(p)) / (1 + abs(z))
+    k = 1 / (1 + abs(z))
     return abs(z - p) / scale < curve_thickness * k
 
 
