@@ -163,6 +163,14 @@ def invert(z, cen, r, scale):
 
 
 @jit
+def equal(z, p, scale):
+    """Check if the final location z is near a given cusp p."""
+    # This factor k is a magic to fix the artifacts near cusps.
+    k = (1 + abs(p)) / (1 + abs(z))
+    return abs(z - p) / scale < curve_thickness * k
+
+
+@jit
 def iterate(z):
     w = z
     count = 0
@@ -170,7 +178,7 @@ def iterate(z):
     scale = 1.0
     for _ in range(1000):
         for p in vertices:
-            if scale < 1e3 and abs(z - p) / scale < curve_thickness:
+            if equal(z, p, scale):
                 return BLACK[0], BLACK[1], BLACK[2]
         found = True
         for cen, r in circles:
