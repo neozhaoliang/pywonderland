@@ -26,7 +26,7 @@ ymin, ymax = -1, 1
 image_width = 1000
 image_height = 1000
 super_sampling_level = 3
-curve_thickness = 2e-3
+curve_thickness = 4e-3
 
 y, x = np.ogrid[
     ymax : ymin : image_height * super_sampling_level * 1j,
@@ -166,8 +166,8 @@ def invert(z, cen, r, scale):
 def equal(z, p, scale):
     """Check if the final location z is near a given cusp p."""
     # This factor k is a magic to fix the artifacts near cusps.
-    k = 1 / (1 + abs(z))
-    return abs(z - p) / scale < curve_thickness * k
+    k = abs(z - p)
+    return k * (k + 1) / scale < curve_thickness
 
 
 @jit
