@@ -34,7 +34,7 @@ y_min = -1.6
 for deg in range(1, degree + 1):
     print(f"degree={deg}")
     for poly in tqdm.tqdm(product(*([[-1, 1]] * deg)), total=2**deg, unit=" polys"):
-        for z in np.roots((1,) + poly):
+        for z in np.polynomial.Polynomial((1,) + poly).roots():
             x = (width - 1) * (z.real - x_min) / (x_max - x_min)
             y = (height - 1) * (z.imag - y_min) / (y_max - y_min)
             if 0 <= x <= width - 1 and 0 <= y <= height - 1:
@@ -52,7 +52,7 @@ colors = [
     (0.65, (1, 1, 1)),
     (1.0, (1.0, 1.0, 1.0)),
 ]
-# save the result so that you can tweak the color scheme without recomputing the image
+# save the result so that you can tweak the color scheme without recomputing the roots
 np.save("polyroots.npy", img)
 img = np.load("polyroots.npy").astype(float)
 img = np.log2(img + 1) / np.log2(np.amax(img) + 1)
