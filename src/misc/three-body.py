@@ -146,7 +146,7 @@ void mainImage(in vec2 fragCoord, out vec4 fragColor) {{
         dC = min(dC, fC.x + fade * c3);
     }}
 
-    const float strength = 0.015;
+    const float strength = 0.01;
     color += 1. - exp(-col1 * pow(strength/dA, 4.));
     color += 1. - exp(-col2 * pow(strength/dB, 4.));
     color += 1. - exp(-col3 * pow(strength/dC, 4.));
