@@ -104,9 +104,9 @@ uniform vec2 pointsC[{trail_length}];
 
 out vec4 fragColor;
 
-vec3 glowPoint(vec2 p, vec2 center, float radius, vec3 col) {{
-    float d = 1.0 / max(abs(length(p - center) - radius), 1e-5);
-    d *= .03;
+vec3 glowPoint(vec2 p, vec2 center, vec3 col) {{
+    float d = 1.0 / max(abs(length(p - center)), 1e-5);
+    d *= .08;
     d = pow(d, 2.);
     return 1.0 - exp(-d * col);
 }}
@@ -119,7 +119,6 @@ vec2 sdSegment(vec2 p, vec2 a, vec2 b) {{
     d = max(abs(d), 1e-5);
     return vec2(d, h);
 }}
-
 
 
 void mainImage(in vec2 fragCoord, out vec4 fragColor) {{
@@ -154,9 +153,9 @@ void mainImage(in vec2 fragCoord, out vec4 fragColor) {{
     vec2 endA = pointsA[{trail_length} - 1];
     vec2 endB = pointsB[{trail_length} - 1];
     vec2 endC = pointsC[{trail_length} - 1];
-    color += glowPoint(uv, endA, radius, col1);
-    color += glowPoint(uv, endB, radius, col2);
-    color += glowPoint(uv, endC, radius, col3);
+    color += glowPoint(uv, endA, col1);
+    color += glowPoint(uv, endB, col2);
+    color += glowPoint(uv, endC, col3);
     fragColor = vec4(pow(clamp(color, 0.0, 1.0), vec3(0.45)), 1.0);
 }}
 
