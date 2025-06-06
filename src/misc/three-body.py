@@ -7,9 +7,8 @@ This script was inspired by this post:
 
 https://www.reddit.com/r/physicsgifs/comments/14db21p/a_few_three_body_periodic_orbits/
 
-The author claims he used Blender and Python, but I thought a lightweight animation
-with real-time preview would be better，　so I made the animation below using Vispy
-and GLSL.
+The author claims he used Blender and Python, but I thought a lightweight animation with
+real-time preview would be better, so I made this animation using vispy and custom glsl code.
 
 I've included only two periodic solutions here. More can be found at:
 
@@ -17,12 +16,11 @@ https://observablehq.com/@rreusser/periodic-planar-three-body-orbits
 
 The only things you need to set are the period, the initial positions and velocities.
 
-There are many variables you can tweak to control the visual effect.
-For example, `dt` and `trail_length` both affect the length of the trails.
-When it comes to controlling the glowing effect of the trails, several variables
-in the GLSL shader are also involved. I haven't had time to figure out a universal
-set of parameters that work for all solutions, so you might need to experiment and
-adjust them manually.
+There are many variables you can tweak to control the visual effect. For example, `dt` and
+`trail_length` both affect the length of the trails. When it comes to controlling the glowing
+effect of the trails, several variables in the fragment shader are also involved. I haven't
+had time to figure out a universal config of parameters that work for all solutions, so you might
+need to experiment and adjust them manually.
 """
 
 import numpy as np
@@ -65,8 +63,7 @@ def calc_accel(t, y):
 
 name = "Broucke　A11"
 T = init_conditions[name]["period"]
-r1_0, r2_0, r3_0 = init_conditions[name]["positions"]
-y0 = np.concatenate([r1_0, r2_0, r3_0] + init_conditions[name]["velocities"])
+y0 = np.concatenate(init_conditions[name]["positions"] + init_conditions[name]["velocities"])
 dt = 0.04
 num_steps = int(T / dt) + 1
 t_eval = np.linspace(0, T, num_steps)
@@ -81,7 +78,6 @@ r2 = solution[:, 2:4]
 r3 = solution[:, 4:6]
 
 trail_length = 600
-
 
 vertex_shader = """
 #version 130
