@@ -116,7 +116,6 @@ vec2 sdSegment(vec2 p, vec2 a, vec2 b) {{
     return vec2(d, h);
 }}
 
-
 void mainImage(in vec2 fragCoord, out vec4 fragColor) {{
     vec2 uv = (2.0 * fragCoord - iResolution.xy) / iResolution.y;
     uv *= zoom;
@@ -126,7 +125,6 @@ void mainImage(in vec2 fragCoord, out vec4 fragColor) {{
     vec3 col2 = vec3(1.0, 0.2, 0.13);
     vec3 col3 = vec3(0.1, 0.2, 1.0);
 
-    float radius = 0.03;
     float dA = 1e5, dB = 1e5, dC = 1e5;
     for (int i = 0; i < {trail_length} - 1; i++) {{
         vec2 fA = sdSegment(uv, pointsA[i], pointsA[i+1]);
