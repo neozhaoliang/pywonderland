@@ -119,11 +119,11 @@ vec2 sdSegment(vec2 p, vec2 a, vec2 b) {{
 void mainImage(in vec2 fragCoord, out vec4 fragColor) {{
     vec2 uv = (2.0 * fragCoord - iResolution.xy) / iResolution.y;
     uv *= zoom;
-
     vec3 color = vec3(0.0);
-    vec3 col1 = vec3(0.75, 0.9, 0.12);
-    vec3 col2 = vec3(1.0, 0.2, 0.13);
-    vec3 col3 = vec3(0.1, 0.2, 1.0);
+    
+    const vec3 col1 = vec3(0.1, 1.0, 0.1);
+    const vec3 col2 = vec3(0.9, 0.05, 0.05);
+    const vec3 col3 = vec3(0.1, 0.1, 1.0);
 
     float dA = 1e5, dB = 1e5, dC = 1e5;
     for (int i = 0; i < {trail_length} - 1; i++) {{
@@ -188,8 +188,8 @@ class ThreeBody(app.Canvas):
             self.program[f"pointsA[{i}]"] = r1[indices[i]]
             self.program[f"pointsB[{i}]"] = r2[indices[i]]
             self.program[f"pointsC[{i}]"] = r3[indices[i]]
-        self.frame_index += 1
         self.program.draw("triangles")
+        self.frame_index += 1
 
     def on_timer(self, event):
         self.program["iTime"] = event.elapsed
