@@ -29,12 +29,11 @@ from vispy import app, gloo
 from vispy.io import imsave
 from scipy.integrate import solve_ivp
 
-resolution = (500, 500)
-zoom = 1.0
+resolution = (1000, 1000)
 G = m1 = m2 = m3 = 1.0
 dt = 0.02
-trail_length = 300
-name = "Broucke R4"
+trail_length = 100
+name = "figure 8"
 
 
 def calc_accel(t, y):
@@ -66,7 +65,11 @@ solution = sol.y.T
 r1 = solution[:, 0:2]
 r2 = solution[:, 2:4]
 r3 = solution[:, 4:6]
-center = np.mean(np.vstack((r1, r2, r3)), axis=0).astype(np.float32)
+
+all_points = np.vstack((r1, r2, r3))
+center = np.mean(all_points, axis=0)
+max_x_distance = np.max(np.abs(all_points[:, 0] - center[0]))
+zoom = max_x_distance * 1.2
 
 
 class ThreeBody(app.Canvas):
