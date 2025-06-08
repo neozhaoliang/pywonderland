@@ -10,7 +10,7 @@ https://www.reddit.com/r/physicsgifs/comments/14db21p/a_few_three_body_periodic_
 The author claims he used Blender and Python, but I thought a lightweight animation with
 real-time preview would be better, so I made this animation using vispy and custom glsl code.
 
-I've included only two periodic solutions here. More can be found at:
+I've included only a few periodic solutions here. More can be found at:
 
 https://observablehq.com/@rreusser/periodic-planar-three-body-orbits
 
@@ -23,30 +23,18 @@ had time to figure out a universal config of parameters that work for all soluti
 need to experiment and adjust them manually.
 """
 
+import json
 import numpy as np
 from vispy import app, gloo
 from vispy.io import imsave
 from scipy.integrate import solve_ivp
 
-
+resolution = (500, 500)
+zoom = 1.0
 G = m1 = m2 = m3 = 1.0
-
-init_conditions = {
-    "figure 8": {
-        "period": 6.324449,
-        "positions": [(-1, 0), (1, 0), (0, 0)],
-        "velocities": [
-            (0.347111, 0.532728),
-            (0.347111, 0.532728),
-            (-2 * 0.347111, -2 * 0.532728),
-        ],
-    },
-    "Broucke　A11": {
-        "period": 32.584945,
-        "positions": [(0.0132604844, 0), (1.4157286016, 0), (-1.4289890859, 0)],
-        "velocities": [(0, 1.054151921), (0, -0.2101466639), (0, -0.8440052572)],
-    },
-}
+dt = 0.02
+trail_length = 300
+name = "Broucke R4"
 
 
 def calc_accel(t, y):
@@ -61,10 +49,13 @@ def calc_accel(t, y):
     return np.concatenate([v1, v2, v3, a1, a2, a3])
 
 
-name = "Broucke　A11"
+with open("init_conditions.json") as f:
+    init_conditions = json.load(f)
+
 T = init_conditions[name]["period"]
-y0 = np.concatenate(init_conditions[name]["positions"] + init_conditions[name]["velocities"])
-dt = 0.04
+y0 = np.concatenate(
+    init_conditions[name]["positions"] + init_conditions[name]["velocities"]
+)
 num_steps = int(T / dt) + 1
 t_eval = np.linspace(0, T, num_steps)
 
@@ -72,98 +63,23 @@ sol = solve_ivp(
     calc_accel, [0, T], y0, t_eval=t_eval, method="RK45", rtol=1e-9, atol=1e-9
 )
 solution = sol.y.T
-
 r1 = solution[:, 0:2]
 r2 = solution[:, 2:4]
 r3 = solution[:, 4:6]
-
-trail_length = 600
-
-vertex_shader = """
-#version 130
-in vec2 position;
-void main() {
-    gl_Position = vec4(position, 0.0, 1.0);
-}
-"""
-
-fragment_shader = f"""
-#version 130
-
-uniform vec2 iResolution;
-uniform float iTime;
-uniform float zoom;
-
-uniform vec2 pointsA[{trail_length}];
-uniform vec2 pointsB[{trail_length}];
-uniform vec2 pointsC[{trail_length}];
-
-out vec4 fragColor;
-
-vec3 glowPoint(vec2 p, vec2 center, vec3 col) {{
-    float d = 1.0 / max(abs(length(p - center)), 1e-5);
-    d *= .08;
-    d = pow(d, 2.);
-    return 1.0 - exp(-d * col);
-}}
-
-vec2 sdSegment(vec2 p, vec2 a, vec2 b) {{
-    vec2 pa = p - a;
-    vec2 ba = b - a;
-    float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
-    float d = length(pa - ba * h);
-    d = max(abs(d), 1e-5);
-    return vec2(d, h);
-}}
-
-void mainImage(in vec2 fragCoord, out vec4 fragColor) {{
-    vec2 uv = (2.0 * fragCoord - iResolution.xy) / iResolution.y;
-    uv *= zoom;
-    vec3 color = vec3(0.0);
-    
-    const vec3 col1 = vec3(0.1, 1.0, 0.1);
-    const vec3 col2 = vec3(0.9, 0.05, 0.05);
-    const vec3 col3 = vec3(0.1, 0.1, 1.0);
-
-    float dA = 1e5, dB = 1e5, dC = 1e5;
-    for (int i = 0; i < {trail_length} - 1; i++) {{
-        vec2 fA = sdSegment(uv, pointsA[i], pointsA[i+1]);
-        vec2 fB = sdSegment(uv, pointsB[i], pointsB[i+1]);
-        vec2 fC = sdSegment(uv, pointsC[i], pointsC[i+1]);
-        float c1 = 1. - (fA.y + float(i)) /  float({trail_length});
-        float c2 = 1. - (fB.y + float(i)) /  float({trail_length});
-        float c3 = 1. - (fC.y + float(i)) /  float({trail_length});
-        const float fade = 0.025;
-        dA = min(dA, fA.x + fade * c1);
-        dB = min(dB, fB.x + fade * c2);
-        dC = min(dC, fC.x + fade * c3);
-    }}
-
-    const float strength = 0.01;
-    color += 1. - exp(-col1 * pow(strength/dA, 4.));
-    color += 1. - exp(-col2 * pow(strength/dB, 4.));
-    color += 1. - exp(-col3 * pow(strength/dC, 4.));
-
-    vec2 endA = pointsA[{trail_length} - 1];
-    vec2 endB = pointsB[{trail_length} - 1];
-    vec2 endC = pointsC[{trail_length} - 1];
-    color += glowPoint(uv, endA, col1);
-    color += glowPoint(uv, endB, col2);
-    color += glowPoint(uv, endC, col3);
-    fragColor = vec4(pow(clamp(color, 0.0, 1.0), vec3(0.45)), 1.0);
-}}
-
-void main() {{
-    mainImage(gl_FragCoord.xy, fragColor);
-}}
-"""
+center = np.mean(np.vstack((r1, r2, r3)), axis=0).astype(np.float32)
 
 
 class ThreeBody(app.Canvas):
     def __init__(self):
         app.Canvas.__init__(
-            self, size=(600, 600), title="Three-Body Simulation", keys="interactive"
+            self, size=resolution, title="Three-Body Simulation", keys="interactive"
         )
+        with open("./glsl/default.vert", "r") as f:
+            vertex_shader = f.read()
+
+        with open("./glsl/3body.frag", "r") as f:
+            fragment_shader = f.read().replace("trail_length", str(trail_length))
+
         self.program = gloo.Program(vertex_shader, fragment_shader)
         self.program["position"] = [
             [-1, -1],
@@ -175,7 +91,8 @@ class ThreeBody(app.Canvas):
         ]
         self.program["iResolution"] = self.size
         self.program["iTime"] = 0.0
-        self.program["zoom"] = 1.8
+        self.program["zoom"] = zoom
+        self.program["center"] = center
         self.timer = app.Timer("auto", connect=self.on_timer, start=False)
         self.frame_index = 0
 
@@ -195,13 +112,13 @@ class ThreeBody(app.Canvas):
         self.program["iTime"] = event.elapsed
         self.update()
 
-    def save_screenshot(self):
+    def save_screenshot(self, fname):
         img = gloo.util._screenshot((0, 0, self.size[0], self.size[1]))
-        imsave("capture.png", img)
+        imsave(fname, img)
 
     def on_key_press(self, event):
         if event.key == "Enter":
-            self.save_screenshot()
+            self.save_screenshot("capture.png")
 
     def on_resize(self, event):
         self.program["iResolution"] = event.size
