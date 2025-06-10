@@ -20,11 +20,11 @@ The purpose of this project is to show the beauty of math with python by renderi
     [[Book]](https://www.routledge.com/Handbook-of-Computational-Group-Theory/Holt-Eick-OBrien/p/book/9780367659448) | [[Doc]](https://pywonderland.com/polytopes)
 
     <p align="center">
-    <img src="images/polytopes.png" width=600>
+    <img src="https://neozhaoliang.github.io/assets/polytopes.png" width=600>
     </p>
 
     <p align="center">
-    <img src="images/polyhedra_mirrors.png" width=600>
+    <img src="https://neozhaoliang.github.io/assets/polyhedra_mirrors.png" width=600>
     </p>
 
 
@@ -33,13 +33,13 @@ The purpose of this project is to show the beauty of math with python by renderi
     + When a Möbius transformation is an isometry of the hyperbolic disk, it must be of elliptic/parabolic/hyperbolic type, and it's elliptic/parabolic/hyperbolic if and only if it's a composition of reflections about two intersecting/parallel/hyper-parallel mirrors.
 
         <p align="center">
-        <img src="images/mobius.png" width=600>
+        <img src="https://neozhaoliang.github.io/assets/mobius.png" width=600>
         </p>
 
     + A Möbius transformation can be uniquely extended to an isometry of the hyperbolic upper-half space.
 
         <p align="center">
-        <img src="images/h3_isometry.png" width=600>
+        <img src="https://neozhaoliang.github.io/assets/h3_isometry.png" width=600>
         </p>
 
 + Coxeter automata and 2D Uniform tilings
@@ -47,7 +47,7 @@ The purpose of this project is to show the beauty of math with python by renderi
     [[Casselman's Paper]](https://personal.math.ubc.ca/~cass/research/pdf/roots.pdf) | [[Doc]](https://pywonderland.com/uniform-tilings/)
 
     <p align="center">
-    <img src="images/hyperbolic-tilings.png" width=600>
+    <img src="https://neozhaoliang.github.io/assets/hyperbolic-tilings.png" width=600>
     </p>
 
 + GIF animations of maze and cellular automata
@@ -58,8 +58,8 @@ The purpose of this project is to show the beauty of math with python by renderi
 
     |    |    |
     |:---:|:---:|
-    | ![](images/kruskal.gif) | ![](images/wilson-bfs.gif)    |
-    | ![](images/gosperglidergun.gif) | ![](images/langton-ant.gif) |
+    | ![](https://neozhaoliang.github.io/assets/kruskal.gif) | ![](https://neozhaoliang.github.io/assets/wilson-bfs.gif)    |
+    | ![](https://neozhaoliang.github.io/assets/gosperglidergun.gif) | ![](https://neozhaoliang.github.io/assets/langton-ant.gif) |
 
 
 + Domino shuffling algorithm
@@ -69,7 +69,7 @@ The purpose of this project is to show the beauty of math with python by renderi
     [[Mathologer Video]](https://www.youtube.com/watch?v=Yy7Q8IWNfHM) | [[Paper]](https://arxiv.org/abs/math/9201305)
 
     <p align="center">
-    <img src="images/dominoshuffling.gif" width=400>
+    <img src="https://neozhaoliang.github.io/assets/dominoshuffling.gif" width=400>
     </p>
 
 + Propp and Wilson's coupling from the past algorithm
@@ -77,7 +77,7 @@ The purpose of this project is to show the beauty of math with python by renderi
     [[Book](https://www.cambridge.org/core/books/finite-markov-chains-and-algorithmic-applications/EE10AF27811B43B02E05905DC6413467)]
 
     <p align="center">
-    <img src="images/random_lozenge_tiling.svg" width=400>
+    <img src="https://neozhaoliang.github.io/assets/random_lozenge_tiling.svg" width=400>
     </p>
 
 + Catacaustics of plane curves
@@ -89,7 +89,7 @@ The purpose of this project is to show the beauty of math with python by renderi
     |   |   |
     |:---:|:---:|
     | Cardioid as a catacaustic of circle | Nephroid as a catacaustic of cardioid |
-    |![](images/caustics_cardioid.png) | ![](images/caustics_nephroid.png)|
+    |![](https://neozhaoliang.github.io/assets/caustics_cardioid.png) | ![](https://neozhaoliang.github.io/assets/caustics_nephroid.png)|
 
 
 + Coxeter element and Coxeter plane
@@ -101,7 +101,7 @@ The purpose of this project is to show the beauty of math with python by renderi
     |   |    |
     |:---:|:---:|
     | E8   |  5-Cube   |
-    | <img src="images/e8.svg" width=300> | <img src="images/5-cube.svg" width=300> |
+    | <img src="https://neozhaoliang.github.io/assets/e8.svg" width=300> | <img src="https://neozhaoliang.github.io/assets/5-cube.svg" width=300> |
 
 
 + Assassin vs Bodyguards
@@ -113,7 +113,7 @@ The purpose of this project is to show the beauty of math with python by renderi
     [[PBS Video](https://www.youtube.com/watch?v=a7gp9c2p0UQ)] | [[math3ma blog](https://www.math3ma.com/blog/is-the-square-a-secure-polygon)]
 
     <p align="center">
-    <img src="images/assassin_vs_bodyguards.png" width=600>
+    <img src="https://neozhaoliang.github.io/assets/assassin_vs_bodyguards.png" width=600>
     </p>
 
 
