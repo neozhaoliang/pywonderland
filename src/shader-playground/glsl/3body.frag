@@ -12,15 +12,20 @@ uniform vec2 pointsC[trail_length];
 
 out vec4 fragColor;
 
-const vec3 col1 = vec3(0.1, 1.0, 0.1);
-const vec3 col2 = vec3(0.9, 0.05, 0.05);
-const vec3 col3 = vec3(0.02, 0.02, 0.8);
+const vec3 colA = vec3(0.1, 0.9, 0.1);
+const vec3 colB = vec3(0.9, 0.05, 0.05);
+const vec3 colC = vec3(0.02, 0.02, 0.8);
+
+const float lumA = dot(colA, vec3(0.299, 0.587, 0.114));
+const float lumB = dot(colB, vec3(0.299, 0.587, 0.114));
+const float lumC = dot(colC, vec3(0.299, 0.587, 0.114));
 
 const float fade = 0.025;
 
-vec3 glowPoint(vec2 p, vec2 center, vec3 col, float strength) {
+vec3 glowPoint(vec2 p, vec2 center, vec3 col, float lum, float strength) {
     float d = max(abs(length(p - center)), 1e-5);
     d = pow(strength / d, 2.);
+    d /= lum;
     return 1.0 - exp(-d * col);
 }
 
@@ -52,19 +57,25 @@ void mainImage(in vec2 fragCoord, out vec4 fragColor) {
         dB = min(dB, fB.x + fade * c2);
         dC = min(dC, fC.x + fade * c3);
     }
-    const float trail_strength = 0.01;
-    color += 1. - exp(-col1 * pow(trail_strength * 0.67 / dA, 4.));
-    color += 1. - exp(-col2 * pow(trail_strength * 1. / dB, 4.));
-    color += 1. - exp(-col3 * pow(trail_strength * 1.5 / dC, 4.));
+    
+    const float trail_strength = 0.008;
+
+    dA = pow(trail_strength / dA, 4.) / lumA;
+    dB = pow(trail_strength / dB, 4.) / lumB;
+    dC = pow(trail_strength / dC, 4.) / lumC;
+
+    color += 1. - exp(-colA * dA);
+    color += 1. - exp(-colB * dB);
+    color += 1. - exp(-colC * dC);
 
     vec2 endA = pointsA[trail_length - 1];
     vec2 endB = pointsB[trail_length - 1];
     vec2 endC = pointsC[trail_length - 1];
 
-    const vec3 particle_strengths = vec3(0.02, 0.08, 0.1);
-    color += glowPoint(uv, endA, col1, particle_strengths.x);
-    color += glowPoint(uv, endB, col2, particle_strengths.y);
-    color += glowPoint(uv, endC, col3, particle_strengths.z);
+    const float particle_strength = 0.06;
+    color += glowPoint(uv, endA, colA, lumA, particle_strength);
+    color += glowPoint(uv, endB, colB, lumB, particle_strength);
+    color += glowPoint(uv, endC, colC, lumC, particle_strength);
 
     fragColor = vec4(pow(clamp(color, 0.0, 1.0), vec3(0.4545)), 1.0);
 }
