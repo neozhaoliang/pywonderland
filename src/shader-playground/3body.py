@@ -48,7 +48,7 @@ def calc_accel(t, y):
     return np.concatenate([v1, v2, v3, a1, a2, a3])
 
 
-with open("init_conditions.json") as f:
+with open("init_conditions.json", encoding="utf-8") as f:
     init_conditions = json.load(f)
 
 T = init_conditions[name]["period"]
