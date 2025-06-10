@@ -72,7 +72,7 @@ void mainImage(in vec2 fragCoord, out vec4 fragColor) {
     vec2 endB = pointsB[trail_length - 1];
     vec2 endC = pointsC[trail_length - 1];
 
-    const float particle_strength = 0.06;
+    const float particle_strength = 0.04;
     color += glowPoint(uv, endA, colA, lumA, particle_strength);
     color += glowPoint(uv, endB, colB, lumB, particle_strength);
     color += glowPoint(uv, endC, colC, lumC, particle_strength);
