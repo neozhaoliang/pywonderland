@@ -23,11 +23,6 @@ The purpose of this project is to show the beauty of math with python by renderi
     <img src="https://neozhaoliang.github.io/assets/polytopes.png" width=600>
     </p>
 
-    <p align="center">
-    <img src="https://neozhaoliang.github.io/assets/polyhedra_mirrors.png" width=600>
-    </p>
-
-
 + Möbius transformations
 
     + When a Möbius transformation is an isometry of the hyperbolic disk, it must be of elliptic/parabolic/hyperbolic type, and it's elliptic/parabolic/hyperbolic if and only if it's a composition of reflections about two intersecting/parallel/hyper-parallel mirrors.
@@ -116,6 +111,11 @@ The purpose of this project is to show the beauty of math with python by renderi
     <img src="https://neozhaoliang.github.io/assets/assassin_vs_bodyguards.png" width=600>
     </p>
 
++ Periodic solutions of the three-body problem
+
+    <p align="center">
+    <video src="https://neozhaoliang.github.io/assets/3body.mp4" controls></video>
+    </p>
 
 # How to use
 
