@@ -114,7 +114,7 @@ The purpose of this project is to show the beauty of math with python by renderi
 + Periodic solutions of the three-body problem
 
     <p align="center">
-    <video src="https://neozhaoliang.github.io/assets/3body.mp4" controls></video>
+    https://neozhaoliang.github.io/assets/3body.mp4
     </p>
 
 # How to use
