@@ -24,7 +24,7 @@ def plot_circle(ax, center, radius, **style):
     return patch
 
 
-def plot_cline(ax, C, line_style, circle_style):
+def plot_cline(ax, C, line_style=dict(ec="k", lw=1), circle_style=dict(ec="k", lw=1, fc="none")):
     cline_type, center, radius = C.get_params()
     if cline_type == "circle":
         return plot_circle(ax, center, radius, **circle_style)
