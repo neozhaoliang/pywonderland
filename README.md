@@ -79,8 +79,6 @@ The purpose of this project is to show the beauty of math with python by renderi
 
     Use sympy to compute catacaustics of parametric and implicit curves.
 
-    [[Doc](https://pywonderland.com/catacaustics)]
-
     |   |   |
     |:---:|:---:|
     | Cardioid as a catacaustic of circle | Nephroid as a catacaustic of cardioid |
@@ -91,7 +89,7 @@ The purpose of this project is to show the beauty of math with python by renderi
 
     We explain how to project the E8 root system to its Coxeter plane.
 
-    [[Casselman's Paper](https://personal.math.ubc.ca/~cass/research/pdf/Element.pdf)] | [[Doc](https://pywonderland.com/e8-and-coxeter-plane/)]
+    [[Casselman's Paper](https://personal.math.ubc.ca/~cass/research/pdf/Element.pdf)]
 
     |   |    |
     |:---:|:---:|
@@ -114,7 +112,15 @@ The purpose of this project is to show the beauty of math with python by renderi
 + Periodic solutions of the three-body problem
 
     <p align="center">
-    https://neozhaoliang.github.io/assets/3body.mp4
+    <img src="https://neozhaoliang.github.io/assets/3body.png" width=600>
+    </p>
+
++ The beauty of roots
+
+    [[John Baez's blog post](https://math.ucr.edu/home/baez/roots/)]
+
+    <p align="center">
+    <img src="https://neozhaoliang.github.io/assets/roots.jpg" width=600>
     </p>
 
 # How to use
