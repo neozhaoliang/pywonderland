@@ -1,3 +1,9 @@
+"""
+Bianchi circle packings. see
+
+https://sites.math.rutgers.edu/~alexk/crystallographic/
+"""
+
 import sympy as sp
 import numpy as np
 import matplotlib as mpl
