@@ -6,8 +6,8 @@ uniquely corresponds to a pair of Standard Young Tableaux (P, Q) of the
 same shape.
 
 Usage:
-    manimgl rsk.py RSK          # Run the insertion process
-    manimgl rsk.py RSKInverse   # Run the inverse/recovery process
+    manimgl rsk_correspondence.py RSK          # Run the insertion process
+    manimgl rsk_correspondence.py RSKInverse   # Run the inverse/recovery process
 """
 
 from copy import deepcopy
