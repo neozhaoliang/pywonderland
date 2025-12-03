@@ -1,5 +1,6 @@
 jupyter
 loguru
+manimgl
 matplotlib
 numba
 numpy
