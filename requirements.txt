@@ -6,7 +6,7 @@ numba
 numpy
 pillow
 pycairo
-pyglet==1.5.27
+pyglet
 pyyaml
 scipy
 sortedcontainers

@@ -10,6 +10,7 @@ For how to use mouse and keyboard to play with the simulation see the doc below.
 
 :copyright (c) 2017 by Zhao Liang.
 """
+
 from __future__ import division
 
 import sys
@@ -81,7 +82,6 @@ def parse(params):
 
 
 class GrayScott(pyglet.window.Window):
-
     """
     ----------------------------------------------------------
     | This simulation uses mouse and keyboard to control the |
@@ -139,7 +139,9 @@ class GrayScott(pyglet.window.Window):
         self.reaction_shader = Shader(
             ["./glsl/default.vert"], ["./glsl/grayscott/compute.frag"]
         )
-        self.render_shader = Shader(["./glsl/default.vert"], ["./glsl/grayscott/render.frag"])
+        self.render_shader = Shader(
+            ["./glsl/default.vert"], ["./glsl/grayscott/render.frag"]
+        )
         self.tex_width, self.tex_height = int(width / scale), int(height / scale)
 
         try:
@@ -187,8 +189,6 @@ class GrayScott(pyglet.window.Window):
 
         # initialize the two shaders
         with self.reaction_shader:
-            self.reaction_shader.vertex_attrib("position", [-1, -1, 1, -1, -1, 1, 1, 1])
-            self.reaction_shader.vertex_attrib("texcoord", [0, 0, 1, 0, 0, 1, 1, 1])
             self.reaction_shader.uniformi("iChannel0", 0)
             self.reaction_shader.uniformi("mask_texture", 1)
             self.reaction_shader.uniformf(
@@ -198,8 +198,6 @@ class GrayScott(pyglet.window.Window):
             self.reaction_shader.uniformf("params", *ALL_SPECIES[self.species])
 
         with self.render_shader:
-            self.render_shader.vertex_attrib("position", [-1, -1, 1, -1, -1, 1, 1, 1])
-            self.render_shader.vertex_attrib("texcoord", [0, 0, 1, 0, 0, 1, 1, 1])
             self.render_shader.uniformi("iChannel0", 0)
             self.render_shader.uniformfv("palette", 5, self.palette)
 
@@ -224,11 +222,11 @@ class GrayScott(pyglet.window.Window):
             gl.glViewport(0, 0, self.tex_width, self.tex_height)
             with self.fbo:
                 with self.reaction_shader:
-                    gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
+                    self.reaction_shader.draw()
 
             gl.glViewport(0, 0, self.width, self.height)
             with self.render_shader:
-                gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
+                self.render_shader.draw()
                 self.frame_count += 1
 
         if self.video_on and (self.frame_count % self.sample_rate == 0):

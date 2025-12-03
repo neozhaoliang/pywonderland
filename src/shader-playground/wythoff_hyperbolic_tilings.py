@@ -11,7 +11,9 @@ Again Matt's program has lots of rich features and a great UI!
 
 Press "ENTER" to save screenshots and "Esc" to escape.
 """
+
 import sys
+
 sys.path.append("../")
 
 import argparse
@@ -59,7 +61,7 @@ class Wythoff(pyglet.window.Window):
             ["./glsl/default.vert"],
             [
                 "./glsl/wythoff_hyperbolic/common.frag",
-                "./glsl/wythoff_hyperbolic/BufferA.frag"
+                "./glsl/wythoff_hyperbolic/BufferA.frag",
             ],
         )
 
@@ -67,14 +69,14 @@ class Wythoff(pyglet.window.Window):
             ["./glsl/default.vert"],
             [
                 "./glsl/wythoff_hyperbolic/common.frag",
-                "./glsl/wythoff_hyperbolic/main.frag"
+                "./glsl/wythoff_hyperbolic/main.frag",
             ],
         )
 
         self.font_texture = create_image_texture(FONT_TEXTURE)
         self.noise_texture = create_image_texture(NOISE_TEXTURE)
-        self.iChannel0 = pyglet.image.Texture.create_for_size(
-            gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F
+        self.iChannel0 = pyglet.image.Texture.create(
+            width, height, internalformat=gl.GL_RGBA32F
         )
         gl.glActiveTexture(gl.GL_TEXTURE0)
         gl.glBindTexture(self.iChannel0.target, self.iChannel0.id)
@@ -88,7 +90,6 @@ class Wythoff(pyglet.window.Window):
 
         # initialize the shaders
         with self.shaderA:
-            self.shaderA.vertex_attrib("position", [-1, -1, 1, -1, -1, 1, 1, 1])
             self.shaderA.uniformf("iResolution", width, height, 0.0)
             self.shaderA.uniformf("iTime", 0.0)
             self.shaderA.uniformf("iMouse", 0.0, 0.0, 0.0, 0.0)
@@ -99,7 +100,6 @@ class Wythoff(pyglet.window.Window):
             self.shaderA.uniformf("iTimeDelta", 0)
 
         with self.shaderB:
-            self.shaderB.vertex_attrib("position", [-1, -1, 1, -1, -1, 1, 1, 1])
             self.shaderB.uniformf("iResolution", width, height, 0.0)
             self.shaderB.uniformf("iTime", 0.0)
             self.shaderB.uniformf("iMouse", 0.0, 0.0, 0.0, 0.0)
@@ -123,19 +123,18 @@ class Wythoff(pyglet.window.Window):
                 self.shaderA.uniformf("iTime", itime)
                 self.shaderA.uniformf("iDate", *idate)
                 self.shaderA.uniformf("iTimeDelta", delta)
-                gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
+                self.shaderA.draw()
 
         with self.shaderB:
             self.shaderB.uniformf("iTime", itime)
             self.shaderB.uniformf("iDate", *idate)
             self.shaderB.uniformf("iTimeDelta", delta)
-            gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
+            self.shaderB.draw()
 
         self._frame_count += 1
 
     def on_key_press(self, symbol, modifiers):
-        """Keyboard interface.
-        """
+        """Keyboard interface."""
         if symbol == key.ENTER:
             self.save_screenshot()
 
@@ -148,8 +147,7 @@ class Wythoff(pyglet.window.Window):
                 self.shaderA.uniformf("iMouse", x, y, x, y)
 
     def on_mouse_release(self, x, y, button, modifiers):
-        """Don't forget reset 'iMouse' when mouse is released.
-        """
+        """Don't forget reset 'iMouse' when mouse is released."""
         with self.shaderA:
             self.shaderA.uniformf("iMouse", 0, 0, 0, 0)
 
@@ -178,8 +176,7 @@ class Wythoff(pyglet.window.Window):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-size", metavar="s", type=str, default="800x480",
-        help="window size in pixels"
+        "-size", metavar="s", type=str, default="800x480", help="window size in pixels"
     )
     args = parser.parse_args()
     w, h = [int(x) for x in args.size.split("x")]

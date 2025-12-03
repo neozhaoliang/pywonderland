@@ -44,7 +44,7 @@ def draw_batch(
     cocluster_circles,
     xlim,
     ylim,
-    rlabel_min=0.01,
+    rlabel_min=0.005,
     bend_scale=1.0,
     bend_texts=None,
     lw_min=0.2,

@@ -1,6 +1,7 @@
 """
 Helper functions for creating textures from images or numpy arrays.
 """
+
 import ctypes as ct
 
 import pyglet
@@ -9,12 +10,9 @@ from PIL import Image, ImageOps
 
 
 def create_texture_from_ndarray(array):
-    """Create a 2D texture from a numpy ndarray.
-    """
+    """Create a 2D texture from a numpy ndarray."""
     height, width = array.shape[:2]
-    texture = pyglet.image.Texture.create_for_size(
-        gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F
-    )
+    texture = pyglet.image.Texture.create(width, height, internalformat=gl.GL_RGBA32F)
     gl.glBindTexture(texture.target, texture.id)
     gl.glTexImage2D(
         texture.target,
@@ -76,9 +74,7 @@ def create_cubemap_texture(imgfiles):
 
     # bind it to `GL_TEXTURE_CUBE_MAP` and set the filter and wrap mode
     gl.glBindTexture(gl.GL_TEXTURE_CUBE_MAP, cubemap)
-    gl.glTexParameteri(
-        gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_MAG_FILTER, gl.GL_LINEAR
-    )
+    gl.glTexParameteri(gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_MAG_FILTER, gl.GL_LINEAR)
     gl.glTexParameteri(
         gl.GL_TEXTURE_CUBE_MAP, gl.GL_TEXTURE_MIN_FILTER, gl.GL_LINEAR_MIPMAP_LINEAR
     )

@@ -7,7 +7,9 @@ Exported from Matt Zucker's excellent shadertoy program at
 
     "https://www.shadertoy.com/view/Md3yRB"
 """
+
 import sys
+
 sys.path.append("../")
 
 import os
@@ -29,7 +31,6 @@ GLSL_DIR = os.path.join(os.getcwd(), "glsl/wythoff")
 
 
 class Wythoff(pyglet.window.Window):
-
     """
     User interface:
       1. use mouse click to play with the ui.
@@ -63,24 +64,33 @@ class Wythoff(pyglet.window.Window):
         # shader A draws the UI
         self.shaderA = Shader(
             [os.path.join(GLSL_DIR, "wythoff.vert")],
-            [os.path.join(GLSL_DIR, "common.frag"),
-             os.path.join(GLSL_DIR, "BufferA.frag")])
+            [
+                os.path.join(GLSL_DIR, "common.frag"),
+                os.path.join(GLSL_DIR, "BufferA.frag"),
+            ],
+        )
         # shadwr B draws the polyhedra
         self.shaderB = Shader(
             [os.path.join(GLSL_DIR, "wythoff.vert")],
-            [os.path.join(GLSL_DIR, "common.frag"),
-             os.path.join(GLSL_DIR, "BufferB.frag")])
+            [
+                os.path.join(GLSL_DIR, "common.frag"),
+                os.path.join(GLSL_DIR, "BufferB.frag"),
+            ],
+        )
         # shader C puts them together
         self.shaderC = Shader(
             [os.path.join(GLSL_DIR, "wythoff.vert")],
-            [os.path.join(GLSL_DIR, "common.frag"),
-             os.path.join(GLSL_DIR, "main.frag")])
-        self.font_texture = create_image_texture(FONT_TEXTURE)
-        self.iChannel0 = pyglet.image.Texture.create_for_size(
-            gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F
+            [
+                os.path.join(GLSL_DIR, "common.frag"),
+                os.path.join(GLSL_DIR, "main.frag"),
+            ],
         )
-        self.iChannel1 = pyglet.image.Texture.create_for_size(
-            gl.GL_TEXTURE_2D, width, height, gl.GL_RGBA32F
+        self.font_texture = create_image_texture(FONT_TEXTURE)
+        self.iChannel0 = pyglet.image.Texture.create(
+            width, height, internalformat=gl.GL_RGBA32F
+        )
+        self.iChannel1 = pyglet.image.Texture.create(
+            width, height, internalformat=gl.GL_RGBA32F
         )
         gl.glActiveTexture(gl.GL_TEXTURE0)
         gl.glBindTexture(self.iChannel0.target, self.iChannel0.id)
@@ -99,7 +109,6 @@ class Wythoff(pyglet.window.Window):
         # initialize the shaders
 
         with self.shaderA:
-            self.shaderA.vertex_attrib("position", [-1, -1, 1, -1, -1, 1, 1, 1])
             self.shaderA.uniformf("iResolution", width, height, 0.0)
             self.shaderA.uniformf("iTime", 0.0)
             self.shaderA.uniformf("iMouse", 0.0, 0.0, 0.0, 0.0)
@@ -107,7 +116,6 @@ class Wythoff(pyglet.window.Window):
             self.shaderA.uniformi("iFrame", 0)
 
         with self.shaderB:
-            self.shaderB.vertex_attrib("position", [-1, -1, 1, -1, -1, 1, 1, 1])
             self.shaderB.uniformf("iResolution", width, height, 0.0)
             self.shaderB.uniformf("iTime", 0.0)
             self.shaderB.uniformf("iMouse", 0.0, 0.0, 0.0, 0.0)
@@ -115,7 +123,6 @@ class Wythoff(pyglet.window.Window):
             self.shaderB.uniformi("AA", self.aa)
 
         with self.shaderC:
-            self.shaderC.vertex_attrib("position", [-1, -1, 1, -1, -1, 1, 1, 1])
             self.shaderC.uniformf("iResolution", width, height, 0.0)
             self.shaderC.uniformf("iTime", 0.0)
             self.shaderC.uniformf("iMouse", 0.0, 0.0, 0.0, 0.0)
@@ -132,16 +139,16 @@ class Wythoff(pyglet.window.Window):
             with self.shaderA:
                 self.shaderA.uniformf("iTime", now)
                 self.shaderA.uniformi("iFrame", self._frame_count)
-                gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
+                self.shaderA.draw()
 
         with self.bufferB:
             with self.shaderB:
                 self.shaderB.uniformf("iTime", now)
-                gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
+                self.shaderB.draw()
 
         with self.shaderC:
             self.shaderC.uniformf("iTime", now)
-            gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
+            self.shaderC.draw()
 
         if self.video_on and (self._frame_count % self.sample_rate == 0):
             self.write_video_frame()
@@ -149,8 +156,7 @@ class Wythoff(pyglet.window.Window):
         self._frame_count += 1
 
     def on_key_press(self, symbol, modifiers):
-        """Keyboard interface.
-        """
+        """Keyboard interface."""
         if symbol == key.ENTER:
             self.save_screenshot()
 
@@ -166,8 +172,7 @@ class Wythoff(pyglet.window.Window):
                 self.shaderA.uniformf("iMouse", x, y, x, y)
 
     def on_mouse_release(self, x, y, button, modifiers):
-        """Don't forget reset 'iMouse' when mouse is released.
-        """
+        """Don't forget reset 'iMouse' when mouse is released."""
         with self.shaderA:
             self.shaderA.uniformf("iMouse", 0, 0, 0, 0)
 
@@ -243,15 +248,10 @@ class Wythoff(pyglet.window.Window):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-size", metavar="s", type=str, default="800x480",
-        help="window size in pixels"
+        "-size", metavar="s", type=str, default="800x480", help="window size in pixels"
     )
-    parser.add_argument(
-        "-aa", type=int, default=2, help="antialiasing level"
-    )
-    parser.add_argument(
-        "-video_rate", type=int, default=16, help="fps of the video"
-    )
+    parser.add_argument("-aa", type=int, default=2, help="antialiasing level")
+    parser.add_argument("-video_rate", type=int, default=16, help="fps of the video")
     parser.add_argument(
         "-sample_rate",
         type=int,

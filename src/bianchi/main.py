@@ -209,12 +209,13 @@ def main(
 if __name__ == "__main__":
     # Example: Bi(7) packing
     main(
-        m=7,
-        cluster_1based=[3, 4],
-        depth=40,
+        m=5,
+        cluster_1based=[3],
+        depth=100,
         xlim=(-1.5, 1.5),
-        ylim=(-0.1, 1.4),
-        figsize=(6, 3),
+        ylim=(-0.1, 2.4),
+        figsize=(6, 5),
+        max_circles=2000000,
     )
 
     # Example: Bi(14) packing (rotated layout)
