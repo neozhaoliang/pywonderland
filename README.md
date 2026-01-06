@@ -91,12 +91,10 @@ The purpose of this project is to show the beauty of math with python by renderi
 
     [[Casselman's Paper](https://personal.math.ubc.ca/~cass/research/pdf/Element.pdf)]
 
-    <p align="center">
     |   |    |
     |:---:|:---:|
     | E8   |  5-Cube   |
     | <img src="https://neozhaoliang.github.io/assets/e8.svg" width=300> | <img src="https://neozhaoliang.github.io/assets/5-cube.svg" width=300> |
-    </p>
 
 
 + Assassin vs Bodyguards
