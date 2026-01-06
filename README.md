@@ -91,10 +91,12 @@ The purpose of this project is to show the beauty of math with python by renderi
 
     [[Casselman's Paper](https://personal.math.ubc.ca/~cass/research/pdf/Element.pdf)]
 
+    <p align="center">
     |   |    |
     |:---:|:---:|
     | E8   |  5-Cube   |
     | <img src="https://neozhaoliang.github.io/assets/e8.svg" width=300> | <img src="https://neozhaoliang.github.io/assets/5-cube.svg" width=300> |
+    </p>
 
 
 + Assassin vs Bodyguards
@@ -122,6 +124,23 @@ The purpose of this project is to show the beauty of math with python by renderi
     <p align="center">
     <img src="https://neozhaoliang.github.io/assets/roots.jpg" width=600>
     </p>
+
++ Circle packings from Bianchi groups
+
+    [[Alex Kontorovich's site](https://sites.math.rutgers.edu/~alexk/crystallographic/)]
+
+    <p align="center">
+    <img src="https://neozhaoliang.github.io/assets/Bi5.jpg" width=600>
+    </p>
+
++ Penrose cooling process
+
+    [[Thomas Fernique's gallery](https://lipn.univ-paris13.fr/~fernique/gallery.html)]
+
+    <p align="center">
+    <img src="https://neozhaoliang.github.io/images/gallery/penrose_cooling.jpg" width=600>
+    </p>
+
 
 # How to use
 
