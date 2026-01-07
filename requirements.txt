@@ -1,6 +1,6 @@
 jupyter
 loguru
-manimgl
+manimgl==1.7.2
 matplotlib
 numba
 numpy
