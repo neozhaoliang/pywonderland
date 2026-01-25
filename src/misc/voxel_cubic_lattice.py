@@ -14,7 +14,7 @@ class Config:
     viewbox: tuple[float, float, float, float] = (-120, -120, 240, 240)
 
     max_steps: int = 2000
-    focal: float = 1.0
+    focal: float = 0.4
     super_sampling: int = 2
 
     barrel: bool = True
@@ -103,7 +103,7 @@ def is_voxel(cell: np.ndarray) -> bool:
 def cast_ray_dda(ro, rd, max_steps, out_pos, out_nor) -> bool:
     cell = np.floor(ro).astype(np.int32)
     inv = np.where(np.abs(rd) > 1e-16, 1.0 / rd, 1e32)
-    step = np.where(inv >= 0.0, 1, -1)
+    step = np.where(inv >= 0.0, 1, -1).astype(np.int32)
     ra = np.abs(inv)
     ds = (cell - ro + 0.5 + 0.5 * step) * inv
 
