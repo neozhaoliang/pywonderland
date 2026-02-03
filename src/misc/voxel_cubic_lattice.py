@@ -1,3 +1,6 @@
+"""
+Adapted from https://turtletoy.net/turtle/dba20f00f6 with some simplifications and optimizations.
+"""
 from dataclasses import dataclass
 import numba as nb
 import numpy as np
